@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using WinFormsApp1;
 
-
+/*
+    Wrapper class around TreeView widget.
+    Allows customization and provides public methods to work with the widget.
+*/
 public class myTree
 {
     private TreeView    _tree        = null;

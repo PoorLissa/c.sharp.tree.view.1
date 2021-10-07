@@ -1,6 +1,11 @@
 ﻿
+/*
+    Misc utilities
+*/
 public class myUtils
 {
+    // --------------------------------------------------------------------------------------------------------
+
     // Gets file name and (absolute or relative) path to a folder.
     // Then tries to resolve the path and return full path to a file
     public static string getFilePath(string dir, string file)
@@ -41,4 +46,6 @@ public class myUtils
 
         return dir + file;
     }
+
+    // --------------------------------------------------------------------------------------------------------
 };

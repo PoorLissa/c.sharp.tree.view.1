@@ -2,6 +2,10 @@
 using System.Reflection;
 using System.Windows.Forms;
 
+/*
+    Wrapper class around DataGridView widget.
+    Allows customization and provides public methods to work with the widget.
+*/
 public class myDataGrid
 {
     private DataGridView    _dataGrid      = null;

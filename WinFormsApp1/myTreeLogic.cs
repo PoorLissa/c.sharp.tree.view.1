@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;   // For dll import
 
+/*
+    Helper class for myTree class.
+    Provides file/directory operations logic, tree traversal logic, etc.
+*/
 public class myTreeLogic
 {
     // Checks if the directory contains at least one subdirectory
