@@ -13,10 +13,14 @@ namespace WinFormsApp1
         private System.Collections.Generic.List<string> listFiles = null;
         private System.Collections.Generic.List<string> listDirs  = null;
 
-        private bool doShowDirs  = false;
-        private bool doShowFiles = false;
+        private bool doShowDirs   = false;
+        private bool doShowFiles  = false;
+        private bool useRecursion = false;
+
         private int  nodeSelected_Dirs;
         private int  nodeSelected_Files;
+
+        private string searchStr = "";
 
         // --------------------------------------------------------------------------------
 
@@ -32,6 +36,7 @@ namespace WinFormsApp1
 
             this.cb_ShowFiles.Checked = true;
             this.cb_ShowDirs. Checked = true;
+            this.cb_Recursive.Checked = false;
 
             nodeSelected_Dirs  = 0;
             nodeSelected_Files = 0;
@@ -41,6 +46,16 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var list = new System.Collections.Generic.List<string>();
+
+            dataGrid.getSelectedFiles(listFiles, list, doShowDirs, doShowFiles);
+
+            richTextBox1.Clear();
+
+            foreach (var item in list)
+            {
+                richTextBox1.Text += item + "\n";
+            }
         }
 
         // --------------------------------------------------------------------------------
@@ -48,13 +63,23 @@ namespace WinFormsApp1
         // Selecting tree node
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (sender != null)
+            // [nodeSelected_Dirs/nodeSelected_Files] will contain the number of items we need to display
+
+            if (sender == cb_Recursive)
             {
-                // [nodeSelected_Dirs/nodeSelected_Files] will contain the number of items we need to display
-                tree.nodeSelected(e.Node, listFiles, ref nodeSelected_Dirs, ref nodeSelected_Files);
+                // This happens when we're changing the state of [cb_Recursive] checkbox
+                tree.nodeSelected(treeView1.SelectedNode, listFiles, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+            }
+            else
+            {
+                if (sender != null)
+                {
+                    // This happens when we're actually clicking the node in the tree
+                    tree.nodeSelected(e.Node, listFiles, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+                }
             }
 
-            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles);
+            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, searchStr);
         }
 
         // --------------------------------------------------------------------------------
@@ -96,6 +121,23 @@ namespace WinFormsApp1
         private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
             dataGrid.OnKeyDown(sender, e);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void cb_Recursive_CheckedChanged(object sender, EventArgs e)
+        {
+            useRecursion = this.cb_Recursive.Checked;
+            treeView1_AfterSelect(sender, null);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            searchStr = (sender as TextBox).Text;
+
+            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, searchStr);
         }
 
         // --------------------------------------------------------------------------------

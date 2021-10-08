@@ -35,6 +35,8 @@ namespace WinFormsApp1
             this.cb_ShowDirs = new System.Windows.Forms.CheckBox();
             this.cb_ShowFiles = new System.Windows.Forms.CheckBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.cb_Recursive = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -102,11 +104,32 @@ namespace WinFormsApp1
             this.dataGridView1.TabIndex = 6;
             this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
+            // cb_Recursive
+            // 
+            this.cb_Recursive.AutoSize = true;
+            this.cb_Recursive.Location = new System.Drawing.Point(1431, 261);
+            this.cb_Recursive.Name = "cb_Recursive";
+            this.cb_Recursive.Size = new System.Drawing.Size(111, 29);
+            this.cb_Recursive.TabIndex = 7;
+            this.cb_Recursive.Text = "Recursive";
+            this.cb_Recursive.UseVisualStyleBackColor = true;
+            this.cb_Recursive.CheckedChanged += new System.EventHandler(this.cb_Recursive_CheckedChanged);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(1634, 191);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(201, 31);
+            this.textBox1.TabIndex = 8;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2043, 1084);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.cb_Recursive);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.cb_ShowFiles);
             this.Controls.Add(this.cb_ShowDirs);
@@ -129,6 +152,8 @@ namespace WinFormsApp1
         private System.Windows.Forms.CheckBox cb_ShowDirs;
         private System.Windows.Forms.CheckBox cb_ShowFiles;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.CheckBox cb_Recursive;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

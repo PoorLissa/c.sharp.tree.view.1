@@ -83,7 +83,22 @@ public class myTreeLogic
             if (dirs != null)
             {
                 foreach (var d in dirs)
-                    list.Add("1?" + d);
+                {
+                    System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(d);
+
+                    bool isHidden = (di.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
+                    bool isSystem = (di.Attributes & System.IO.FileAttributes.System) == System.IO.FileAttributes.System;
+
+                    if (isHidden || isSystem)
+                    {
+                        //list.Add("1?" + d + "?hidden");
+                        list.Add("1?" + d);
+                    }
+                    else
+                    {
+                        list.Add("1?" + d);
+                    }
+                }
             }
         }
 

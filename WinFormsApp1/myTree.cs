@@ -30,10 +30,6 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    public Color    ForeColor   => _foreColor;
-
-    // --------------------------------------------------------------------------------------------------------
-
     public myTree(TreeView tv, string path, bool expandEmpty)
     {
         _tree  = tv;
@@ -162,7 +158,7 @@ public class myTree
                 // Erase the text, as we're going to shift it a bit, and it will left some trace otherwise
                 x = e.Node.Bounds.X + xLeftMargin;
                 y = e.Node.Bounds.Y;
-                e.Graphics.FillRectangle(SystemBrushes.Window, x, y, e.Node.Bounds.Width, e.Node.Bounds.Height);
+                e.Graphics.FillRectangle(SystemBrushes.Window, x, y, drawWidth, e.Node.Bounds.Height);
 
                 xAdjustment = 2;
                 backBrush = _customHotNodeBrush;
@@ -223,24 +219,62 @@ public class myTree
     // Populates the list with directory and file names
     // Returns the number of errors
     // ref int itemsFound parameter receives the number of items found (depending on the search boolean parameters)
-    public int nodeSelected(TreeNode n, System.Collections.Generic.List<string> files, ref int dirsFound, ref int filesFound)
+    public int nodeSelected(TreeNode n, System.Collections.Generic.List<string> files, ref int dirsFound, ref int filesFound, bool useRecursion = false)
     {
         int res = 0;
 
-        // Get directories first
-        res += _logic.getDirectories(n.Name, files, doClear: true);
+        if (useRecursion)
+        {
+            dirsFound = 0;
+            filesFound = 0;
 
-        dirsFound = files.Count;
+            files.Clear();
+            var listTmpDirs  = new System.Collections.Generic.List<string>();
+            var listTmpFiles = new System.Collections.Generic.List<string>();
+            var stack = new System.Collections.Generic.Stack<string>(20);
 
-        files.Add("2?");
+            _logic.getDirectories(n.Name, listTmpDirs, doClear: true);
+            listTmpDirs.Sort();
 
-        // Get files next
-        res += _logic.getFiles(n.Name, files, doClear: false);
+            for (int i = listTmpDirs.Count-1; i >= 0; i--)
+                stack.Push(listTmpDirs[i][2..]);
 
-        filesFound = files.Count - dirsFound - 1;
+            while (stack.Count > 0)
+            {
+                string currentDir = stack.Pop();
 
-        // Sort the results
-        files.Sort();
+                files.Add("1?" + currentDir);
+                dirsFound++;
+
+                _logic.getFiles(currentDir, listTmpFiles, doClear: true);
+                listTmpFiles.Sort();
+                filesFound += listTmpFiles.Count;
+                foreach (var file in listTmpFiles)
+                    files.Add(file);
+
+                _logic.getDirectories(currentDir, listTmpDirs, doClear: true);
+                listTmpDirs.Sort();
+                for (int i = listTmpDirs.Count - 1; i >= 0; i--)
+                    stack.Push(listTmpDirs[i][2..]);
+            }
+        }
+        else
+        {
+            // Get directories first
+            res += _logic.getDirectories(n.Name, files, doClear: true);
+
+            dirsFound = files.Count;
+
+            files.Add("2?");
+
+            // Get files next
+            res += _logic.getFiles(n.Name, files, doClear: false);
+
+            filesFound = files.Count - dirsFound - 1;
+
+            // Sort the results
+            files.Sort();
+        }
 
         return res;
     }

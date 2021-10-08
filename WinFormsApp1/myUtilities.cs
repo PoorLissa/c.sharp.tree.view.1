@@ -34,6 +34,7 @@ public class myUtils
 
                 do
                 {
+
                     int index = currentDir.LastIndexOf(slash);
                     currentDir = index > 0 ? currentDir.Substring(0, index) : "";
 

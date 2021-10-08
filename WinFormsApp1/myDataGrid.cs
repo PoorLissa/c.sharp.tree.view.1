@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.DirectoryServices.ActiveDirectory;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -43,7 +44,7 @@ public class myDataGrid
             _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
             _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
 
-            _dataGrid.Paint += new PaintEventHandler(OnPaint);                              // Customize whole widget appearance
+            //_dataGrid.Paint += new PaintEventHandler(OnPaint);                            // Customize whole widget appearance
             //_dataGrid.CellPainting +=
             //  new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
 
@@ -60,6 +61,7 @@ public class myDataGrid
             _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange;               // Row selection color
             _dataGrid.GridColor = Color.LightGray;
             _dataGrid.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.Control;
+            _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor;               // Instead of OnPaint event
 
             // --- Add Columns ---
 
@@ -152,7 +154,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
+    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr = "")
     {
         _dataGrid.Rows.Clear();
 
@@ -191,6 +193,19 @@ public class myDataGrid
                 if (item[0] == '2')
                     continue;
 
+                // Skip everything that does not match the search string
+                if (searchStr.Length > 0)
+                {
+                    if (!item.Contains(searchStr))
+                        continue;
+
+                    todo:
+                    // make 2 different functions: one with search string param, and other without it
+                    // the first one is able to reserve known amount of rows
+                    // the other one will need to calculate this amount
+
+                }
+
                 // Wasn't able to create new rows any other way
                 // So had to stick to the cloning
 
@@ -212,9 +227,46 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    public void getSelectedFiles(System.Collections.Generic.List<string> originalFilesList, System.Collections.Generic.List<string> list, bool doShowDirs, bool doShowFiles)
+    {
+        list.Clear();
+
+        int i = 0;
+
+        // Get all directories and files
+        foreach (var item in originalFilesList)
+        {
+            bool isDir = (item[0] == '1');
+
+            // Show/skip directories
+            if (isDir && !doShowDirs)
+                continue;
+
+            // Show/skip files
+            if (!isDir && !doShowFiles)
+                continue;
+
+            // Skip the delimiter
+            if (item[0] == '2')
+                continue;
+
+            bool isChecked = (bool)_dataGrid.Rows[i++].Cells[0].Value;
+
+            if (isChecked)
+            {
+                list.Add(item[2..]);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Remove dark gray parts of the GridView in case the rows don't cover all the area of the widget
     // Simplified version, only fills gray parts with background color
     // https://social.msdn.microsoft.com/Forums/windows/en-US/d39e565e-cf33-45b9-993c-99d39813fd15/datagridview-filling-rest-of-rows-with-empty-lines?forum=winforms
+    // Not used anymore. Instead, background color of the widget was set.
     public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
     {
         if (doFillWithEmptyRows)
@@ -241,7 +293,7 @@ public class myDataGrid
                     e.Graphics.DrawImage(_rowImg, 1, h + i * rowHeight);
 
                 // Draw once more, at the very bottom
-                e.Graphics.DrawImage(_rowImg, 1, _dataGrid.Height - rowHeight - 1);
+                e.Graphics.DrawImage(_rowImg, 1, _dataGrid.Height - rowHeight - 1); // Bug: Sometimes it covered the lower row
             }
             else
             {
