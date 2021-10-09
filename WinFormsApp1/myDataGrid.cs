@@ -153,19 +153,11 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Add files/derectories to the DataGridView from the List
-    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr = "")
+    // Populate GridView with known amount of rows
+    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
-        _dataGrid.Rows.Clear();
-
-        // The first time we populate our GridView, we create this template row that we'll use for cloning later
-        if (_myTemplateRow == null)
-        {
-            _myTemplateRow = _dataGrid.Rows[_dataGrid.Rows.Add()];
-        }
-
         int Count = 0;
-        Count += doShowDirs  ?  dirsCount : 0;
+        Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
 
         if (Count > 0)
@@ -193,18 +185,73 @@ public class myDataGrid
                 if (item[0] == '2')
                     continue;
 
+                // Wasn't able to create new rows any other way
+                // So had to stick to the cloning
+
+                // Anyway, create new row and populate it with the data:
+                var newRow = (DataGridViewRow)_myTemplateRow.Clone();
+                buildRow(ref newRow, item, isDir);
+                rows[Count++] = newRow;
+            }
+
+            // Add all the rows in a single motion
+            // Less redrawing, less flickering
+            _dataGrid.Rows.AddRange(rows);
+
+            _dataGrid.ClearSelection();
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Populate GridView with unknown amount of rows
+    private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr)
+    {
+        int Count = 0;
+        Count += doShowDirs ? dirsCount : 0;
+        Count += doShowFiles ? filesCount : 0;
+
+        if (Count > 0)
+        {
+            var selectedItems = new System.Collections.Generic.List<string>();
+
+            // Calculate the number of items we need to add
+            foreach (var item in list)
+            {
+                bool isDir = (item[0] == '1');
+
+                // Show/skip directories
+                if (isDir && !doShowDirs)
+                    continue;
+
+                // Show/skip files
+                if (!isDir && !doShowFiles)
+                    continue;
+
+                // Skip the delimiter
+                if (item[0] == '2')
+                    continue;
+
+                string fileName = item.Substring(item.LastIndexOf("\\") + 1);
+
                 // Skip everything that does not match the search string
-                if (searchStr.Length > 0)
-                {
-                    if (!item.Contains(searchStr))
-                        continue;
+                if (!fileName.Contains(searchStr))
+                    continue;
 
-                    todo:
-                    // make 2 different functions: one with search string param, and other without it
-                    // the first one is able to reserve known amount of rows
-                    // the other one will need to calculate this amount
+                selectedItems.Add(item);
+            }
 
-                }
+            // Reuse Count
+            Count = 0;
+
+            // Reserve known amount of rows
+            var rows = new DataGridViewRow[selectedItems.Count];
+
+            foreach (var item in selectedItems)
+            {
+                bool isDir = (item[0] == '1');
 
                 // Wasn't able to create new rows any other way
                 // So had to stick to the cloning
@@ -220,6 +267,31 @@ public class myDataGrid
             _dataGrid.Rows.AddRange(rows);
 
             _dataGrid.ClearSelection();
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Add files/derectories to the DataGridView from the List
+    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr = "")
+    {
+        _dataGrid.Rows.Clear();
+
+        // The first time we populate our GridView, we create this template row that we'll use for cloning later
+        if (_myTemplateRow == null)
+        {
+            _myTemplateRow = _dataGrid.Rows[_dataGrid.Rows.Add()];
+        }
+
+        if (searchStr.Length == 0)
+        {
+            Populate_Fast(list, dirsCount, filesCount, doShowDirs, doShowFiles);
+        }
+        else
+        {
+            Populate_Slow(list, dirsCount, filesCount, doShowDirs, doShowFiles, searchStr);
         }
 
         return;
