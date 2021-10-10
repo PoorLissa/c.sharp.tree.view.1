@@ -28,6 +28,8 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            path = "D:\\Games\\Dishonored\\Uninstall";
+
             tree = new myTree(this.treeView1, path, expandEmpty);
             dataGrid = new myDataGrid(this.dataGridView1);
 
@@ -87,14 +89,12 @@ namespace WinFormsApp1
         // Expanding tree node
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            //richTextBox1.Text += $" --> before expand({e.Node.Text})\n";
             tree.AllowRedrawing(false);
             tree.nodeExpanded_Before(e.Node, listDirs);
         }
 
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
         {
-            //richTextBox1.Text += " --> after expand()\n";
             tree.AllowRedrawing(true);
         }
 

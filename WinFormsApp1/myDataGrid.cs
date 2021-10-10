@@ -210,12 +210,14 @@ public class myDataGrid
     private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr)
     {
         int Count = 0;
-        Count += doShowDirs ? dirsCount : 0;
+        Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
 
         if (Count > 0)
         {
             var selectedItems = new System.Collections.Generic.List<string>();
+
+            searchStr = searchStr.ToLower();
 
             // Calculate the number of items we need to add
             foreach (var item in list)
@@ -234,7 +236,7 @@ public class myDataGrid
                 if (item[0] == '2')
                     continue;
 
-                string fileName = item.Substring(item.LastIndexOf("\\") + 1);
+                string fileName = item.Substring(item.LastIndexOf("\\") + 1).ToLower();
 
                 // Skip everything that does not match the search string
                 if (!fileName.Contains(searchStr))

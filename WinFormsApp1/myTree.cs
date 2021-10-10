@@ -233,11 +233,19 @@ public class myTree
             var listTmpFiles = new System.Collections.Generic.List<string>();
             var stack = new System.Collections.Generic.Stack<string>(20);
 
+            // Get all subfolders in current folder
             _logic.getDirectories(n.Name, listTmpDirs, doClear: true);
             listTmpDirs.Sort();
 
             for (int i = listTmpDirs.Count-1; i >= 0; i--)
                 stack.Push(listTmpDirs[i][2..]);
+
+            // Get all files in current folder
+            _logic.getFiles(n.Name, listTmpFiles, doClear: true);
+            listTmpFiles.Sort();
+            filesFound += listTmpFiles.Count;
+            foreach (var file in listTmpFiles)
+                files.Add(file);
 
             while (stack.Count > 0)
             {
