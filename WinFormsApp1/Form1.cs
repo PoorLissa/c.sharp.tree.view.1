@@ -28,6 +28,7 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            expandEmpty = true;
             path = "D:\\Games\\Dishonored\\Uninstall";
 
             tree = new myTree(this.treeView1, path, expandEmpty);

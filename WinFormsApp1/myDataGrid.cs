@@ -45,8 +45,8 @@ public class myDataGrid
             _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
 
             //_dataGrid.Paint += new PaintEventHandler(OnPaint);                            // Customize whole widget appearance
-            //_dataGrid.CellPainting +=
-            //  new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
+            _dataGrid.CellPainting +=
+              new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
 
             _dataGrid.RowTemplate.Height = 50;                                              // Row height
             _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;              // Row select mode
@@ -398,19 +398,46 @@ public class myDataGrid
             //e.PaintBackground(e.CellBounds, true);                // Paint only background
             //e.PaintContent(e.CellBounds);                         // Paint only contents
 
-            System.Drawing.Color penColor = e.CellStyle.BackColor;
-
+            // Draw border around selected row
             if ((e.State & DataGridViewElementStates.Selected) != 0)
-                penColor = e.CellStyle.SelectionBackColor;
-
-            using (Pen p = new Pen(penColor, 1))
             {
-                // Erase cell borders
-                Rectangle rect = new Rectangle(e.CellBounds.X - 1, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height - 2);
-                e.Graphics.DrawRectangle(p, rect);
+                int yOffset = e.RowIndex == 0 ? 1 : 0;
+
+                // Draw borders around each cell in a row
+                //using (Pen p = new Pen(Color.OrangeRed, 1))
+                using (Pen p = new Pen(Color.FloralWhite, 1))
+                {
+                    Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + yOffset, e.CellBounds.Width - 1, e.CellBounds.Height - 2 - yOffset);
+                    e.Graphics.DrawRectangle(p, rect);
+                }
+
+                // Remove verical lines, so only the row rectangle remains
+                if (e.ColumnIndex > 0)
+                {
+                    using (Pen p2 = new Pen(e.CellStyle.SelectionBackColor, 2))
+                    {
+                        e.Graphics.DrawLine(p2, e.CellBounds.X, e.CellBounds.Y + 1 + yOffset, e.CellBounds.X, e.CellBounds.Y + e.CellBounds.Height - 2);
+                    }
+                }
             }
 
             e.Handled = true;
+
+/*
+                        System.Drawing.Color penColor = e.CellStyle.BackColor;
+
+                        if ((e.State & DataGridViewElementStates.Selected) != 0)
+                            penColor = e.CellStyle.SelectionBackColor;
+
+                        using (Pen p = new Pen(penColor, 1))
+                        {
+                            // Erase cell borders
+                            Rectangle rect = new Rectangle(e.CellBounds.X - 1, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height - 2);
+                            e.Graphics.DrawRectangle(p, rect);
+                        }
+
+                        e.Handled = true;
+*/
         }
 
         return;
