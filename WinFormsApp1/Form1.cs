@@ -29,7 +29,7 @@ namespace WinFormsApp1
             InitializeComponent();
 
             expandEmpty = true;
-            path = "D:\\Games\\Dishonored\\Uninstall";
+            //path = "D:\\Games\\Dishonored\\Uninstall";
 
             tree = new myTree(this.treeView1, path, expandEmpty);
             dataGrid = new myDataGrid(this.dataGridView1);
@@ -43,6 +43,9 @@ namespace WinFormsApp1
 
             nodeSelected_Dirs  = 0;
             nodeSelected_Files = 0;
+
+            richTextBox1.Text += "treeView1.DeviceDpi = " + treeView1.DeviceDpi + "\n";
+            // try using logicaltodeviceunits property
         }
 
         // --------------------------------------------------------------------------------
