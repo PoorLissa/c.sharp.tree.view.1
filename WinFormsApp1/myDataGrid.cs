@@ -207,7 +207,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Populate GridView with unknown amount of rows
-    private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr)
+    private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
     {
         int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
@@ -217,7 +217,7 @@ public class myDataGrid
         {
             var selectedItems = new System.Collections.Generic.List<string>();
 
-            searchStr = searchStr.ToLower();
+            filterStr = filterStr.ToLower();
 
             // Calculate the number of items we need to add
             foreach (var item in list)
@@ -239,7 +239,7 @@ public class myDataGrid
                 string fileName = item.Substring(item.LastIndexOf("\\") + 1).ToLower();
 
                 // Skip everything that does not match the search string
-                if (!fileName.Contains(searchStr))
+                if (!fileName.Contains(filterStr))
                     continue;
 
                 selectedItems.Add(item);
@@ -277,7 +277,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string searchStr = "")
+    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr = "")
     {
         _dataGrid.Rows.Clear();
 
@@ -287,13 +287,13 @@ public class myDataGrid
             _myTemplateRow = _dataGrid.Rows[_dataGrid.Rows.Add()];
         }
 
-        if (searchStr.Length == 0)
+        if (filterStr.Length == 0)
         {
             Populate_Fast(list, dirsCount, filesCount, doShowDirs, doShowFiles);
         }
         else
         {
-            Populate_Slow(list, dirsCount, filesCount, doShowDirs, doShowFiles, searchStr);
+            Populate_Slow(list, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
         }
 
         return;

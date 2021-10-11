@@ -105,7 +105,6 @@ public class myTree
         _treeBackBrush          = new System.Drawing.SolidBrush(_tree.BackColor);
         _customHotNodeBrush     = new System.Drawing.SolidBrush(Color.FromArgb(100, 204, 232, 255));
         _customFocusedNodeBrush = new System.Drawing.SolidBrush(Color.FromArgb(255, 193, 227, 255));
-
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -604,11 +603,11 @@ public class myTree
 
                 while (path.Length > 0)
                 {
-                    string nodeName = _logic.getLeftmostPartFromPath(ref path);
+                    string nodeName = _logic.getLeftmostPartFromPath(ref path).ToLower();
 
                     foreach (TreeNode node in thisLevelNodes)
                     {
-                        string text = node.Text;
+                        string text = node.Text.ToLower();
 
                         if (node.Level == 0) // "Drive C:" --> "C:"
                             text = text.Substring(6);

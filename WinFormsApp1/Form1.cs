@@ -20,7 +20,7 @@ namespace WinFormsApp1
         private int  nodeSelected_Dirs;
         private int  nodeSelected_Files;
 
-        private string searchStr = "";
+        private string filterStr = "";
 
         // --------------------------------------------------------------------------------
 
@@ -28,8 +28,10 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+
             expandEmpty = true;
-            //path = "D:\\Games\\Dishonored\\Uninstall";
+            path = "c:\\_maxx\\Games\\Dishonored\\Uninstall";
 
             tree = new myTree(this.treeView1, path, expandEmpty);
             dataGrid = new myDataGrid(this.dataGridView1);
@@ -43,15 +45,17 @@ namespace WinFormsApp1
 
             nodeSelected_Dirs  = 0;
             nodeSelected_Files = 0;
-
-            richTextBox1.Text += "treeView1.DeviceDpi = " + treeView1.DeviceDpi + "\n";
-            // try using logicaltodeviceunits property
         }
 
         // --------------------------------------------------------------------------------
 
         private void button1_Click(object sender, EventArgs e)
         {
+            richTextBox1.Text += "treeView1.DeviceDpi = " + treeView1.DeviceDpi + "\n";
+            // try using logicaltodeviceunits property
+
+            return;
+
             var list = new System.Collections.Generic.List<string>();
 
             dataGrid.getSelectedFiles(listFiles, list, doShowDirs, doShowFiles);
@@ -85,7 +89,7 @@ namespace WinFormsApp1
                 }
             }
 
-            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, searchStr);
+            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------
@@ -139,9 +143,9 @@ namespace WinFormsApp1
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            searchStr = (sender as TextBox).Text;
+            filterStr = (sender as TextBox).Text;
 
-            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, searchStr);
+            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------

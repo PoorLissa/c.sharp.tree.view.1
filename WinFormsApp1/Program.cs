@@ -67,6 +67,8 @@ namespace WinFormsApp1
 
                 if (dpiMode == "1")
                 {
+                    // Windows  7 --  6.1
+                    // Windows 10 -- 10.0
                     if (Environment.OSVersion.Version.Major >= 6)
                         SetProcessDPIAware();
                     break;
@@ -76,10 +78,24 @@ namespace WinFormsApp1
                 {
                     Application.SetHighDpiMode(HighDpiMode.SystemAware);
 
+                    // Windows  7 --  6.1
+                    // Windows 10 -- 10.0
                     if (Environment.OSVersion.Version.Major >= 6)
                         SetProcessDPIAware();
                     break;
                 }
+
+                if (dpiMode == "3")
+                {
+                    // Windows  7 --  6.1
+                    // Windows 10 -- 10.0
+                    if (Environment.OSVersion.Version.Major >= 6)
+                        SetProcessDPIAware();
+
+                    Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                    break;
+                }
+
 
             } while (false);
 
