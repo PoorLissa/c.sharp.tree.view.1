@@ -14,9 +14,10 @@ public class myTree
     private float       _fontSize    = 0.0f;
     private Color       _foreColor;
 
-    private System.Drawing.Brush _customHotNodeBrush     = null;
-    private System.Drawing.Brush _customFocusedNodeBrush = null;
-    private System.Drawing.Brush _treeBackBrush          = null;
+    private System.Drawing.Brush _treeBackBrush      = null;
+    private System.Drawing.Brush _treeGradientBrush1 = null;
+    private System.Drawing.Brush _treeGradientBrush2 = null;
+    private System.Drawing.Brush _treeGradientBrush3 = null;
 
     private Image _imgPlus      = null;
     private Image _imgMinus     = null;
@@ -26,7 +27,6 @@ public class myTree
 
     private bool _doUseDummies   = false;
     private bool _allowRedrawing = false;
-    private bool _isScrollBarVisible = false;
 
     private Font [] _nodeFonts = null;
 
@@ -83,7 +83,7 @@ public class myTree
 
             // Configure the TreeView control for owner-draw and add a handler for the DrawNode event
             _tree.DrawMode  = TreeViewDrawMode.OwnerDrawAll;
-            _tree.DrawNode += new DrawTreeNodeEventHandler(myTree_DrawNode2);
+            _tree.DrawNode += new DrawTreeNodeEventHandler(myTree_DrawNode);
 
             // Populate the first level of the tree
             foreach (var drive in System.Environment.GetLogicalDrives())
@@ -102,15 +102,28 @@ public class myTree
 
     private void createDrawingPrimitives()
     {
-        _treeBackBrush          = new System.Drawing.SolidBrush(_tree.BackColor);
-        _customHotNodeBrush     = new System.Drawing.SolidBrush(Color.FromArgb(100, 204, 232, 255));
-        _customFocusedNodeBrush = new System.Drawing.SolidBrush(Color.FromArgb(255, 193, 227, 255));
+        _treeBackBrush = new System.Drawing.SolidBrush(_tree.BackColor);
+
+        var pt1 = new Point(1, 120);
+        var pt2 = new Point(1, 160);
+
+        _treeGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
+                                    Color.FromArgb(150, 204, 232, 255),
+                                    Color.FromArgb(255, 190, 220, 255));
+
+        _treeGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
+                                    Color.FromArgb(33, 204, 232, 255),
+                                    Color.FromArgb(100, 204, 232, 255));
+
+        _treeGradientBrush3 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
+                                    Color.FromArgb(100, 204, 232, 255),
+                                    Color.FromArgb(250, 204, 232, 255));
     }
 
     // --------------------------------------------------------------------------------------------------------
 
     // Custom drawing function for a node
-    private void myTree_DrawNode2(object sender, DrawTreeNodeEventArgs e)
+    private void myTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
     {
         if (_allowRedrawing)
         {
@@ -132,7 +145,11 @@ public class myTree
             int yAdjustment = 0;
             int xAdjustment = 0;
             int xLeftMargin = 40;
-            int drawWidth = _tree.Width - 22;
+            int drawWidth = _tree.ClientRectangle.Right - e.Node.Bounds.X;
+
+            // Don't let the selection rectangle be shorter than the node's text
+            if (e.Node.Bounds.Right >= _tree.ClientRectangle.Right)
+                drawWidth += 10;
 
             // The node that was selected before the user selected another one
             if ((e.State & TreeNodeStates.Selected) != 0)
@@ -177,7 +194,8 @@ public class myTree
 
                 // Erase the canvas under plus-minus icon, as semitransparent areas of the image tend to 'sum up' and become darker each time it is drawn
                 x = e.Node.Bounds.Location.X - 26;
-                y = e.Node.Bounds.Location.Y + 8;
+                y = e.Node.Bounds.Location.Y + 11;
+
                 e.Graphics.FillRectangle(_treeBackBrush, x, y, 21, 21);
 
                 // Set up gradient brush
@@ -187,27 +205,22 @@ public class myTree
                     var pt2 = new Point(0, e.Node.Bounds.Y + e.Node.Bounds.Height);
 
                     if (gradientBrush == 1)
-                        backBrush = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-                            Color.FromArgb(150, 204, 232, 255),
-                            Color.FromArgb(255, 190, 220, 255));
+                        backBrush = _treeGradientBrush1;
 
                     if (gradientBrush == 2)
-                        backBrush = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-                            Color.FromArgb(33, 204, 232, 255),
-                            Color.FromArgb(100, 204, 232, 255));
+                        backBrush = _treeGradientBrush2;
 
                     if (gradientBrush == 3)
-                        backBrush = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-                            Color.FromArgb(100, 204, 232, 255),
-                            Color.FromArgb(250, 204, 232, 255));
+                        backBrush = _treeGradientBrush3;
                 }
 
                 x = e.Node.Bounds.X - 2;
                 y = e.Node.Bounds.Y;
+
                 e.Graphics.FillRectangle(backBrush, x, y, drawWidth, e.Node.Bounds.Height - 1);
             }
 
-            // Draw node plus/minus icon
+            // Draw plus/minus icon
             {
                 if (_doUseDummies || e.Node.Level == 0)
                 {
@@ -224,7 +237,7 @@ public class myTree
                 if (doDrawIcon)
                 {
                     x = e.Node.Bounds.Location.X - 35;
-                    y = e.Node.Bounds.Location.Y - 3;
+                    y = e.Node.Bounds.Location.Y - 0;
 
                     e.Graphics.DrawImage(expandImg, x, y, 40, 40);
                 }
@@ -234,11 +247,12 @@ public class myTree
             {
                 Image dirImg = isNodeExpanded ? _imgDirOpened : _imgDir;
                 x = e.Node.Bounds.Location.X + 3;
-                y = e.Node.Bounds.Location.Y + 2;
+                y = e.Node.Bounds.Location.Y + 5;
+
                 e.Graphics.DrawImage(e.Node.Level == 0 ? _imgHDD : dirImg, x, y, 30, 30);
             }
 
-            // Draw the text of the node
+            // Draw node text
             {
                 if (nodeFont.Height > 17)
                     yAdjustment = -1;
@@ -252,151 +266,21 @@ public class myTree
                 e.Graphics.DrawString(e.Node.Text, nodeFont, fontBrush, x, y);
             }
 
-            // If the node is hovered upon, draw a focus rectangle
-            if (isNodeHovered)
+            // If the node is clicked or hovered upon, draw a focus rectangle
+            if (isNodeHovered || isNodeClicked)
             {
-                using (Pen focusPen = new Pen(Color.LightBlue))
-                {
-                    x = e.Node.Bounds.X + 1 + xLeftMargin - 43;
-                    y = e.Node.Bounds.Y + 1;
+                x = e.Node.Bounds.X - 2;
+                y = e.Node.Bounds.Y + 1;
 
-                    var rect = new Rectangle(x, y, _tree.Width - e.Node.Bounds.X - 20, e.Node.Bounds.Height - 3);
+                var rect = new Rectangle(x, y, drawWidth - 2, e.Node.Bounds.Height - 3);
+                Color focusPenColor = Color.LightBlue;
+
+                if (isNodeClicked)
+                    focusPenColor = Color.CornflowerBlue;
+
+                using (Pen focusPen = new Pen(focusPenColor))
+                {
                     myUtils.DrawRoundedRectangle(e.Graphics, focusPen, rect, 3);
-                }
-            }
-
-            if (isNodeClicked)
-            {
-                using (Pen focusPen = new Pen(Color.CornflowerBlue))
-                {
-                    x = e.Node.Bounds.X + 1 + xLeftMargin - 43;
-                    y = e.Node.Bounds.Y + 1;
-
-                    var rect = new Rectangle(x, y, _tree.Width - e.Node.Bounds.X - 20, e.Node.Bounds.Height - 3);
-                    myUtils.DrawRoundedRectangle(e.Graphics, focusPen, rect, 3);
-                }
-            }
-        }
-
-        return;
-    }
-
-    // Custom drawing function for a node
-    private void myTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
-    {
-        if (_allowRedrawing)
-        {
-            bool isNodeExpanded = e.Node.IsExpanded;
-            bool isNodeEmpty    = e.Node.Nodes.Count == 0;
-            bool doDrawIcon     = true;
-            Image expandImg     = null;
-
-            //System.Drawing.Brush backBrush = new SolidBrush(_tree.BackColor);
-            System.Drawing.Brush backBrush = Brushes.White;
-            System.Drawing.Brush fontBrush = Brushes.Black;
-
-            // Draw plus/minus icon
-            // Erase first, as semitransparent areas of the image tend to 'sum up' and become darker each time it is drawn
-            int x = e.Node.Bounds.Location.X - 26;
-            int y = e.Node.Bounds.Location.Y + 8;
-            e.Graphics.FillRectangle(SystemBrushes.Window, x, y, 21, 21);
-
-            if (_doUseDummies || e.Node.Level == 0)
-            {
-                expandImg = (isNodeExpanded || isNodeEmpty) ? _imgMinus : _imgPlus;
-            }
-            else
-            {
-                expandImg = (isNodeExpanded) ? _imgMinus : _imgPlus;
-
-                if (isNodeEmpty)
-                    doDrawIcon = false;
-            }
-
-            if (doDrawIcon)
-            {
-                x = e.Node.Bounds.Location.X - 35;
-                y = e.Node.Bounds.Location.Y - 3;
-
-                e.Graphics.DrawImage(expandImg, x, y, 40, 40);
-            }
-
-            // Draw node image
-            Image dirImg = isNodeExpanded ? _imgDirOpened : _imgDir;
-            x = e.Node.Bounds.Location.X + 3;
-            y = e.Node.Bounds.Location.Y + 2;
-            e.Graphics.DrawImage(e.Node.Level == 0 ? _imgHDD : dirImg, x, y, 30, 30);
-
-            int yAdjustment = 0;
-            int xAdjustment = 0;
-            int xLeftMargin = 40;
-            int drawWidth = _tree.Width - e.Node.Bounds.X - 3;
-
-            // Retrieve the node font. If it has not been set, use the TreeView font instead
-            Font nodeFont = (e.Node.NodeFont == null) ? ((TreeView)sender).Font : e.Node.NodeFont;
-
-            // The node the mouse is hovering upon
-            if ((e.State & TreeNodeStates.Hot) != 0)
-            {
-                // Erase the text, as we're going to shift it a bit, and it will left some trace otherwise
-                x = e.Node.Bounds.X + xLeftMargin;
-                y = e.Node.Bounds.Y;
-                e.Graphics.FillRectangle(SystemBrushes.Window, x, y, drawWidth, e.Node.Bounds.Height);
-
-                xAdjustment = 2;
-                //backBrush = _customHotNodeBrush;
-
-                backBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                   new Point(0, e.Node.Bounds.Y-1),
-                   new Point(0, e.Node.Bounds.Y + e.Node.Bounds.Height),
-                   Color.FromArgb( 33, 204, 232, 255),
-                   Color.FromArgb(100, 204, 232, 255)
-                );
-            }
-
-            // The node that was selected before the user selected another one
-            if ((e.State & TreeNodeStates.Selected) != 0)
-            {
-                xAdjustment += xAdjustment == 0 ? 0 : 1;
-                backBrush = Brushes.AliceBlue;
-            }
-
-            // Clicked node
-            if ((e.State & TreeNodeStates.Focused) != 0)
-            {
-                backBrush = _customFocusedNodeBrush;
-            }
-
-            // Draw the background of the selected node
-            x = e.Node.Bounds.X + xLeftMargin;
-            y = e.Node.Bounds.Y;
-            e.Graphics.FillRectangle(backBrush, x, y, drawWidth, e.Node.Bounds.Height);
-
-            // Draw the text of the node
-            {
-                if (nodeFont.Height > 17)
-                    yAdjustment = -1;
-
-                if (nodeFont.Height < 7)
-                    yAdjustment = 1;
-
-                x = e.Node.Bounds.X + xAdjustment + xLeftMargin;
-                y = e.Node.Bounds.Y + (e.Node.TreeView.ItemHeight - nodeFont.Height) / 2 + yAdjustment;
-
-                e.Graphics.DrawString(e.Node.Text, nodeFont, fontBrush, x, y);
-            }
-
-            // If the node is Focused and is hovered upon, also draw a focus rectangle
-            if ((e.State & TreeNodeStates.Focused) != 0 && (e.State & TreeNodeStates.Hot) != 0)
-            {
-                using (Pen focusPen = new Pen(Color.Black))
-                {
-                    focusPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-
-                    x = e.Node.Bounds.X + 1 + xLeftMargin;
-                    y = e.Node.Bounds.Y + 1;
-
-                    e.Graphics.DrawRectangle(focusPen, x, y, drawWidth - 3, e.Node.Bounds.Height - 3);
                 }
             }
         }
