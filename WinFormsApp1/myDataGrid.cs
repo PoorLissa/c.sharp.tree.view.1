@@ -1,6 +1,10 @@
-﻿using System.DirectoryServices.ActiveDirectory;
+﻿using System;
+using System.Data.Common;
+using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 /*
@@ -9,18 +13,25 @@ using System.Windows.Forms;
 */
 public class myDataGrid
 {
-    private DataGridView    _dataGrid      = null;
+    private DataGridView _dataGrid = null;
     private DataGridViewRow _myTemplateRow = null;
 
-    private bool doAlternateColors   = false;
-    private bool doUseIcons          = true;
+    private bool doAlternateColors = false;
     private bool doFillWithEmptyRows = true;
 
     private System.Drawing.Brush _gridGradientBrush1 = null;
 
-    private Image  _imgDir  = null;
-    private Image  _imgFile = null;
-    private Bitmap _rowImg  = null;
+    private Image _imgDir = null;
+    private Image _imgFile = null;
+    private Bitmap _rowImg = null;
+
+    private enum Columns
+    {
+        colCheckBox = 0,
+        colImage,
+        colName,
+        colNumber
+    };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -38,52 +49,62 @@ public class myDataGrid
         // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-work-with-image-columns-in-the-windows-forms-datagridview-control?view=netframeworkdesktop-4.8
         if (_dataGrid != null)
         {
+            int dpi = _dataGrid.DeviceDpi;
+
             // Set double buffering to reduce flickering:
             // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
-            PropertyInfo pi = _dataGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            PropertyInfo pi = _dataGrid.GetType()
+                .GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(_dataGrid, true, null);
 
-            _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
+            _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
             _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
 
             //_dataGrid.Paint += new PaintEventHandler(OnPaint);                            // Customize whole widget appearance
             _dataGrid.CellPainting +=
-              new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
+                new DataGridViewCellPaintingEventHandler(
+                    dataGridView_CellPainting); // Customize individual cell appearance
 
-            _dataGrid.RowTemplate.Height = 30;                                              // Row height
-            _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;              // Row select mode
-            _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
-            _dataGrid.EditMode = DataGridViewEditMode.EditOnF2;                             // How to edit cell (press F2)
-            _dataGrid.AllowUserToAddRows = false;                                           // User can't add new rows
-            _dataGrid.AllowUserToResizeRows = false;                                        // User can't resize rows
-            _dataGrid.ColumnHeadersVisible = false;                                         // No column headers
-            _dataGrid.RowHeadersVisible = false;                                            // No row headers
+            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30; // Row height
+            _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Row select mode
+            _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal; // Cell borders
+            _dataGrid.EditMode = DataGridViewEditMode.EditOnF2; // How to edit cell (press F2)
+            _dataGrid.AllowUserToAddRows = false; // User can't add new rows
+            _dataGrid.AllowUserToResizeRows = false; // User can't resize rows
+            _dataGrid.ColumnHeadersVisible = false; // No column headers
+            _dataGrid.RowHeadersVisible = false; // No row headers
 
             // Grid Colors
-            _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange;               // Row selection color
+            _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange; // Row selection color
             _dataGrid.GridColor = Color.LightGray;
             _dataGrid.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.Control;
-            _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor;               // Instead of OnPaint event
+            _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor; // Instead of OnPaint event
 
             // --- Add Columns ---
 
-            // Checkbox column
+            // Checkbox column Columns.colCheckBox
             var checkBoxColumn = new DataGridViewCheckBoxColumn();
             checkBoxColumn.Width = 50;
             checkBoxColumn.Resizable = DataGridViewTriState.False;
             _dataGrid.Columns.Add(checkBoxColumn);
 
-            // Icon column
+            // Icon column Columns.colImage
             var imageColumn = new DataGridViewImageColumn();
             imageColumn.Width = 30;
             imageColumn.Resizable = DataGridViewTriState.False;
             _dataGrid.Columns.Add(imageColumn);
 
-            // Text column (auto adjusted to fill all the available width)
+            // Text column Columns.colName (auto adjusted to fill all the available width)
             var textColumn = new DataGridViewTextBoxColumn();
             textColumn.Name = "Name";
             textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             _dataGrid.Columns.Add(textColumn);
+
+            // Row number column Columns.colNumber
+            var numberColumn = new DataGridViewTextBoxColumn();
+            numberColumn.Name = "Num";
+            numberColumn.Visible = false;
+            _dataGrid.Columns.Add(numberColumn);
         }
     }
 
@@ -95,8 +116,8 @@ public class myDataGrid
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-                                    Color.FromArgb(150, 204, 232, 255),
-                                    Color.FromArgb(255, 190, 220, 255));
+            Color.FromArgb(150, 204, 232, 255),
+            Color.FromArgb(255, 190, 220, 255));
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -109,19 +130,16 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Modify a copy of a template row and give it real values
-    public void buildRow(ref DataGridViewRow row, string item, bool isDir)
+    public void buildRow(ref DataGridViewRow row, string item, bool isDir, int num)
     {
-        int pos = item.LastIndexOf('\\') + 1;
-
         if (item.Length > 0)
         {
-            if (doUseIcons)
-            {
-                row.Cells[1].Value = isDir ? _imgDir : _imgFile;
-            }
+            int pos = item.LastIndexOf('\\') + 1;
 
-            row.Cells[0].Value = false;
-            row.Cells[2].Value = item[pos..];
+            row.Cells[(int)Columns.colCheckBox].Value = false;
+            row.Cells[(int)Columns.colImage   ].Value = isDir ? _imgDir : _imgFile;
+            row.Cells[(int)Columns.colName    ].Value = item[pos..];
+            row.Cells[(int)Columns.colNumber  ].Value = num;
 
             row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
         }
@@ -129,7 +147,8 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Add a single file/derectory to the DataGridView
+    // Add a single item to the DataGridView
+    // Not used
     public void addRow(string item, bool isDir)
     {
         int pos = item.LastIndexOf('\\') + 1;
@@ -153,13 +172,10 @@ public class myDataGrid
                 _dataGrid.Rows[i].DefaultCellStyle.ForeColor = System.Drawing.Color.Brown;
             }
 
-            if (doUseIcons)
-            {
-                _dataGrid.Rows[i].Cells[1].Value = isDir ? _imgDir : _imgFile;
-            }
-
-            _dataGrid.Rows[i].Cells[0].Value = false;
-            _dataGrid.Rows[i].Cells[2].Value = item[pos..];
+            _dataGrid.Rows[i].Cells[(int)Columns.colCheckBox].Value = false;
+            _dataGrid.Rows[i].Cells[(int)Columns.colImage   ].Value = isDir ? _imgDir : _imgFile;
+            _dataGrid.Rows[i].Cells[(int)Columns.colName    ].Value = item[pos..];
+            _dataGrid.Rows[i].Cells[(int)Columns.colNumber  ].Value = 999;
         }
 
         return;
@@ -168,36 +184,31 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Populate GridView with known amount of rows
-    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
+    // Single pass
+    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount,
+        bool doShowDirs, bool doShowFiles)
     {
+/*
+        // check the memory impact
+        if (true)
         {
-            foreach (var item in list)
+            int CNT = 130000, cnt = 0;
+            var rows = new DataGridViewRow[CNT];
+
+            for (int i = 0; i < CNT; i++)
             {
-                // check the memory imnpact
-
-                if (true || item.Contains("joppa"))
-                {
-                    int CNT = 130000, cnt = 0;
-                    var rows = new DataGridViewRow[CNT];
-
-                    for (int i = 0; i < CNT; i++)
-                    {
-                        var newRow = (DataGridViewRow)_myTemplateRow.Clone();
-                        buildRow(ref newRow, item, true);
-                        rows[cnt++] = newRow;
-                    }
-
-                    _dataGrid.Rows.AddRange(rows);
-                    _dataGrid.ClearSelection();
-
-                    return;
-                }
+                var newRow = (DataGridViewRow)_myTemplateRow.Clone();
+                buildRow(ref newRow, item, true);
+                rows[cnt++] = newRow;
             }
+
+            _dataGrid.Rows.AddRange(rows);
+            _dataGrid.ClearSelection();
+            return;
         }
-
-
-        int Count = 0;
-        Count += doShowDirs  ? dirsCount  : 0;
+*/
+        int Count = 0, i = -1;
+        Count += doShowDirs ? dirsCount : 0;
         Count += doShowFiles ? filesCount : 0;
 
         if (Count > 0)
@@ -211,6 +222,8 @@ public class myDataGrid
             // Display all directories and files
             foreach (var item in list)
             {
+                i++;
+
                 bool isDir = (item[0] == '1');
 
                 // Show/skip directories
@@ -230,7 +243,7 @@ public class myDataGrid
 
                 // Anyway, create new row and populate it with the data:
                 var newRow = (DataGridViewRow)_myTemplateRow.Clone();
-                buildRow(ref newRow, item, isDir);
+                buildRow(ref newRow, item, isDir, i);
                 rows[Count++] = newRow;
             }
 
@@ -247,6 +260,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Populate GridView with unknown amount of rows
+    // Multiple pass
     private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
     {
         int Count = 0;
@@ -255,14 +269,14 @@ public class myDataGrid
 
         if (Count > 0)
         {
-            var selectedItems = new System.Collections.Generic.List<string>();
-
             filterStr = filterStr.ToLower();
 
-            // Calculate the number of items we need to add
-            foreach (var item in list)
+            // Select only the indexes of the items we need
+            var selectedItems = new System.Collections.Generic.List<int>();
+
+            for(int i = 0; i < list.Count; i++)
             {
-                bool isDir = (item[0] == '1');
+                bool isDir = (list[i][0] == '1');
 
                 // Show/skip directories
                 if (isDir && !doShowDirs)
@@ -273,16 +287,16 @@ public class myDataGrid
                     continue;
 
                 // Skip the delimiter
-                if (item[0] == '2')
+                if (list[i][0] == '2')
                     continue;
 
-                string fileName = item.Substring(item.LastIndexOf("\\") + 1).ToLower();
+                string fileName = list[i].Substring(list[i].LastIndexOf("\\") + 1).ToLower();
 
                 // Skip everything that does not match the search string
                 if (!fileName.Contains(filterStr))
                     continue;
 
-                selectedItems.Add(item);
+                selectedItems.Add(i);
             }
 
             // Reuse Count
@@ -291,16 +305,16 @@ public class myDataGrid
             // Reserve known amount of rows
             var rows = new DataGridViewRow[selectedItems.Count];
 
-            foreach (var item in selectedItems)
+            foreach (var n in selectedItems)
             {
-                bool isDir = (item[0] == '1');
+                bool isDir = (list[n][0] == '1');
 
                 // Wasn't able to create new rows any other way
                 // So had to stick to the cloning
 
                 // Anyway, create new row and populate it with the data:
                 var newRow = (DataGridViewRow)_myTemplateRow.Clone();
-                buildRow(ref newRow, item, isDir);
+                buildRow(ref newRow, list[n], isDir, n);
                 rows[Count++] = newRow;
             }
 
@@ -341,15 +355,19 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Get a list of files that are currently checked in the GridView
     public void getSelectedFiles(System.Collections.Generic.List<string> originalFilesList, System.Collections.Generic.List<string> list, bool doShowDirs, bool doShowFiles)
     {
         list.Clear();
-
-        int i = 0;
-
-        // Get all directories and files
-        foreach (var item in originalFilesList)
+/*
+        list.Add($"-- Total number of items in List: {originalFilesList.Count}");
+        list.Add($"-- Total number of items in Grid: {_dataGrid.Rows.Count}");
+*/
+        // Get all checked directories and files
+        for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
+            DataGridViewRow row = _dataGrid.Rows[i];
+            string item = (string)(row.Cells[(int)Columns.colName].Value);
             bool isDir = (item[0] == '1');
 
             // Show/skip directories
@@ -364,11 +382,18 @@ public class myDataGrid
             if (item[0] == '2')
                 continue;
 
-            bool isChecked = (bool)_dataGrid.Rows[i++].Cells[0].Value;
+            bool isChecked = (bool)(row.Cells[(int)Columns.colCheckBox].Value);
 
+            // If the item is checked, we need to find it in the original list.
+            // This is easy and fast, as we know its index in the original list,
+            // and accessing item by index in the List is O(1)
             if (isChecked)
             {
-                list.Add(item[2..]);
+                int num = (int)(row.Cells[(int)Columns.colNumber].Value);
+
+                // Add unmodified file name
+                // This way, list will contain references to original file names, and not the copies
+                list.Add(originalFilesList[num]);
             }
         }
 
@@ -490,19 +515,15 @@ public class myDataGrid
     {
         switch (e.KeyData)
         {
-            // Change checked state of each selected row
             case Keys.Space: {
 
-                    bool isChecked = false;
+                    // Change checked state of each selected row
                     int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
 
-                    if (selectedRowCount > 0)
+                    for (int i = 0; i < selectedRowCount; i++)
                     {
-                        for (int i = 0; i < selectedRowCount; i++)
-                        {
-                            isChecked = (bool)_dataGrid.SelectedRows[i].Cells[0].Value;
-                            _dataGrid.SelectedRows[i].Cells[0].Value = (isChecked == true) ? false : true;
-                        }
+                        var cb = _dataGrid.SelectedRows[i].Cells[(int)Columns.colCheckBox];
+                        cb.Value = !(bool)(cb.Value);
                     }
                 }
                 break;

@@ -10,8 +10,8 @@ namespace WinFormsApp1
 
         private myTree      tree     = null;
         private myDataGrid  dataGrid = null;
-        private System.Collections.Generic.List<string> listFiles = null;
-        private System.Collections.Generic.List<string> listDirs  = null;
+        private System.Collections.Generic.List<string> globalFileList = null;
+        private System.Collections.Generic.List<string> globalFldrList = null;
 
         private bool doShowDirs   = false;
         private bool doShowFiles  = false;
@@ -39,8 +39,8 @@ namespace WinFormsApp1
             tree = new myTree(this.treeView1, path, expandEmpty);
             dataGrid = new myDataGrid(this.dataGridView1);
 
-            listFiles = new List<string>();
-            listDirs  = new List<string>();
+            globalFileList = new List<string>();
+            globalFldrList = new List<string>();
 
             this.cb_ShowFiles.Checked = true;
             this.cb_ShowDirs. Checked = true;
@@ -56,20 +56,15 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text += "treeView1.DeviceDpi = " + treeView1.DeviceDpi + "\n";
-            // try using logicaltodeviceunits property
-
-            return;
-
             var list = new System.Collections.Generic.List<string>();
 
-            dataGrid.getSelectedFiles(listFiles, list, doShowDirs, doShowFiles);
+            dataGrid.getSelectedFiles(globalFileList, list, doShowDirs, doShowFiles);
 
             richTextBox1.Clear();
 
             foreach (var item in list)
             {
-                richTextBox1.Text += item + "\n";
+                richTextBox1.Text += item[2..] + "\n";
             }
         }
 
@@ -83,18 +78,18 @@ namespace WinFormsApp1
             if (sender == cb_Recursive)
             {
                 // This happens when we're changing the state of [cb_Recursive] checkbox
-                tree.nodeSelected(treeView1.SelectedNode, listFiles, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+                tree.nodeSelected(treeView1.SelectedNode, globalFileList, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
             }
             else
             {
                 if (sender != null)
                 {
                     // This happens when we're actually clicking the node in the tree
-                    tree.nodeSelected(e.Node, listFiles, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+                    tree.nodeSelected(e.Node, globalFileList, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
                 }
             }
 
-            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
+            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------
@@ -103,7 +98,7 @@ namespace WinFormsApp1
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             tree.AllowRedrawing(false);
-            tree.nodeExpanded_Before(e.Node, listDirs);
+            tree.nodeExpanded_Before(e.Node, globalFldrList);
         }
 
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
@@ -150,7 +145,7 @@ namespace WinFormsApp1
         {
             filterStr = (sender as TextBox).Text;
 
-            dataGrid.Populate(listFiles, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
+            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------
