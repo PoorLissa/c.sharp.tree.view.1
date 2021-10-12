@@ -25,6 +25,8 @@ public class myDataGrid
     private Image _imgFile = null;
     private Bitmap _rowImg = null;
 
+    private Button _btn = null;
+
     private enum Columns
     {
         colCheckBox = 0,
@@ -51,28 +53,28 @@ public class myDataGrid
         {
             int dpi = _dataGrid.DeviceDpi;
 
-            // Set double buffering to reduce flickering:
-            // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
-            PropertyInfo pi = _dataGrid.GetType()
-                .GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(_dataGrid, true, null);
+            setDoubleBuffering();
 
-            _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
+            _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
             _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
 
             //_dataGrid.Paint += new PaintEventHandler(OnPaint);                            // Customize whole widget appearance
             _dataGrid.CellPainting +=
-                new DataGridViewCellPaintingEventHandler(
-                    dataGridView_CellPainting); // Customize individual cell appearance
+                new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
 
-            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30; // Row height
-            _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Row select mode
-            _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal; // Cell borders
-            _dataGrid.EditMode = DataGridViewEditMode.EditOnF2; // How to edit cell (press F2)
-            _dataGrid.AllowUserToAddRows = false; // User can't add new rows
-            _dataGrid.AllowUserToResizeRows = false; // User can't resize rows
-            _dataGrid.ColumnHeadersVisible = false; // No column headers
-            _dataGrid.RowHeadersVisible = false; // No row headers
+            _dataGrid.CellMouseDown += new DataGridViewCellMouseEventHandler(DataGridView_CellMouseDown);
+            _dataGrid.CellMouseUp   += new DataGridViewCellMouseEventHandler(DataGridView_CellMouseUp);
+
+            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30;                              // Row height
+
+            _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
+            _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
+            _dataGrid.EditMode        = DataGridViewEditMode.EditOnF2;                      // How to edit cell (press F2)
+
+            _dataGrid.AllowUserToAddRows    = false;                                        // User can't add new rows
+            _dataGrid.AllowUserToResizeRows = false;                                        // User can't resize rows
+            _dataGrid.ColumnHeadersVisible  = false;                                        // No column headers
+            _dataGrid.RowHeadersVisible     = false;                                        // No row headers
 
             // Grid Colors
             _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange; // Row selection color
@@ -105,6 +107,8 @@ public class myDataGrid
             numberColumn.Name = "Num";
             numberColumn.Visible = false;
             _dataGrid.Columns.Add(numberColumn);
+
+            createDrawingPrimitives();
         }
     }
 
@@ -112,12 +116,25 @@ public class myDataGrid
 
     private void createDrawingPrimitives()
     {
+/*
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
             Color.FromArgb(150, 204, 232, 255),
             Color.FromArgb(255, 190, 220, 255));
+*/
+
+        _btn = new Button();
+
+        _dataGrid.Controls.Add(_btn);
+
+        _btn.Text = "...";
+        _btn.Height = 36;
+        _btn.Width  = 50;
+        _btn.Left = 1;
+        _btn.Top = 1;
+        _btn.Visible = false;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -333,6 +350,7 @@ public class myDataGrid
     // Add files/derectories to the DataGridView from the List
     public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr = "")
     {
+        _btn.Visible = false;
         _dataGrid.Rows.Clear();
 
         // The first time we populate our GridView, we create this template row that we'll use for cloning later
@@ -510,6 +528,40 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+    {
+        _btn.Visible = false;
+    }
+
+    private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+    {
+        int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
+
+        if (selectedRowCount == 1)
+        {
+            int i = e.RowIndex;
+
+            var rowImg = _dataGrid.Rows[i].Cells[1].Value as Image;
+
+            if (rowImg == _imgDir)
+            {
+                _btn.Left = _dataGrid.Width - 66;
+                _btn.Top = _dataGrid.RowTemplate.Height * i + (_dataGrid.RowTemplate.Height - _btn.Height) / 2;
+                _btn.Visible = true;
+            }
+            else
+            {
+                _btn.Visible = false;
+            }
+        }
+        else
+        {
+            _btn.Visible = false;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Key Down Event
     public void OnKeyDown(object sender, KeyEventArgs e)
     {
@@ -530,6 +582,16 @@ public class myDataGrid
         }
 
         return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Set double buffering to reduce flickering
+    private void setDoubleBuffering()
+    {
+        // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
+        PropertyInfo pi = _dataGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+        pi.SetValue(_dataGrid, true, null);
     }
 
     // --------------------------------------------------------------------------------------------------------
