@@ -30,6 +30,8 @@ public class myTree
 
     private Font [] _nodeFonts = null;
 
+    private int _winVer = 0;
+
     // --------------------------------------------------------------------------------------------------------
 
     public myTree(TreeView tv, string path, bool expandEmpty)
@@ -45,6 +47,8 @@ public class myTree
 
         init();
         setPath(path, useDummies: true, expandEmpty: expandEmpty);
+
+        _winVer = Environment.OSVersion.Version.Major * 10 + Environment.OSVersion.Version.Minor;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -57,8 +61,6 @@ public class myTree
             // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
             PropertyInfo pi = _tree.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(_tree, true, null);
-
-            createDrawingPrimitives();
 
             try
             {
@@ -80,6 +82,7 @@ public class myTree
             _tree.FullRowSelect = true;
             _tree.ShowLines     = false;        // The ShowLines property must be false for the FullRowSelect property to work
 
+            createDrawingPrimitives();
 
             // Configure the TreeView control for owner-draw and add a handler for the DrawNode event
             _tree.DrawMode  = TreeViewDrawMode.OwnerDrawAll;
@@ -104,8 +107,8 @@ public class myTree
     {
         _treeBackBrush = new System.Drawing.SolidBrush(_tree.BackColor);
 
-        var pt1 = new Point(1, 120);
-        var pt2 = new Point(1, 160);
+        var pt1 = new Point(0, 0);
+        var pt2 = new Point(0, _tree.ItemHeight);
 
         _treeGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(150, 204, 232, 255),
@@ -118,6 +121,7 @@ public class myTree
         _treeGradientBrush3 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(100, 204, 232, 255),
                                     Color.FromArgb(250, 204, 232, 255));
+
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -142,44 +146,51 @@ public class myTree
             System.Drawing.Brush fontBrush = Brushes.Black;
 
             int x = 0, y = 0, gradientBrush = 0;
-            int yAdjustment = 0;
-            int xAdjustment = 0;
-            int xLeftMargin = 40;
-            int drawWidth = _tree.ClientRectangle.Right - e.Node.Bounds.X;
+            int yAdjustment     = 0;
+            int xAdjustmentText = 0;
+            int xAdjustmentBgr  = 0;
+            int yAdjustmentBgr  = 0;
+            int xLeftMargin     = 40;
+            int drawWidth       = _tree.ClientRectangle.Right - e.Node.Bounds.X;
 
-            // Don't let the selection rectangle be shorter than the node's text
-            if (e.Node.Bounds.Right >= _tree.ClientRectangle.Right)
-                drawWidth += 10;
+            // Don't let the selection rectangle be shorter than the node's text (Doesn't work in Win7)
+            {
+                if (_winVer > 90)
+                {
+                    if (e.Node.Bounds.Right >= _tree.ClientRectangle.Right)
+                        drawWidth += 10;
+                }
+                else
+                {
+                    if (_tree.ClientRectangle.Right - e.Node.Bounds.Right < 37)
+                        drawWidth += 10;
+                }
+            }
 
             // The node that was selected before the user selected another one
             if ((e.State & TreeNodeStates.Selected) != 0)
             {
-                xAdjustment += xAdjustment == 0 ? 0 : 1;
+                xAdjustmentText += xAdjustmentText == 0 ? 0 : 1;
                 backBrush = Brushes.AliceBlue;
             }
 
-            if (isNodeHovered && isNodeClicked)
+            if (isNodeHovered || isNodeClicked)
             {
                 doErase = true;
-                xAdjustment = 2;
-                gradientBrush = 1;
-            }
-            else
-            {
+
                 // The node the mouse is hovering upon
                 if (isNodeHovered)
                 {
-                    doErase = true;
-                    xAdjustment = 2;
+                    xAdjustmentText = 2;
                     gradientBrush = 2;
                 }
 
                 // Clicked node
                 if (isNodeClicked)
-                {
-                    doErase = true;
                     gradientBrush = 3;
-                }
+
+                if (isNodeHovered && isNodeClicked)
+                    gradientBrush = 1;
             }
 
             // Draw the background of the selected node
@@ -198,26 +209,32 @@ public class myTree
 
                 e.Graphics.FillRectangle(_treeBackBrush, x, y, 21, 21);
 
-                // Set up gradient brush
-                if (gradientBrush > 0)
+                // Draw background or erase the old node
                 {
-                    var pt1 = new Point(0, e.Node.Bounds.Y - 1);
-                    var pt2 = new Point(0, e.Node.Bounds.Y + e.Node.Bounds.Height);
+                    x = e.Node.Bounds.X - 2;
+                    y = e.Node.Bounds.Y;
 
-                    if (gradientBrush == 1)
-                        backBrush = _treeGradientBrush1;
+                    // Set up gradient brush
+                    if (gradientBrush > 0)
+                    {
+                        x += 1;
+                        y += 2;
 
-                    if (gradientBrush == 2)
-                        backBrush = _treeGradientBrush2;
+                        xAdjustmentBgr = 3;
+                        yAdjustmentBgr = 4;
 
-                    if (gradientBrush == 3)
-                        backBrush = _treeGradientBrush3;
+                        if (gradientBrush == 1)
+                            backBrush = _treeGradientBrush1;
+
+                        if (gradientBrush == 2)
+                            backBrush = _treeGradientBrush2;
+
+                        if (gradientBrush == 3)
+                            backBrush = _treeGradientBrush3;
+                    }
+
+                    e.Graphics.FillRectangle(backBrush, x, y, drawWidth - xAdjustmentBgr, e.Node.Bounds.Height - yAdjustmentBgr);
                 }
-
-                x = e.Node.Bounds.X - 2;
-                y = e.Node.Bounds.Y;
-
-                e.Graphics.FillRectangle(backBrush, x, y, drawWidth, e.Node.Bounds.Height - 1);
             }
 
             // Draw plus/minus icon
@@ -260,7 +277,7 @@ public class myTree
                 if (nodeFont.Height < 7)
                     yAdjustment = 1;
 
-                x = e.Node.Bounds.X + xAdjustment + xLeftMargin;
+                x = e.Node.Bounds.X + xAdjustmentText + xLeftMargin;
                 y = e.Node.Bounds.Y + (e.Node.TreeView.ItemHeight - nodeFont.Height) / 2 + yAdjustment;
 
                 e.Graphics.DrawString(e.Node.Text, nodeFont, fontBrush, x, y);
@@ -280,7 +297,7 @@ public class myTree
 
                 using (Pen focusPen = new Pen(focusPenColor))
                 {
-                    myUtils.DrawRoundedRectangle(e.Graphics, focusPen, rect, 3);
+                    myUtils.DrawRoundedRectangle(e.Graphics, focusPen, rect, cornerRadius: 3);
                 }
             }
         }

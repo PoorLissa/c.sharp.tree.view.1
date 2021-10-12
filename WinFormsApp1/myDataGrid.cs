@@ -16,6 +16,8 @@ public class myDataGrid
     private bool doUseIcons          = true;
     private bool doFillWithEmptyRows = true;
 
+    private System.Drawing.Brush _gridGradientBrush1 = null;
+
     private Image  _imgDir  = null;
     private Image  _imgFile = null;
     private Bitmap _rowImg  = null;
@@ -48,7 +50,7 @@ public class myDataGrid
             _dataGrid.CellPainting +=
               new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
 
-            _dataGrid.RowTemplate.Height = 50;                                              // Row height
+            _dataGrid.RowTemplate.Height = 30;                                              // Row height
             _dataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;              // Row select mode
             _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
             _dataGrid.EditMode = DataGridViewEditMode.EditOnF2;                             // How to edit cell (press F2)
@@ -83,6 +85,18 @@ public class myDataGrid
             textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             _dataGrid.Columns.Add(textColumn);
         }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void createDrawingPrimitives()
+    {
+        var pt1 = new Point(0, 0);
+        var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
+
+        _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
+                                    Color.FromArgb(150, 204, 232, 255),
+                                    Color.FromArgb(255, 190, 220, 255));
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -156,6 +170,32 @@ public class myDataGrid
     // Populate GridView with known amount of rows
     private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
+        {
+            foreach (var item in list)
+            {
+                // check the memory imnpact
+
+                if (true || item.Contains("joppa"))
+                {
+                    int CNT = 130000, cnt = 0;
+                    var rows = new DataGridViewRow[CNT];
+
+                    for (int i = 0; i < CNT; i++)
+                    {
+                        var newRow = (DataGridViewRow)_myTemplateRow.Clone();
+                        buildRow(ref newRow, item, true);
+                        rows[cnt++] = newRow;
+                    }
+
+                    _dataGrid.Rows.AddRange(rows);
+                    _dataGrid.ClearSelection();
+
+                    return;
+                }
+            }
+        }
+
+
         int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
@@ -424,19 +464,19 @@ public class myDataGrid
             e.Handled = true;
 
 /*
-                        System.Drawing.Color penColor = e.CellStyle.BackColor;
+            System.Drawing.Color penColor = e.CellStyle.BackColor;
 
-                        if ((e.State & DataGridViewElementStates.Selected) != 0)
-                            penColor = e.CellStyle.SelectionBackColor;
+            if ((e.State & DataGridViewElementStates.Selected) != 0)
+                penColor = e.CellStyle.SelectionBackColor;
 
-                        using (Pen p = new Pen(penColor, 1))
-                        {
-                            // Erase cell borders
-                            Rectangle rect = new Rectangle(e.CellBounds.X - 1, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height - 2);
-                            e.Graphics.DrawRectangle(p, rect);
-                        }
+            using (Pen p = new Pen(penColor, 1))
+            {
+                // Erase cell borders
+                Rectangle rect = new Rectangle(e.CellBounds.X - 1, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height - 2);
+                e.Graphics.DrawRectangle(p, rect);
+            }
 
-                        e.Handled = true;
+            e.Handled = true;
 */
         }
 

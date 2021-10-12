@@ -28,10 +28,13 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
-            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-
-            expandEmpty = true;
-            path = "c:\\_maxx\\Games\\Dishonored\\Uninstall";
+            if (path.Length == 0)
+            {
+                expandEmpty = true;
+                path = "d:\\Games\\Dishonored-2\\Uninstall";
+                path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options";
+                path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options\\__far.user.menu.1.png";
+            }
 
             tree = new myTree(this.treeView1, path, expandEmpty);
             dataGrid = new myDataGrid(this.dataGridView1);
@@ -45,6 +48,8 @@ namespace WinFormsApp1
 
             nodeSelected_Dirs  = 0;
             nodeSelected_Files = 0;
+
+            richTextBox1.Text += path + "\n\n\n";
         }
 
         // --------------------------------------------------------------------------------
