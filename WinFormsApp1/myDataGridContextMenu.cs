@@ -7,19 +7,7 @@ using System.Windows.Forms;
 public class myDataGrid_ContextMenu
 {
     private static DataGridView _dataGrid = null;
-
-    // Going to hold a reference to the global list of files
     private static System.Collections.Generic.List<string> _globalFileListRef = null;
-
-
-    // Must be the same as the enum in myDataGrid class
-    private enum Columns
-    {
-        colCheckBox = 0,
-        colImage,
-        colName,
-        colNumber
-    };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -119,7 +107,7 @@ public class myDataGrid_ContextMenu
             var row = _dataGrid.Rows[i];
 
             if (row.Selected)
-                str += row.Cells[(int)Columns.colName].Value.ToString() + "\n";
+                str += row.Cells[(int)myDataGrid.Columns.colName].Value.ToString() + "\n";
         }
 
         if (str.Length > 0)
@@ -145,7 +133,7 @@ public class myDataGrid_ContextMenu
 
             if (row.Selected)
             {
-                int n = (int)(row.Cells[(int)Columns.colNumber].Value);
+                int n = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
                 list.Add(n);
             }
         }
@@ -171,7 +159,7 @@ public class myDataGrid_ContextMenu
     {
         var list = new System.Collections.Generic.List<int>();
         var row = _dataGrid.SelectedRows[0];
-        int num = (int)(row.Cells[(int)Columns.colNumber].Value);
+        int num = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
 
         string path = _globalFileListRef[num][2..];
 
@@ -185,8 +173,11 @@ public class myDataGrid_ContextMenu
         for (int i = 0; i < list.Count; i++)
         {
             int n = list[i];
-            var cb = _dataGrid.Rows[n].Cells[(int)Columns.colCheckBox];
+            var cb = _dataGrid.Rows[n].Cells[(int)myDataGrid.Columns.colCheckBox];
             cb.Value = mode;
+
+            // Also, set selection for the rows
+            _dataGrid.Rows[n].Selected = mode;
         }
 
         return;

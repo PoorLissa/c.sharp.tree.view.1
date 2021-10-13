@@ -18,7 +18,7 @@ public class myDataGrid
     private Image  _imgFile = null;
     private Bitmap _rowImg  = null;
 
-    private enum Columns
+    public enum Columns
     {
         colCheckBox = 0,
         colImage,
@@ -68,10 +68,11 @@ public class myDataGrid
             _dataGrid.RowHeadersVisible     = false;                                        // No row headers
 
             // Grid Colors
-            _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange; // Row selection color
+            _dataGrid.DefaultCellStyle.SelectionForeColor = Color.Black;                    // Selected row's font color
+            _dataGrid.DefaultCellStyle.SelectionBackColor = Color.DarkOrange;               // Row selection color
             _dataGrid.GridColor = Color.LightGray;
             _dataGrid.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.Control;
-            _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor; // Instead of OnPaint event
+            _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor;               // Instead of OnPaint event
 
             // Add Columns
             addColumns();
@@ -82,17 +83,16 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    private System.Drawing.Brush _gridGradientBrush1 = null;
+
     private void createDrawingPrimitives(int dpi)
     {
-/*
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
-        private System.Drawing.Brush _gridGradientBrush1 = null;
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-            Color.FromArgb(150, 204, 232, 255),
-            Color.FromArgb(255, 190, 220, 255));
-*/
+            Color.FromArgb( 50, 255, 200, 133),
+            Color.FromArgb(175, 255, 128,   0));
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -112,6 +112,8 @@ public class myDataGrid
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
+
+        _dataGrid.RowPostPaint += new DataGridViewRowPostPaintEventHandler(on_RowPostPaint);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -425,6 +427,8 @@ public class myDataGrid
     // Not used anymore. Instead, background color of the widget was set.
     public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
     {
+        return;
+
         bool doFillWithEmptyRows = false;
 
         if (doFillWithEmptyRows)
@@ -478,54 +482,90 @@ public class myDataGrid
     {
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
-            e.Paint(e.CellBounds, DataGridViewPaintParts.All);      // Paint everything
-            //e.PaintBackground(e.CellBounds, true);                // Paint only background
-            //e.PaintContent(e.CellBounds);                         // Paint only contents
-
-            // Draw border around selected row
+            // Selected cell
             if ((e.State & DataGridViewElementStates.Selected) != 0)
             {
-                int yOffset = e.RowIndex == 0 ? 1 : 0;
+                int x = e.CellBounds.X + 1;
+                int y = e.CellBounds.Y + 1;
+                int w = e.CellBounds.Width - 2;
+                int h = e.CellBounds.Height - 3;
 
-                // Draw borders around each cell in a row
-                //using (Pen p = new Pen(Color.OrangeRed, 1))
-                using (Pen p = new Pen(Color.FloralWhite, 1))
+                if (e.ColumnIndex == 0)
                 {
-                    Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + yOffset, e.CellBounds.Width - 1, e.CellBounds.Height - 2 - yOffset);
-                    e.Graphics.DrawRectangle(p, rect);
+                    w += 1;
                 }
 
-                // Remove verical lines, so only the row rectangle remains
-                if (e.ColumnIndex > 0)
+                if (e.ColumnIndex == 1)
                 {
-                    using (Pen p2 = new Pen(e.CellStyle.SelectionBackColor, 2))
+                    x -= 1;
+                    w += 1;
+                }
+
+                if (e.ColumnIndex > 1)
+                {
+                    x -= 2;
+                    w += 2;
+                }
+
+                e.PaintBackground(e.CellBounds, false);
+
+                e.Graphics.FillRectangle(_gridGradientBrush1, x, y, w, h);
+
+                e.PaintContent(e.CellBounds);
+
+                if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
+                {
+                    using (Pen p = new Pen(Color.DarkOrange, 1))
                     {
-                        e.Graphics.DrawLine(p2, e.CellBounds.X, e.CellBounds.Y + 1 + yOffset, e.CellBounds.X, e.CellBounds.Y + e.CellBounds.Height - 2);
+                        if (e.ColumnIndex < 2)
+                        {
+                            h--;
+
+                            e.Graphics.DrawLine(p, x, y, x + w, y);
+                            e.Graphics.DrawLine(p, x, y + h, x + w, y + h);
+
+                            if (e.ColumnIndex == 0)
+                                e.Graphics.DrawLine(p, x, y, x, y + h);
+                        }
+                        else
+                        {
+                            Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                            e.Graphics.DrawRectangle(p, rect);
+                        }
                     }
                 }
             }
-
-            e.Handled = true;
-
-/*
-            System.Drawing.Color penColor = e.CellStyle.BackColor;
-
-            if ((e.State & DataGridViewElementStates.Selected) != 0)
-                penColor = e.CellStyle.SelectionBackColor;
-
-            using (Pen p = new Pen(penColor, 1))
+            else
             {
-                // Erase cell borders
-                Rectangle rect = new Rectangle(e.CellBounds.X - 1, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height - 2);
-                e.Graphics.DrawRectangle(p, rect);
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
             }
 
             e.Handled = true;
-*/
         }
 
         return;
     }
+
+    private void on_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+    {
+        return;
+
+        SolidBrush forebrush = new SolidBrush(Color.Red);
+
+        //Rectangle rowBounds = new Rectangle(e.RowBounds.X, e.RowBounds.Y, e.RowBounds.X + 5, e.RowBounds.Y + 5);
+
+        Rectangle rect = new Rectangle(e.RowBounds.Location.X, e.RowBounds.Location.Y, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 5);
+
+        //e.Graphics.FillRectangle(forebrush, rowBounds);
+
+        using (Pen p = new Pen(Color.DarkOrange, 1))
+        {
+            e.Graphics.DrawRectangle(p, rect);
+        }
+
+        return;
+    }
+
 
     // --------------------------------------------------------------------------------------------------------
 
