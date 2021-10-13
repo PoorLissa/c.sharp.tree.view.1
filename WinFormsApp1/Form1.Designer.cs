@@ -102,7 +102,6 @@ namespace WinFormsApp1
             this.dataGridView1.RowTemplate.Height = 33;
             this.dataGridView1.Size = new System.Drawing.Size(763, 1060);
             this.dataGridView1.TabIndex = 6;
-            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyDown);
             // 
             // cb_Recursive
             // 

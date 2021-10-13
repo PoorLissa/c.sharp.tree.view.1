@@ -28,19 +28,20 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+            globalFileList = new List<string>();
+            globalFldrList = new List<string>();
+
             if (path.Length == 0)
             {
                 expandEmpty = true;
                 path = "d:\\Games\\Dishonored-2\\Uninstall";
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options";
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options\\__far.user.menu.1.png";
+                path = "c:\\_maxx\\music";
             }
 
             tree = new myTree(this.treeView1, path, expandEmpty);
-            dataGrid = new myDataGrid(this.dataGridView1);
-
-            globalFileList = new List<string>();
-            globalFldrList = new List<string>();
+            dataGrid = new myDataGrid(this.dataGridView1, globalFileList);
 
             this.cb_ShowFiles.Checked = true;
             this.cb_ShowDirs. Checked = true;
@@ -58,7 +59,7 @@ namespace WinFormsApp1
         {
             var list = new System.Collections.Generic.List<string>();
 
-            dataGrid.getSelectedFiles(globalFileList, list, doShowDirs, doShowFiles);
+            dataGrid.getSelectedFiles(list, doShowDirs, doShowFiles);
 
             richTextBox1.Clear();
 
@@ -89,7 +90,7 @@ namespace WinFormsApp1
                 }
             }
 
-            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, useRecursion, filterStr);
+            dataGrid.Populate(nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------
@@ -126,16 +127,12 @@ namespace WinFormsApp1
 
         // --------------------------------------------------------------------------------
 
-        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
-        {
-            dataGrid.OnKeyDown(sender, e);
-        }
-
-        // --------------------------------------------------------------------------------
-
         private void cb_Recursive_CheckedChanged(object sender, EventArgs e)
         {
             useRecursion = this.cb_Recursive.Checked;
+
+            dataGrid.setRecursiveMode(useRecursion);
+
             treeView1_AfterSelect(sender, null);
         }
 
@@ -145,7 +142,7 @@ namespace WinFormsApp1
         {
             filterStr = (sender as TextBox).Text;
 
-            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, useRecursion, filterStr);
+            dataGrid.Populate(nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
         }
 
         // --------------------------------------------------------------------------------

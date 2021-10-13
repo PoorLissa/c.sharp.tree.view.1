@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Data.Common;
-using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 /*
@@ -16,17 +12,11 @@ public class myDataGrid
     private DataGridView    _dataGrid      = null;
     private DataGridViewRow _myTemplateRow = null;
 
-    private bool doAlternateColors   = false;
-    private bool doFillWithEmptyRows = true;
-    private bool doUseRecursion      = false;
+    private bool _doUseRecursion = false;
 
-    private System.Drawing.Brush _gridGradientBrush1 = null;
-
-    private Image _imgDir = null;
-    private Image _imgFile = null;
-    private Bitmap _rowImg = null;
-
-    private Button _btn = null;
+    private Image  _imgDir  = null;
+    private Image  _imgFile = null;
+    private Bitmap _rowImg  = null;
 
     private enum Columns
     {
@@ -36,11 +26,15 @@ public class myDataGrid
         colNumber
     };
 
+    // Going to hold a reference to the global list of files
+    private readonly System.Collections.Generic.List<string> _globalFileListRef = null;
+
     // --------------------------------------------------------------------------------------------------------
 
-    public myDataGrid(DataGridView dgv)
+    public myDataGrid(DataGridView dgv, System.Collections.Generic.List<string> list)
     {
         _dataGrid = dgv;
+        _globalFileListRef = list;
 
         init();
     }
@@ -59,12 +53,8 @@ public class myDataGrid
             _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
             _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
 
-            //_dataGrid.Paint += new PaintEventHandler(OnPaint);                            // Customize whole widget appearance
-            _dataGrid.CellPainting +=
-                new DataGridViewCellPaintingEventHandler(dataGridView_CellPainting);        // Customize individual cell appearance
-
-            _dataGrid.CellMouseDown += new DataGridViewCellMouseEventHandler(DataGridView_CellMouseDown);
-            _dataGrid.CellMouseUp   += new DataGridViewCellMouseEventHandler(DataGridView_CellMouseUp);
+            // Add and subscribe to events
+            setUpEvents();
 
             _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30;                              // Row height
 
@@ -83,31 +73,8 @@ public class myDataGrid
             _dataGrid.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.Control;
             _dataGrid.BackgroundColor = _dataGrid.DefaultCellStyle.BackColor; // Instead of OnPaint event
 
-            // --- Add Columns ---
-
-            // Checkbox column Columns.colCheckBox
-            var checkBoxColumn = new DataGridViewCheckBoxColumn();
-            checkBoxColumn.Width = 50;
-            checkBoxColumn.Resizable = DataGridViewTriState.False;
-            _dataGrid.Columns.Add(checkBoxColumn);
-
-            // Icon column Columns.colImage
-            var imageColumn = new DataGridViewImageColumn();
-            imageColumn.Width = 30;
-            imageColumn.Resizable = DataGridViewTriState.False;
-            _dataGrid.Columns.Add(imageColumn);
-
-            // Text column Columns.colName (auto adjusted to fill all the available width)
-            var textColumn = new DataGridViewTextBoxColumn();
-            textColumn.Name = "Name";
-            textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            _dataGrid.Columns.Add(textColumn);
-
-            // Row number column Columns.colNumber
-            var numberColumn = new DataGridViewTextBoxColumn();
-            numberColumn.Name = "Num";
-            numberColumn.Visible = false;
-            _dataGrid.Columns.Add(numberColumn);
+            // Add Columns
+            addColumns();
 
             createDrawingPrimitives(dpi);
         }
@@ -121,19 +88,61 @@ public class myDataGrid
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
+        private System.Drawing.Brush _gridGradientBrush1 = null;
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
             Color.FromArgb(150, 204, 232, 255),
             Color.FromArgb(255, 190, 220, 255));
 */
+    }
 
-        _btn = new Button();
-        _dataGrid.Controls.Add(_btn);
-        _btn.Text = "...";
-        _btn.Height = dpi > 96 ? 36 : 22;
-        _btn.Width  = 50;
-        _btn.Left = 1;
-        _btn.Top = 1;
-        _btn.Visible = false;
+    // --------------------------------------------------------------------------------------------------------
+
+    // Add and subscribe to events
+    private void setUpEvents()
+    {
+        // Customize whole widget appearance (not used for now)
+        //_dataGrid.Paint += new PaintEventHandler(OnPaint);
+
+        // Customize individual cell appearance
+        _dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(on_CellPainting);
+
+        // Mouse events
+        _dataGrid.CellMouseDown += new DataGridViewCellMouseEventHandler(on_CellMouseDown);
+        _dataGrid.CellMouseUp   += new DataGridViewCellMouseEventHandler(on_CellMouseUp);
+
+        // Keyboard events
+        _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void addColumns()
+    {
+        // Checkbox column Columns.colCheckBox
+        var checkBoxColumn = new DataGridViewCheckBoxColumn();
+        checkBoxColumn.Width = 50;
+        checkBoxColumn.Resizable = DataGridViewTriState.False;
+        _dataGrid.Columns.Add(checkBoxColumn);
+
+        // Icon column Columns.colImage
+        var imageColumn = new DataGridViewImageColumn();
+        imageColumn.Width = 30;
+        imageColumn.Resizable = DataGridViewTriState.False;
+        _dataGrid.Columns.Add(imageColumn);
+
+        // Text column Columns.colName (auto adjusted to fill all the available width)
+        var textColumn = new DataGridViewTextBoxColumn();
+        textColumn.Name = "Name";
+        textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        _dataGrid.Columns.Add(textColumn);
+
+        // Row number column Columns.colNumber
+        var numberColumn = new DataGridViewTextBoxColumn();
+        numberColumn.Name = "Num";
+        numberColumn.Visible = false;
+        _dataGrid.Columns.Add(numberColumn);
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -169,13 +178,6 @@ public class myDataGrid
     {
         int pos = item.LastIndexOf('\\') + 1;
         int i = _dataGrid.Rows.Add();
-
-        // Alternate row background color (Zebra style)
-        if (doAlternateColors)
-        {
-            System.Drawing.Color backColor = (i % 2 == 0) ? System.Drawing.Color.LightGray : System.Drawing.Color.Wheat;
-            _dataGrid.Rows[i].DefaultCellStyle.BackColor = backColor;
-        }
 
         if (item.Length > 0)
         {
@@ -346,10 +348,8 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, bool useRecursion, string filterStr = "")
+    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr = "")
     {
-        doUseRecursion = useRecursion;
-        _btn.Visible = false;
         _dataGrid.Rows.Clear();
 
         // The first time we populate our GridView, we create this template row that we'll use for cloning later
@@ -360,11 +360,11 @@ public class myDataGrid
 
         if (filterStr.Length == 0)
         {
-            Populate_Fast(list, dirsCount, filesCount, doShowDirs, doShowFiles);
+            Populate_Fast(_globalFileListRef, dirsCount, filesCount, doShowDirs, doShowFiles);
         }
         else
         {
-            Populate_Slow(list, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
+            Populate_Slow(_globalFileListRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
         }
 
         return;
@@ -373,7 +373,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Get a list of files that are currently checked in the GridView
-    public void getSelectedFiles(System.Collections.Generic.List<string> originalFilesList, System.Collections.Generic.List<string> list, bool doShowDirs, bool doShowFiles)
+    public void getSelectedFiles(System.Collections.Generic.List<string> list, bool doShowDirs, bool doShowFiles)
     {
         list.Clear();
 /*
@@ -410,7 +410,7 @@ public class myDataGrid
 
                 // Add unmodified file name
                 // This way, list will contain references to original file names, and not the copies
-                list.Add(originalFilesList[num]);
+                list.Add(_globalFileListRef[num]);
             }
         }
 
@@ -425,6 +425,8 @@ public class myDataGrid
     // Not used anymore. Instead, background color of the widget was set.
     public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
     {
+        bool doFillWithEmptyRows = false;
+
         if (doFillWithEmptyRows)
         {
             int rowHeight = _dataGrid.RowTemplate.Height;
@@ -472,7 +474,7 @@ public class myDataGrid
 
     // Customize the look of each cell
     // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.cellpainting?view=netframework-4.8
-    private void dataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+    private void on_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
@@ -527,39 +529,28 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+    private void on_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
     {
-        _btn.Visible = false;
+        ;
     }
 
-    private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+    // --------------------------------------------------------------------------------------------------------
+
+    private void on_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
     {
-        if (doUseRecursion)
+        if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
         {
-            int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
-
-            if (selectedRowCount == 1)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                int i = e.RowIndex;
-                var rowImg = _dataGrid.Rows[i].Cells[1].Value as Image;
-
-                if (rowImg == _imgDir)
-                {
-                    _btn.Left = _dataGrid. Width - 75;
-                    _btn.Top = _dataGrid.RowTemplate.Height * i + (_dataGrid.RowTemplate.Height - _btn.Height) / 2;
-                    _btn.Visible = true;
-                    return;
-                }
+                myDataGrid_ContextMenu.showMenu(sender, e, _globalFileListRef, _doUseRecursion);
             }
         }
-
-        _btn.Visible = false;
     }
 
     // --------------------------------------------------------------------------------------------------------
 
     // Key Down Event
-    public void OnKeyDown(object sender, KeyEventArgs e)
+    private void on_KeyDown(object sender, KeyEventArgs e)
     {
         switch (e.KeyData)
         {
@@ -588,6 +579,13 @@ public class myDataGrid
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
         PropertyInfo pi = _dataGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
         pi.SetValue(_dataGrid, true, null);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public void setRecursiveMode(bool mode)
+    {
+        _doUseRecursion = mode;
     }
 
     // --------------------------------------------------------------------------------------------------------
