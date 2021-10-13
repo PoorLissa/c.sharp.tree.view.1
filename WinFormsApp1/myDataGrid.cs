@@ -13,11 +13,12 @@ using System.Windows.Forms;
 */
 public class myDataGrid
 {
-    private DataGridView _dataGrid = null;
+    private DataGridView    _dataGrid      = null;
     private DataGridViewRow _myTemplateRow = null;
 
-    private bool doAlternateColors = false;
+    private bool doAlternateColors   = false;
     private bool doFillWithEmptyRows = true;
+    private bool doUseRecursion      = false;
 
     private System.Drawing.Brush _gridGradientBrush1 = null;
 
@@ -108,13 +109,13 @@ public class myDataGrid
             numberColumn.Visible = false;
             _dataGrid.Columns.Add(numberColumn);
 
-            createDrawingPrimitives();
+            createDrawingPrimitives(dpi);
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
 
-    private void createDrawingPrimitives()
+    private void createDrawingPrimitives(int dpi)
     {
 /*
         var pt1 = new Point(0, 0);
@@ -126,11 +127,9 @@ public class myDataGrid
 */
 
         _btn = new Button();
-
         _dataGrid.Controls.Add(_btn);
-
         _btn.Text = "...";
-        _btn.Height = 36;
+        _btn.Height = dpi > 96 ? 36 : 22;
         _btn.Width  = 50;
         _btn.Left = 1;
         _btn.Top = 1;
@@ -202,8 +201,7 @@ public class myDataGrid
 
     // Populate GridView with known amount of rows
     // Single pass
-    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount,
-        bool doShowDirs, bool doShowFiles)
+    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
 /*
         // check the memory impact
@@ -348,8 +346,9 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr = "")
+    public void Populate(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, bool useRecursion, string filterStr = "")
     {
+        doUseRecursion = useRecursion;
         _btn.Visible = false;
         _dataGrid.Rows.Clear();
 
@@ -535,29 +534,26 @@ public class myDataGrid
 
     private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
     {
-        int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
-
-        if (selectedRowCount == 1)
+        if (doUseRecursion)
         {
-            int i = e.RowIndex;
+            int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
 
-            var rowImg = _dataGrid.Rows[i].Cells[1].Value as Image;
+            if (selectedRowCount == 1)
+            {
+                int i = e.RowIndex;
+                var rowImg = _dataGrid.Rows[i].Cells[1].Value as Image;
 
-            if (rowImg == _imgDir)
-            {
-                _btn.Left = _dataGrid.Width - 66;
-                _btn.Top = _dataGrid.RowTemplate.Height * i + (_dataGrid.RowTemplate.Height - _btn.Height) / 2;
-                _btn.Visible = true;
-            }
-            else
-            {
-                _btn.Visible = false;
+                if (rowImg == _imgDir)
+                {
+                    _btn.Left = _dataGrid. Width - 75;
+                    _btn.Top = _dataGrid.RowTemplate.Height * i + (_dataGrid.RowTemplate.Height - _btn.Height) / 2;
+                    _btn.Visible = true;
+                    return;
+                }
             }
         }
-        else
-        {
-            _btn.Visible = false;
-        }
+
+        _btn.Visible = false;
     }
 
     // --------------------------------------------------------------------------------------------------------

@@ -89,7 +89,7 @@ namespace WinFormsApp1
                 }
             }
 
-            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
+            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, useRecursion, filterStr);
         }
 
         // --------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace WinFormsApp1
         {
             filterStr = (sender as TextBox).Text;
 
-            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, filterStr);
+            dataGrid.Populate(globalFileList, nodeSelected_Dirs, nodeSelected_Files, doShowDirs, doShowFiles, useRecursion, filterStr);
         }
 
         // --------------------------------------------------------------------------------
