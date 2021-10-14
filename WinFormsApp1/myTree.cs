@@ -266,7 +266,21 @@ public class myTree
                 x = e.Node.Bounds.Location.X + 3;
                 y = e.Node.Bounds.Location.Y + 5;
 
-                e.Graphics.DrawImage(e.Node.Level == 0 ? _imgHDD : dirImg, x, y, 30, 30);
+                //e.Graphics.DrawImage(e.Node.Level == 0 ? _imgHDD : dirImg, x, y, 30, 30);
+
+                if (e.Node.Level == 0)
+                {
+                    //e.Graphics.DrawImage(_imgHDD, x, y, 32, 32);
+                    //e.Graphics.DrawImage(_imgHDD, x, y, 64, 64);
+                    e.Graphics.DrawImage(_imgHDD, x, y, 32, 32);
+                }
+                else
+                {
+                    //e.Graphics.DrawImage(dirImg, x, y, 30, 30);
+                    e.Graphics.DrawImage(dirImg, x-1, y-1, 32, 32);
+                }
+
+
             }
 
             // Draw node text

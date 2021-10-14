@@ -112,8 +112,6 @@ public class myDataGrid
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
-
-        _dataGrid.RowPostPaint += new DataGridViewRowPostPaintEventHandler(on_RowPostPaint);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -136,6 +134,7 @@ public class myDataGrid
         var textColumn = new DataGridViewTextBoxColumn();
         textColumn.Name = "Name";
         textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        textColumn.ReadOnly = true;
         _dataGrid.Columns.Add(textColumn);
 
         // Row number column Columns.colNumber
@@ -482,37 +481,32 @@ public class myDataGrid
     {
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
-            // Selected cell
+            // Selected row (all the row's cells will be painted as selected)
             if ((e.State & DataGridViewElementStates.Selected) != 0)
             {
                 int x = e.CellBounds.X + 1;
                 int y = e.CellBounds.Y + 1;
-                int w = e.CellBounds.Width - 2;
+                int w = e.CellBounds.Width;
                 int h = e.CellBounds.Height - 3;
 
-                if (e.ColumnIndex == 0)
-                {
-                    w += 1;
-                }
-
-                if (e.ColumnIndex == 1)
+                if (e.ColumnIndex > 0)
                 {
                     x -= 1;
-                    w += 1;
-                }
-
-                if (e.ColumnIndex > 1)
-                {
-                    x -= 2;
                     w += 2;
                 }
 
+                // Paint background of a cell (white or gray)
                 e.PaintBackground(e.CellBounds, false);
 
+                // Paint gradient background
                 e.Graphics.FillRectangle(_gridGradientBrush1, x, y, w, h);
 
+                // Paint the contents of each cell
                 e.PaintContent(e.CellBounds);
 
+                // Paint custom border around each row
+                // I'm painting it at the time the last cell in a row is painted,
+                // But it also needs to be partly restored in the first 2 cells when they're being selected
                 if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
                 {
                     using (Pen p = new Pen(Color.DarkOrange, 1))
@@ -545,27 +539,6 @@ public class myDataGrid
 
         return;
     }
-
-    private void on_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-    {
-        return;
-
-        SolidBrush forebrush = new SolidBrush(Color.Red);
-
-        //Rectangle rowBounds = new Rectangle(e.RowBounds.X, e.RowBounds.Y, e.RowBounds.X + 5, e.RowBounds.Y + 5);
-
-        Rectangle rect = new Rectangle(e.RowBounds.Location.X, e.RowBounds.Location.Y, e.RowBounds.Location.X + 5, e.RowBounds.Location.Y + 5);
-
-        //e.Graphics.FillRectangle(forebrush, rowBounds);
-
-        using (Pen p = new Pen(Color.DarkOrange, 1))
-        {
-            e.Graphics.DrawRectangle(p, rect);
-        }
-
-        return;
-    }
-
 
     // --------------------------------------------------------------------------------------------------------
 
