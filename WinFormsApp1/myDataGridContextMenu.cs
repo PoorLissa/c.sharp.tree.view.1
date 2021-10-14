@@ -11,16 +11,16 @@ public class myDataGrid_ContextMenu
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Display context menu of the row
+    // Display context menu for the row
     public static void showMenu(object sender, DataGridViewCellMouseEventArgs e, List<string> list, bool recursion)
     {
         var dataGrid = (DataGridView)(sender);
 
         if (_dataGrid == null)
-        {
             _dataGrid = dataGrid;
+
+        if (_globalFileListRef == null)
             _globalFileListRef = list;
-        }
 
         var cell = _dataGrid[e.ColumnIndex, e.RowIndex];
 
@@ -35,10 +35,10 @@ public class myDataGrid_ContextMenu
         var pt      = new Point(0, 0);
         var handler = new EventHandler(contextMenuHandler);
 
-        menu.Items.Add("Copy Name",         null, handler);
-        menu.Items.Add("Copy Full Path",    null, handler);
-        menu.Items.Add("Select children",   null, handler);
-        menu.Items.Add("Deselect children", null, handler);
+        menu.Items.Add("Copy Name",         null, handler).Name = "1";
+        menu.Items.Add("Copy Full Path",    null, handler).Name = "2";
+        menu.Items.Add("Select children",   null, handler).Name = "3";
+        menu.Items.Add("Deselect children", null, handler).Name = "4";
 
         pt.X = e.X;
         pt.Y = e.Y + ((e.RowIndex - _dataGrid.FirstDisplayedScrollingRowIndex) * _dataGrid.RowTemplate.Height);
@@ -64,28 +64,28 @@ public class myDataGrid_ContextMenu
         do
         {
             // Copy selected items names to clipboard
-            if (menuItem.Text == "Copy Name")
+            if (menuItem.Name == "1")
             {
                 copyName();
                 break;
             }
 
             // Copy selected items full path to clipboard
-            if (menuItem.Text == "Copy Full Path")
+            if (menuItem.Name == "2")
             {
                 copyFullPath();
                 break;
             }
 
             // Select all the children of the selected item
-            if (menuItem.Text == "Select children")
+            if (menuItem.Name == "3")
             {
                 selectChildren(true);
                 break;
             }
 
             // Deselect all the children of the selected item
-            if (menuItem.Text == "Deselect children")
+            if (menuItem.Name == "4")
             {
                 selectChildren(false);
                 break;
@@ -157,27 +157,31 @@ public class myDataGrid_ContextMenu
     // Find any children of selected directory and check/uncheck their checkboxes
     private static void selectChildren(bool mode)
     {
-        var list = new System.Collections.Generic.List<int>();
-        var row = _dataGrid.SelectedRows[0];
-        int num = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
+        var set = new System.Collections.Generic.HashSet<int>();
 
-        string path = _globalFileListRef[num][2..];
-
-        // Find indexes of item's children
-        for (int i = 0; i < _globalFileListRef.Count; i++)
+        // For every selected row:
+        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
         {
-            if (_globalFileListRef[i].Contains(path))
-                list.Add(i);
+            var row = _dataGrid.SelectedRows[i];
+
+            int id = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
+            string path = _globalFileListRef[id][2..];
+
+            set.Add(id);
+
+            // Find indexes of item's children
+            for (int j = id + 1; j < _globalFileListRef.Count; j++)
+                if (_globalFileListRef[j].Contains(path))
+                    set.Add(j);
         }
 
-        for (int i = 0; i < list.Count; i++)
+        foreach (var id in set)
         {
-            int n = list[i];
-            var cb = _dataGrid.Rows[n].Cells[(int)myDataGrid.Columns.colCheckBox];
+            var cb = _dataGrid.Rows[id].Cells[(int)myDataGrid.Columns.colCheckBox];
             cb.Value = mode;
 
-            // Also, set selection for the rows
-            _dataGrid.Rows[n].Selected = mode;
+            // Also, set selection for the row
+            _dataGrid.Rows[id].Selected = mode;
         }
 
         return;

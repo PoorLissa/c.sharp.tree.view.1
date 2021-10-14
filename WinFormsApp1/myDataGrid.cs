@@ -18,6 +18,9 @@ public class myDataGrid
     private Image  _imgFile = null;
     private Bitmap _rowImg  = null;
 
+    private System.Drawing.Brush _gridGradientBrush1 = null;
+    private System.Drawing.Brush _gridGradientBrush2 = null;
+
     public enum Columns
     {
         colCheckBox = 0,
@@ -57,6 +60,7 @@ public class myDataGrid
             setUpEvents();
 
             _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30;                              // Row height
+            _dataGrid.RowTemplate.MinimumHeight = 2;                                        // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
             _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
             _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
@@ -66,6 +70,7 @@ public class myDataGrid
             _dataGrid.AllowUserToResizeRows = false;                                        // User can't resize rows
             _dataGrid.ColumnHeadersVisible  = false;                                        // No column headers
             _dataGrid.RowHeadersVisible     = false;                                        // No row headers
+            _dataGrid.ShowCellToolTips      = false;                                        // No cell tooltips
 
             // Grid Colors
             _dataGrid.DefaultCellStyle.SelectionForeColor = Color.Black;                    // Selected row's font color
@@ -83,16 +88,18 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    private System.Drawing.Brush _gridGradientBrush1 = null;
-
     private void createDrawingPrimitives(int dpi)
     {
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
-            Color.FromArgb( 50, 255, 200, 133),
-            Color.FromArgb(175, 255, 128,   0));
+                                    Color.FromArgb( 50, 255, 200, 133),
+                                    Color.FromArgb(175, 255, 128,   0));
+
+        _gridGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
+                                    Color.FromArgb(150, 255, 200, 133),
+                                    Color.FromArgb(233, 255, 128,   0));
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -107,8 +114,10 @@ public class myDataGrid
         _dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(on_CellPainting);
 
         // Mouse events
-        _dataGrid.CellMouseDown += new DataGridViewCellMouseEventHandler(on_CellMouseDown);
-        _dataGrid.CellMouseUp   += new DataGridViewCellMouseEventHandler(on_CellMouseUp);
+        _dataGrid.CellMouseDown  += new DataGridViewCellMouseEventHandler(on_CellMouseDown);
+        _dataGrid.CellMouseUp    += new DataGridViewCellMouseEventHandler(on_CellMouseUp);
+        _dataGrid.CellMouseEnter += new DataGridViewCellEventHandler(on_CellMouseEnter);
+        _dataGrid.CellMouseLeave += new DataGridViewCellEventHandler(on_CellMouseLeave);
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
@@ -481,9 +490,21 @@ public class myDataGrid
     {
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
-            // Selected row (all the row's cells will be painted as selected)
+            // Selected row (all the row's cells will be painted one by one starting from the left)
             if ((e.State & DataGridViewElementStates.Selected) != 0)
             {
+                char hoverStatus = '0';
+                var row = _dataGrid.Rows[e.RowIndex];
+
+                if (row.MinimumHeight > 2)
+                {
+                    hoverStatus = row.MinimumHeight == 4 ? '2' : '1';
+
+                    // Reset row's hover status to default (but only if the mouse has left the row)
+                    if (hoverStatus == '3' && e.ColumnIndex == (int)Columns.colName)
+                        row.MinimumHeight = 2;
+                }
+
                 int x = e.CellBounds.X + 1;
                 int y = e.CellBounds.Y + 1;
                 int w = e.CellBounds.Width;
@@ -499,7 +520,7 @@ public class myDataGrid
                 e.PaintBackground(e.CellBounds, false);
 
                 // Paint gradient background
-                e.Graphics.FillRectangle(_gridGradientBrush1, x, y, w, h);
+                e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
 
                 // Paint the contents of each cell
                 e.PaintContent(e.CellBounds);
@@ -509,7 +530,9 @@ public class myDataGrid
                 // But it also needs to be partly restored in the first 2 cells when they're being selected
                 if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
                 {
-                    using (Pen p = new Pen(Color.DarkOrange, 1))
+                    var penColor = hoverStatus == '2' ? Color.DarkMagenta: Color.DarkOrange;
+
+                    using (Pen p = new Pen(penColor, 1))
                     {
                         if (e.ColumnIndex < 2)
                         {
@@ -544,7 +567,10 @@ public class myDataGrid
 
     private void on_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
     {
-        ;
+        if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+        {
+            _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -555,8 +581,35 @@ public class myDataGrid
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
+                // This call will also cause CellMouseLeave event
                 myDataGrid_ContextMenu.showMenu(sender, e, _globalFileListRef, _doUseRecursion);
             }
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void on_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+    {
+        if (_dataGrid.Rows[e.RowIndex].Selected)
+        {
+            // Change row's appearance while mouse is hovering upon it
+            _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
+            _dataGrid.InvalidateRow(e.RowIndex);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void on_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+    {
+        if (_dataGrid.Rows[e.RowIndex].Selected)
+        {
+            // Change row's appearance while mouse is hovering upon it
+            if (_dataGrid.Rows[e.RowIndex].MinimumHeight == 4)
+                _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
+
+            _dataGrid.InvalidateRow(e.RowIndex);
         }
     }
 
