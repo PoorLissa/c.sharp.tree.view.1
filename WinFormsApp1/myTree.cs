@@ -57,23 +57,7 @@ public class myTree
     {
         if (_tree != null)
         {
-            // Set double buffering to reduce flickering:
-            // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
-            PropertyInfo pi = _tree.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(_tree, true, null);
-
-            try
-            {
-                _imgMinus     = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
-                _imgPlus      = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
-                _imgHDD       = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
-                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
-                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "myTree: Failed to load images", MessageBoxButtons.OK);
-            }
+            setDoubleBuffering();
 
             _tree.Indent        = 30;
             _tree.ItemHeight    = 40;
@@ -105,6 +89,21 @@ public class myTree
 
     private void createDrawingPrimitives()
     {
+        // Load images
+        try
+        {
+            _imgMinus = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
+            _imgPlus = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
+            _imgHDD = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
+            _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
+            _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "myTree: Failed to load images", MessageBoxButtons.OK);
+        }
+
+        // Create brushes, gradients, etc.
         _treeBackBrush = new System.Drawing.SolidBrush(_tree.BackColor);
 
         var pt1 = new Point(0, 0);
@@ -121,7 +120,7 @@ public class myTree
         _treeGradientBrush3 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(100, 204, 232, 255),
                                     Color.FromArgb(250, 204, 232, 255));
-
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -743,6 +742,17 @@ public class myTree
 
         //e.Handled = true;
         return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Set double buffering to reduce flickering
+    private void setDoubleBuffering()
+    {
+        // Set double buffering to reduce flickering:
+        // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
+        PropertyInfo pi = _tree.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+        pi.SetValue(_tree, true, null);
     }
 
     // --------------------------------------------------------------------------------------------------------

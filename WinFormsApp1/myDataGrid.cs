@@ -47,9 +47,6 @@ public class myDataGrid
 
             setDoubleBuffering();
 
-            _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
-            _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
-
             // Add and subscribe to events
             setUpEvents();
 
@@ -84,6 +81,11 @@ public class myDataGrid
 
     private void createDrawingPrimitives(int dpi)
     {
+        // Load images
+        _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
+        _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
+
+        // Create brushes, gradients, etc.
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
@@ -94,6 +96,7 @@ public class myDataGrid
         _gridGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(150, 255, 200, 133),
                                     Color.FromArgb(233, 255, 128,   0));
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------

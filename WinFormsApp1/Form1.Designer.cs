@@ -116,8 +116,9 @@ namespace WinFormsApp1
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1634, 191);
+            this.textBox1.Location = new System.Drawing.Point(1630, 189);
             this.textBox1.Name = "textBox1";
+            this.textBox1.PlaceholderText = "filter";
             this.textBox1.Size = new System.Drawing.Size(201, 31);
             this.textBox1.TabIndex = 8;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
