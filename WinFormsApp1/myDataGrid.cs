@@ -21,13 +21,7 @@ public class myDataGrid
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
 
-    public enum Columns
-    {
-        colCheckBox = 0,
-        colImage,
-        colName,
-        colNumber
-    };
+    public enum Columns { colChBox = 0, colImage, colName, colId };
 
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<string> _globalFileListRef = null;
@@ -132,8 +126,9 @@ public class myDataGrid
 
         // Custom cell template
         var cellTemplate = new myDataGridViewCheckBoxCell();
-            cellTemplate.CustomSize = 32;
-            cellTemplate.CustomDrawing = true;
+            //cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom2;
+            cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom2;
+            cellTemplate.CustomSize = 20;
             cellTemplate.CustomActiveAreaMargin = 5;
             cellTemplate.CustomImg_Checked  ("icon-tick-box1-checked-64.png");
             cellTemplate.CustomImg_Unchecked("icon-tick-box1-unchecked-64.png");
@@ -159,7 +154,7 @@ public class myDataGrid
 
         // Row number column Columns.colNumber
         var numberColumn = new DataGridViewTextBoxColumn();
-        numberColumn.Name = "Num";
+        numberColumn.Name = "id";
         numberColumn.Visible = false;
         _dataGrid.Columns.Add(numberColumn);
 
@@ -182,10 +177,10 @@ public class myDataGrid
         {
             int pos = item.LastIndexOf('\\') + 1;
 
-            row.Cells[(int)Columns.colCheckBox].Value = false;
-            row.Cells[(int)Columns.colImage   ].Value = isDir ? _imgDir : _imgFile;
-            row.Cells[(int)Columns.colName    ].Value = item[pos..];
-            row.Cells[(int)Columns.colNumber  ].Value = num;
+            row.Cells[(int)Columns.colChBox].Value = false;
+            row.Cells[(int)Columns.colImage].Value = isDir ? _imgDir : _imgFile;
+            row.Cells[(int)Columns.colName ].Value = item[pos..];
+            row.Cells[(int)Columns.colId   ].Value = num;
 
             row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
         }
@@ -211,10 +206,10 @@ public class myDataGrid
                 _dataGrid.Rows[i].DefaultCellStyle.ForeColor = System.Drawing.Color.Brown;
             }
 
-            _dataGrid.Rows[i].Cells[(int)Columns.colCheckBox].Value = false;
-            _dataGrid.Rows[i].Cells[(int)Columns.colImage   ].Value = isDir ? _imgDir : _imgFile;
-            _dataGrid.Rows[i].Cells[(int)Columns.colName    ].Value = item[pos..];
-            _dataGrid.Rows[i].Cells[(int)Columns.colNumber  ].Value = 999;
+            _dataGrid.Rows[i].Cells[(int)Columns.colChBox].Value = false;
+            _dataGrid.Rows[i].Cells[(int)Columns.colImage].Value = isDir ? _imgDir : _imgFile;
+            _dataGrid.Rows[i].Cells[(int)Columns.colName ].Value = item[pos..];
+            _dataGrid.Rows[i].Cells[(int)Columns.colId   ].Value = 999;
         }
 
         return;
@@ -420,14 +415,14 @@ public class myDataGrid
             if (item[0] == '2')
                 continue;
 
-            bool isChecked = (bool)(row.Cells[(int)Columns.colCheckBox].Value);
+            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
             // If the item is checked, we need to find it in the original list.
             // This is easy and fast, as we know its index in the original list,
             // and accessing item by index in the List is O(1)
             if (isChecked)
             {
-                int num = (int)(row.Cells[(int)Columns.colNumber].Value);
+                int num = (int)(row.Cells[(int)Columns.colId].Value);
 
                 // Add unmodified file name
                 // This way, list will contain references to original file names, and not the copies
@@ -638,7 +633,7 @@ public class myDataGrid
 
                     for (int i = 0; i < selectedRowCount; i++)
                     {
-                        var cb = _dataGrid.SelectedRows[i].Cells[(int)Columns.colCheckBox];
+                        var cb = _dataGrid.SelectedRows[i].Cells[(int)Columns.colChBox];
                         cb.Value = !(bool)(cb.Value);
                     }
                 }

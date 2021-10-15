@@ -1,28 +1,38 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-
-/*
+﻿/*
+  ===============================================================================
     Custom DataGridViewCheckBoxCell class.
+    Allows the user to create custom checkbox column in DataGridView widget.
     Used as a template for DataGridViewCheckBoxColumn:
 
         var checkBoxColumn = new DataGridViewCheckBoxColumn();
 
-        var cellTemplate = new myDataGridViewCheckBoxCell();
-            cellTemplate.Size = 13;
-            cellTemplate.UseCustomDrawing = true;
-
+        // Custom cell template
+        var cellTemplate = new myDataGridViewCheckBoxCell(); <--- THIS CLASS
+            cellTemplate.CustomSize = 20;
+            cellTemplate.CustomDrawing = true;
+            cellTemplate.CustomActiveAreaMargin = 5;
+            cellTemplate.CustomImg_Checked  ("icon-checked.png");
+            cellTemplate.CustomImg_Unchecked("icon-unchecked.png");
         checkBoxColumn.CellTemplate = cellTemplate;
 
-    Allows the user to create custom checkbox column in DataGridView
+        dataGrid.Columns.Add(checkBoxColumn);
+  ===============================================================================
 */
+
+
+using System.Drawing;
+using System.Windows.Forms;
+
 
 class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 {
+
     // Size of the custom checkbox
+    // Also sets the size of the image. If zero, the image will be drawn in its original size
     private static int _size = 10;
 
     // If [true], will draw custom checkbox
-    private static bool _useCustomDrawing = false;
+    private static DrawMode _drawMode = 0;
 
     // How the checkbox responds to mouse click:
     //  - if [ -1  ], only original checkbox area is active
@@ -30,8 +40,19 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
     //  - if [ > 0 ], the active area is a [cell minus margin]
     private static int _cellMargin = -1;
 
+    // Mouse is hovering over the checkbox
+    private bool isHovered = false;
+
     private static Image _imgChecked = null;
     private static Image _imgUnchecked = null;
+
+    // Delegate to draw the checkbox from outside of the class
+    public delegate void myDelegate(Graphics g, int x, int y, int size, bool Checked);
+    private static myDelegate _drawFunc = null;
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public enum DrawMode { Default, DefaultCustomSize, Custom1, Custom2, Image };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -41,10 +62,10 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         set { _size = value; }
     }
 
-    public bool CustomDrawing
+    public DrawMode CustomDrawing
     {
-        get {  return _useCustomDrawing; }
-        set { _useCustomDrawing = value; }
+        get {  return _drawMode; }
+        set { _drawMode = value; }
     }
 
     public int CustomActiveAreaMargin
@@ -55,18 +76,69 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
     public void CustomImg_Checked(string file)
     {
-        _imgChecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+        // Allocate resource only if it will be used later
+        if (_drawMode == DrawMode.Image)
+            _imgChecked = Image.FromFile(myUtils.getFilePath("_icons", file));
     }
 
     public void CustomImg_Unchecked(string file)
     {
-        _imgUnchecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+        // Allocate resource only if it will be used later
+        if (_drawMode == DrawMode.Image)
+            _imgUnchecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+    }
+
+    public void CustomDrawFunc(myDelegate f)
+    {
+        _drawFunc = f;
     }
 
     // --------------------------------------------------------------------------------------------------------
 
     public myDataGridViewCheckBoxCell() : base()
     {
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
+    {
+        bool withinBounds = false;
+        var cell = (DataGridViewCheckBoxCell)DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+        if (e.X >= _cellMargin && e.X <= cell.Size.Width - _cellMargin)
+            if (e.Y >= _cellMargin && e.Y <= cell.Size.Height - _cellMargin)
+                withinBounds = true;
+
+        if (isHovered)
+        {
+            if (!withinBounds)
+            {
+                isHovered = false;
+                DataGridView.InvalidateCell(cell);
+            }
+        }
+        else
+        {
+            if (withinBounds)
+            {
+                isHovered = true;
+                DataGridView.InvalidateCell(cell);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    protected override void OnMouseLeave(int rowIndex)
+    {
+        if (isHovered)
+        {
+            isHovered = false;
+            DataGridView.InvalidateRow(rowIndex);
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -122,39 +194,178 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
                                             DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                                 DataGridViewPaintParts paintParts)
     {
-        // Draw the original checkbox using system style
+        // Let the system draw original checkbox
         base.Paint(graph, clipBounds, cellBounds, rowIndex, elementState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
 
-        // Now draw the custom checkbox over it
-        if (_useCustomDrawing)
+        // Now draw our custom checkbox over it
+        int cellCenterX = cellBounds.X + cellBounds.Width  / 2;
+        int cellCenterY = cellBounds.Y + cellBounds.Height / 2;
+
+        switch (_drawMode)
         {
-            int cellCenterX = cellBounds.X + cellBounds.Width  / 2;
-            int cellCenterY = cellBounds.Y + cellBounds.Height / 2;
+            case DrawMode.Default:
+                // base.Paint(...) did that already
+                break;
 
-            if (_imgUnchecked != null && _imgChecked != null)
+            case DrawMode.DefaultCustomSize:
+                drawCheckBox_DefaultCustomSize(graph, cellCenterX, cellCenterY, (bool)formattedValue);
+                break;
+
+            case DrawMode.Custom1:
+                drawCheckBox_Custom1(graph, cellCenterX, cellCenterY, (bool)formattedValue);
+                break;
+
+            case DrawMode.Custom2:
+                drawCheckBox_Custom2(graph, cellCenterX, cellCenterY, (bool)formattedValue);
+                break;
+
+            case DrawMode.Image:
+                drawCheckBox_Image(graph, cellCenterX, cellCenterY, (bool)formattedValue);
+                break;
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Draw custom checkbox using standard Windows API
+    private void drawCheckBox_DefaultCustomSize(Graphics g, int x, int y, bool Checked)
+    {
+        ControlPaint.DrawCheckBox(g, x - _size, y - _size, 2 * _size, 2 * _size,
+            Checked
+                ? ButtonState.Checked | ButtonState.Flat
+                : ButtonState.Normal  | ButtonState.Flat);
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Manually draw custom checkbox
+    private void drawCheckBox_Custom1(Graphics g, int x, int y, bool Checked)
+    {
+        if (_drawFunc != null)
+        {
+            _drawFunc(g, x, y, _size, Checked);
+        }
+        else
+        {
+            // Make the size uneven
+            if (_size % 2 == 0)
+                _size++;
+
+            g.FillRectangle(Brushes.White, x - _size, y - _size, 2 * _size, 2 * _size);
+
+            Brush b = Checked ? Brushes.Green : Brushes.DarkRed;
+            g.FillRectangle(b, x - _size + 3, y - _size + 3, 2 * _size - 5, 2 * _size - 5);
+            g.DrawRectangle(Pens.DarkGray, x - _size, y - _size, 2 * _size, 2 * _size);
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Manually draw custom checkbox
+    // This one should look like Windows 10 Flat Checkbox
+    private void drawCheckBox_Custom2(Graphics g, int x, int y, bool Checked)
+    {
+        if (_drawFunc != null)
+        {
+            _drawFunc(g, x, y, _size, Checked);
+        }
+        else
+        {
+            x--;
+            y--;
+
+            g.FillRectangle(Brushes.White, x - 10, y - 10, 20, 20);
+
+            if (isHovered)
             {
-                Image img = (bool)formattedValue ? _imgChecked : _imgUnchecked;
+                g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 22, 22);
+                g.FillRectangle(Brushes.White,          x - 10, y - 10, 20, 20);
+                g.FillRectangle(Brushes.LightSteelBlue, x -  8, y -  8, 17, 17);
+            }
 
-                int imgWidth  = img.Width;
-                int imgHeight = img.Height;
+            g.DrawRectangle(Pens.Black, x - 10, y - 10, 20, 20);
 
-                if (_size != 0)
+            if (Checked)
+            {
+                Color[] cl = {
+                    Color.Gray,
+                    Color.Black,
+                    Color.DarkGray,
+                    Color.WhiteSmoke
+                };
+
+                using (Pen p = new Pen(Color.Black, 2))
                 {
-                    imgWidth  = _size;
-                    imgHeight = _size;
+                    p.Color = cl[0];
+                    g.DrawLine(p, x - 6 - 0, y + 0 - 0, x - 2 - 0, y + 4 - 0);
+                    g.DrawLine(p, x - 2 + 0, y + 4 - 0, x + 7 + 0, y - 5 - 0);
+
+                    p.Color = cl[1];
+                    g.DrawLine(p, x - 6 - 1, y + 0 + 0, x - 2 - 0, y + 4 + 1);
+                    g.DrawLine(p, x - 2 + 1, y + 4 - 0, x + 7 + 1, y - 5 - 0);
+
+                    p.Color = cl[2];
+                    p.Width = 1;
+                    g.DrawLine(p, x - 6 - 1, y + 0 + 1, x - 2 - 1, y + 4 + 1);
+                    g.DrawLine(p, x - 2 + 0, y + 4 + 2, x + 7 + 1, y - 5 + 1);
+
+                    p.Color = cl[3];
+                    g.DrawLine(p, x - 6 - 1, y + 0 + 2, x - 2 - 1, y + 4 + 2);
+                    g.DrawLine(p, x - 2 + 1, y + 4 + 2, x + 7 + 1, y - 5 + 2);
                 }
-
-                graph.DrawImage(img, cellCenterX - imgWidth/2, cellCenterY - imgHeight/2, imgWidth, imgHeight);
             }
-            else
+
+            return;
+#if false
+            using (Pen p = new Pen(Color.Black, 1))
             {
-//              graphics.FillRectangle(System.Drawing.Brushes.Red, x - size, y - size, 2*size, 2*size);
+                Color[] cl = {
+                    Color.Gray,
+                    Color.Black,
+                    Color.DarkGray,
+                    Color.LightGray
+                };
 
-                ControlPaint.DrawCheckBox(graph, cellCenterX - _size, cellCenterY - _size, 2 * _size, 2 * _size,
-                                (bool)formattedValue
-                                        ? ButtonState.Checked | ButtonState.Flat
-                                        : ButtonState.Normal  | ButtonState.Flat);
+                p.Color = cl[0];
+                g.DrawLine(p, x - 6 - 0, y + 0 + 0, x - 2 - 0, y + 4 + 0);
+                g.DrawLine(p, x - 2 + 0, y + 4 - 0, x + 7 + 0, y - 5 - 0);
+
+                p.Color = cl[1];
+                //p.Width = 2;
+                g.DrawLine(p, x - 6 - 1, y + 0 + 0, x - 2 - 0, y + 4 + 1);
+                g.DrawLine(p, x - 2 + 1, y + 4 - 0, x + 7 + 1, y - 5 - 0);
+
+                p.Color = cl[2];
+                //p.Width = 1;
+                g.DrawLine(p, x - 6 - 1, y + 0 + 1, x - 2 - 1, y + 4 + 1);
+                g.DrawLine(p, x - 2 + 1, y + 4 + 1, x + 7 + 1, y - 5 + 1);
+
+                //p.Color = cl[3];
+                //g.DrawLine(p, x - 6 - 1, y + 0 + 2, x - 2 - 1, y + 4 + 2);
+                //g.DrawLine(p, x - 2 + 1, y + 4 + 1, x + 7 + 1, y - 5 + 1);
             }
+#endif
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Draw custom checkbox using loaded image for that
+    private void drawCheckBox_Image(Graphics g, int x, int y, bool Checked)
+    {
+        if (_imgUnchecked != null && _imgChecked != null)
+        {
+            Image img = Checked ? _imgChecked : _imgUnchecked;
+
+            int imgWidth  = (_size == 0) ? img.Width  : _size;
+            int imgHeight = (_size == 0) ? img.Height : _size;
+
+            g.DrawImage(img, x - imgWidth / 2, y - imgHeight / 2, imgWidth, imgHeight);
         }
 
         return;

@@ -133,7 +133,7 @@ public class myDataGrid_ContextMenu
 
             if (row.Selected)
             {
-                int n = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
+                int n = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
                 list.Add(n);
             }
         }
@@ -164,7 +164,7 @@ public class myDataGrid_ContextMenu
         {
             var row = _dataGrid.SelectedRows[i];
 
-            int id = (int)(row.Cells[(int)myDataGrid.Columns.colNumber].Value);
+            int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
             string path = _globalFileListRef[id][2..];
 
             set.Add(id);
@@ -177,7 +177,7 @@ public class myDataGrid_ContextMenu
 
         foreach (var id in set)
         {
-            var cb = _dataGrid.Rows[id].Cells[(int)myDataGrid.Columns.colCheckBox];
+            var cb = _dataGrid.Rows[id].Cells[(int)myDataGrid.Columns.colChBox];
             cb.Value = mode;
 
             // Also, set selection for the row
