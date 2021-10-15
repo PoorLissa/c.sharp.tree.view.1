@@ -64,11 +64,11 @@ public class myTree
 
             try
             {
-                _imgMinus     = Image.FromFile(myUtils.getFilePath("_icons", "_bullet_toggle_minus.png"));
-                _imgPlus      = Image.FromFile(myUtils.getFilePath("_icons", "_bullet_toggle_plus.png"));
-                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icons8-folder-30.png"));
-                _imgHDD       = Image.FromFile(myUtils.getFilePath("_icons", "_icons8-ssd-30.png"));
-                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-30.png"));
+                _imgMinus     = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
+                _imgPlus      = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
+                _imgHDD       = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
+                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
+                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
             }
             catch(Exception ex)
             {

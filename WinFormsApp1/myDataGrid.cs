@@ -53,13 +53,13 @@ public class myDataGrid
 
             setDoubleBuffering();
 
-            _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icons8-opened-folder-2-16.png"));
-            _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icons8-file-16.png"));
+            _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
+            _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
 
             // Add and subscribe to events
             setUpEvents();
 
-            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 40;                              // Row height
+            _dataGrid.RowTemplate.Height = dpi > 96 ? 60 : 40;                              // Row height
             _dataGrid.RowTemplate.MinimumHeight = 2;                                        // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
             _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
@@ -128,12 +128,16 @@ public class myDataGrid
     private void addColumns()
     {
         // Checkbox column Columns.colCheckBox
-        //var checkBoxColumn = new DataGridViewCheckBoxColumn();
+        var checkBoxColumn = new DataGridViewCheckBoxColumn();
 
-var checkBoxColumn = new DataGridViewCheckBoxColumn();
-checkBoxColumn.CellTemplate = new myDataGridViewCheckBoxCell();
-checkBoxColumn.TrueValue = true;
-checkBoxColumn.FalseValue = false;
+        // Custom cell template
+        var cellTemplate = new myDataGridViewCheckBoxCell();
+            cellTemplate.CustomSize = 32;
+            cellTemplate.CustomDrawing = true;
+            cellTemplate.CustomActiveAreaMargin = 5;
+            cellTemplate.CustomImg_Checked  ("icon-tick-box1-checked-64.png");
+            cellTemplate.CustomImg_Unchecked("icon-tick-box1-unchecked-64.png");
+        checkBoxColumn.CellTemplate = cellTemplate;
 
         checkBoxColumn.Width = 50;
         checkBoxColumn.Resizable = DataGridViewTriState.False;
@@ -150,6 +154,7 @@ checkBoxColumn.FalseValue = false;
         textColumn.Name = "Name";
         textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         textColumn.ReadOnly = true;
+        textColumn.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
         _dataGrid.Columns.Add(textColumn);
 
         // Row number column Columns.colNumber
