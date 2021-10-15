@@ -59,7 +59,7 @@ public class myDataGrid
             // Add and subscribe to events
             setUpEvents();
 
-            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 30;                              // Row height
+            _dataGrid.RowTemplate.Height = dpi > 96 ? 50 : 40;                              // Row height
             _dataGrid.RowTemplate.MinimumHeight = 2;                                        // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
             _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
@@ -128,7 +128,13 @@ public class myDataGrid
     private void addColumns()
     {
         // Checkbox column Columns.colCheckBox
-        var checkBoxColumn = new DataGridViewCheckBoxColumn();
+        //var checkBoxColumn = new DataGridViewCheckBoxColumn();
+
+var checkBoxColumn = new DataGridViewCheckBoxColumn();
+checkBoxColumn.CellTemplate = new myDataGridViewCheckBoxCell();
+checkBoxColumn.TrueValue = true;
+checkBoxColumn.FalseValue = false;
+
         checkBoxColumn.Width = 50;
         checkBoxColumn.Resizable = DataGridViewTriState.False;
         _dataGrid.Columns.Add(checkBoxColumn);
