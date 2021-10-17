@@ -129,12 +129,11 @@ public class myDataGrid
 
         // Custom cell template
         var cellTemplate = new myDataGridViewCheckBoxCell();
-            //cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom2;
-            cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom2;
-            cellTemplate.CustomSize = 20;
+            cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom3;
+            cellTemplate.CustomSize = 126;
             cellTemplate.CustomActiveAreaMargin = 5;
-            cellTemplate.CustomImg_Checked  ("icon-tick-box1-checked-64.png");
-            cellTemplate.CustomImg_Unchecked("icon-tick-box1-unchecked-64.png");
+            cellTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
+            cellTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
         checkBoxColumn.CellTemplate = cellTemplate;
 
         checkBoxColumn.Width = 50;

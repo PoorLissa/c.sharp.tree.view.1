@@ -43,8 +43,11 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
     // Mouse is hovering over the checkbox
     private bool isHovered = false;
 
-    private static Image _imgChecked = null;
+    private static Image _imgChecked   = null;
     private static Image _imgUnchecked = null;
+    private static Image _imgTick      = null;
+
+    private static Brush _hoveredCheckboxBrush = null;
 
     // Delegate to draw the checkbox from outside of the class
     public delegate void myDelegate(Graphics g, int x, int y, int size, bool Checked);
@@ -52,7 +55,8 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
     // --------------------------------------------------------------------------------------------------------
 
-    public enum DrawMode { Default, DefaultCustomSize, Custom1, Custom2, Image };
+    public enum DrawMode { Default, DefaultCustomSize, Custom1, Custom2, Custom3, Image };
+    public enum cbMode   { Checked, Unchecked };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -74,18 +78,22 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         set { _cellMargin = value; }
     }
 
-    public void CustomImg_Checked(string file)
+    public void CustomImg(string file, cbMode mode)
     {
-        // Allocate resource only if it will be used later
+        // Allocate resource only if it will be actually used later
         if (_drawMode == DrawMode.Image)
-            _imgChecked = Image.FromFile(myUtils.getFilePath("_icons", file));
-    }
+        {
+            switch (mode)
+            {
+                case cbMode.Checked:
+                    _imgChecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+                    break;
 
-    public void CustomImg_Unchecked(string file)
-    {
-        // Allocate resource only if it will be used later
-        if (_drawMode == DrawMode.Image)
-            _imgUnchecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+                case cbMode.Unchecked:
+                    _imgUnchecked = Image.FromFile(myUtils.getFilePath("_icons", file));
+                    break;
+            }
+        }
     }
 
     public void CustomDrawFunc(myDelegate f)
@@ -101,8 +109,11 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Check if the mouse cursor is hovering over the active area and make the cell visually respond to this
     protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
     {
+        base.OnMouseMove(e);
+
         bool withinBounds = false;
         var cell = (DataGridViewCheckBoxCell)DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
@@ -150,8 +161,8 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
         // Totally skip, if the mouse pointer is within the original checkbox limits.
         // OnContentClick event will take care of this situation
-        if (e.X >= content.X && e.X <= (content.X + content.Width))
-            if (e.Y >= content.Y && e.Y <= (content.Y + content.Height))
+        if (e.X > content.X && e.X < (content.X + content.Width))
+            if (e.Y > content.Y && e.Y < (content.Y + content.Height))
                 return;
 
         if (_cellMargin == -1)
@@ -197,6 +208,8 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         // Let the system draw original checkbox
         base.Paint(graph, clipBounds, cellBounds, rowIndex, elementState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
 
+
+
         // Now draw our custom checkbox over it
         int cellCenterX = cellBounds.X + cellBounds.Width  / 2;
         int cellCenterY = cellBounds.Y + cellBounds.Height / 2;
@@ -217,6 +230,10 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
             case DrawMode.Custom2:
                 drawCheckBox_Custom2(graph, cellCenterX, cellCenterY, (bool)formattedValue);
+                break;
+
+            case DrawMode.Custom3:
+                drawCheckBox_Custom3(graph, cellCenterX, cellCenterY, (bool)formattedValue);
                 break;
 
             case DrawMode.Image:
@@ -266,8 +283,11 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
 
     // --------------------------------------------------------------------------------------------------------
 
+    Bitmap b = null;
+
     // Manually draw custom checkbox
     // This one should look like Windows 10 Flat Checkbox
+    // The size of this checkbox is fixed, but we'll adjust it for different dpi
     private void drawCheckBox_Custom2(Graphics g, int x, int y, bool Checked)
     {
         if (_drawFunc != null)
@@ -276,81 +296,136 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         }
         else
         {
-            x--;
-            y--;
-
-            g.FillRectangle(Brushes.White, x - 10, y - 10, 20, 20);
-
-            if (isHovered)
+            if (b == null)
             {
-                g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 22, 22);
-                g.FillRectangle(Brushes.White,          x - 10, y - 10, 20, 20);
-                g.FillRectangle(Brushes.LightSteelBlue, x -  8, y -  8, 17, 17);
-            }
+                b = new Bitmap(18, 18);
+                Graphics gr = Graphics.FromImage(b);
 
-            g.DrawRectangle(Pens.Black, x - 10, y - 10, 20, 20);
-
-            if (Checked)
-            {
-                Color[] cl = {
-                    Color.Gray,
-                    Color.Black,
-                    Color.DarkGray,
-                    Color.WhiteSmoke
-                };
+                int X = 10;
+                int Y = 10;
 
                 using (Pen p = new Pen(Color.Black, 2))
                 {
-                    p.Color = cl[0];
-                    g.DrawLine(p, x - 6 - 0, y + 0 - 0, x - 2 - 0, y + 4 - 0);
-                    g.DrawLine(p, x - 2 + 0, y + 4 - 0, x + 7 + 0, y - 5 - 0);
+                    p.Color = Color.Gray;
+                    gr.DrawLine(p, X - 6 - 0, Y + 0 - 0, X - 2 - 0, Y + 4 - 0);
+                    gr.DrawLine(p, X - 2 + 0, Y + 4 - 0, X + 7 + 0, Y - 5 - 0);
 
-                    p.Color = cl[1];
-                    g.DrawLine(p, x - 6 - 1, y + 0 + 0, x - 2 - 0, y + 4 + 1);
-                    g.DrawLine(p, x - 2 + 1, y + 4 - 0, x + 7 + 1, y - 5 - 0);
+                    p.Color = Color.Black;
+                    gr.DrawLine(p, X - 6 - 1, Y + 0 + 0, X - 2 - 0, Y + 4 + 1);
+                    gr.DrawLine(p, X - 2 + 1, Y + 4 - 0, X + 7 + 1, Y - 5 - 0);
 
-                    p.Color = cl[2];
+                    p.Color = Color.DarkGray;
                     p.Width = 1;
-                    g.DrawLine(p, x - 6 - 1, y + 0 + 1, x - 2 - 1, y + 4 + 1);
-                    g.DrawLine(p, x - 2 + 0, y + 4 + 2, x + 7 + 1, y - 5 + 1);
+                    gr.DrawLine(p, X - 6 - 1, Y + 0 + 1, X - 2 - 1, Y + 4 + 1);
+                    gr.DrawLine(p, X - 2 + 0, Y + 4 + 2, X + 7 + 1, Y - 5 + 1);
 
-                    p.Color = cl[3];
-                    g.DrawLine(p, x - 6 - 1, y + 0 + 2, x - 2 - 1, y + 4 + 2);
-                    g.DrawLine(p, x - 2 + 1, y + 4 + 2, x + 7 + 1, y - 5 + 2);
+                    p.Color = Color.WhiteSmoke;
+                    gr.DrawLine(p, X - 6 - 1, Y + 0 + 2, X - 2 - 1, Y + 4 + 2);
+                    gr.DrawLine(p, X - 2 + 1, Y + 4 + 2, X + 7 + 1, Y - 5 + 2);
+
+                    // Erase part of the bitmap, making this part transparent
+                    gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    using (var br = new SolidBrush(Color.FromArgb(0, 0, 0, 0)))
+                    {
+                        gr.FillRectangle(br, X - 8, Y - 8, 11, 11);
+                    }
+                }
+
+                gr.Dispose();
+            }
+
+            int size = g.DpiX > 96 ? 20 : 16;
+
+            x--;
+            y--;
+
+            g.FillRectangle(Brushes.White, x - size/2, y - size/2, size, size);
+
+            if (isHovered)
+            {
+                if (size == 20)
+                {
+                    //g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 22, 22);  // work
+                    g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 23, 23);    // home
+                    g.FillRectangle(Brushes.White,          x - 10, y - 10, 20, 20);
+                    g.FillRectangle(Brushes.LightSteelBlue, x -  8, y -  8, 17, 17);
+                }
+                else
+                {
+                    g.FillRectangle(Brushes.AliceBlue,      x - 9, y - 9, 19, 19);
+                    g.FillRectangle(Brushes.White,          x - 8, y - 8, 16, 16);
+                    g.FillRectangle(Brushes.LightSteelBlue, x - 6, y - 6, 13, 13);
                 }
             }
 
-            return;
-#if false
-            using (Pen p = new Pen(Color.Black, 1))
+            g.DrawRectangle(Pens.Black, x - size/2, y - size/2, size, size);
+
+
+            if (Checked)
             {
-                Color[] cl = {
-                    Color.Gray,
-                    Color.Black,
-                    Color.DarkGray,
-                    Color.LightGray
-                };
-
-                p.Color = cl[0];
-                g.DrawLine(p, x - 6 - 0, y + 0 + 0, x - 2 - 0, y + 4 + 0);
-                g.DrawLine(p, x - 2 + 0, y + 4 - 0, x + 7 + 0, y - 5 - 0);
-
-                p.Color = cl[1];
-                //p.Width = 2;
-                g.DrawLine(p, x - 6 - 1, y + 0 + 0, x - 2 - 0, y + 4 + 1);
-                g.DrawLine(p, x - 2 + 1, y + 4 - 0, x + 7 + 1, y - 5 - 0);
-
-                p.Color = cl[2];
-                //p.Width = 1;
-                g.DrawLine(p, x - 6 - 1, y + 0 + 1, x - 2 - 1, y + 4 + 1);
-                g.DrawLine(p, x - 2 + 1, y + 4 + 1, x + 7 + 1, y - 5 + 1);
-
-                //p.Color = cl[3];
-                //g.DrawLine(p, x - 6 - 1, y + 0 + 2, x - 2 - 1, y + 4 + 2);
-                //g.DrawLine(p, x - 2 + 1, y + 4 + 1, x + 7 + 1, y - 5 + 1);
+                g.DrawImage(b, x - size / 2, y - size / 2);
             }
-#endif
         }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Manually draw custom checkbox frame
+    // Use the tick from image file
+    // The size of this checkbox is fixed, but we'll adjust it for different dpi
+    private void drawCheckBox_Custom3(Graphics g, int x, int y, bool Checked)
+    {
+        int size = g.DpiX > 96 ? 20 : 16;
+
+        if (_imgTick == null)
+        {
+            if (size == 20)
+                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-tick-24-large.png"));
+
+            if (size == 16)
+                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-tick-24-small.png"));
+
+            _hoveredCheckboxBrush = new SolidBrush(Color.FromArgb(200, 170, 227, 255));
+        }
+
+        x--;
+        y--;
+
+        g.FillRectangle(Brushes.White, x - size / 2, y - size / 2, size, size);
+
+        if (isHovered)
+        {
+            if (size == 16)
+            {
+                g.FillRectangle(Brushes.AliceBlue,      x - 9, y - 9, 19, 19);
+                g.FillRectangle(Brushes.White,          x - 8, y - 8, 16, 16);
+//              g.FillRectangle(Brushes.LightSteelBlue, x - 6, y - 6, 13, 13);
+                g.FillRectangle(_hoveredCheckboxBrush,  x - 6, y - 6, 13, 13);
+            }
+
+            if (size == 20)
+            {
+//              g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 22, 22);        // work
+                g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 23, 23);        // home
+                g.FillRectangle(Brushes.White,          x - 10, y - 10, 20, 20);
+                g.FillRectangle(Brushes.LightSteelBlue, x -  8, y -  8, 17, 17);
+            }
+        }
+
+        g.DrawRectangle(Pens.Black, x - size / 2, y - size / 2, size, size);
+
+        if (Checked)
+        {
+            if (size == 16)
+                g.DrawImage(_imgTick, x - size/2 - 3, y - size/2 - 4);
+
+            if (size == 20)
+                g.DrawImage(_imgTick, x - size/2 - 1, y - size/2 - 1);
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------

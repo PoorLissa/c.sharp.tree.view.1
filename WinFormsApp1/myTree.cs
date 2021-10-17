@@ -7,6 +7,7 @@ using System.Windows.Forms;
     Wrapper class around TreeView widget.
     Allows customization and provides public methods to work with the widget.
 */
+
 public class myTree
 {
     private TreeView    _tree        = null;
@@ -14,10 +15,10 @@ public class myTree
     private float       _fontSize    = 0.0f;
     private Color       _foreColor;
 
-    private System.Drawing.Brush _treeBackBrush      = null;
-    private System.Drawing.Brush _treeGradientBrush1 = null;
-    private System.Drawing.Brush _treeGradientBrush2 = null;
-    private System.Drawing.Brush _treeGradientBrush3 = null;
+    private Brush _treeBackBrush      = null;
+    private Brush _treeGradientBrush1 = null;
+    private Brush _treeGradientBrush2 = null;
+    private Brush _treeGradientBrush3 = null;
 
     private Image _imgPlus      = null;
     private Image _imgMinus     = null;
@@ -92,11 +93,11 @@ public class myTree
         // Load images
         try
         {
-            _imgMinus = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
-            _imgPlus = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
-            _imgHDD = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
-            _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
-            _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
+            _imgMinus     = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
+            _imgPlus      = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
+            _imgHDD       = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
+            _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30-wide.png"));
+            _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30-wide.png"));
         }
         catch (Exception ex)
         {
@@ -404,7 +405,7 @@ public class myTree
     // Cache node fonts and return them as needed
     private ref Font getNodeFont(int level)
     {
-        int max = 25;
+        int max = _tree.DeviceDpi > 96 ? 25 : 18;
         int min = 9;
 
         if (_nodeFonts == null)
