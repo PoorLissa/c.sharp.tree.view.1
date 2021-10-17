@@ -382,10 +382,10 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         if (_imgTick == null)
         {
             if (size == 20)
-                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-tick-24-large.png"));
+                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-1-tick-24-large.png"));
 
             if (size == 16)
-                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-tick-24-small.png"));
+                _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-1-tick-24-small.png"));
 
             _hoveredCheckboxBrush = new SolidBrush(Color.FromArgb(200, 170, 227, 255));
         }

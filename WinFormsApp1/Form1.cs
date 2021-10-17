@@ -35,10 +35,10 @@ namespace WinFormsApp1
             if (path.Length == 0)
             {
                 expandEmpty = true;
-                path = "d:\\Games\\Dishonored-2\\Uninstall";
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options";
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options\\__far.user.menu.1.png";
                 path = "c:\\_maxx\\002 - music";
+                path = "d:\\Games\\Dishonored-2\\Uninstall";
             }
 
             tree = new myTree(this.treeView1, path, expandEmpty);

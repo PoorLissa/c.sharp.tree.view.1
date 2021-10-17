@@ -61,7 +61,7 @@ public class myTree
             setDoubleBuffering();
 
             _tree.Indent        = 30;
-            _tree.ItemHeight    = 40;
+            _tree.ItemHeight    = _tree.DeviceDpi > 96 ? 40 : 32;
             _tree.HideSelection = false;
             _tree.HotTracking   = true;
             _tree.FullRowSelect = true;
@@ -74,10 +74,13 @@ public class myTree
             _tree.DrawNode += new DrawTreeNodeEventHandler(myTree_DrawNode);
 
             // Populate the first level of the tree
-            foreach (var drive in System.Environment.GetLogicalDrives())
+            foreach (var drive in System.IO.DriveInfo.GetDrives())
             {
-                TreeNode newNode = _tree.Nodes.Add(drive, "Drive " + drive.Substring(0, 2));
+                string label = drive.IsReady ? drive.VolumeLabel : "";
+                string text = (label.Length > 0) ? " (" : "(";
+                text += drive.Name.Substring(0, 2) + ")";
 
+                TreeNode newNode = _tree.Nodes.Add(drive.Name, label + text);
                 newNode.NodeFont = getNodeFont(0);
 
                 // Each yet unopened node will contain this secret node
@@ -93,11 +96,20 @@ public class myTree
         // Load images
         try
         {
-            _imgMinus     = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
-            _imgPlus      = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
-            _imgHDD       = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48.png"));
-            _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30-wide.png"));
-            _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30-wide.png"));
+            _imgMinus = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-minus-32.png"));
+            _imgPlus  = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-node-2-plus-32.png"));
+            _imgHDD   = Image.FromFile(myUtils.getFilePath("_icons", "icon-hdd-1-48-wide.png"));
+
+            if (_tree.ItemHeight <= 35)
+            {
+                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30-wide.png"));
+                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30-wide.png"));
+            }
+            else
+            {
+                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
+                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
+            }
         }
         catch (Exception ex)
         {
@@ -105,7 +117,7 @@ public class myTree
         }
 
         // Create brushes, gradients, etc.
-        _treeBackBrush = new System.Drawing.SolidBrush(_tree.BackColor);
+        _treeBackBrush = new SolidBrush(_tree.BackColor);
 
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _tree.ItemHeight);
@@ -203,12 +215,6 @@ public class myTree
                     e.Graphics.FillRectangle(_treeBackBrush, x, y, drawWidth, e.Node.Bounds.Height);
                 }
 
-                // Erase the canvas under plus-minus icon, as semitransparent areas of the image tend to 'sum up' and become darker each time it is drawn
-                x = e.Node.Bounds.Location.X - 26;
-                y = e.Node.Bounds.Location.Y + 11;
-
-                e.Graphics.FillRectangle(_treeBackBrush, x, y, 21, 21);
-
                 // Draw background or erase the old node
                 {
                     x = e.Node.Bounds.X - 2;
@@ -239,6 +245,14 @@ public class myTree
 
             // Draw plus/minus icon
             {
+                int iconHeight = 40;
+
+                x = e.Node.Bounds.Location.X - 35;
+                y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - iconHeight) / 2;
+
+                // Erase the canvas under the icon, as semitransparent areas of the image tend to 'sum up' and become darker each time it is drawn
+                e.Graphics.FillRectangle(_treeBackBrush, x + 8, y + 10, iconHeight - 18, iconHeight - 18);
+
                 if (_doUseDummies || e.Node.Level == 0)
                 {
                     expandImg = (isNodeExpanded || isNodeEmpty) ? _imgMinus : _imgPlus;
@@ -253,34 +267,27 @@ public class myTree
 
                 if (doDrawIcon)
                 {
-                    x = e.Node.Bounds.Location.X - 35;
-                    y = e.Node.Bounds.Location.Y - 0;
-
-                    e.Graphics.DrawImage(expandImg, x, y, 40, 40);
+                    e.Graphics.DrawImage(expandImg, x, y, iconHeight, iconHeight);
                 }
             }
 
             // Draw node image
             {
-                Image dirImg = isNodeExpanded ? _imgDirOpened : _imgDir;
                 x = e.Node.Bounds.Location.X + 3;
-                y = e.Node.Bounds.Location.Y + 5;
-
-                //e.Graphics.DrawImage(e.Node.Level == 0 ? _imgHDD : dirImg, x, y, 30, 30);
 
                 if (e.Node.Level == 0)
                 {
-                    //e.Graphics.DrawImage(_imgHDD, x, y, 32, 32);
-                    //e.Graphics.DrawImage(_imgHDD, x, y, 64, 64);
-                    e.Graphics.DrawImage(_imgHDD, x, y, 32, 32);
+                    int hddH = _imgHDD.Height < _tree.ItemHeight ? _imgHDD.Height : _tree.ItemHeight;
+
+                    y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - hddH) / 2;
+                    e.Graphics.DrawImage(_imgHDD, x, y, hddH, hddH);
                 }
                 else
                 {
-                    //e.Graphics.DrawImage(dirImg, x, y, 30, 30);
-                    e.Graphics.DrawImage(dirImg, x-1, y-1, 32, 32);
+                    Image dirImg = isNodeExpanded ? _imgDirOpened : _imgDir;
+                    y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - dirImg.Height) / 2;
+                    e.Graphics.DrawImage(dirImg, x - 1, y, 32, 32);
                 }
-
-
             }
 
             // Draw node text
@@ -524,8 +531,11 @@ public class myTree
                     {
                         string text = node.Text.ToLower();
 
-                        if (node.Level == 0) // "Drive C:" --> "C:"
-                            text = text.Substring(6);
+                        if (node.Level == 0)
+                        {
+                            int index = text.IndexOf(':') - 1;
+                            text = text.Substring(index, 2);        // "Win 7 SSD (C:)" ==> "C:"
+                        }
 
                         if (text == nodeName)
                         {
