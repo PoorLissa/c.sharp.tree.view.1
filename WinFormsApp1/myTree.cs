@@ -193,7 +193,7 @@ public class myTree
                 // The node the mouse is hovering upon
                 if (isNodeHovered)
                 {
-                    xAdjustmentText = 2;
+                    xAdjustmentText = 1;
                     gradientBrush = 2;
                 }
 
@@ -273,7 +273,7 @@ public class myTree
 
             // Draw node image
             {
-                x = e.Node.Bounds.Location.X + 3;
+                x = e.Node.Bounds.Location.X + 3 + xAdjustmentText;
 
                 if (e.Node.Level == 0)
                 {
