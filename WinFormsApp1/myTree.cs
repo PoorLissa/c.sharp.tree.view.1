@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -20,11 +21,13 @@ public class myTree
     private Brush _treeGradientBrush2 = null;
     private Brush _treeGradientBrush3 = null;
 
-    private Image _imgPlus      = null;
-    private Image _imgMinus     = null;
-    private Image _imgDir       = null;
-    private Image _imgDirOpened = null;
-    private Image _imgHDD       = null;
+    private Image _imgPlus        = null;
+    private Image _imgMinus       = null;
+    private Image _imgDir1        = null;
+    private Image _imgDir2        = null;
+    private Image _imgDir1_Opaque = null;
+    private Image _imgDir2_Opaque = null;
+    private Image _imgHDD         = null;
 
     private bool _doUseDummies   = false;
     private bool _allowRedrawing = false;
@@ -32,6 +35,8 @@ public class myTree
     private Font [] _nodeFonts = null;
 
     private int _winVer = 0;
+
+    private List<myTreeListDataItem> _dirsListTmpExt = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -45,6 +50,8 @@ public class myTree
 
         _doUseDummies   = false;
         _allowRedrawing = true;
+
+        _dirsListTmpExt = new List<myTreeListDataItem>();
 
         init();
         setPath(path, useDummies: true, expandEmpty: expandEmpty);
@@ -102,14 +109,17 @@ public class myTree
 
             if (_tree.ItemHeight <= 35)
             {
-                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30-wide.png"));
-                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30-wide.png"));
+                _imgDir1 = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30-wide.png"));
+                _imgDir2 = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30-wide.png"));
             }
             else
             {
-                _imgDir       = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
-                _imgDirOpened = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
+                _imgDir1 = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-closed-30.png"));
+                _imgDir2 = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
             }
+
+            _imgDir1_Opaque = _logic.ChangeImageOpacity(_imgDir1, 0.35);
+            _imgDir2_Opaque = _logic.ChangeImageOpacity(_imgDir2, 0.35);
         }
         catch (Exception ex)
         {
@@ -150,6 +160,7 @@ public class myTree
             bool isNodeEmpty    = e.Node.Nodes.Count == 0;
             bool isNodeHovered  = (e.State & TreeNodeStates.Hot) != 0;
             bool isNodeClicked  = (e.State & TreeNodeStates.Focused) != 0;
+            bool isHidden       = e.Node.ForeColor == Color.Gray;
             bool doErase        = false;
             bool doDrawIcon     = true;
             Image expandImg     = null;
@@ -284,7 +295,17 @@ public class myTree
                 }
                 else
                 {
-                    Image dirImg = isNodeExpanded ? _imgDirOpened : _imgDir;
+                    Image dirImg = null;
+
+                    if (isNodeExpanded)
+                    {
+                        dirImg = isHidden ? _imgDir2_Opaque : _imgDir2;
+                    }
+                    else
+                    {
+                        dirImg = isHidden ? _imgDir1_Opaque : _imgDir1;
+                    }
+
                     y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - dirImg.Height) / 2;
                     e.Graphics.DrawImage(dirImg, x - 1, y, 32, 32);
                 }
@@ -301,7 +322,7 @@ public class myTree
                 x = e.Node.Bounds.X + xAdjustmentText + xLeftMargin;
                 y = e.Node.Bounds.Y + (e.Node.TreeView.ItemHeight - nodeFont.Height) / 2 + yAdjustment;
 
-                e.Graphics.DrawString(e.Node.Text, nodeFont, fontBrush, x, y);
+                e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.LightSlateGray : fontBrush, x, y);
             }
 
             // If the node is clicked or hovered upon, draw a focus rectangle
@@ -331,7 +352,7 @@ public class myTree
     // Populates the list with directory and file names
     // Returns the number of errors
     // ref int itemsFound parameter receives the number of items found (depending on the search boolean parameters)
-    public int nodeSelected(TreeNode n, System.Collections.Generic.List<string> files, ref int dirsFound, ref int filesFound, bool useRecursion = false)
+    public int nodeSelected(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, bool useRecursion = false)
     {
         int res = 0;
 
@@ -340,60 +361,59 @@ public class myTree
             dirsFound = 0;
             filesFound = 0;
 
-            files.Clear();
-            var listTmpDirs  = new System.Collections.Generic.List<string>();
-            var listTmpFiles = new System.Collections.Generic.List<string>();
-            var stack = new System.Collections.Generic.Stack<string>(20);
+            filesExt.Clear();
+            var listTmpDirs  = new List<myTreeListDataItem>();
+            var listTmpFiles = new List<myTreeListDataItem>();
+
+            var stack = new Stack<myTreeListDataItem>(20);
 
             // Get all subfolders in current folder
             _logic.getDirectories(n.Name, listTmpDirs, doClear: true);
             listTmpDirs.Sort();
 
             for (int i = listTmpDirs.Count-1; i >= 0; i--)
-                stack.Push(listTmpDirs[i][2..]);
+                stack.Push(listTmpDirs[i]);
 
             // Get all files in current folder
             _logic.getFiles(n.Name, listTmpFiles, doClear: true);
             listTmpFiles.Sort();
             filesFound += listTmpFiles.Count;
             foreach (var file in listTmpFiles)
-                files.Add(file);
+                filesExt.Add(file);
 
             while (stack.Count > 0)
             {
-                string currentDir = stack.Pop();
+                myTreeListDataItem currentDir = stack.Pop();
 
-                files.Add("1?" + currentDir);
+                filesExt.Add(currentDir);
                 dirsFound++;
 
-                _logic.getFiles(currentDir, listTmpFiles, doClear: true);
+                _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true);
                 listTmpFiles.Sort();
                 filesFound += listTmpFiles.Count;
                 foreach (var file in listTmpFiles)
-                    files.Add(file);
+                    filesExt.Add(file);
 
-                _logic.getDirectories(currentDir, listTmpDirs, doClear: true);
+                _logic.getDirectories(currentDir.Name, listTmpDirs, doClear: true);
                 listTmpDirs.Sort();
                 for (int i = listTmpDirs.Count - 1; i >= 0; i--)
-                    stack.Push(listTmpDirs[i][2..]);
+                    stack.Push(listTmpDirs[i]);
             }
         }
         else
         {
             // Get directories first
-            res += _logic.getDirectories(n.Name, files, doClear: true);
+            res += _logic.getDirectories(n.Name, filesExt, doClear: true);
 
-            dirsFound = files.Count;
-
-            files.Add("2?");
+            dirsFound = filesExt.Count;
 
             // Get files next
-            res += _logic.getFiles(n.Name, files, doClear: false);
+            res += _logic.getFiles(n.Name, filesExt, doClear: false);
 
-            filesFound = files.Count - dirsFound - 1;
+            filesFound = filesExt.Count - dirsFound;
 
             // Sort the results
-            files.Sort();
+            filesExt.Sort();
         }
 
         return res;
@@ -439,31 +459,32 @@ public class myTree
     // Should be called from TreeView::BeforeExpand
     // Should be preceeded by AllowRedrawing(false), and should be followed by tree.AllowRedrawing(true);
     // The latter should be called from TreeView::AfterExpand
-    public void nodeExpanded_Before(TreeNode n, System.Collections.Generic.List<string> dirs)
+    public void nodeExpanded_Before(TreeNode n)
     {
         if (n.Nodes.Count == 1 && n.Nodes[0].Text == "[?]")
         {
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 
             n.Nodes.Clear();
-            _logic.getDirectories(n.Name, dirs);
+            _logic.getDirectories(n.Name, _dirsListTmpExt, doClear: true);
 
-            if (dirs.Count > 0)
+            if (_dirsListTmpExt.Count > 0)
             {
-                dirs.Sort();
+                _dirsListTmpExt.Sort();
 
-                TreeNode[] childNodes = new TreeNode[dirs.Count];
+                TreeNode[] childNodes = new TreeNode[_dirsListTmpExt.Count];
                 int i = 0;
 
-                foreach (var dir in dirs)
+                foreach (var dir in _dirsListTmpExt)
                 {
-                    string key  = dir[2..];                                 // Full path
-                    string text = dir[(dir.LastIndexOf('\\') + 1)..];       // Only name
+                    string key  = dir.Name;                                         // Full path
+                    string text = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Only name
 
                     var newNode = new TreeNode(key);
                     newNode.Name = key;
                     newNode.Text = text;
                     newNode.NodeFont = getNodeFont(n.Level);
+                    newNode.ForeColor = dir.isHidden ? Color.Gray : Color.Black;
                     addDummySubNode(ref newNode);
 
                     childNodes[i++] = newNode;
@@ -521,7 +542,6 @@ public class myTree
             if (path.Length > 0)
             {
                 TreeNodeCollection thisLevelNodes = _tree.Nodes;
-                var dirs = new System.Collections.Generic.List<string>();
 
                 while (path.Length > 0)
                 {
@@ -540,7 +560,7 @@ public class myTree
                         if (text == nodeName)
                         {
                             // Fill the node with actual data
-                            nodeExpanded_Before(node, dirs);
+                            nodeExpanded_Before(node);
 
                             if (path.Length == 0)
                             {

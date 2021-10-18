@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;   // For dll import
 
@@ -26,12 +28,12 @@ public class myTreeLogic
 
     // --------------------------------------------------------------------------------------------------------
 
-    public int getFiles(string dir, System.Collections.Generic.List<string> list, bool doClear = true)
+    public int getFiles(string dir, List<myTreeListDataItem> listExt, bool doClear = true)
     {
         int res = 0;
 
         if (doClear)
-            list.Clear();
+            listExt.Clear();
 
         if (System.IO.Directory.Exists(dir))
         {
@@ -50,7 +52,18 @@ public class myTreeLogic
             if (files != null)
             {
                 foreach (var file in files)
-                    list.Add("3?" + file);
+                {
+                    System.IO.FileInfo fi = new System.IO.FileInfo(file);
+
+                    bool isHidden = (fi.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
+                    bool isSystem = (fi.Attributes & System.IO.FileAttributes.System) == System.IO.FileAttributes.System;
+
+                    var File = new myTreeListDataItem(file);
+                    File.isDir = false;
+                    File.isHidden = isHidden || isSystem;
+                    listExt.Add(File);
+                }
+
             }
         }
 
@@ -59,12 +72,12 @@ public class myTreeLogic
 
     // --------------------------------------------------------------------------------------------------------
 
-    public int getDirectories(string dir, System.Collections.Generic.List<string> list, bool doClear = true)
+    public int getDirectories(string dir, List<myTreeListDataItem> listExt, bool doClear = true)
     {
         int res = 0;
 
         if (doClear)
-            list.Clear();
+            listExt.Clear();
 
         if (System.IO.Directory.Exists(dir))
         {
@@ -89,15 +102,10 @@ public class myTreeLogic
                     bool isHidden = (di.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
                     bool isSystem = (di.Attributes & System.IO.FileAttributes.System) == System.IO.FileAttributes.System;
 
-                    if (isHidden || isSystem)
-                    {
-                        //list.Add("1?" + d + "?hidden");
-                        list.Add("1?" + d);
-                    }
-                    else
-                    {
-                        list.Add("1?" + d);
-                    }
+                    var Dir = new myTreeListDataItem(d);
+                    Dir.isDir = true;
+                    Dir.isHidden = isHidden || isSystem;
+                    listExt.Add(Dir);
                 }
             }
         }
@@ -229,6 +237,65 @@ public class myTreeLogic
         }
 
         return res;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Change the opacity of an image
+    // https://stackoverflow.com/questions/4779027/changing-the-opacity-of-a-bitmap-image
+    public Image ChangeImageOpacity(Image originalImage, double opacity)
+    {
+        const int bytesPerPixel = 4;
+
+        // Cannot modify an image with indexed colors
+        if ((originalImage.PixelFormat & PixelFormat.Indexed) == PixelFormat.Indexed)
+        {
+            return originalImage;
+        }
+
+        Bitmap bmp = (Bitmap)originalImage.Clone();
+
+        // Specify a pixel format
+        PixelFormat pxf = PixelFormat.Format32bppArgb;
+
+        // Lock the bitmap's bits
+        Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
+
+        // Get the address of the first line
+        IntPtr ptr = bmpData.Scan0;
+
+        // Declare an array to hold the bytes of the bitmap.
+        // This code is specific to a bitmap with 32 bits per pixels (32 bits = 4 bytes, 3 for RGB and 1 byte for alpha)
+        int numBytes = bmp.Width * bmp.Height * bytesPerPixel;
+        byte[] argbValues = new byte[numBytes];
+
+        // Copy the ARGB values into the array
+        System.Runtime.InteropServices.Marshal.Copy(ptr, argbValues, 0, numBytes);
+
+        // Manipulate the bitmap, such as changing the RGB values for all pixels in the the bitmap
+        // (argbValues is in format BGRA (Blue, Green, Red, Alpha))
+        for (int counter = 0; counter < argbValues.Length; counter += bytesPerPixel)
+        {
+            // If 100% transparent, skip pixel
+            if (argbValues[counter + bytesPerPixel - 1] == 0)
+                continue;
+
+            int pos = 0;
+            pos++; // B value
+            pos++; // G value
+            pos++; // R value
+
+            argbValues[counter + pos] = (byte)(argbValues[counter + pos] * opacity);
+        }
+
+        // Copy the ARGB values back to the bitmap
+        System.Runtime.InteropServices.Marshal.Copy(argbValues, 0, ptr, numBytes);
+
+        // Unlock the bits
+        bmp.UnlockBits(bmpData);
+
+        return bmp;
     }
 
     // --------------------------------------------------------------------------------------------------------

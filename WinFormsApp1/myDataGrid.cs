@@ -16,7 +16,6 @@ public class myDataGrid
 
     private Image  _imgDir  = null;
     private Image  _imgFile = null;
-    private Bitmap _rowImg  = null;
 
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
@@ -24,14 +23,14 @@ public class myDataGrid
     public enum Columns { colChBox = 0, colImage, colName, colId };
 
     // Going to hold a reference to the global list of files
-    private readonly System.Collections.Generic.List<string> _globalFileListRef = null;
+    private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myDataGrid(DataGridView dgv, System.Collections.Generic.List<string> list)
+    public myDataGrid(DataGridView dgv, System.Collections.Generic.List<myTreeListDataItem> listGlobal)
     {
         _dataGrid = dgv;
-        _globalFileListRef = list;
+        _globalFileListExtRef = listGlobal;
 
         init();
     }
@@ -173,15 +172,15 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Modify a copy of a template row and give it real values
-    public void buildRow(ref DataGridViewRow row, string item, bool isDir, int num)
+    public void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int num)
     {
-        if (item.Length > 0)
+        if (item.Name.Length > 0)
         {
-            int pos = item.LastIndexOf('\\') + 1;
+            int pos = item.Name.LastIndexOf('\\') + 1;
 
             row.Cells[(int)Columns.colChBox].Value = false;
             row.Cells[(int)Columns.colImage].Value = isDir ? _imgDir : _imgFile;
-            row.Cells[(int)Columns.colName ].Value = item[pos..];
+            row.Cells[(int)Columns.colName ].Value = item.Name[pos..];
             row.Cells[(int)Columns.colId   ].Value = num;
 
             row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
@@ -221,7 +220,7 @@ public class myDataGrid
 
     // Populate GridView with known amount of rows
     // Single pass
-    private void Populate_Fast(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
+    private void Populate_Fast(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
 /*
         // check the memory impact
@@ -243,7 +242,7 @@ public class myDataGrid
         }
 */
         int Count = 0, i = -1;
-        Count += doShowDirs ? dirsCount : 0;
+        Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
 
         if (Count > 0)
@@ -259,7 +258,7 @@ public class myDataGrid
             {
                 i++;
 
-                bool isDir = (item[0] == '1');
+                bool isDir = item.isDir;
 
                 // Show/skip directories
                 if (isDir && !doShowDirs)
@@ -267,10 +266,6 @@ public class myDataGrid
 
                 // Show/skip files
                 if (!isDir && !doShowFiles)
-                    continue;
-
-                // Skip the delimiter
-                if (item[0] == '2')
                     continue;
 
                 // Wasn't able to create new rows any other way
@@ -296,7 +291,7 @@ public class myDataGrid
 
     // Populate GridView with unknown amount of rows
     // Multiple pass
-    private void Populate_Slow(System.Collections.Generic.List<string> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
+    private void Populate_Slow(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
     {
         int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
@@ -311,7 +306,7 @@ public class myDataGrid
 
             for(int i = 0; i < list.Count; i++)
             {
-                bool isDir = (list[i][0] == '1');
+                bool isDir = (list[i].isDir);
 
                 // Show/skip directories
                 if (isDir && !doShowDirs)
@@ -321,11 +316,7 @@ public class myDataGrid
                 if (!isDir && !doShowFiles)
                     continue;
 
-                // Skip the delimiter
-                if (list[i][0] == '2')
-                    continue;
-
-                string fileName = list[i].Substring(list[i].LastIndexOf("\\") + 1).ToLower();
+                string fileName = list[i].Name.Substring(list[i].Name.LastIndexOf("\\") + 1).ToLower();
 
                 // Skip everything that does not match the search string
                 if (!fileName.Contains(filterStr))
@@ -342,7 +333,7 @@ public class myDataGrid
 
             foreach (var n in selectedItems)
             {
-                bool isDir = (list[n][0] == '1');
+                bool isDir = (list[n].isDir);
 
                 // Wasn't able to create new rows any other way
                 // So had to stick to the cloning
@@ -378,11 +369,11 @@ public class myDataGrid
 
         if (filterStr.Length == 0)
         {
-            Populate_Fast(_globalFileListRef, dirsCount, filesCount, doShowDirs, doShowFiles);
+            Populate_Fast(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles);
         }
         else
         {
-            Populate_Slow(_globalFileListRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
+            Populate_Slow(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
         }
 
         return;
@@ -391,7 +382,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Get a list of files that are currently checked in the GridView
-    public void getSelectedFiles(System.Collections.Generic.List<string> list, bool doShowDirs, bool doShowFiles)
+    public void getSelectedFiles(System.Collections.Generic.List<myTreeListDataItem> list, bool doShowDirs, bool doShowFiles)
     {
         list.Clear();
 /*
@@ -428,7 +419,7 @@ public class myDataGrid
 
                 // Add unmodified file name
                 // This way, list will contain references to original file names, and not the copies
-                list.Add(_globalFileListRef[num]);
+                list.Add(_globalFileListExtRef[num]);
             }
         }
 
@@ -443,8 +434,7 @@ public class myDataGrid
     // Not used anymore. Instead, background color of the widget was set.
     public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
     {
-        return;
-
+#if false
         bool doFillWithEmptyRows = false;
 
         if (doFillWithEmptyRows)
@@ -486,7 +476,7 @@ public class myDataGrid
                 }
             }
         }
-
+#endif
         return;
     }
 
@@ -590,7 +580,7 @@ public class myDataGrid
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 // This call will also cause CellMouseLeave event
-                myDataGrid_ContextMenu.showMenu(sender, e, _globalFileListRef, _doUseRecursion);
+                myDataGrid_ContextMenu.showMenu(sender, e, _globalFileListExtRef, _doUseRecursion);
             }
         }
     }

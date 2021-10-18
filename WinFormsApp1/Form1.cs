@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinFormsApp1
@@ -11,8 +10,7 @@ namespace WinFormsApp1
 
         private myTree      tree     = null;
         private myDataGrid  dataGrid = null;
-        private System.Collections.Generic.List<string> globalFileList = null;
-        private System.Collections.Generic.List<string> globalFldrList = null;
+        private List<myTreeListDataItem> globalFileListExt = null;
 
         private bool doShowDirs   = false;
         private bool doShowFiles  = false;
@@ -29,8 +27,7 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
-            globalFileList = new List<string>();
-            globalFldrList = new List<string>();
+            globalFileListExt = new List<myTreeListDataItem>();
 
             if (path.Length == 0)
             {
@@ -41,8 +38,8 @@ namespace WinFormsApp1
                 path = "d:\\Games\\Dishonored-2\\Uninstall";
             }
 
-            tree = new myTree(this.treeView1, path, expandEmpty);
-            dataGrid = new myDataGrid(this.dataGridView1, globalFileList);
+            tree     = new myTree       (this.treeView1, path, expandEmpty);
+            dataGrid = new myDataGrid   (this.dataGridView1, globalFileListExt);
 
             this.cb_ShowFiles.Checked = true;
             this.cb_ShowDirs. Checked = true;
@@ -58,7 +55,7 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var list = new System.Collections.Generic.List<string>();
+            var list = new List<myTreeListDataItem>();
 
             dataGrid.getSelectedFiles(list, doShowDirs, doShowFiles);
 
@@ -66,7 +63,7 @@ namespace WinFormsApp1
 
             foreach (var item in list)
             {
-                richTextBox1.Text += item[2..] + "\n";
+                richTextBox1.Text += item.Name[2..] + "\n";
             }
         }
 
@@ -80,14 +77,17 @@ namespace WinFormsApp1
             if (sender == cb_Recursive)
             {
                 // This happens when we're changing the state of [cb_Recursive] checkbox
-                tree.nodeSelected(treeView1.SelectedNode, globalFileList, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+                tree.nodeSelected(treeView1.SelectedNode, globalFileListExt, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
             }
             else
             {
                 if (sender != null)
                 {
                     // This happens when we're actually clicking the node in the tree
-                    tree.nodeSelected(e.Node, globalFileList, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+                    tree.nodeSelected(e.Node, globalFileListExt, ref nodeSelected_Dirs, ref nodeSelected_Files, useRecursion);
+
+                    // Set Form's header text
+                    this.Text = e.Node.FullPath;
                 }
             }
 
@@ -100,7 +100,7 @@ namespace WinFormsApp1
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             tree.AllowRedrawing(false);
-            tree.nodeExpanded_Before(e.Node, globalFldrList);
+            tree.nodeExpanded_Before(e.Node);
         }
 
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)

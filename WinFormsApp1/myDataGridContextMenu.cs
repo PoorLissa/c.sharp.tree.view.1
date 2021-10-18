@@ -7,12 +7,12 @@ using System.Windows.Forms;
 public class myDataGrid_ContextMenu
 {
     private static DataGridView _dataGrid = null;
-    private static System.Collections.Generic.List<string> _globalFileListRef = null;
+    private static System.Collections.Generic.List<myTreeListDataItem> _globalFileListRef = null;
 
     // --------------------------------------------------------------------------------------------------------
 
     // Display context menu for the row
-    public static void showMenu(object sender, DataGridViewCellMouseEventArgs e, List<string> list, bool recursion)
+    public static void showMenu(object sender, DataGridViewCellMouseEventArgs e, List<myTreeListDataItem> list, bool recursion)
     {
         var dataGrid = (DataGridView)(sender);
 
@@ -141,7 +141,7 @@ public class myDataGrid_ContextMenu
         for (int i = 0; i < list.Count; i++)
         {
             int n = list[i];
-            str += _globalFileListRef[n][2..] + '\n';
+            str += _globalFileListRef[n].Name[2..] + '\n';
         }
 
         if (str.Length > 0)
@@ -165,13 +165,13 @@ public class myDataGrid_ContextMenu
             var row = _dataGrid.SelectedRows[i];
 
             int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
-            string path = _globalFileListRef[id][2..];
+            string path = _globalFileListRef[id].Name[2..];
 
             set.Add(id);
 
             // Find indexes of item's children
             for (int j = id + 1; j < _globalFileListRef.Count; j++)
-                if (_globalFileListRef[j].Contains(path))
+                if (_globalFileListRef[j].Name.Contains(path))
                     set.Add(j);
         }
 
