@@ -50,9 +50,6 @@ namespace WinFormsApp1
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(444, 638);
             this.treeView1.TabIndex = 0;
-            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
-            this.treeView1.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterExpand);
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // button1
             // 
@@ -84,7 +81,6 @@ namespace WinFormsApp1
             this.cb_ShowDirs.TabIndex = 3;
             this.cb_ShowDirs.Text = "Show Directories";
             this.cb_ShowDirs.UseVisualStyleBackColor = true;
-            this.cb_ShowDirs.CheckedChanged += new System.EventHandler(this.cb_ShowDirs_CheckedChanged);
             // 
             // cb_ShowFiles
             // 
@@ -96,7 +92,6 @@ namespace WinFormsApp1
             this.cb_ShowFiles.TabIndex = 5;
             this.cb_ShowFiles.Text = "Show Files";
             this.cb_ShowFiles.UseVisualStyleBackColor = true;
-            this.cb_ShowFiles.CheckedChanged += new System.EventHandler(this.cb_ShowFiles_CheckedChanged);
             // 
             // dataGridView1
             // 
@@ -119,7 +114,6 @@ namespace WinFormsApp1
             this.cb_Recursive.TabIndex = 7;
             this.cb_Recursive.Text = "Recursive";
             this.cb_Recursive.UseVisualStyleBackColor = true;
-            this.cb_Recursive.CheckedChanged += new System.EventHandler(this.cb_Recursive_CheckedChanged);
             // 
             // textBox1
             // 
@@ -129,7 +123,6 @@ namespace WinFormsApp1
             this.textBox1.PlaceholderText = "filter";
             this.textBox1.Size = new System.Drawing.Size(142, 23);
             this.textBox1.TabIndex = 8;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // Form1
             // 

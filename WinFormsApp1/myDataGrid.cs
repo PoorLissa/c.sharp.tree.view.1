@@ -381,6 +381,7 @@ public class myDataGrid
         if (_myTemplateRow == null)
         {
             _myTemplateRow = _dataGrid.Rows[_dataGrid.Rows.Add()];
+            _dataGrid.Rows.Clear();
         }
 
         if (filterStr.Length == 0)
