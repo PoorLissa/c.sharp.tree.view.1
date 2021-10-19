@@ -2,6 +2,26 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+/*
+    Front-facing class that wraps myTree and myDataGrid objects.
+    Provides all the necessary infrastructure fo them to work together.
+    
+    To use it, put the components declared in [myTree_DataGrid_Manager_Initializer] structure on a form,
+    fill in the structure and pass it as a parameter to the [myTree_DataGrid_Manager] constructor:
+
+            var mtdgmi = new myTree_DataGrid_Manager_Initializer();
+
+            mtdgmi.form = this;
+            mtdgmi.tv = treeView1;
+            mtdgmi.dg = dataGridView1;
+            mtdgmi.cb_Recursive = cb_Recursive;
+            mtdgmi.cb_ShowDirs  = cb_ShowDirs;
+            mtdgmi.cb_ShowFiles = cb_ShowFiles;
+            mtdgmi.tb_Filter = textBox1;
+
+            myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+*/
+
 
 
 public struct myTree_DataGrid_Manager_Initializer
@@ -29,14 +49,14 @@ public class myTree_DataGrid_Manager
     private CheckBox    _cb_Recursive = null;
     private TextBox     _tb_Filter    = null;
 
-    private List<myTreeListDataItem> _globalFileListExt = null;
+    private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
 
     private bool _doShowDirs   = true;
     private bool _doShowFiles  = true;
     private bool _useRecursion = false;
 
-    private int  _nodeSelected_Dirs;
-    private int  _nodeSelected_Files;
+    private int  _nDirs;                                            // Stores the number of folders found in the last [nodeSelected] call
+    private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
 
     private string _filterStr = "";
 
@@ -44,26 +64,27 @@ public class myTree_DataGrid_Manager
 
     public myTree_DataGrid_Manager(ref myTree_DataGrid_Manager_Initializer mtdgmi, string path, bool expandEmpty)
     {
-        _nodeSelected_Dirs  = 0;
-        _nodeSelected_Files = 0;
+        _nDirs  = 0;
+        _nFiles = 0;
 
         _globalFileListExt = new List<myTreeListDataItem>();
 
         _tree     = new myTree     (mtdgmi.tv, path, expandEmpty);
         _dataGrid = new myDataGrid (mtdgmi.dg, _globalFileListExt);
 
-        _form = mtdgmi.form;
-
+        _form         = mtdgmi.form;
         _cb_ShowFiles = mtdgmi.cb_ShowFiles;
         _cb_ShowDirs  = mtdgmi.cb_ShowDirs;
         _cb_Recursive = mtdgmi.cb_Recursive;
-
-        _tb_Filter = mtdgmi.tb_Filter;
+        _tb_Filter    = mtdgmi.tb_Filter;
 
         _cb_ShowFiles.Checked = true;
         _cb_ShowDirs.Checked  = true;
         _cb_Recursive.Checked = false;
 
+        _tb_Filter.PlaceholderText = "Filter text";
+
+        // Set up events for the components:
         _tree.Obj().AfterSelect  += new TreeViewEventHandler(tree_onAfterSelect);
         _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler(tree_onBeforeExpand);
         _tree.Obj().AfterExpand  += new TreeViewEventHandler(tree_onAfterExpand);
@@ -84,29 +105,37 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Selecting tree node
+    // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
-        // [nodeSelected_Dirs/nodeSelected_Files] will contain the number of items we need to display
+        // Decide if the current directory in the tree has changed or not
+        // (if not, the selected files will be restored later, when the grid is repopulated)
+        myDataGrid.PopulateReason reason = myDataGrid.PopulateReason.viewDirChanged;
 
-        if (sender == _cb_Recursive)
+        if (sender != null)
         {
-            // This happens when we're changing the state of [cb_Recursive] checkbox
-            _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nodeSelected_Dirs, ref _nodeSelected_Files, _useRecursion);
-        }
-        else
-        {
-            if (sender != null)
+            if (sender == _cb_Recursive)
             {
+                reason = myDataGrid.PopulateReason.recursionChanged;
+
+                _dataGrid.Collect_Or_Restore(reason, true);
+
+                // This happens when we're changing the state of [cb_Recursive] checkbox
+                _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+            }
+            else
+            {
+                reason = myDataGrid.PopulateReason.dirChanged;
+
                 // This happens when we're actually clicking the node in the tree
-                _tree.nodeSelected(e.Node, _globalFileListExt, ref _nodeSelected_Dirs, ref _nodeSelected_Files, _useRecursion);
+                _tree.nodeSelected(e.Node, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
 
                 // Set Form's header text
                 _form.Text = e.Node.FullPath;
             }
         }
 
-        _dataGrid.Populate(_nodeSelected_Dirs, _nodeSelected_Files, _doShowDirs, _doShowFiles, _filterStr);
+        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
 
         return;
     }
@@ -165,7 +194,7 @@ public class myTree_DataGrid_Manager
     {
         _filterStr = (sender as TextBox).Text;
 
-        _dataGrid.Populate(_nodeSelected_Dirs, _nodeSelected_Files, _doShowDirs, _doShowFiles, _filterStr);
+        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, myDataGrid.PopulateReason.filterChanged, _filterStr);
     }
 
     // --------------------------------------------------------------------------------

@@ -347,9 +347,9 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Populates the list with directory and file names
+    // Populates the supplied list with directory and file names
     // Returns the number of errors
-    // ref int itemsFound parameter receives the number of items found (depending on the search boolean parameters)
+    // ref int itemsFound parameters receive the number of items found
     public int nodeSelected(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, bool useRecursion = false)
     {
         int res = 0;

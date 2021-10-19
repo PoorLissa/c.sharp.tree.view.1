@@ -8,7 +8,7 @@ namespace WinFormsApp1
     {
         // --------------------------------------------------------------------------------
 
-        private myTree_DataGrid_Manager manager = null;
+        private myTree_DataGrid_Manager myTDGManager = null;
 
         // --------------------------------------------------------------------------------
 
@@ -21,8 +21,8 @@ namespace WinFormsApp1
                 expandEmpty = true;
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options";
                 path = "E:\\_work\\_projects\\Visual Studio\\2021\\c.sharp.tree.view.1\\WinFormsApp1\\_far.options\\__far.user.menu.1.png";
-                path = "c:\\_maxx\\002 - music";
                 path = "d:\\Games\\Dishonored-2\\Uninstall";
+                path = "c:\\_maxx\\002 - music";
             }
 
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
@@ -35,7 +35,7 @@ namespace WinFormsApp1
             mtdgmi.cb_ShowFiles = cb_ShowFiles;
             mtdgmi.tb_Filter = textBox1;
 
-            manager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+            myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
         }
 
         // --------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ namespace WinFormsApp1
         {
             var list = new List<myTreeListDataItem>();
 
-            manager.getSelectedFiles(list);
+            myTDGManager.getSelectedFiles(list);
 
             richTextBox1.Clear();
 

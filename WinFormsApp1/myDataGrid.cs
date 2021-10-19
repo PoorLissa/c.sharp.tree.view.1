@@ -2,10 +2,13 @@
 using System.Reflection;
 using System.Windows.Forms;
 
+
+
 /*
     Wrapper class around DataGridView widget.
     Allows customization and provides public methods to work with the widget.
 */
+
 public class myDataGrid
 {
     private DataGridView    _dataGrid      = null;
@@ -26,6 +29,14 @@ public class myDataGrid
 
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
+
+    // Lists to store the state of selected items between grid repopulations
+    private System.Collections.Generic.List<    int> currentSelectionIds   = null;
+    private System.Collections.Generic.List<string > currentSelectionNames = null;
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public enum PopulateReason { dirChanged, viewFileChanged, viewDirChanged, filterChanged, recursionChanged };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -372,9 +383,86 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Add files/derectories to the DataGridView from the List
-    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr = "")
+    // Collect all the selected entries
+    // - or -
+    // Restore the selection
+    public void Collect_Or_Restore(PopulateReason reason, bool action)
     {
+        const bool doRememberState = true;
+        const bool doRestoreState  = false;
+
+        if (action == doRememberState)
+        {
+            switch (reason)
+            {
+                case PopulateReason.dirChanged:
+
+                    if (currentSelectionIds != null)
+                        currentSelectionIds.Clear();
+
+                    if (currentSelectionNames != null)
+                        currentSelectionNames.Clear();
+
+                    break;
+
+                // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
+                case PopulateReason.filterChanged:
+                case PopulateReason.viewDirChanged:
+                case PopulateReason.viewFileChanged:
+
+                    getSelectedIds(ref currentSelectionIds);
+                    break;
+
+                case PopulateReason.recursionChanged:
+
+                    if (_doUseRecursion)
+                    {
+                        // Checkbox has been just checked: 
+                        getSelectedNames(ref currentSelectionNames);
+                    }
+                    else
+                    {
+                        // Checkbox has been just unChecked
+                        getSelectedNames(ref currentSelectionNames);
+                    }
+                    break;
+            }
+        }
+
+        if (action == doRestoreState)
+        {
+            switch (reason)
+            {
+                case PopulateReason.dirChanged:
+                    break;
+
+                // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
+                case PopulateReason.filterChanged:
+                case PopulateReason.viewDirChanged:
+                case PopulateReason.viewFileChanged:
+                    if (currentSelectionIds != null)
+                        restoreSelectedIds(currentSelectionIds);
+                    break;
+
+                case PopulateReason.recursionChanged:
+
+                    restoreSelectedNames(currentSelectionNames);
+                    break;
+            }
+        }
+
+        return;
+    }
+
+    // Add files/derectories to the DataGridView from the List
+    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "")
+    {
+        // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
+        if (reason != PopulateReason.recursionChanged)
+        {
+            Collect_Or_Restore(reason, true);
+        }
+
         _dataGrid.Rows.Clear();
 
         // The first time we populate our GridView, we create this template row that we'll use for cloning later
@@ -386,11 +474,143 @@ public class myDataGrid
 
         if (filterStr.Length == 0)
         {
+            // Populate GridView with known amount of rows -- Single pass
             Populate_Fast(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles);
         }
         else
         {
+            // Populate GridView with unknown amount of rows -- Multiple pass
             Populate_Slow(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
+        }
+
+        // Try to restore the selection from before:
+        Collect_Or_Restore(reason, false);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Get a list of files that are currently checked in the GridView
+    private void getSelectedIds(ref System.Collections.Generic.List<int> list)
+    {
+        for (int i = 0; i < _dataGrid.Rows.Count; i++)
+        {
+            DataGridViewRow row = _dataGrid.Rows[i];
+
+            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
+
+            // If the item is checked, we store its id:
+            if (isChecked)
+            {
+                if (list == null)
+                {
+                    list = new System.Collections.Generic.List<int>();
+                }
+
+                list.Add((int)(row.Cells[(int)Columns.colId].Value));
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Set checked state for the files from the list
+    private void restoreSelectedIds(System.Collections.Generic.List<int> list)
+    {
+        if (list.Count > 0)
+        {
+            var set = new System.Collections.Generic.HashSet<int>(list.Count);
+
+            // Put everything on the set for fast extraction later on
+            for (int i = 0; i < list.Count; i++)
+                set.Add(list[i]);
+
+            // In case the list has duplicates, fill it from the set
+            if (list.Count > set.Count)
+            {
+                list.Clear();
+                foreach (var id in set)
+                    list.Add(id);
+            }
+
+            for (int i = 0; i < _dataGrid.Rows.Count; i++)
+            {
+                DataGridViewRow row = _dataGrid.Rows[i];
+
+                int id = (int)(row.Cells[(int)Columns.colId].Value);
+
+                if (set.Contains(id))
+                {
+                    row.Cells[(int)Columns.colChBox].Value = true;
+                }
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Get a list of files that are currently checked in the GridView
+    private void getSelectedNames(ref System.Collections.Generic.List<string> list)
+    {
+        for (int i = 0; i < _dataGrid.Rows.Count; i++)
+        {
+            DataGridViewRow row = _dataGrid.Rows[i];
+
+            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
+
+            // If the item is checked, we store its name:
+            if (isChecked)
+            {
+                if (list == null)
+                {
+                    list = new System.Collections.Generic.List<string>();
+                }
+
+                int id = (int)(row.Cells[(int)Columns.colId].Value);
+                list.Add(_globalFileListExtRef[id].Name);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Set checked state for the files from the list
+    private void restoreSelectedNames(System.Collections.Generic.List<string> list)
+    {
+        if (list.Count > 0)
+        {
+            var set = new System.Collections.Generic.HashSet<string>(list.Count);
+
+            // Put everything on the set for fast extraction later on
+            for (int i = 0; i < list.Count; i++)
+                set.Add(list[i]);
+
+            // In case the list has duplicates, fill it from the set
+            if (list.Count > set.Count)
+            {
+                list.Clear();
+                foreach (var id in set)
+                    list.Add(id);
+            }
+
+            for (int i = 0; i < _dataGrid.Rows.Count; i++)
+            {
+                DataGridViewRow row = _dataGrid.Rows[i];
+
+                int id = (int)(row.Cells[(int)Columns.colId].Value);
+
+                if (set.Contains(_globalFileListExtRef[id].Name))
+                {
+                    row.Cells[(int)Columns.colChBox].Value = true;
+                }
+            }
         }
 
         return;
