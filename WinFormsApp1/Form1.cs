@@ -27,6 +27,20 @@ namespace WinFormsApp1
         {
             InitializeComponent();
 
+/*
+            myTree_DataGrid_Manager_Initializer mtdgmi = new myTree_DataGrid_Manager_Initializer();
+
+            mtdgmi.form = this;
+            mtdgmi.tv = treeView1;
+            mtdgmi.dg = dataGridView1;
+            mtdgmi.cb_Recursive = cb_Recursive;
+            mtdgmi.cb_ShowDirs  = cb_ShowDirs;
+            mtdgmi.cb_ShowFiles = cb_ShowFiles;
+
+            myTree_DataGrid_Manager m = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+
+            return;
+*/
             globalFileListExt = new List<myTreeListDataItem>();
 
             if (path.Length == 0)
@@ -57,13 +71,13 @@ namespace WinFormsApp1
         {
             var list = new List<myTreeListDataItem>();
 
-            dataGrid.getSelectedFiles(list, doShowDirs, doShowFiles);
+            dataGrid.getSelectedFiles(list);
 
             richTextBox1.Clear();
 
             foreach (var item in list)
             {
-                richTextBox1.Text += item.Name[2..] + "\n";
+                richTextBox1.Text += item.Name + "\n";
             }
         }
 

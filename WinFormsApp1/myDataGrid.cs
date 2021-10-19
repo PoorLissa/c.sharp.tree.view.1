@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -14,8 +13,11 @@ public class myDataGrid
 
     private bool _doUseRecursion = false;
 
-    private Image  _imgDir  = null;
-    private Image  _imgFile = null;
+    private Image _imgDir         = null;
+    private Image _imgFile        = null;
+    private Image _imgDir_Opaque  = null;
+    private Image _imgFile_Opaque = null;
+
 
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
@@ -83,6 +85,9 @@ public class myDataGrid
         // Load images
         _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
         _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
+
+        _imgDir_Opaque  = myUtils.ChangeImageOpacity(_imgDir,  0.35);
+        _imgFile_Opaque = myUtils.ChangeImageOpacity(_imgFile, 0.35);
 
         // Create brushes, gradients, etc.
         var pt1 = new Point(0, 0);
@@ -176,15 +181,26 @@ public class myDataGrid
     {
         if (item.Name.Length > 0)
         {
+            Image img = isDir
+                            ? item.isHidden ? _imgDir_Opaque  : _imgDir
+                            : item.isHidden ? _imgFile_Opaque : _imgFile;
+
             int pos = item.Name.LastIndexOf('\\') + 1;
 
             row.Cells[(int)Columns.colChBox].Value = false;
-            row.Cells[(int)Columns.colImage].Value = isDir ? _imgDir : _imgFile;
+            row.Cells[(int)Columns.colImage].Value = img;
             row.Cells[(int)Columns.colName ].Value = item.Name[pos..];
             row.Cells[(int)Columns.colId   ].Value = num;
 
             row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
+
+            if (item.isHidden)
+            {
+                row.Cells[(int)Columns.colName].Style.ForeColor = Color.Gray;
+            }
         }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -382,7 +398,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Get a list of files that are currently checked in the GridView
-    public void getSelectedFiles(System.Collections.Generic.List<myTreeListDataItem> list, bool doShowDirs, bool doShowFiles)
+    public void getSelectedFiles(System.Collections.Generic.List<myTreeListDataItem> list)
     {
         list.Clear();
 /*
@@ -393,20 +409,6 @@ public class myDataGrid
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
-            string item = (string)(row.Cells[(int)Columns.colName].Value);
-            bool isDir = (item[0] == '1');
-
-            // Show/skip directories
-            if (isDir && !doShowDirs)
-                continue;
-
-            // Show/skip files
-            if (!isDir && !doShowFiles)
-                continue;
-
-            // Skip the delimiter
-            if (item[0] == '2')
-                continue;
 
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
@@ -415,11 +417,11 @@ public class myDataGrid
             // and accessing item by index in the List is O(1)
             if (isChecked)
             {
-                int num = (int)(row.Cells[(int)Columns.colId].Value);
+                int id = (int)(row.Cells[(int)Columns.colId].Value);
 
                 // Add unmodified file name
                 // This way, list will contain references to original file names, and not the copies
-                list.Add(_globalFileListExtRef[num]);
+                list.Add(_globalFileListExtRef[id]);
             }
         }
 

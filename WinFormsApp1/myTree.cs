@@ -118,8 +118,8 @@ public class myTree
                 _imgDir2 = Image.FromFile(myUtils.getFilePath("_icons", "icon-tree-folder-1-opened-30.png"));
             }
 
-            _imgDir1_Opaque = _logic.ChangeImageOpacity(_imgDir1, 0.35);
-            _imgDir2_Opaque = _logic.ChangeImageOpacity(_imgDir2, 0.35);
+            _imgDir1_Opaque = myUtils.ChangeImageOpacity(_imgDir1, 0.35);
+            _imgDir2_Opaque = myUtils.ChangeImageOpacity(_imgDir2, 0.35);
         }
         catch (Exception ex)
         {
@@ -295,16 +295,9 @@ public class myTree
                 }
                 else
                 {
-                    Image dirImg = null;
-
-                    if (isNodeExpanded)
-                    {
-                        dirImg = isHidden ? _imgDir2_Opaque : _imgDir2;
-                    }
-                    else
-                    {
-                        dirImg = isHidden ? _imgDir1_Opaque : _imgDir1;
-                    }
+                    Image dirImg = isNodeExpanded
+                                        ? isHidden ? _imgDir2_Opaque : _imgDir2
+                                        : isHidden ? _imgDir1_Opaque : _imgDir1;
 
                     y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - dirImg.Height) / 2;
                     e.Graphics.DrawImage(dirImg, x - 1, y, 32, 32);
