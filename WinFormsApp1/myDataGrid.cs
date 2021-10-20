@@ -36,7 +36,10 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    public enum PopulateReason { dirChanged, viewFileChanged, viewDirChanged, filterChanged, recursionChanged };
+    public enum PopulateReason
+    {
+        dirChanged, viewFileChanged, viewDirChanged, filterChanged, recursionChanged_Before, recursionChanged_After
+    };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -46,6 +49,12 @@ public class myDataGrid
         _globalFileListExtRef = listGlobal;
 
         init();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    public ref DataGridView Obj()
+    {
+        return ref _dataGrid;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -387,12 +396,12 @@ public class myDataGrid
     // Collect all the selected entries
     // - or -
     // Restore the selection
-    public void Collect_Or_Restore(PopulateReason reason, bool action)
+    private void Collect_Or_Restore(PopulateReason reason, bool action)
     {
-        const bool doRememberState = true;
-        const bool doRestoreState  = false;
+        const bool doStoreState   = true;
+        const bool doRestoreState = false;
 
-        if (action == doRememberState)
+        if (action == doStoreState)
         {
             switch (reason)
             {
@@ -414,9 +423,12 @@ public class myDataGrid
                     getSelectedIds(ref currentlySelectedIds);
                     break;
 
-                case PopulateReason.recursionChanged:
+                case PopulateReason.recursionChanged_Before:
 
                     getSelectedNames(ref currentlySelectedNames);
+                    break;
+
+                case PopulateReason.recursionChanged_After:
                     break;
             }
         }
@@ -436,7 +448,10 @@ public class myDataGrid
                     restoreSelectedIds(currentlySelectedIds);
                     break;
 
-                case PopulateReason.recursionChanged:
+                case PopulateReason.recursionChanged_Before:
+                    break;
+
+                case PopulateReason.recursionChanged_After:
 
                     restoreSelectedNames(currentlySelectedNames);
                     break;
@@ -452,10 +467,7 @@ public class myDataGrid
     public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "")
     {
         // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
-        if (reason != PopulateReason.recursionChanged)
-        {
-            Collect_Or_Restore(reason, true);
-        }
+        Collect_Or_Restore(reason, true);
 
         _dataGrid.Rows.Clear();
 
@@ -844,6 +856,13 @@ public class myDataGrid
     public void setRecursiveMode(bool mode)
     {
         _doUseRecursion = mode;
+
+        // Also, store the list of files selected by user
+        // This needs to be done BEFORE [myTree_DataGrid_Manager.tree_onAfterSelect] is called,
+        // as it will change the global file list contents
+        Collect_Or_Restore(PopulateReason.recursionChanged_Before, true);
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------

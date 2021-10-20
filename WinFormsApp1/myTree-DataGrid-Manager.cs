@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 /*
@@ -33,6 +34,7 @@ public struct myTree_DataGrid_Manager_Initializer
     public CheckBox         cb_ShowDirs;
     public CheckBox         cb_Recursive;
     public TextBox          tb_Filter;
+    public RichTextBox      richTextBox;
 }
 
 
@@ -48,6 +50,7 @@ public class myTree_DataGrid_Manager
     private CheckBox    _cb_ShowDirs  = null;
     private CheckBox    _cb_Recursive = null;
     private TextBox     _tb_Filter    = null;
+    private RichTextBox _richTextBox  = null;
 
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
 
@@ -58,7 +61,8 @@ public class myTree_DataGrid_Manager
     private int  _nDirs;                                            // Stores the number of folders found in the last [nodeSelected] call
     private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
 
-    private string _filterStr = "";
+    private string _filterStr = "";                                 // To use with filtering event
+    private int    _filterDelayCnt = 0;                             // To use with filtering event (to delay filtering)
 
     // --------------------------------------------------------------------------------
 
@@ -77,6 +81,7 @@ public class myTree_DataGrid_Manager
         _cb_ShowDirs  = mtdgmi.cb_ShowDirs;
         _cb_Recursive = mtdgmi.cb_Recursive;
         _tb_Filter    = mtdgmi.tb_Filter;
+        _richTextBox  = mtdgmi.richTextBox;
 
         _cb_ShowFiles.Checked = true;
         _cb_ShowDirs.Checked  = true;
@@ -116,9 +121,7 @@ public class myTree_DataGrid_Manager
         {
             if (sender == _cb_Recursive)
             {
-                reason = myDataGrid.PopulateReason.recursionChanged;
-
-                _dataGrid.Collect_Or_Restore(reason, true);
+                reason = myDataGrid.PopulateReason.recursionChanged_After;
 
                 // This happens when we're changing the state of [cb_Recursive] checkbox
                 _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
@@ -194,7 +197,53 @@ public class myTree_DataGrid_Manager
     {
         _filterStr = (sender as TextBox).Text;
 
-        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, myDataGrid.PopulateReason.filterChanged, _filterStr);
+        var reason = myDataGrid.PopulateReason.filterChanged;
+
+        if (_dataGrid.Obj().RowCount < 10000 || _filterStr.Length == 0)
+        {
+            // Populate dataGrid immediately, as this won't take much time anyway
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+        }
+        else
+        {
+            // Too much rows in the grid.
+            // Don't want to repopulate the grid each time the user enters new char in a filter box.
+            // Delay the populating task until the user stops typing
+            if (_filterDelayCnt == 0)
+            {
+                var delayedTask = new Task(() =>
+                {
+                    _filterDelayCnt = 2;
+
+                    while (_filterDelayCnt > 1)
+                    {
+                        _filterDelayCnt = 1;
+
+                        // If the user has not typed anything while this delay's in progress,
+                        // assume it's time to finally populate the grid
+                        Task.Delay(500).Wait();
+                    }
+
+                    _form.Invoke(new MethodInvoker(delegate
+                    {
+                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                    }));
+
+                    _filterDelayCnt = 0;
+
+                    return;
+                });
+
+                delayedTask.Start();
+            }
+            else
+            {
+                // Keep increasing the counter while the user is typing
+                _filterDelayCnt++;
+            }
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------
