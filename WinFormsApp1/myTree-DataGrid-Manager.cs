@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -211,28 +212,35 @@ public class myTree_DataGrid_Manager
             // Delay the populating task until the user stops typing
             if (_filterDelayCnt == 0)
             {
-                var delayedTask = new Task(() =>
-                {
-                    _filterDelayCnt = 2;
+                _tb_Filter.BackColor = Color.LightGoldenrodYellow;
 
-                    while (_filterDelayCnt > 1)
+                var delayedTask = new Task(
+                    delegate
                     {
-                        _filterDelayCnt = 1;
+                        _filterDelayCnt = 2;
 
-                        // If the user has not typed anything while this delay's in progress,
-                        // assume it's time to finally populate the grid
-                        Task.Delay(500).Wait();
+                        while (_filterDelayCnt > 1)
+                        {
+                            _filterDelayCnt = 1;
+
+                            // If the user has not typed anything while this delay's in progress,
+                            // assume it's time to finally populate the grid
+                            Task.Delay(500).Wait();
+                        }
+
+                        _form.Invoke(new MethodInvoker(
+                            delegate
+                            {
+                                _tb_Filter.BackColor = Color.White;
+                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                            })
+                        );
+
+                        _filterDelayCnt = 0;
+
+                        return;
                     }
-
-                    _form.Invoke(new MethodInvoker(delegate
-                    {
-                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
-                    }));
-
-                    _filterDelayCnt = 0;
-
-                    return;
-                });
+                );
 
                 delayedTask.Start();
             }

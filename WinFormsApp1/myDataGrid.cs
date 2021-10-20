@@ -52,6 +52,7 @@ public class myDataGrid
     }
 
     // --------------------------------------------------------------------------------------------------------
+
     public ref DataGridView Obj()
     {
         return ref _dataGrid;
@@ -694,21 +695,23 @@ public class myDataGrid
     {
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
+            var row = _dataGrid.Rows[e.RowIndex];
+
+            char hoverStatus = '0';
+
+            if (row.MinimumHeight > 2)
+            {
+                hoverStatus = row.MinimumHeight == 4 ? '2' : '1';
+
+                // Reset row's hover status to default (but only if the mouse has left the row)
+                if (hoverStatus == '3' && e.ColumnIndex == (int)Columns.colName)
+                    row.MinimumHeight = 2;
+            }
+
+
             // Selected row (all the row's cells will be painted one by one starting from the left)
             if ((e.State & DataGridViewElementStates.Selected) != 0)
             {
-                char hoverStatus = '0';
-                var row = _dataGrid.Rows[e.RowIndex];
-
-                if (row.MinimumHeight > 2)
-                {
-                    hoverStatus = row.MinimumHeight == 4 ? '2' : '1';
-
-                    // Reset row's hover status to default (but only if the mouse has left the row)
-                    if (hoverStatus == '3' && e.ColumnIndex == (int)Columns.colName)
-                        row.MinimumHeight = 2;
-                }
-
                 int x = e.CellBounds.X + 1;
                 int y = e.CellBounds.Y + 1;
                 int w = e.CellBounds.Width;
@@ -758,7 +761,45 @@ public class myDataGrid
             }
             else
             {
-                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                if (hoverStatus == '0')
+                {
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                }
+                else
+                {
+                    int x = e.CellBounds.X + 1;
+                    int y = e.CellBounds.Y + 1;
+                    int w = e.CellBounds.Width;
+                    int h = e.CellBounds.Height - 3;
+
+                    if (e.ColumnIndex > 0)
+                    {
+                        x -= 1;
+                        w += 2;
+                    }
+
+                    e.PaintBackground(e.CellBounds, false);
+                    e.PaintContent(e.CellBounds);
+
+                    if (hoverStatus == '2' && (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName))
+                    {
+                        if (e.ColumnIndex < 2)
+                        {
+                            h--;
+
+                            e.Graphics.DrawLine(Pens.DarkOrange, x, y, x + w, y);
+                            e.Graphics.DrawLine(Pens.DarkOrange, x, y + h, x + w, y + h);
+
+                            if (e.ColumnIndex == 0)
+                                e.Graphics.DrawLine(Pens.DarkOrange, x, y, x, y + h);
+                        }
+                        else
+                        {
+                            Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                            e.Graphics.DrawRectangle(Pens.DarkOrange, rect);
+                        }
+                    }
+                }
             }
 
             e.Handled = true;
@@ -795,26 +836,20 @@ public class myDataGrid
 
     private void on_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
-        if (_dataGrid.Rows[e.RowIndex].Selected)
-        {
-            // Change row's appearance while mouse is hovering upon it
-            _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
-            _dataGrid.InvalidateRow(e.RowIndex);
-        }
+        // Change row's appearance while mouse is hovering upon it
+        _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
+        _dataGrid.InvalidateRow(e.RowIndex);
     }
 
     // --------------------------------------------------------------------------------------------------------
 
     private void on_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
     {
-        if (_dataGrid.Rows[e.RowIndex].Selected)
-        {
-            // Change row's appearance while mouse is hovering upon it
-            if (_dataGrid.Rows[e.RowIndex].MinimumHeight == 4)
-                _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
+        // Change row's appearance when mouse is leaving it
+        if (_dataGrid.Rows[e.RowIndex].MinimumHeight == 4)
+            _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
 
-            _dataGrid.InvalidateRow(e.RowIndex);
-        }
+        _dataGrid.InvalidateRow(e.RowIndex);
     }
 
     // --------------------------------------------------------------------------------------------------------

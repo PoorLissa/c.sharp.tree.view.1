@@ -387,7 +387,7 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
             if (size == 16)
                 _imgTick = Image.FromFile(myUtils.getFilePath("_icons", "check-box-1-tick-24-small.png"));
 
-            _hoveredCheckboxBrush = new SolidBrush(Color.FromArgb(200, 170, 227, 255));
+            _hoveredCheckboxBrush = new SolidBrush(Color.FromArgb(50, 50, 175, 255));
         }
 
         x--;
@@ -401,20 +401,22 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
             {
                 g.FillRectangle(Brushes.AliceBlue,      x - 9, y - 9, 19, 19);
                 g.FillRectangle(Brushes.White,          x - 8, y - 8, 16, 16);
-//              g.FillRectangle(Brushes.LightSteelBlue, x - 6, y - 6, 13, 13);
                 g.FillRectangle(_hoveredCheckboxBrush,  x - 6, y - 6, 13, 13);
             }
 
             if (size == 20)
             {
-//              g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 22, 22);        // work
-                g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 23, 23);        // home
+                g.FillRectangle(Brushes.AliceBlue,      x - 11, y - 11, 23, 23);
                 g.FillRectangle(Brushes.White,          x - 10, y - 10, 20, 20);
-                g.FillRectangle(Brushes.LightSteelBlue, x -  8, y -  8, 17, 17);
+                g.FillRectangle(_hoveredCheckboxBrush,  x -  8, y -  8, 17, 17);
             }
-        }
 
-        g.DrawRectangle(Pens.Black, x - size / 2, y - size / 2, size, size);
+            g.DrawRectangle(Pens.Black, x - size/2 - 1, y - size/2 - 1, size + 2, size + 2);
+        }
+        else
+        {
+            g.DrawRectangle(Pens.Black, x - size/2, y - size/2, size, size);
+        }
 
         if (Checked)
         {
