@@ -74,6 +74,7 @@ public class myDataGrid
             _dataGrid.ColumnHeadersVisible  = false;                                        // No column headers
             _dataGrid.RowHeadersVisible     = false;                                        // No row headers
             _dataGrid.ShowCellToolTips      = false;                                        // No cell tooltips
+            _dataGrid.MultiSelect           = true;                                         // User is allowed to select several rows
 
             // Grid Colors
             _dataGrid.DefaultCellStyle.SelectionForeColor = Color.Black;                    // Selected row's font color
