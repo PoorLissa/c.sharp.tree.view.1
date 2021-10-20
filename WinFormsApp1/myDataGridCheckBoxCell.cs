@@ -393,7 +393,7 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         x--;
         y--;
 
-        g.FillRectangle(Brushes.White, x - size / 2, y - size / 2, size, size);
+        g.FillRectangle(Brushes.White, x - size/2, y - size/2, size, size);
 
         if (isHovered)
         {
