@@ -25,7 +25,7 @@ public class myDataGrid
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
 
-    public enum Columns { colChBox = 0, colImage, colName, colId };
+    public enum Columns { colId, colChBox, colImage, colName };
 
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
@@ -153,6 +153,17 @@ public class myDataGrid
         // Checkbox column Columns.colCheckBox
         var checkBoxColumn = new DataGridViewCheckBoxColumn();
 
+        // Row number column Columns.colNumber
+        var numberColumn = new DataGridViewTextBoxColumn();
+        numberColumn.Name = "id";
+        numberColumn.Visible = true;
+        numberColumn.DividerWidth = 3;
+        numberColumn.MinimumWidth = _dataGrid.RowTemplate.Height;
+        numberColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        numberColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        numberColumn.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
+        _dataGrid.Columns.Add(numberColumn);
+
         // Custom cell template
         var cellTemplate = new myDataGridViewCheckBoxCell();
             cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom3;
@@ -180,12 +191,6 @@ public class myDataGrid
         textColumn.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
         _dataGrid.Columns.Add(textColumn);
 
-        // Row number column Columns.colNumber
-        var numberColumn = new DataGridViewTextBoxColumn();
-        numberColumn.Name = "id";
-        numberColumn.Visible = false;
-        _dataGrid.Columns.Add(numberColumn);
-
         return;
     }
 
@@ -199,7 +204,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Modify a copy of a template row and give it real values
-    public void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int num)
+    public void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int id)
     {
         if (item.Name.Length > 0)
         {
@@ -209,10 +214,10 @@ public class myDataGrid
 
             int pos = item.Name.LastIndexOf('\\') + 1;
 
+            row.Cells[(int)Columns.colId   ].Value = id;
             row.Cells[(int)Columns.colChBox].Value = false;
             row.Cells[(int)Columns.colImage].Value = img;
             row.Cells[(int)Columns.colName ].Value = item.Name[pos..];
-            row.Cells[(int)Columns.colId   ].Value = num;
 
             row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
 
