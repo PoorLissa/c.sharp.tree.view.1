@@ -30,9 +30,9 @@ public class myDataGrid
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
 
-    // Lists to store the state of selected items between grid repopulations
-    private System.Collections.Generic.List<    int> currentSelectionIds   = null;
-    private System.Collections.Generic.List<string > currentSelectionNames = null;
+    // Containers to store the state of selected items between grid repopulations
+    private System.Collections.Generic.HashSet<   int> currentlySelectedIds   = null;
+    private System.Collections.Generic.HashSet<string> currentlySelectedNames = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -397,11 +397,11 @@ public class myDataGrid
             {
                 case PopulateReason.dirChanged:
 
-                    if (currentSelectionIds != null)
-                        currentSelectionIds.Clear();
+                    if (currentlySelectedNames != null)
+                        currentlySelectedNames.Clear();
 
-                    if (currentSelectionNames != null)
-                        currentSelectionNames.Clear();
+                    if (currentlySelectedIds != null)
+                        currentlySelectedIds.Clear();
 
                     break;
 
@@ -410,21 +410,12 @@ public class myDataGrid
                 case PopulateReason.viewDirChanged:
                 case PopulateReason.viewFileChanged:
 
-                    getSelectedIds(ref currentSelectionIds);
+                    getSelectedIds(ref currentlySelectedIds);
                     break;
 
                 case PopulateReason.recursionChanged:
 
-                    if (_doUseRecursion)
-                    {
-                        // Checkbox has been just checked: 
-                        getSelectedNames(ref currentSelectionNames);
-                    }
-                    else
-                    {
-                        // Checkbox has been just unChecked
-                        getSelectedNames(ref currentSelectionNames);
-                    }
+                    getSelectedNames(ref currentlySelectedNames);
                     break;
             }
         }
@@ -436,23 +427,25 @@ public class myDataGrid
                 case PopulateReason.dirChanged:
                     break;
 
-                // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
+                // In case we're on the same directory as before, restore the selection
                 case PopulateReason.filterChanged:
                 case PopulateReason.viewDirChanged:
                 case PopulateReason.viewFileChanged:
-                    if (currentSelectionIds != null)
-                        restoreSelectedIds(currentSelectionIds);
+
+                    restoreSelectedIds(currentlySelectedIds);
                     break;
 
                 case PopulateReason.recursionChanged:
 
-                    restoreSelectedNames(currentSelectionNames);
+                    restoreSelectedNames(currentlySelectedNames);
                     break;
             }
         }
 
         return;
     }
+
+    // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
     public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "")
@@ -491,51 +484,39 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Get a list of files that are currently checked in the GridView
-    private void getSelectedIds(ref System.Collections.Generic.List<int> list)
+    // Store a list of files that are currently checked in the GridView
+    private void getSelectedIds(ref System.Collections.Generic.HashSet<int> set)
     {
+        if (set == null)
+            set = new System.Collections.Generic.HashSet<int>();
+
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
 
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
+            int id = (int)(row.Cells[(int)Columns.colId].Value);
+
             // If the item is checked, we store its id:
             if (isChecked)
             {
-                if (list == null)
-                {
-                    list = new System.Collections.Generic.List<int>();
-                }
-
-                list.Add((int)(row.Cells[(int)Columns.colId].Value));
+                set.Add(id);
+            }
+            else
+            {
+                set.Remove(id);
             }
         }
-
-        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Set checked state for the files from the list
-    private void restoreSelectedIds(System.Collections.Generic.List<int> list)
+    // Restore checked state for the files stored in the set
+    private void restoreSelectedIds(System.Collections.Generic.HashSet<int> set)
     {
-        if (list.Count > 0)
+        if (set.Count > 0)
         {
-            var set = new System.Collections.Generic.HashSet<int>(list.Count);
-
-            // Put everything on the set for fast extraction later on
-            for (int i = 0; i < list.Count; i++)
-                set.Add(list[i]);
-
-            // In case the list has duplicates, fill it from the set
-            if (list.Count > set.Count)
-            {
-                list.Clear();
-                foreach (var id in set)
-                    list.Add(id);
-            }
-
             for (int i = 0; i < _dataGrid.Rows.Count; i++)
             {
                 DataGridViewRow row = _dataGrid.Rows[i];
@@ -555,24 +536,27 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Get a list of files that are currently checked in the GridView
-    private void getSelectedNames(ref System.Collections.Generic.List<string> list)
+    private void getSelectedNames(ref System.Collections.Generic.HashSet<string> set)
     {
+        if (set == null)
+            set = new System.Collections.Generic.HashSet<string>();
+
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
 
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
+            int id = (int)(row.Cells[(int)Columns.colId].Value);
+
             // If the item is checked, we store its name:
             if (isChecked)
             {
-                if (list == null)
-                {
-                    list = new System.Collections.Generic.List<string>();
-                }
-
-                int id = (int)(row.Cells[(int)Columns.colId].Value);
-                list.Add(_globalFileListExtRef[id].Name);
+                set.Add(_globalFileListExtRef[id].Name);
+            }
+            else
+            {
+                set.Remove(_globalFileListExtRef[id].Name);
             }
         }
 
@@ -582,24 +566,10 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Set checked state for the files from the list
-    private void restoreSelectedNames(System.Collections.Generic.List<string> list)
+    private void restoreSelectedNames(System.Collections.Generic.HashSet<string> set)
     {
-        if (list.Count > 0)
+        if (set.Count > 0)
         {
-            var set = new System.Collections.Generic.HashSet<string>(list.Count);
-
-            // Put everything on the set for fast extraction later on
-            for (int i = 0; i < list.Count; i++)
-                set.Add(list[i]);
-
-            // In case the list has duplicates, fill it from the set
-            if (list.Count > set.Count)
-            {
-                list.Clear();
-                foreach (var id in set)
-                    list.Add(id);
-            }
-
             for (int i = 0; i < _dataGrid.Rows.Count; i++)
             {
                 DataGridViewRow row = _dataGrid.Rows[i];
