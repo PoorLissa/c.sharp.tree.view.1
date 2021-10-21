@@ -748,8 +748,7 @@ public class myDataGrid
             e.PaintBackground(e.CellBounds, false);
 
             // Paint gradient background
-            if (isRowSelected)
-                paintGradientBgr(e, hoverStatus, isRowSelected, x, y, w, h);
+            paintGradientBgr(e, hoverStatus, isRowSelected, x, y, w, h);
 
             // Paint the contents of each cell
             paintCustomContent(e, hoverStatus, isRowSelected);
@@ -797,10 +796,13 @@ public class myDataGrid
     // Paint gradient background of a cell
     private void paintGradientBgr(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, int x, int y, int w, int h)
     {
-        // Skip columnId
-        if (e.ColumnIndex != (int)Columns.colId)
+        if (isRowSelected)
         {
-            e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
+            // Skip columnId
+            if (e.ColumnIndex != (int)Columns.colId)
+            {
+                e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
+            }
         }
     }
 
