@@ -34,7 +34,8 @@ public class myTree
 
     private Font [] _nodeFonts = null;
 
-    private int _winVer = 0;
+    private int _winVer  = 0;
+    private int _treeDpi = 0;
 
     private List<myTreeListDataItem> _dirsListTmpExt = null;
 
@@ -74,8 +75,9 @@ public class myTree
         {
             setDoubleBuffering();
 
+            _treeDpi            = _tree.DeviceDpi;
             _tree.Indent        = 30;
-            _tree.ItemHeight    = _tree.DeviceDpi > 96 ? 40 : 32;
+            _tree.ItemHeight    = _treeDpi > 96 ? 40 : 32;
             _tree.HideSelection = false;
             _tree.HotTracking   = true;
             _tree.FullRowSelect = true;
@@ -263,13 +265,13 @@ public class myTree
 
             // Draw plus/minus icon
             {
-                int iconHeight = 40;
+                int iconHeight = _treeDpi > 96 ?  40 : 32;
 
-                x = e.Node.Bounds.Location.X - 35;
+                x = e.Node.Bounds.Location.X - iconHeight;
                 y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - iconHeight) / 2;
 
                 // Erase the canvas under the icon, as semitransparent areas of the image tend to 'sum up' and become darker each time it is drawn
-                e.Graphics.FillRectangle(_treeBackBrush, x + 8, y + 10, iconHeight - 18, iconHeight - 18);
+                e.Graphics.FillRectangle(_treeBackBrush, x + 5, y + 5, iconHeight - 10, iconHeight - 10);
 
                 if (_doUseDummies || e.Node.Level == 0)
                 {
@@ -432,7 +434,7 @@ public class myTree
     // Cache node fonts and return them as needed
     private ref Font getNodeFont(int level)
     {
-        int max = _tree.DeviceDpi > 96 ? 25 : 18;
+        int max = _treeDpi > 96 ? 25 : 18;
         int min = 9;
 
         if (_nodeFonts == null)

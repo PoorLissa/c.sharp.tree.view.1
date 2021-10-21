@@ -25,8 +25,6 @@ public class myDataGrid
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
 
-    public enum Columns { colId, colChBox, colImage, colName };
-
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
 
@@ -35,6 +33,11 @@ public class myDataGrid
     private System.Collections.Generic.HashSet<string> currentlySelectedNames = null;
 
     // --------------------------------------------------------------------------------------------------------
+
+    public enum Columns
+    { 
+        colChBox, colImage, colName, colId
+    };
 
     public enum PopulateReason
     {
@@ -150,19 +153,18 @@ public class myDataGrid
 
     private void addColumns()
     {
-        // Checkbox column Columns.colCheckBox
-        var checkBoxColumn = new DataGridViewCheckBoxColumn();
-
-        // Row number column Columns.colNumber
+        // Row id column Columns.colId
         var numberColumn = new DataGridViewTextBoxColumn();
         numberColumn.Name = "id";
-        numberColumn.Visible = true;
-        numberColumn.DividerWidth = 3;
+        numberColumn.Visible = false;
+        numberColumn.DividerWidth = 1;
         numberColumn.MinimumWidth = _dataGrid.RowTemplate.Height;
         numberColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         numberColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         numberColumn.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
-        _dataGrid.Columns.Add(numberColumn);
+
+        // Checkbox column Columns.colCheckBox
+        var checkBoxColumn = new DataGridViewCheckBoxColumn();
 
         // Custom cell template
         var cellTemplate = new myDataGridViewCheckBoxCell();
@@ -172,16 +174,13 @@ public class myDataGrid
             cellTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
             cellTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
         checkBoxColumn.CellTemplate = cellTemplate;
-
         checkBoxColumn.Width = 50;
         checkBoxColumn.Resizable = DataGridViewTriState.False;
-        _dataGrid.Columns.Add(checkBoxColumn);
 
         // Icon column Columns.colImage
         var imageColumn = new DataGridViewImageColumn();
         imageColumn.Width = 30;
         imageColumn.Resizable = DataGridViewTriState.False;
-        _dataGrid.Columns.Add(imageColumn);
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var textColumn = new DataGridViewTextBoxColumn();
@@ -189,7 +188,12 @@ public class myDataGrid
         textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         textColumn.ReadOnly = true;
         textColumn.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
+
+        // Index of columns must match Columns enum
+        _dataGrid.Columns.Add(checkBoxColumn);
+        _dataGrid.Columns.Add(imageColumn);
         _dataGrid.Columns.Add(textColumn);
+        _dataGrid.Columns.Add(numberColumn);
 
         return;
     }
@@ -698,11 +702,22 @@ public class myDataGrid
     // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.cellpainting?view=netframework-4.8
     private void on_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
+        // ColumnId: paint with default settings
+        if (e.ColumnIndex == (int)Columns.colId)
+        {
+            e.PaintBackground(e.CellBounds, false);
+            e.PaintContent(e.CellBounds);
+            e.Handled = true;
+            return;
+        }
+
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
             var row = _dataGrid.Rows[e.RowIndex];
 
             char hoverStatus = '0';
+
+            bool isRowSelected = (e.State & DataGridViewElementStates.Selected) != 0;
 
             if (row.MinimumHeight > 2)
             {
@@ -713,9 +728,10 @@ public class myDataGrid
                     row.MinimumHeight = 2;
             }
 
+            // ---------------------------------------
 
             // Selected row (all the row's cells will be painted one by one starting from the left)
-            if ((e.State & DataGridViewElementStates.Selected) != 0)
+            if (isRowSelected)
             {
                 int x = e.CellBounds.X + 1;
                 int y = e.CellBounds.Y + 1;
@@ -738,31 +754,7 @@ public class myDataGrid
                 e.PaintContent(e.CellBounds);
 
                 // Paint custom border around each row
-                // I'm painting it at the time the last cell in a row is painted,
-                // But it also needs to be partly restored in the first 2 cells when they're being selected
-                if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
-                {
-                    var penColor = hoverStatus == '2' ? Color.DarkMagenta: Color.DarkOrange;
-
-                    using (Pen p = new Pen(penColor, 1))
-                    {
-                        if (e.ColumnIndex < 2)
-                        {
-                            h--;
-
-                            e.Graphics.DrawLine(p, x, y, x + w, y);
-                            e.Graphics.DrawLine(p, x, y + h, x + w, y + h);
-
-                            if (e.ColumnIndex == 0)
-                                e.Graphics.DrawLine(p, x, y, x, y + h);
-                        }
-                        else
-                        {
-                            Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
-                            e.Graphics.DrawRectangle(p, rect);
-                        }
-                    }
-                }
+                paintCustomBorder(e, hoverStatus, isRowSelected, x, y, w, h);
             }
             else
             {
@@ -786,28 +778,67 @@ public class myDataGrid
                     e.PaintBackground(e.CellBounds, false);
                     e.PaintContent(e.CellBounds);
 
-                    if (hoverStatus == '2' && (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName))
-                    {
-                        if (e.ColumnIndex < 2)
-                        {
-                            h--;
-
-                            e.Graphics.DrawLine(Pens.DarkOrange, x, y, x + w, y);
-                            e.Graphics.DrawLine(Pens.DarkOrange, x, y + h, x + w, y + h);
-
-                            if (e.ColumnIndex == 0)
-                                e.Graphics.DrawLine(Pens.DarkOrange, x, y, x, y + h);
-                        }
-                        else
-                        {
-                            Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
-                            e.Graphics.DrawRectangle(Pens.DarkOrange, rect);
-                        }
-                    }
+                    // Paint custom border around each row
+                    paintCustomBorder(e, hoverStatus, isRowSelected, x, y, w, h);
                 }
             }
 
             e.Handled = true;
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Paint custom border around each row
+    // I'm painting it at the time the last cell in a row is painted,
+    // But it also needs to be partly restored in the first 2 cells when they're being selected
+    private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
+    {
+        if (isSelected)
+        {
+            if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
+            {
+                var customBorderPen = (hoverStatus == '2') ? Pens.DarkMagenta : Pens.DarkOrange;
+
+                if (e.ColumnIndex < 2)
+                {
+                    h--;
+
+                    e.Graphics.DrawLine(customBorderPen, x, y, x + w, y);
+                    e.Graphics.DrawLine(customBorderPen, x, y + h, x + w, y + h);
+
+                    if (e.ColumnIndex == 0)
+                        e.Graphics.DrawLine(customBorderPen, x, y, x, y + h);
+                }
+                else
+                {
+                    Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                    e.Graphics.DrawRectangle(customBorderPen, rect);
+                }
+            }
+        }
+        else
+        {
+            if (hoverStatus == '2' && (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName))
+            {
+                if (e.ColumnIndex < 2)
+                {
+                    h--;
+
+                    e.Graphics.DrawLine(Pens.DarkOrange, x, y, x + w, y);
+                    e.Graphics.DrawLine(Pens.DarkOrange, x, y + h, x + w, y + h);
+
+                    if (e.ColumnIndex == 0)
+                        e.Graphics.DrawLine(Pens.DarkOrange, x, y, x, y + h);
+                }
+                else
+                {
+                    Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                    e.Graphics.DrawRectangle(Pens.DarkOrange, rect);
+                }
+            }
         }
 
         return;
