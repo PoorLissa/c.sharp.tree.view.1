@@ -35,8 +35,8 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     public enum Columns
-    { 
-        colChBox, colImage, colName, colId
+    {
+        colId, colChBox, colImage, colName
     };
 
     public enum PopulateReason
@@ -154,46 +154,47 @@ public class myDataGrid
     private void addColumns()
     {
         // Row id column Columns.colId
-        var numberColumn = new DataGridViewTextBoxColumn();
-        numberColumn.Name = "id";
-        numberColumn.Visible = false;
-        numberColumn.DividerWidth = 1;
-        numberColumn.MinimumWidth = _dataGrid.RowTemplate.Height;
-        numberColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-        numberColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        numberColumn.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
+        var columnId = new DataGridViewTextBoxColumn();
+        columnId.Name = "id";
+        columnId.Visible = false;
+        columnId.DividerWidth = 1;
+        columnId.MinimumWidth = _dataGrid.RowTemplate.Height;
+        columnId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        columnId.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        columnId.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
 
         // Checkbox column Columns.colCheckBox
-        var checkBoxColumn = new DataGridViewCheckBoxColumn();
+        var columnCheckBox = new DataGridViewCheckBoxColumn();
 
         // Custom cell template
         var cellTemplate = new myDataGridViewCheckBoxCell();
             cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom3;
-            cellTemplate.CustomSize = 126;
+            cellTemplate.CustomSize = 26;
             cellTemplate.CustomActiveAreaMargin = 5;
             cellTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
             cellTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
-        checkBoxColumn.CellTemplate = cellTemplate;
-        checkBoxColumn.Width = 50;
-        checkBoxColumn.Resizable = DataGridViewTriState.False;
+        columnCheckBox.CellTemplate = cellTemplate;
+        columnCheckBox.Width = 50;
+        columnCheckBox.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        columnCheckBox.Resizable = DataGridViewTriState.False;
 
         // Icon column Columns.colImage
-        var imageColumn = new DataGridViewImageColumn();
-        imageColumn.Width = 30;
-        imageColumn.Resizable = DataGridViewTriState.False;
+        var columnImage = new DataGridViewImageColumn();
+        columnImage.Width = 30;
+        columnImage.Resizable = DataGridViewTriState.False;
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
-        var textColumn = new DataGridViewTextBoxColumn();
-        textColumn.Name = "Name";
-        textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-        textColumn.ReadOnly = true;
-        textColumn.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
+        var columnName = new DataGridViewTextBoxColumn();
+        columnName.Name = "Name";
+        columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        columnName.ReadOnly = true;
+        columnName.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
 
         // Index of columns must match Columns enum
-        _dataGrid.Columns.Add(checkBoxColumn);
-        _dataGrid.Columns.Add(imageColumn);
-        _dataGrid.Columns.Add(textColumn);
-        _dataGrid.Columns.Add(numberColumn);
+        _dataGrid.Columns.Add(columnId);
+        _dataGrid.Columns.Add(columnCheckBox);
+        _dataGrid.Columns.Add(columnImage);
+        _dataGrid.Columns.Add(columnName);
 
         return;
     }
@@ -738,7 +739,7 @@ public class myDataGrid
                 int w = e.CellBounds.Width;
                 int h = e.CellBounds.Height - 3;
 
-                if (e.ColumnIndex > 0)
+                if (e.ColumnIndex > (int)Columns.colChBox)
                 {
                     x -= 1;
                     w += 2;
@@ -769,7 +770,7 @@ public class myDataGrid
                     int w = e.CellBounds.Width;
                     int h = e.CellBounds.Height - 3;
 
-                    if (e.ColumnIndex > 0)
+                    if (e.ColumnIndex > (int)Columns.colChBox)
                     {
                         x -= 1;
                         w += 2;
@@ -798,18 +799,18 @@ public class myDataGrid
     {
         if (isSelected)
         {
-            if (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName)
+            if (e.ColumnIndex <= (int)Columns.colName)
             {
                 var customBorderPen = (hoverStatus == '2') ? Pens.DarkMagenta : Pens.DarkOrange;
 
-                if (e.ColumnIndex < 2)
+                if (e.ColumnIndex < (int)Columns.colName)
                 {
                     h--;
 
                     e.Graphics.DrawLine(customBorderPen, x, y, x + w, y);
                     e.Graphics.DrawLine(customBorderPen, x, y + h, x + w, y + h);
 
-                    if (e.ColumnIndex == 0)
+                    if (e.ColumnIndex == (int)Columns.colChBox)
                         e.Graphics.DrawLine(customBorderPen, x, y, x, y + h);
                 }
                 else
@@ -821,16 +822,16 @@ public class myDataGrid
         }
         else
         {
-            if (hoverStatus == '2' && (e.ColumnIndex < 2 || e.ColumnIndex == (int)Columns.colName))
+            if (hoverStatus == '2' && (e.ColumnIndex <= (int)Columns.colName))
             {
-                if (e.ColumnIndex < 2)
+                if (e.ColumnIndex < (int)Columns.colName)
                 {
                     h--;
 
                     e.Graphics.DrawLine(Pens.DarkOrange, x, y, x + w, y);
                     e.Graphics.DrawLine(Pens.DarkOrange, x, y + h, x + w, y + h);
 
-                    if (e.ColumnIndex == 0)
+                    if (e.ColumnIndex == (int)Columns.colChBox)
                         e.Graphics.DrawLine(Pens.DarkOrange, x, y, x, y + h);
                 }
                 else
