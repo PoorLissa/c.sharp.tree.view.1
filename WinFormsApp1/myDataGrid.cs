@@ -32,6 +32,9 @@ public class myDataGrid
     private System.Collections.Generic.HashSet<   int> currentlySelectedIds   = null;
     private System.Collections.Generic.HashSet<string> currentlySelectedNames = null;
 
+    // StringFormat for CellId custom text drawing
+    private StringFormat strFormat_CellId = null;
+
     // --------------------------------------------------------------------------------------------------------
 
     public enum Columns
@@ -125,6 +128,11 @@ public class myDataGrid
         _gridGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(150, 255, 200, 133),
                                     Color.FromArgb(233, 255, 128,   0));
+
+        strFormat_CellId = new StringFormat(StringFormatFlags.NoClip);
+        strFormat_CellId.LineAlignment = StringAlignment.Center;
+        strFormat_CellId.Alignment = StringAlignment.Center;
+
         return;
     }
 
@@ -156,8 +164,9 @@ public class myDataGrid
         // Row id column Columns.colId
         var columnId = new DataGridViewTextBoxColumn();
         columnId.Name = "id";
-        columnId.Visible = false;
+        columnId.Visible = true;
         columnId.DividerWidth = 1;
+        columnId.ReadOnly = true;
         columnId.MinimumWidth = _dataGrid.RowTemplate.Height;
         columnId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         columnId.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -700,26 +709,19 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Customize the look of each cell
+    // To be more precise, this customizes the appearance of each row as a whole
     // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.cellpainting?view=netframework-4.8
     private void on_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
-        // ColumnId: paint with default settings
-        if (e.ColumnIndex == (int)Columns.colId)
-        {
-            e.PaintBackground(e.CellBounds, false);
-            e.PaintContent(e.CellBounds);
-            e.Handled = true;
-            return;
-        }
+        bool isCellIdVisible = _dataGrid.Columns[(int)Columns.colId].Visible;
 
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
-            var row = _dataGrid.Rows[e.RowIndex];
-
-            char hoverStatus = '0';
-
+            char hoverStatus   = '0';
+            var row            = _dataGrid.Rows[e.RowIndex];
             bool isRowSelected = (e.State & DataGridViewElementStates.Selected) != 0;
 
+            // Check hover status of the row
             if (row.MinimumHeight > 2)
             {
                 hoverStatus = row.MinimumHeight == 4 ? '2' : '1';
@@ -731,58 +733,30 @@ public class myDataGrid
 
             // ---------------------------------------
 
-            // Selected row (all the row's cells will be painted one by one starting from the left)
+            int x = e.CellBounds.X + 1;
+            int y = e.CellBounds.Y + 1;
+            int w = e.CellBounds.Width;
+            int h = e.CellBounds.Height - 3;
+
+            if (e.ColumnIndex > (int)Columns.colChBox)
+            {
+                x -= 1;
+                w += 2;
+            }
+
+            // Paint background of a cell (white or gray)
+            e.PaintBackground(e.CellBounds, false);
+
+            // Paint gradient background
             if (isRowSelected)
-            {
-                int x = e.CellBounds.X + 1;
-                int y = e.CellBounds.Y + 1;
-                int w = e.CellBounds.Width;
-                int h = e.CellBounds.Height - 3;
+                paintGradientBgr(e, hoverStatus, isRowSelected, x, y, w, h);
 
-                if (e.ColumnIndex > (int)Columns.colChBox)
-                {
-                    x -= 1;
-                    w += 2;
-                }
+            // Paint the contents of each cell
+            paintCustomContent(e, hoverStatus, isRowSelected);
 
-                // Paint background of a cell (white or gray)
-                e.PaintBackground(e.CellBounds, false);
+            // Paint custom border around each row
+            paintCustomBorder(e, hoverStatus, isRowSelected, isCellIdVisible, x, y, w, h);
 
-                // Paint gradient background
-                e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
-
-                // Paint the contents of each cell
-                e.PaintContent(e.CellBounds);
-
-                // Paint custom border around each row
-                paintCustomBorder(e, hoverStatus, isRowSelected, x, y, w, h);
-            }
-            else
-            {
-                if (hoverStatus == '0')
-                {
-                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
-                }
-                else
-                {
-                    int x = e.CellBounds.X + 1;
-                    int y = e.CellBounds.Y + 1;
-                    int w = e.CellBounds.Width;
-                    int h = e.CellBounds.Height - 3;
-
-                    if (e.ColumnIndex > (int)Columns.colChBox)
-                    {
-                        x -= 1;
-                        w += 2;
-                    }
-
-                    e.PaintBackground(e.CellBounds, false);
-                    e.PaintContent(e.CellBounds);
-
-                    // Paint custom border around each row
-                    paintCustomBorder(e, hoverStatus, isRowSelected, x, y, w, h);
-                }
-            }
 
             e.Handled = true;
         }
@@ -792,10 +766,68 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void paintCustomContent(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected)
+    {
+        bool done = false;
+
+        if (e.ColumnIndex == (int)Columns.colId)
+        {
+            var font = e.CellStyle.Font;
+
+            if (isRowSelected)
+            {
+                font = new Font(font.Name, font.Size + 1, FontStyle.Bold, font.Unit, font.GdiCharSet);
+            }
+
+            e.Graphics.DrawString(e.Value.ToString(), font, Brushes.Black, e.CellBounds, strFormat_CellId);
+            done = true;
+        }
+
+        if (!done)
+        {
+            // Paint original content in original style
+            e.PaintContent(e.CellBounds);
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Paint gradient background of a cell
+    private void paintGradientBgr(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, int x, int y, int w, int h)
+    {
+        // Skip columnId
+        if (e.ColumnIndex != (int)Columns.colId)
+        {
+            e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Paint custom border around each row
     // I'm painting it at the time the last cell in a row is painted,
     // But it also needs to be partly restored in the first 2 cells when they're being selected
-    private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
+    private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, bool isCellIdVisible, int x, int y, int w, int h)
+    {
+        if (isCellIdVisible)
+        {
+            paintCustomBorder2(e, hoverStatus, isRowSelected, x, y, w, h);
+        }
+        else
+        {
+            paintCustomBorder1(e, hoverStatus, isRowSelected, x, y, w, h);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Paint custom border around each row
+    // I'm painting it at the time the last cell in a row is painted,
+    // But it also needs to be partly restored in the first 2 cells when they're being selected
+    // This version targets the case when columnId is invisible
+    private void paintCustomBorder1(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
     {
         if (isSelected)
         {
@@ -838,6 +870,69 @@ public class myDataGrid
                 {
                     Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
                     e.Graphics.DrawRectangle(Pens.DarkOrange, rect);
+                }
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Paint custom border around each row
+    // I'm painting it at the time the last cell in a row is painted,
+    // But it also needs to be partly restored in the first 2 cells when they're being selected
+    // This version targets the case when columnId is visible
+    private void paintCustomBorder2(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
+    {
+        bool doPaint = false;
+        Pen customBorderPen = null;
+
+        if (isSelected)
+        {
+            if (e.ColumnIndex <= (int)Columns.colName)
+            {
+                doPaint = true;
+                customBorderPen = (hoverStatus == '2') ? Pens.DarkMagenta : Pens.DarkOrange;
+            }
+        }
+        else
+        {
+            if (hoverStatus == '2' && (e.ColumnIndex <= (int)Columns.colName))
+            {
+                doPaint = true;
+                customBorderPen = Pens.DarkOrange;
+            }
+        }
+
+        if (doPaint)
+        {
+            if (e.ColumnIndex == (int)Columns.colId)
+            {
+                return;
+                int divider = _dataGrid.Columns[(int)Columns.colId].DividerWidth;
+
+                Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - divider, e.CellBounds.Height - 4);
+                e.Graphics.DrawRectangle(customBorderPen, rect);
+            }
+            else
+            {
+                if (e.ColumnIndex < (int)Columns.colName)
+                {
+                    h--;
+
+                    e.Graphics.DrawLine(customBorderPen, x, y, x + w, y);
+                    e.Graphics.DrawLine(customBorderPen, x, y + h, x + w, y + h);
+
+                    if (e.ColumnIndex == (int)Columns.colChBox)
+                        e.Graphics.DrawLine(customBorderPen, x, y, x, y + h);
+                }
+                else
+                {
+                    int colIdWidth = _dataGrid.Columns[(int)Columns.colId].Width;
+
+                    Rectangle rect = new Rectangle(colIdWidth + 2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
+                    e.Graphics.DrawRectangle(customBorderPen, rect);
                 }
             }
         }
