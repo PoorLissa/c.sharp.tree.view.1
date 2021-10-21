@@ -111,6 +111,18 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    public List<myTreeListDataItem> getSelectedFiles()
+    {
+        var list = new List<myTreeListDataItem>();
+
+        _dataGrid.getSelectedFiles(list);
+
+        return list;
+    }
+
+    // --------------------------------------------------------------------------------
+
+
     // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
@@ -255,4 +267,23 @@ public class myTree_DataGrid_Manager
     }
 
     // --------------------------------------------------------------------------------
+
+    // Update widget's state using the data from [updatedList]
+    public void update(List<myTreeListDataItem> updatedList)
+    {
+        // now we can update global list, and them make every dependent widged be updated from the global list
+
+
+        foreach (var item in updatedList)
+        {
+            int id = item.Id;
+
+            _richTextBox.Text += " check original: " + _globalFileListExt[id].Name + "\n";
+            _richTextBox.Text += " check changed : " + item.Name + "\n\n";
+        }
+
+        //_dataGrid.update(updatedList);
+
+        return;
+    }
 };

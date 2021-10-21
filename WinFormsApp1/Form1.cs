@@ -43,14 +43,24 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var list = new List<myTreeListDataItem>();
+            var list = myTDGManager.getSelectedFiles();
 
-            myTDGManager.getSelectedFiles(list);
+            var list_copy = myTreeListDataItem.copyList(list);
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list_copy[i].Name += "_zzz";
+            }
 
             richTextBox1.Clear();
 
-            foreach (var item in list)
-                  richTextBox1.Text += item.Name + "\n";
+            for (int i = 0; i < list.Count; i++)
+            {
+                richTextBox1.Text += list[i].Name + "\n";
+                richTextBox1.Text += list_copy[i].Name + "\n";
+            }
+
+            myTDGManager.update(list_copy);
         }
 
         // --------------------------------------------------------------------------------

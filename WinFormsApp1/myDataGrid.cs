@@ -121,10 +121,12 @@ public class myDataGrid
         var pt1 = new Point(0, 0);
         var pt2 = new Point(0, _dataGrid.RowTemplate.Height);
 
+        // Selected, but not hovered upon
         _gridGradientBrush1 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb( 50, 255, 200, 133),
                                     Color.FromArgb(175, 255, 128,   0));
 
+        // Selected and hovered upon
         _gridGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(150, 255, 200, 133),
                                     Color.FromArgb(233, 255, 128,   0));
@@ -298,7 +300,7 @@ public class myDataGrid
             return;
         }
 */
-        int Count = 0, i = -1;
+        int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
 
@@ -311,9 +313,12 @@ public class myDataGrid
             Count = 0;
 
             // Display all directories and files
-            foreach (var item in list)
+            for(int i = 0; i < list.Count; i++)
             {
-                i++;
+                var item = list[i];
+
+                if (item.Id < 0)
+                    item.Id = i;
 
                 bool isDir = item.isDir;
 
@@ -363,6 +368,9 @@ public class myDataGrid
 
             for(int i = 0; i < list.Count; i++)
             {
+                if (list[i].Id < 0)
+                    list[i].Id = i;
+
                 bool isDir = (list[i].isDir);
 
                 // Show/skip directories
@@ -756,7 +764,6 @@ public class myDataGrid
             // Paint custom border around each row
             paintCustomBorder(e, hoverStatus, isRowSelected, isCellIdVisible, x, y, w, h);
 
-
             e.Handled = true;
         }
 
@@ -1030,6 +1037,29 @@ public class myDataGrid
         // This needs to be done BEFORE [myTree_DataGrid_Manager.tree_onAfterSelect] is called,
         // as it will change the global file list contents
         Collect_Or_Restore(PopulateReason.recursionChanged_Before, true);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Update DataGrid's state using data from the [updatedList]
+    public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList)
+    {
+        for (int i = 0, j = 0; i < _dataGrid.Rows.Count && j != updatedList.Count; i++)
+        {
+            DataGridViewRow row = _dataGrid.Rows[i];
+
+            int id = (int)row.Cells[(int)Columns.colId].Value;
+
+            if (id == updatedList[j].Id)
+            {
+                int pos = updatedList[j].Name.LastIndexOf('\\') + 1;
+                row.Cells[(int)Columns.colName].Value = updatedList[j].Name.Substring(pos);
+
+                _globalFileListExtRef[id].Name = updatedList[j++].Name;
+            }
+        }
 
         return;
     }

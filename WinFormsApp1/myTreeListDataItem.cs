@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 
 
@@ -7,9 +6,16 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
 {
     // --------------------------------------------------------------------------------
 
+    private int     _id;
     private string  _fileName;
     private bool    _isDir;
     private bool    _isHidden;
+
+    public int Id
+    {
+        get {  return _id; }
+        set { _id = value; }
+    }
 
     public string Name
     {
@@ -48,7 +54,33 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
 
     public myTreeListDataItem(string file)
     {
+        _id = -1;
         _fileName = file;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public myTreeListDataItem Clone()
+    {
+        var item = new myTreeListDataItem(_fileName);
+
+        item._id       = _id;
+        item.isDir     = _isDir;
+        item._isHidden = _isHidden;
+
+        return item;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public static System.Collections.Generic.List<myTreeListDataItem> copyList(System.Collections.Generic.List<myTreeListDataItem> other)
+    {
+        var copy = new System.Collections.Generic.List<myTreeListDataItem>(other.Count);
+
+        for (int i = 0; i < other.Count; i++)
+            copy.Add(other[i].Clone());
+
+        return copy;
     }
 
     // --------------------------------------------------------------------------------
