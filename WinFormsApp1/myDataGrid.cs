@@ -1043,21 +1043,43 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Update DataGrid's state using data from the [updatedList]
-    public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList)
+    // Update DataGrid's state
+    public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
-        for (int i = 0, j = 0; i < _dataGrid.Rows.Count && j != updatedList.Count; i++)
+        if (updatedList != null)
         {
-            DataGridViewRow row = _dataGrid.Rows[i];
-
-            int id = (int)row.Cells[(int)Columns.colId].Value;
-
-            if (id == updatedList[j].Id)
+            // Update from supplies updateList
+            for (int i = 0, j = 0; i < _dataGrid.Rows.Count && j != updatedList.Count; i++)
             {
-                int pos = updatedList[j].Name.LastIndexOf('\\') + 1;
-                row.Cells[(int)Columns.colName].Value = updatedList[j].Name.Substring(pos);
+                DataGridViewRow row = _dataGrid.Rows[i];
 
-                _globalFileListExtRef[id].Name = updatedList[j++].Name;
+                int id = (int)row.Cells[(int)Columns.colId].Value;
+
+                if (id == updatedList[j].Id)
+                {
+                    int pos = updatedList[j].Name.LastIndexOf('\\') + 1;
+                    row.Cells[(int)Columns.colName].Value = updatedList[j].Name.Substring(pos);
+
+                    _globalFileListExtRef[id].Name = updatedList[j++].Name;
+                }
+            }
+        }
+        else
+        {
+            // Update from global list
+            for (int i = 0; i < _dataGrid.Rows.Count; i++)
+            {
+                DataGridViewRow row = _dataGrid.Rows[i];
+
+                int id = (int)row.Cells[(int)Columns.colId].Value;
+
+                string rowName = (string)row.Cells[(int)Columns.colName].Value;
+
+                if (rowName != _globalFileListExtRef[id].Name)
+                {
+                    int pos = _globalFileListExtRef[id].Name.LastIndexOf('\\') + 1;
+                    row.Cells[(int)Columns.colName].Value = _globalFileListExtRef[id].Name.Substring(pos);
+                }
             }
         }
 

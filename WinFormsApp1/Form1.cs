@@ -49,16 +49,18 @@ namespace WinFormsApp1
 
             for (int i = 0; i < list.Count; i++)
             {
-                list_copy[i].Name += "_zzz";
+                list_copy[i].Name += "_z";
             }
 
             richTextBox1.Clear();
 
+#if false
             for (int i = 0; i < list.Count; i++)
             {
                 richTextBox1.Text += list[i].Name + "\n";
                 richTextBox1.Text += list_copy[i].Name + "\n";
             }
+#endif
 
             myTDGManager.update(list_copy);
         }

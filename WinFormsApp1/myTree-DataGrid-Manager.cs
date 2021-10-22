@@ -55,6 +55,8 @@ public class myTree_DataGrid_Manager
 
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
 
+    private myBackup _backup = null;
+
     private bool _doShowDirs   = true;
     private bool _doShowFiles  = true;
     private bool _useRecursion = false;
@@ -268,23 +270,42 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Update widget's state using the data from [updatedList]
+    // Update all the widgets' state using the data from [updatedList]
     public void update(List<myTreeListDataItem> updatedList)
     {
-        // now we can update global list, and them make every dependent widged be updated from it
+        // We're only going to update the global list here;
+        // Every dependent widged must implement its own method to update itself from the global list
 
-        // this class must only be able to update its state.
-        // all the restore functionality must be implemented by other parties
-
-        foreach (var item in updatedList)
+        // Before updating the global list, we need to make a backup
+        // to be able to restore all the files to their original names
+        if (_backup == null)
         {
-            int id = item.Id;
-
-            _richTextBox.Text += " check original: " + _globalFileListExt[id].Name + "\n";
-            _richTextBox.Text += " check changed : " + item.Name + "\n\n";
+            _backup = new myBackup();
         }
 
-        //_dataGrid.update(updatedList);
+        _backup.saveState(_globalFileListExt, updatedList);
+
+
+        // Update global list
+        for (int i = 0; i < updatedList.Count; i++)
+        {
+            int id = updatedList[i].Id;
+
+            if(_globalFileListExt[id].Name != updatedList[i].Name)
+                _globalFileListExt[id].Name  = updatedList[i].Name;
+        }
+
+        // Update widgets
+        //_dataGrid.update();
+
+        // Check our history:
+        {
+            string s = _backup.getHistory();
+
+            _richTextBox.Text += " --- history so far ---\n";
+            _richTextBox.Text += s + "\n";
+            _richTextBox.Text += " ----------------------\n";
+        }
 
         return;
     }
