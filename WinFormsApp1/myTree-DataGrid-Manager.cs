@@ -277,33 +277,76 @@ public class myTree_DataGrid_Manager
         // Every dependent widged must implement its own method to update itself from the global list
 
         // Before updating the global list, we need to make a backup
-        // to be able to restore all the files to their original names
+        // to be able to restore all the files to their original names later
         if (_backup == null)
         {
             _backup = new myBackup();
         }
 
+
         _backup.saveState(_globalFileListExt, updatedList);
 
 
-        // Update global list
+        // For every changed directory:
         for (int i = 0; i < updatedList.Count; i++)
         {
             int id = updatedList[i].Id;
 
-            if(_globalFileListExt[id].Name != updatedList[i].Name)
-                _globalFileListExt[id].Name  = updatedList[i].Name;
+            if (_globalFileListExt[id].Name != updatedList[i].Name)
+            {
+                // In case the recursion is enabled,
+                // we need to update all the global list's items that have been affected by the latest change
+                if (_useRecursion && updatedList[i].isDir)
+                {
+                    int j = id + 1;
+                    string oldPath = _globalFileListExt[id].Name;
+                    string name;
+
+                    while (j < _globalFileListExt.Count && _globalFileListExt[j].Name.Contains(oldPath))
+                    {
+                        name = updatedList[i].Name + _globalFileListExt[j].Name[oldPath.Length..];
+
+                        _globalFileListExt[j].Name = name;
+                        j++;
+                    }
+
+                    j = i + 1;
+
+                    while (j < updatedList.Count && updatedList[j].Name.Contains(oldPath))
+                    {
+                        name = updatedList[i].Name + updatedList[j].Name[oldPath.Length..];
+                        updatedList[j].Name = name;
+                        j++;
+                    }
+                }
+
+                // Update current 
+                _globalFileListExt[id].Name = updatedList[i].Name;
+            }
         }
 
+
         // Update widgets
-        //_dataGrid.update();
+        _dataGrid.update();
+
 
         // Check our history:
+        if (false)
         {
             string s = _backup.getHistory();
 
             _richTextBox.Text += " --- history so far ---\n";
             _richTextBox.Text += s + "\n";
+            _richTextBox.Text += " ----------------------\n";
+        }
+
+        if (true)
+        {
+            _richTextBox.Text += " --- global list so far ---\n";
+
+            foreach (var item in _globalFileListExt)
+                _richTextBox.Text += item.Name + "\n";
+
             _richTextBox.Text += " ----------------------\n";
         }
 

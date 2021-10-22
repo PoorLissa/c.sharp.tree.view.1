@@ -35,6 +35,8 @@ public class myDataGrid
     // StringFormat for CellId custom text drawing
     private StringFormat strFormat_CellId = null;
 
+    private StringFormat strFormat_CellName = null;
+
     // --------------------------------------------------------------------------------------------------------
 
     public enum Columns
@@ -134,6 +136,10 @@ public class myDataGrid
         strFormat_CellId = new StringFormat(StringFormatFlags.NoClip);
         strFormat_CellId.LineAlignment = StringAlignment.Center;
         strFormat_CellId.Alignment = StringAlignment.Center;
+
+        strFormat_CellName = new StringFormat(StringFormatFlags.NoWrap);
+        strFormat_CellName.LineAlignment = StringAlignment.Near;
+        strFormat_CellName.Alignment = StringAlignment.Far;
 
         return;
     }
@@ -795,6 +801,42 @@ public class myDataGrid
             e.PaintContent(e.CellBounds);
         }
 
+        // Paint path in the right bottom corner on mouse hover
+        if (hoverStatus == '2' && e.ColumnIndex == (int)Columns.colName)
+        {
+            using (var font = new Font("Helvetica Condensed",
+                e.CellStyle.Font.Size - 3, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet))
+            {
+                int id  = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
+                int pos = _globalFileListExtRef[id].Name.LastIndexOf('\\') + 1;
+
+                Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + 3, e.CellBounds.Width - 3, e.CellBounds.Height);
+
+                var aaa = e.Graphics.MeasureString(_globalFileListExtRef[id].Name[..pos], font, e.CellBounds.Width * 2, strFormat_CellName);
+
+                if (aaa.Width > e.CellBounds.Width)
+                {
+                    string str = _globalFileListExtRef[id].Name[..pos];
+
+                    do
+                    {
+                        pos = str.IndexOf('\\') + 1;
+
+                        str = str[pos..];
+
+                        aaa = e.Graphics.MeasureString(str, font, e.CellBounds.Width * 2, strFormat_CellName);
+
+                    } while (aaa.Width > e.CellBounds.Width);
+
+                    e.Graphics.DrawString(str, font, Brushes.Gray, rect, strFormat_CellName);
+                }
+                else
+                {
+                    e.Graphics.DrawString(_globalFileListExtRef[id].Name[..pos], font, Brushes.Gray, rect, strFormat_CellName);
+                }
+            }
+        }
+
         return;
     }
 
@@ -918,11 +960,12 @@ public class myDataGrid
         {
             if (e.ColumnIndex == (int)Columns.colId)
             {
-                return;
+#if false
                 int divider = _dataGrid.Columns[(int)Columns.colId].DividerWidth;
 
                 Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - divider, e.CellBounds.Height - 4);
                 e.Graphics.DrawRectangle(customBorderPen, rect);
+#endif
             }
             else
             {
@@ -1048,7 +1091,7 @@ public class myDataGrid
     {
         if (updatedList != null)
         {
-            // Update from supplies updateList
+            // Update from the supplied [updateList]
             for (int i = 0, j = 0; i < _dataGrid.Rows.Count && j != updatedList.Count; i++)
             {
                 DataGridViewRow row = _dataGrid.Rows[i];
@@ -1079,6 +1122,8 @@ public class myDataGrid
                 {
                     int pos = _globalFileListExtRef[id].Name.LastIndexOf('\\') + 1;
                     row.Cells[(int)Columns.colName].Value = _globalFileListExtRef[id].Name.Substring(pos);
+
+                    _dataGrid.InvalidateRow(i);
                 }
             }
         }
