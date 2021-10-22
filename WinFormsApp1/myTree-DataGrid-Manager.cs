@@ -271,8 +271,10 @@ public class myTree_DataGrid_Manager
     // Update widget's state using the data from [updatedList]
     public void update(List<myTreeListDataItem> updatedList)
     {
-        // now we can update global list, and them make every dependent widged be updated from the global list
+        // now we can update global list, and them make every dependent widged be updated from it
 
+        // this class must only be able to update its state.
+        // all the restore functionality must be implemented by other parties
 
         foreach (var item in updatedList)
         {
