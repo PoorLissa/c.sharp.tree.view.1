@@ -2,8 +2,6 @@
 using System.Reflection;
 using System.Windows.Forms;
 
-
-
 /*
     Wrapper class around DataGridView widget.
     Allows customization and provides public methods to work with the widget.
@@ -54,6 +52,10 @@ public class myDataGrid
 
     public myDataGrid(DataGridView dgv, System.Collections.Generic.List<myTreeListDataItem> listGlobal)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.myDataGrid", "");
+        #endif
+
         _dataGrid = dgv;
         _globalFileListExtRef = listGlobal;
 
@@ -71,6 +73,10 @@ public class myDataGrid
 
     public void init()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.init", "");
+        #endif
+
         // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-work-with-image-columns-in-the-windows-forms-datagridview-control?view=netframeworkdesktop-4.8
         if (_dataGrid != null)
         {
@@ -113,8 +119,12 @@ public class myDataGrid
 
     private void createDrawingPrimitives(int dpi)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.createDrawingPrimitives", "");
+        #endif
+
         // Load images
-        _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
+        _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
         _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
 
         _imgDir_Opaque  = myUtils.ChangeImageOpacity(_imgDir,  0.35);
@@ -150,6 +160,10 @@ public class myDataGrid
     // Add and subscribe to events
     private void setUpEvents()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.setUpEvents", "");
+        #endif
+
         // Customize whole widget appearance (not used for now)
         //_dataGrid.Paint += new PaintEventHandler(OnPaint);
 
@@ -170,6 +184,10 @@ public class myDataGrid
 
     private void addColumns()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.addColumns", "");
+        #endif
+
         // Row id column Columns.colId
         var columnId = new DataGridViewTextBoxColumn();
         columnId.Name = "id";
@@ -221,6 +239,10 @@ public class myDataGrid
 
     public void Clear()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Clear", "");
+        #endif
+
         _dataGrid.Rows.Clear();
     }
 
@@ -229,6 +251,10 @@ public class myDataGrid
     // Modify a copy of a template row and give it real values
     public void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int id)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.buildRow", "");
+        #endif
+
         if (item.Name.Length > 0)
         {
             Image img = isDir
@@ -259,6 +285,10 @@ public class myDataGrid
     // Not used
     public void addRow(string item, bool isDir)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.addRow", "");
+        #endif
+
         int pos = item.LastIndexOf('\\') + 1;
         int i = _dataGrid.Rows.Add();
 
@@ -288,6 +318,10 @@ public class myDataGrid
     // Single pass
     private void Populate_Fast(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Populate_Fast", "");
+        #endif
+
 /*
         // check the memory impact
         if (true)
@@ -362,6 +396,10 @@ public class myDataGrid
     // Multiple pass
     private void Populate_Slow(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Populate_Slow", "");
+        #endif
+
         int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
@@ -433,6 +471,10 @@ public class myDataGrid
     // Restore the selection
     private void Collect_Or_Restore(PopulateReason reason, bool action)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Collect_Or_Restore", "");
+        #endif
+
         const bool doStoreState   = true;
         const bool doRestoreState = false;
 
@@ -501,6 +543,10 @@ public class myDataGrid
     // Add files/derectories to the DataGridView from the List
     public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "")
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Populate", "");
+        #endif
+
         // In case we're on the same directory as before, collect all the selected entries to be able to restore the selection later on
         Collect_Or_Restore(reason, true);
 
@@ -535,6 +581,10 @@ public class myDataGrid
     // Store a list of files that are currently checked in the GridView
     private void getSelectedIds(ref System.Collections.Generic.HashSet<int> set)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.getSelectedIds", "");
+        #endif
+
         if (set == null)
             set = new System.Collections.Generic.HashSet<int>();
 
@@ -563,6 +613,10 @@ public class myDataGrid
     // Restore checked state for the files stored in the set
     private void restoreSelectedIds(System.Collections.Generic.HashSet<int> set)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.restoreSelectedIds", "");
+        #endif
+
         if (set.Count > 0)
         {
             for (int i = 0; i < _dataGrid.Rows.Count; i++)
@@ -586,6 +640,10 @@ public class myDataGrid
     // Get a list of files that are currently checked in the GridView
     private void getSelectedNames(ref System.Collections.Generic.HashSet<string> set)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.getSelectedNames", "");
+        #endif
+
         if (set == null)
             set = new System.Collections.Generic.HashSet<string>();
 
@@ -616,6 +674,10 @@ public class myDataGrid
     // Set checked state for the files from the list
     private void restoreSelectedNames(System.Collections.Generic.HashSet<string> set)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.restoreSelectedNames", "");
+        #endif
+
         if (set.Count > 0)
         {
             for (int i = 0; i < _dataGrid.Rows.Count; i++)
@@ -639,6 +701,10 @@ public class myDataGrid
     // Get a list of files that are currently checked in the GridView
     public void getSelectedFiles(System.Collections.Generic.List<myTreeListDataItem> list)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.getSelectedFiles", "");
+        #endif
+
         list.Clear();
 /*
         list.Add($"-- Total number of items in List: {originalFilesList.Count}");
@@ -675,6 +741,10 @@ public class myDataGrid
     // Not used anymore. Instead, background color of the widget was set.
     public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.OnPaint", "");
+        #endif
+
 #if false
         bool doFillWithEmptyRows = false;
 
@@ -728,6 +798,10 @@ public class myDataGrid
     // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.cellpainting?view=netframework-4.8
     private void on_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_CellPainting", "");
+        #endif
+
         bool isCellIdVisible = _dataGrid.Columns[(int)Columns.colId].Visible;
 
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -781,6 +855,10 @@ public class myDataGrid
 
     private void paintCustomContent(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintCustomContent", "");
+        #endif
+
         bool done = false;
 
         if (e.ColumnIndex == (int)Columns.colId)
@@ -815,6 +893,10 @@ public class myDataGrid
 
     private void paintCustomRowTooltip(DataGridViewCellPaintingEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintCustomRowTooltip", "");
+        #endif
+
         if (cellTooltipFont == null)
         {
             if (_dataGrid.DeviceDpi > 96)
@@ -843,6 +925,10 @@ public class myDataGrid
     // Paint gradient background of a cell
     private void paintGradientBgr(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, int x, int y, int w, int h)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintGradientBgr", "");
+        #endif
+
         if (isRowSelected)
         {
             // Skip columnId
@@ -860,6 +946,10 @@ public class myDataGrid
     // But it also needs to be partly restored in the first 2 cells when they're being selected
     private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, bool isCellIdVisible, int x, int y, int w, int h)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintCustomBorder", "");
+        #endif
+
         if (isCellIdVisible)
         {
             paintCustomBorder2(e, hoverStatus, isRowSelected, x, y, w, h);
@@ -878,6 +968,10 @@ public class myDataGrid
     // This version targets the case when columnId is invisible
     private void paintCustomBorder1(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintCustomBorder1", "");
+        #endif
+
         if (isSelected)
         {
             if (e.ColumnIndex <= (int)Columns.colName)
@@ -934,6 +1028,10 @@ public class myDataGrid
     // This version targets the case when columnId is visible
     private void paintCustomBorder2(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintCustomBorder2", "");
+        #endif
+
         bool doPaint = false;
         Pen customBorderPen = null;
 
@@ -994,6 +1092,10 @@ public class myDataGrid
 
     private void on_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_CellMouseDown", "");
+        #endif
+
         if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
         {
             _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
@@ -1004,6 +1106,10 @@ public class myDataGrid
 
     private void on_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_CellMouseUp", "");
+        #endif
+
         if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
@@ -1018,6 +1124,10 @@ public class myDataGrid
 
     private void on_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_CellMouseEnter", "");
+        #endif
+
         // Change row's appearance while mouse is hovering upon it
         _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
         _dataGrid.InvalidateRow(e.RowIndex);
@@ -1027,6 +1137,10 @@ public class myDataGrid
 
     private void on_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_CellMouseLeave", "");
+        #endif
+
         // Change row's appearance when mouse is leaving it
         if (_dataGrid.Rows[e.RowIndex].MinimumHeight == 4)
             _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
@@ -1039,6 +1153,10 @@ public class myDataGrid
     // Key Down Event
     private void on_KeyDown(object sender, KeyEventArgs e)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.on_KeyDown", "");
+        #endif
+
         switch (e.KeyData)
         {
             case Keys.Space: {
@@ -1063,6 +1181,10 @@ public class myDataGrid
     // Set double buffering to reduce flickering
     private void setDoubleBuffering()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.setDoubleBuffering", "");
+        #endif
+
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
         PropertyInfo pi = _dataGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
         pi.SetValue(_dataGrid, true, null);
@@ -1072,6 +1194,10 @@ public class myDataGrid
 
     public void setRecursiveMode(bool mode)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.setRecursiveMode", "");
+        #endif
+
         _doUseRecursion = mode;
 
         // Also, store the list of files selected by user
@@ -1087,6 +1213,10 @@ public class myDataGrid
     // Update DataGrid's state
     public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.update", "");
+        #endif
+
         if (updatedList != null)
         {
             // Update from the supplied [updateList]

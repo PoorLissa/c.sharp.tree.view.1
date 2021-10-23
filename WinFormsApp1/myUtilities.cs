@@ -252,4 +252,21 @@ public class myUtils
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    public static void logMsg(string func, string msg)
+    {
+        string path = "WriteText.txt";
+        
+        if (!System.IO.File.Exists(path))
+        {
+            System.IO.File.CreateText(path);
+        }
+
+        using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+        {
+            sw.WriteLine(func + " : " + msg + "\n");
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
