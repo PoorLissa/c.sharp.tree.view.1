@@ -340,7 +340,7 @@ public class myTree_DataGrid_Manager
             _richTextBox.Text += " ----------------------\n";
         }
 
-        if (true)
+        if (false)
         {
             _richTextBox.Text += " --- global list so far ---\n";
 

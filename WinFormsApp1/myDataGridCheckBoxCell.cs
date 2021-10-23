@@ -171,12 +171,15 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         // Proceed and make outside area of the checkbox active as well:
         base.OnMouseDown(e);
 
-        if (e.X >= _cellMargin && e.X <= cell.Size.Width - _cellMargin)
+        if (e.Button == MouseButtons.Left)
         {
-            if (e.Y >= _cellMargin && e.Y <= cell.Size.Height - _cellMargin)
+            if (e.X >= _cellMargin && e.X <= cell.Size.Width - _cellMargin)
             {
-                this.DataGridView.EndEdit();
-                cell.Value = !(bool)(cell.Value);
+                if (e.Y >= _cellMargin && e.Y <= cell.Size.Height - _cellMargin)
+                {
+                    this.DataGridView.EndEdit();
+                    cell.Value = !(bool)(cell.Value);
+                }
             }
         }
 

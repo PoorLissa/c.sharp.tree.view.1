@@ -142,7 +142,7 @@ public class myDataGrid_ContextMenu
         for (int i = 0; i < list.Count; i++)
         {
             int n = list[i];
-            str += _globalFileListRef[n].Name[2..] + '\n';
+            str += _globalFileListRef[n].Name + '\n';
         }
 
         if (str.Length > 0)
