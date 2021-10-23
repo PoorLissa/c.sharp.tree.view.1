@@ -34,8 +34,9 @@ public class myDataGrid
 
     // StringFormat for CellId custom text drawing
     private StringFormat strFormat_CellId = null;
-
     private StringFormat strFormat_CellName = null;
+
+    private Font cellTooltipFont = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -804,38 +805,35 @@ public class myDataGrid
         // Paint path in the right bottom corner on mouse hover
         if (hoverStatus == '2' && e.ColumnIndex == (int)Columns.colName)
         {
-            using (var font = new Font("Helvetica Condensed",
-                e.CellStyle.Font.Size - 3, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet))
+            paintCustomRowTooltip(e);
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void paintCustomRowTooltip(DataGridViewCellPaintingEventArgs e)
+    {
+        if (cellTooltipFont == null)
+        {
+            if (_dataGrid.DeviceDpi > 96)
             {
-                int id  = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
-                int pos = _globalFileListExtRef[id].Name.LastIndexOf('\\') + 1;
-
-                Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + 3, e.CellBounds.Width - 3, e.CellBounds.Height);
-
-                var aaa = e.Graphics.MeasureString(_globalFileListExtRef[id].Name[..pos], font, e.CellBounds.Width * 2, strFormat_CellName);
-
-                if (aaa.Width > e.CellBounds.Width)
-                {
-                    string str = _globalFileListExtRef[id].Name[..pos];
-
-                    do
-                    {
-                        pos = str.IndexOf('\\') + 1;
-
-                        str = str[pos..];
-
-                        aaa = e.Graphics.MeasureString(str, font, e.CellBounds.Width * 2, strFormat_CellName);
-
-                    } while (aaa.Width > e.CellBounds.Width);
-
-                    e.Graphics.DrawString(str, font, Brushes.Gray, rect, strFormat_CellName);
-                }
-                else
-                {
-                    e.Graphics.DrawString(_globalFileListExtRef[id].Name[..pos], font, Brushes.Gray, rect, strFormat_CellName);
-                }
+                cellTooltipFont = new Font("Helvetica Condensed", e.CellStyle.Font.Size - 3, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet);
+            }
+            else
+            {
+                cellTooltipFont = new Font("Calibri", e.CellStyle.Font.Size - 1, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet);
             }
         }
+
+        Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + 2, e.CellBounds.Width - 2, e.CellBounds.Height);
+
+        int id = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
+
+        string tooltip = myUtils.condensePath(e, _globalFileListExtRef[id].Name, rect, cellTooltipFont, strFormat_CellName);
+
+        e.Graphics.DrawString(tooltip, cellTooltipFont, Brushes.Gray, rect, strFormat_CellName);
 
         return;
     }

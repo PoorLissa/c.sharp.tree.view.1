@@ -24,6 +24,7 @@ namespace WinFormsApp1
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
+                path = @"D:\Games\Space Rangers HD A War Apart\EngVer\help\content_Eng\img\equip\secret\aaa\bbb\ccc";
             }
 
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();

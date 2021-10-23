@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text;
+using System.Windows.Forms;
 
 /*
     Misc utilities
@@ -157,4 +159,97 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Shortens the path in a way it fits the rectangle
+    public static string condensePath(DataGridViewCellPaintingEventArgs e, string path, Rectangle r, Font f, StringFormat format)
+    {
+        int pos = path.LastIndexOf('\\') + 1;
+
+        StringBuilder sb = new StringBuilder(path, 0, pos, 0);
+
+        SizeF size = e.Graphics.MeasureString(sb.ToString(), f, r.Width * 2, format);
+
+        bool ok = size.Width <= r.Width;
+
+        // Repeat while string does not fit the rectangle
+        for (int maxlen = 10; !ok && maxlen != 7; maxlen--)
+        {
+            while (!ok && shortenPathNodes(sb, maxlen))
+            {
+                size = e.Graphics.MeasureString(sb.ToString(), f, r.Width * 2, format);
+                ok = (size.Width <= r.Width);
+            }
+        }
+
+        if (!ok)
+        {
+            sb.Insert(0, "...");
+
+            // Skip "c:\\"
+            for (pos = 0; pos < sb.Length; pos++)
+                if (sb[pos + 3] == '\\')
+                    break;
+            sb.Remove(3, pos);
+
+            do
+            {
+                for (pos = 1; pos < sb.Length; pos++)
+                    if (sb[pos + 3] == '\\')
+                        break;
+
+                sb.Remove(3, pos);
+
+                size = e.Graphics.MeasureString(sb.ToString(), f, r.Width * 2, format);
+
+            } while (size.Width > r.Width);
+        }
+
+        return sb.ToString();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Finds the longest part in the path enclosed between back slashes.
+    // Reduces its length: "c:\aaa\bbb\1234567890_abc\ccc\" => "c:\aaa\bbb\1234567...\ccc\"
+    // Returns true if it was able to reduce the length of the path
+    private static bool shortenPathNodes(StringBuilder sb, int maxLen = 10)
+    {
+        int beg = -1, end = -1, pos = 0, len = 0;
+
+        for (int i = 0; i < sb.Length; i++)
+        {
+            if (sb[i] == '\\')
+            {
+                if (end == -1)
+                {
+                    beg = i;
+                    end = i;
+                }
+                else
+                {
+                    end = i;
+
+                    int Len = i - beg;
+
+                    if (Len > len)
+                    {
+                        len = Len;
+                        pos = beg;
+                    }
+
+                    beg = i;
+                }
+            }
+        }
+
+        if (len > maxLen + 1)
+        {
+            sb.Remove(pos + maxLen - 2, len - maxLen + 2);
+            sb.Insert(pos + maxLen - 2, "...");
+            return true;
+        }
+
+        return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
