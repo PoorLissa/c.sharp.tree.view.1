@@ -4,7 +4,7 @@
 
 // -----------------------------------------------------------------------------------------------------------------------
 
-// Checks if the directory contains any subdirectories
+// Checks if the directory contains at least one subdirectory
 // Prerequisites:
 //  - Path parameter must be ending with "*.*"
 extern "C" __declspec(dllexport) bool dirHasSubdirs(const char *path)

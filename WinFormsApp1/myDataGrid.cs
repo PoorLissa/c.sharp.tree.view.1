@@ -19,7 +19,6 @@ public class myDataGrid
     private Image _imgDir_Opaque  = null;
     private Image _imgFile_Opaque = null;
 
-
     private System.Drawing.Brush _gridGradientBrush1 = null;
     private System.Drawing.Brush _gridGradientBrush2 = null;
 
@@ -165,7 +164,7 @@ public class myDataGrid
         #endif
 
         // Customize whole widget appearance (not used for now)
-        //_dataGrid.Paint += new PaintEventHandler(OnPaint);
+        _dataGrid.Paint += new PaintEventHandler(OnPaint);
 
         // Customize individual cell appearance
         _dataGrid.CellPainting += new DataGridViewCellPaintingEventHandler(on_CellPainting);
@@ -735,59 +734,22 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Remove dark gray parts of the GridView in case the rows don't cover all the area of the widget
-    // Simplified version, only fills gray parts with background color
-    // https://social.msdn.microsoft.com/Forums/windows/en-US/d39e565e-cf33-45b9-993c-99d39813fd15/datagridview-filling-rest-of-rows-with-empty-lines?forum=winforms
-    // Not used anymore. Instead, background color of the widget was set.
-    public void OnPaint(object sender, System.Windows.Forms.PaintEventArgs e)
+    // Customize the look of the whole widget
+    public void OnPaint(object sender, PaintEventArgs e)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.OnPaint", "");
         #endif
 
-#if false
-        bool doFillWithEmptyRows = false;
-
-        if (doFillWithEmptyRows)
+        // Paint transparent box -- Simulate disable state
+        if (_dataGrid.Enabled == false && _dataGrid.DefaultCellStyle.ForeColor == Color.Red)
         {
-            int rowHeight = _dataGrid.RowTemplate.Height;
-
-            if (_rowImg == null)
+            using (Brush b = new SolidBrush(Color.FromArgb(150, Color.White)))
             {
-                int rowWidth = _dataGrid.Width - 2;
-
-                _rowImg = new Bitmap(rowWidth, rowHeight);
-                Graphics g = Graphics.FromImage(_rowImg);
-                g.FillRectangle(new SolidBrush(_dataGrid.DefaultCellStyle.BackColor), 0, 0, rowWidth, rowHeight);
-                g.Dispose();
-            }
-
-            int h = _dataGrid.Rows.Count * rowHeight + 1;
-
-            if (h < _dataGrid.Height)
-            {
-                int num = (_dataGrid.Height - h) / rowHeight;
-
-                for (int i = 0; i < num; i++)
-                    e.Graphics.DrawImage(_rowImg, 1, h + i * rowHeight);
-
-                // Draw once more, at the very bottom
-                e.Graphics.DrawImage(_rowImg, 1, _dataGrid.Height - rowHeight - 1); // Bug: Sometimes it covered the lower row
-            }
-            else
-            {
-                // Hide dark gray area that appears at the very bottom when scrolling all the way down
-                int allowedVerticalScrollOffset = h - _dataGrid.Height;
-
-                if (_dataGrid.VerticalScrollingOffset > allowedVerticalScrollOffset)
-                {
-                    int diff = _dataGrid.VerticalScrollingOffset - allowedVerticalScrollOffset;
-
-                    e.Graphics.DrawImage(_rowImg, 1, _dataGrid.Height - diff, _dataGrid.Width - 2, diff);
-                }
+                e.Graphics.FillRectangle(b, e.ClipRectangle);
             }
         }
-#endif
+
         return;
     }
 
@@ -1260,4 +1222,25 @@ public class myDataGrid
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    // Set Enabled or Disabled look of the widget
+    // Visual style applies via OnPaint() event
+    public void Enable(bool mode)
+    {
+        if (mode == false)
+        {
+            _dataGrid.DefaultCellStyle.ForeColor = Color.Red;
+            _dataGrid.Enabled = false;
+        }
+        else
+        {
+            _dataGrid.DefaultCellStyle.ForeColor = Color.White;
+            _dataGrid.Enabled = true;
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
 };

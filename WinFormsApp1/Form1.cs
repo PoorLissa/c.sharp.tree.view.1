@@ -9,6 +9,8 @@ namespace WinFormsApp1
 
         private myTree_DataGrid_Manager myTDGManager = null;
 
+        private myComboBox myCb = null;
+
         // --------------------------------------------------------------------------------
 
         public Form1(string path, bool expandEmpty)
@@ -37,6 +39,8 @@ namespace WinFormsApp1
             mtdgmi.richTextBox  = richTextBox1;
 
             myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+
+            myCb = new myComboBox(this.comboBox1, "Select option");
         }
 
         // --------------------------------------------------------------------------------

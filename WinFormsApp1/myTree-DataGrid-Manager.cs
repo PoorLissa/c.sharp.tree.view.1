@@ -124,28 +124,29 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-
     // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
+        _dataGrid.Enable(false);
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
+
         // Decide if the current directory in the tree has changed or not
-        // (if not, the selected files will be restored later, when the grid is repopulated)
+        // (if not, the checked files will be restored later, when the grid is repopulated)
         myDataGrid.PopulateReason reason = myDataGrid.PopulateReason.viewDirChanged;
 
         if (sender != null)
         {
             if (sender == _cb_Recursive)
             {
-                reason = myDataGrid.PopulateReason.recursionChanged_After;
-
                 // This happens when we're changing the state of [cb_Recursive] checkbox
+                reason = myDataGrid.PopulateReason.recursionChanged_After;
                 _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
             }
             else
             {
+                // This happens when we're actually clicking the node in the tree
                 reason = myDataGrid.PopulateReason.dirChanged;
 
-                // This happens when we're actually clicking the node in the tree
                 _tree.nodeSelected(e.Node, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
 
                 // Set Form's header text
@@ -154,6 +155,9 @@ public class myTree_DataGrid_Manager
         }
 
         _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
+        _dataGrid.Enable(true);
 
         return;
     }
@@ -203,6 +207,8 @@ public class myTree_DataGrid_Manager
         _dataGrid.setRecursiveMode(_useRecursion);
 
         tree_onAfterSelect(sender, null);
+
+        return;
     }
 
     // --------------------------------------------------------------------------------
