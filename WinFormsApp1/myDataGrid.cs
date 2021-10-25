@@ -19,8 +19,9 @@ public class myDataGrid
     private Image _imgDir_Opaque  = null;
     private Image _imgFile_Opaque = null;
 
-    private System.Drawing.Brush _gridGradientBrush1 = null;
-    private System.Drawing.Brush _gridGradientBrush2 = null;
+    private Brush _gridGradientBrush1 = null;
+    private Brush _gridGradientBrush2 = null;
+    private Brush _disabledStateBrush = null;
 
     // Going to hold a reference to the global list of files
     private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
@@ -33,7 +34,7 @@ public class myDataGrid
     private StringFormat strFormat_CellId = null;
     private StringFormat strFormat_CellName = null;
 
-    private Font cellTooltipFont = null;
+    private myDataGrid_Cache _cache = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -122,8 +123,10 @@ public class myDataGrid
             myUtils.logMsg("myDataGrid.createDrawingPrimitives", "");
         #endif
 
+        _cache = new myDataGrid_Cache(dpi);
+
         // Load images
-        _imgDir = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
+        _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
         _imgFile = Image.FromFile(myUtils.getFilePath("_icons", "icon-file-1-30.png"));
 
         _imgDir_Opaque  = myUtils.ChangeImageOpacity(_imgDir,  0.35);
@@ -142,6 +145,8 @@ public class myDataGrid
         _gridGradientBrush2 = new System.Drawing.Drawing2D.LinearGradientBrush(pt1, pt2,
                                     Color.FromArgb(150, 255, 200, 133),
                                     Color.FromArgb(233, 255, 128,   0));
+
+        _disabledStateBrush = new SolidBrush(Color.FromArgb(150, Color.White));
 
         strFormat_CellId = new StringFormat(StringFormatFlags.NoClip);
         strFormat_CellId.LineAlignment = StringAlignment.Center;
@@ -248,7 +253,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Modify a copy of a template row and give it real values
-    public void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int id)
+    private void buildRow(ref DataGridViewRow row, myTreeListDataItem item, bool isDir, int id)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.buildRow", "");
@@ -295,17 +300,17 @@ public class myDataGrid
         {
             if (isDir)
             {
-                _dataGrid.Rows[i].DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
+                _dataGrid.Rows[i].DefaultCellStyle.ForeColor = Color.Black;
             }
             else
             {
-                _dataGrid.Rows[i].DefaultCellStyle.ForeColor = System.Drawing.Color.Brown;
+                _dataGrid.Rows[i].DefaultCellStyle.ForeColor = Color.Brown;
             }
 
             _dataGrid.Rows[i].Cells[(int)Columns.colChBox].Value = false;
             _dataGrid.Rows[i].Cells[(int)Columns.colImage].Value = isDir ? _imgDir : _imgFile;
             _dataGrid.Rows[i].Cells[(int)Columns.colName ].Value = item[pos..];
-            _dataGrid.Rows[i].Cells[(int)Columns.colId   ].Value = 999;
+            _dataGrid.Rows[i].Cells[(int)Columns.colId   ].Value = -1;
         }
 
         return;
@@ -321,25 +326,6 @@ public class myDataGrid
             myUtils.logMsg("myDataGrid.Populate_Fast", "");
         #endif
 
-/*
-        // check the memory impact
-        if (true)
-        {
-            int CNT = 130000, cnt = 0;
-            var rows = new DataGridViewRow[CNT];
-
-            for (int i = 0; i < CNT; i++)
-            {
-                var newRow = (DataGridViewRow)_myTemplateRow.Clone();
-                buildRow(ref newRow, item, true);
-                rows[cnt++] = newRow;
-            }
-
-            _dataGrid.Rows.AddRange(rows);
-            _dataGrid.ClearSelection();
-            return;
-        }
-*/
         int Count = 0;
         Count += doShowDirs  ? dirsCount  : 0;
         Count += doShowFiles ? filesCount : 0;
@@ -440,8 +426,10 @@ public class myDataGrid
             // Reserve known amount of rows
             var rows = new DataGridViewRow[selectedItems.Count];
 
-            foreach (var n in selectedItems)
+            for (int i = 0; i < selectedItems.Count; i++)
             {
+                int n = selectedItems[i];
+
                 bool isDir = (list[n].isDir);
 
                 // Wasn't able to create new rows any other way
@@ -741,13 +729,10 @@ public class myDataGrid
             myUtils.logMsg("myDataGrid.OnPaint", "");
         #endif
 
-        // Paint transparent box -- Simulate disable state
+        // Paint transparent box -- Simulate disabled state
         if (_dataGrid.Enabled == false && _dataGrid.DefaultCellStyle.ForeColor == Color.Red)
         {
-            using (Brush b = new SolidBrush(Color.FromArgb(150, Color.White)))
-            {
-                e.Graphics.FillRectangle(b, e.ClipRectangle);
-            }
+            e.Graphics.FillRectangle(_disabledStateBrush, e.ClipRectangle);
         }
 
         return;
@@ -825,12 +810,7 @@ public class myDataGrid
 
         if (e.ColumnIndex == (int)Columns.colId)
         {
-            var font = e.CellStyle.Font;
-
-            if (isRowSelected)
-            {
-                font = new Font(font.Name, font.Size + 1, FontStyle.Bold, font.Unit, font.GdiCharSet);
-            }
+            var font = isRowSelected ? _cache.getCustomContentFont(e.CellStyle.Font) : e.CellStyle.Font;
 
             e.Graphics.DrawString(e.Value.ToString(), font, Brushes.Black, e.CellBounds, strFormat_CellId);
             done = true;
@@ -853,31 +833,20 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Paint tooltip: path to current object in the right bottom corner on mouse hover
     private void paintCustomRowTooltip(DataGridViewCellPaintingEventArgs e)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintCustomRowTooltip", "");
         #endif
 
-        if (cellTooltipFont == null)
-        {
-            if (_dataGrid.DeviceDpi > 96)
-            {
-                cellTooltipFont = new Font("Helvetica Condensed", e.CellStyle.Font.Size - 3, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet);
-            }
-            else
-            {
-                cellTooltipFont = new Font("Calibri", e.CellStyle.Font.Size - 1, FontStyle.Regular, e.CellStyle.Font.Unit, e.CellStyle.Font.GdiCharSet);
-            }
-        }
-
-        Rectangle rect = new Rectangle(e.CellBounds.X, e.CellBounds.Y + 2, e.CellBounds.Width - 2, e.CellBounds.Height);
+        Rectangle r = _cache.getRect(e.CellBounds.X, e.CellBounds.Y + 2, e.CellBounds.Width - 2, e.CellBounds.Height);
+        Font f = _cache.getCellTooltipFont(e.CellStyle.Font);
 
         int id = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
+        string tooltip = myUtils.condensePath(e, _globalFileListExtRef[id].Name, r, f, strFormat_CellName);
 
-        string tooltip = myUtils.condensePath(e, _globalFileListExtRef[id].Name, rect, cellTooltipFont, strFormat_CellName);
-
-        e.Graphics.DrawString(tooltip, cellTooltipFont, Brushes.Gray, rect, strFormat_CellName);
+        e.Graphics.DrawString(tooltip, f, Brushes.Gray, r, strFormat_CellName);
 
         return;
     }
@@ -952,7 +921,7 @@ public class myDataGrid
                 }
                 else
                 {
-                    Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                    Rectangle rect = _cache.getRect(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
                     e.Graphics.DrawRectangle(customBorderPen, rect);
                 }
             }
@@ -973,7 +942,7 @@ public class myDataGrid
                 }
                 else
                 {
-                    Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
+                    Rectangle rect = _cache.getRect(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X, e.CellBounds.Height - 4);
                     e.Graphics.DrawRectangle(Pens.DarkOrange, rect);
                 }
             }
@@ -1021,7 +990,7 @@ public class myDataGrid
 #if false
                 int divider = _dataGrid.Columns[(int)Columns.colId].DividerWidth;
 
-                Rectangle rect = new Rectangle(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - divider, e.CellBounds.Height - 4);
+                Rectangle rect = _cache.getRect(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - divider, e.CellBounds.Height - 4);
                 e.Graphics.DrawRectangle(customBorderPen, rect);
 #endif
             }
@@ -1041,7 +1010,7 @@ public class myDataGrid
                 {
                     int colIdWidth = _dataGrid.Columns[(int)Columns.colId].Width;
 
-                    Rectangle rect = new Rectangle(colIdWidth + 2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
+                    Rectangle rect = _cache.getRect(colIdWidth + 2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
                     e.Graphics.DrawRectangle(customBorderPen, rect);
                 }
             }
@@ -1124,13 +1093,15 @@ public class myDataGrid
             case Keys.Space: {
 
                     // Change checked state of each selected row
-                    int selectedRowCount = _dataGrid.Rows.GetRowCount(DataGridViewElementStates.Selected);
-
-                    for (int i = 0; i < selectedRowCount; i++)
+                    for (int i = 0; i < _dataGrid.RowCount; i++)
                     {
-                        var cb = _dataGrid.SelectedRows[i].Cells[(int)Columns.colChBox];
-                        cb.Value = !(bool)(cb.Value);
+                        if (_dataGrid.Rows[i].Selected)
+                        {
+                            var cb = _dataGrid.Rows[i].Cells[(int)Columns.colChBox];
+                            cb.Value = !(bool)(cb.Value);
+                        }
                     }
+
                 }
                 break;
         }
@@ -1143,9 +1114,9 @@ public class myDataGrid
     // Set double buffering to reduce flickering
     private void setDoubleBuffering()
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.setDoubleBuffering", "");
-        #endif
+#endif
 
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
         PropertyInfo pi = _dataGrid.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -1156,9 +1127,9 @@ public class myDataGrid
 
     public void setRecursiveMode(bool mode)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.setRecursiveMode", "");
-        #endif
+#endif
 
         _doUseRecursion = mode;
 
@@ -1175,9 +1146,9 @@ public class myDataGrid
     // Update DataGrid's state
     public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.update", "");
-        #endif
+#endif
 
         if (updatedList != null)
         {

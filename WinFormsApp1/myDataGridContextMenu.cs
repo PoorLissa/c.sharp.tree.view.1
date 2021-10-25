@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 
@@ -8,7 +9,7 @@ using System.Windows.Forms;
 public class myDataGrid_ContextMenu
 {
     private static DataGridView _dataGrid = null;
-    private static System.Collections.Generic.List<myTreeListDataItem> _globalFileListRef = null;
+    private static List<myTreeListDataItem> _globalFileListRef = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -101,18 +102,21 @@ public class myDataGrid_ContextMenu
 
     private static void copyName()
     {
-        string str = "";
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < _dataGrid.RowCount; i++)
         {
             var row = _dataGrid.Rows[i];
 
             if (row.Selected)
-                str += row.Cells[(int)myDataGrid.Columns.colName].Value.ToString() + "\n";
+            {
+                sb.Append(row.Cells[(int)myDataGrid.Columns.colName].Value.ToString());
+                sb.Append('\n');
+            }
         }
 
-        if (str.Length > 0)
-            Clipboard.SetText(str);
+        if (sb.Length > 0)
+            Clipboard.SetText(sb.ToString());
         else
             Clipboard.Clear();
 
@@ -123,7 +127,7 @@ public class myDataGrid_ContextMenu
 
     private static void copyFullPath()
     {
-        string str = "";
+        StringBuilder sb = new StringBuilder();
 
         var list = new List<int>();
 
@@ -142,11 +146,12 @@ public class myDataGrid_ContextMenu
         for (int i = 0; i < list.Count; i++)
         {
             int n = list[i];
-            str += _globalFileListRef[n].Name + '\n';
+            sb.Append(_globalFileListRef[n].Name);
+            sb.Append('\n');
         }
 
-        if (str.Length > 0)
-            Clipboard.SetText(str);
+        if (sb.Length > 0)
+            Clipboard.SetText(sb.ToString());
         else
             Clipboard.Clear();
 
@@ -158,22 +163,25 @@ public class myDataGrid_ContextMenu
     // Find any children of selected directory and check/uncheck their checkboxes
     private static void selectChildren(bool mode)
     {
-        var set = new System.Collections.Generic.HashSet<int>();
+        var set = new HashSet<int>();
 
         // For every selected row:
-        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+        for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
-            var row = _dataGrid.SelectedRows[i];
+            var row = _dataGrid.Rows[i];
 
-            int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
-            string path = _globalFileListRef[id].Name[2..];
+            if (row.Selected)
+            {
+                int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
+                string path = _globalFileListRef[id].Name;
 
-            set.Add(id);
+                set.Add(id);
 
-            // Find indexes of item's children
-            for (int j = id + 1; j < _globalFileListRef.Count; j++)
-                if (_globalFileListRef[j].Name.Contains(path))
-                    set.Add(j);
+                // Find indexes of item's children
+                for (int j = id + 1; j < _globalFileListRef.Count; j++)
+                    if (_globalFileListRef[j].Name.Contains(path))
+                        set.Add(j);
+            }
         }
 
         foreach (var id in set)
