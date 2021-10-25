@@ -55,7 +55,6 @@ public class myComboBox
     private void on_TextChanged(object sender, EventArgs e)
     {
         ComboBox cb = (ComboBox)(sender);
-
         _placeholder.Visible = cb.Text.Length == 0;
     }
 
