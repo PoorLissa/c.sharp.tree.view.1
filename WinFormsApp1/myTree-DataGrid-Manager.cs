@@ -22,6 +22,11 @@ using System.Windows.Forms;
             mtdgmi.tb_Filter = textBox1;
 
             myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+
+    The ultimate goal here is to obtain the list of selected files.
+    To do this, call either of 'getSelectedFiles' methods.
+
+    In case the files in the list above have changed, use 'update' method to reflect those changes in the widgets.
 */
 
 
@@ -55,7 +60,7 @@ public class myTree_DataGrid_Manager
 
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
 
-    private myBackup _backup = null;
+    private myBackup _backup = null;                                // Keeps the history of all changes made to the file names
 
     private bool _doShowDirs   = true;
     private bool _doShowFiles  = true;
@@ -93,11 +98,11 @@ public class myTree_DataGrid_Manager
         _tb_Filter.PlaceholderText = "Filter text";
 
         // Set up events for the components:
-        _tree.Obj().AfterSelect  += new TreeViewEventHandler(tree_onAfterSelect);
-        _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler(tree_onBeforeExpand);
-        _tree.Obj().AfterExpand  += new TreeViewEventHandler(tree_onAfterExpand);
+        _tree.Obj().AfterSelect  += new TreeViewEventHandler        (tree_onAfterSelect);
+        _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
+        _tree.Obj().AfterExpand  += new TreeViewEventHandler        (tree_onAfterExpand);
 
-        _cb_ShowDirs.CheckedChanged  += new EventHandler(cb_ShowDirs_onCheckedChanged);
+        _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
         _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
 
@@ -106,6 +111,7 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    // Public interface method: obtain the list of selected files
     public void getSelectedFiles(List<myTreeListDataItem> filesList)
     {
         _dataGrid.getSelectedFiles(filesList);
@@ -113,6 +119,7 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    // Public interface method: obtain the list of selected files
     public List<myTreeListDataItem> getSelectedFiles()
     {
         var list = new List<myTreeListDataItem>();

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 
 /*
-    Provides the ability to keep the heistory of changes and restore file names to the original values
+    Provides the ability to keep the history of changes and restore file names to the original values
+
+    _historyList -- contains the list of all the changed names for a single file
+    _mapIndex    -- maps the last known file name to its position in [_historyList] for fast retrieval
 */
 
 
@@ -51,6 +54,11 @@ public class myBackup
                 str += '\n';
             }
         }
+
+        public ref List<string> getHistory()
+        {
+            return ref _fileNameHistory;
+        }
     };
 
     // --------------------------------------------------------------------------------
@@ -76,7 +84,6 @@ public class myBackup
             // Item has changed:
             if (globalList[id].Name != updatedList[i].Name)
             {
-                //store(globalList[id].Name, updatedList[i].Name);    // 15 sec
                 store_map(globalList, id, updatedList, i);
             }
         }
@@ -163,6 +170,20 @@ public class myBackup
         }
 
         return res;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public List<string> getHistory(string fileName)
+    {
+        if (_mapIndex.ContainsKey(fileName))
+        {
+            int map_id = _mapIndex[fileName];
+
+            return _historyList[map_id].getHistory();
+        }
+
+        return null;
     }
 
     // --------------------------------------------------------------------------------
