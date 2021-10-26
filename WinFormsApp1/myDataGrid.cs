@@ -730,9 +730,18 @@ public class myDataGrid
         #endif
 
         // Paint transparent box -- Simulate disabled state
-        if (_dataGrid.Enabled == false && _dataGrid.DefaultCellStyle.ForeColor == Color.Red)
+        if (_dataGrid.Enabled == false)
         {
             e.Graphics.FillRectangle(_disabledStateBrush, e.ClipRectangle);
+
+            if (_doUseRecursion)
+            {
+                var font = _dataGrid.Font;
+                using (Font f = new Font(font.Name, 25, font.Style, font.Unit, font.GdiCharSet))
+                {
+                    e.Graphics.DrawString("Recursive Search...", f, Brushes.LightGray, e.ClipRectangle, strFormat_CellId);
+                }
+            }
         }
 
         return;
@@ -1127,9 +1136,9 @@ public class myDataGrid
 
     public void setRecursiveMode(bool mode)
     {
-#if DEBUG_TRACE
+        #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.setRecursiveMode", "");
-#endif
+        #endif
 
         _doUseRecursion = mode;
 
@@ -1146,9 +1155,9 @@ public class myDataGrid
     // Update DataGrid's state
     public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
-#if DEBUG_TRACE
+        #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.update", "");
-#endif
+        #endif
 
         if (updatedList != null)
         {
@@ -1200,12 +1209,10 @@ public class myDataGrid
     {
         if (mode == false)
         {
-            _dataGrid.DefaultCellStyle.ForeColor = Color.Red;
             _dataGrid.Enabled = false;
         }
         else
         {
-            _dataGrid.DefaultCellStyle.ForeColor = Color.White;
             _dataGrid.Enabled = true;
         }
 

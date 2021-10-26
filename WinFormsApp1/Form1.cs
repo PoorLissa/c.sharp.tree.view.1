@@ -1,5 +1,40 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
+public class AAA
+{
+    public AAA()
+    {
+    }
+
+    public void doSomeWork(RichTextBox tb, System.Threading.CancellationTokenSource src)
+    {
+        int total = 0;
+        string res = "-done-";
+
+        for (int i = 0; i < 500000000; i++)
+        {
+            if (src.Token.IsCancellationRequested)
+            {
+                res = "-cancelled-";
+                break;
+            }
+
+            double z = Math.Sqrt((double)(i * i * i * i * i));
+            double zz = z * z * z * z * z / 3.14;
+            double zzz = (zz + zz) * zz;
+            double zzzz = Math.Sqrt(zzz);
+
+            total += (int)(10 * zzzz);
+        }
+
+        tb.Invoke(new MethodInvoker(delegate { tb.AppendText(res); }));
+
+        return;
+    }
+};
+
 
 namespace WinFormsApp1
 {
@@ -10,6 +45,8 @@ namespace WinFormsApp1
         private myTree_DataGrid_Manager myTDGManager = null;
 
         private myComboBox myCb = null;
+
+        private AAA _aaa = new AAA();
 
         // --------------------------------------------------------------------------------
 
@@ -45,8 +82,30 @@ namespace WinFormsApp1
 
         // --------------------------------------------------------------------------------
 
+        System.Threading.CancellationTokenSource source = null;
+        Task t = null;
+
         private void button1_Click(object sender, EventArgs e)
         {
+            if (t == null || t.IsCompleted)
+            {
+                source = new System.Threading.CancellationTokenSource();
+
+                t = new System.Threading.Tasks.Task(() =>
+                {
+                    _aaa.doSomeWork(richTextBox1, source);
+
+                }, source.Token);
+
+                t.Start();
+            }
+            else
+            {
+                source.Cancel();
+            }
+
+            return;
+
             var list = myTDGManager.getSelectedFiles();
 
             var list_copy = myTreeListDataItem.copyList(list);

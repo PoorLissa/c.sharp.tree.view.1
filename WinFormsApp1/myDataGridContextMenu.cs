@@ -165,7 +165,7 @@ public class myDataGrid_ContextMenu
     {
         var set = new HashSet<int>();
 
-        // For every selected row:
+        // For every row:
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
             var row = _dataGrid.Rows[i];
@@ -184,13 +184,21 @@ public class myDataGrid_ContextMenu
             }
         }
 
-        foreach (var id in set)
+        // For every row:
+        for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
-            var cb = _dataGrid.Rows[id].Cells[(int)myDataGrid.Columns.colChBox];
-            cb.Value = mode;
+            var row = _dataGrid.Rows[i];
 
-            // Also, set selection for the row
-            _dataGrid.Rows[id].Selected = mode;
+            int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
+
+            if (set.Contains(id))
+            {
+                var cb = row.Cells[(int)myDataGrid.Columns.colChBox];
+                cb.Value = mode;
+
+                // Also, set selection for the row
+                row.Selected = mode;
+            }
         }
 
         return;

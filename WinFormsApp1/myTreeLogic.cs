@@ -26,7 +26,7 @@ public class myTreeLogic
 
     // --------------------------------------------------------------------------------------------------------
 
-    public int getFiles(string dir, List<myTreeListDataItem> listExt, bool doClear = true)
+    public int getFiles(string dir, List<myTreeListDataItem> listExt, bool doClear = true, bool doSort = false)
     {
         int res = 0;
 
@@ -49,8 +49,10 @@ public class myTreeLogic
 
             if (files != null)
             {
-                foreach (var file in files)
+                for (int i = 0; i < files.Length; i++)
                 {
+                    var file = files[i];
+
                     System.IO.FileInfo fi = new System.IO.FileInfo(file);
 
                     bool isHidden = (fi.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
@@ -62,6 +64,8 @@ public class myTreeLogic
                     listExt.Add(File);
                 }
 
+                if (doSort)
+                    listExt.Sort();
             }
         }
 
@@ -70,7 +74,7 @@ public class myTreeLogic
 
     // --------------------------------------------------------------------------------------------------------
 
-    public int getDirectories(string dir, List<myTreeListDataItem> listExt, bool doClear = true)
+    public int getDirectories(string dir, List<myTreeListDataItem> listExt, bool doClear = true, bool doSort = false)
     {
         int res = 0;
 
@@ -93,8 +97,10 @@ public class myTreeLogic
 
             if (dirs != null)
             {
-                foreach (var d in dirs)
+                for(int i = 0; i < dirs.Length; i++)
                 {
+                    var d = dirs[i];
+
                     System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(d);
 
                     bool isHidden = (di.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
@@ -105,6 +111,9 @@ public class myTreeLogic
                     Dir.isHidden = isHidden || isSystem;
                     listExt.Add(Dir);
                 }
+
+                if (doSort)
+                    listExt.Sort();
             }
         }
 

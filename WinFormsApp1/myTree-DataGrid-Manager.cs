@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -65,12 +66,16 @@ public class myTree_DataGrid_Manager
     private bool _doShowDirs   = true;
     private bool _doShowFiles  = true;
     private bool _useRecursion = false;
+    private bool _useTasks     = true;                              // Defines if async tasks should be used for building file tree. If [true], build process can be cancelled
 
     private int  _nDirs;                                            // Stores the number of folders found in the last [nodeSelected] call
     private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
 
     private string _filterStr = "";                                 // To use with filtering event
     private int    _filterDelayCnt = 0;                             // To use with filtering event (to delay filtering)
+
+    private CancellationTokenSource _tokenSource = null;
+    private Task        _tree_onAfterSelect_Task = null;
 
     // --------------------------------------------------------------------------------
 
@@ -135,36 +140,98 @@ public class myTree_DataGrid_Manager
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
         _dataGrid.Enable(false);
-        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
+
 
         // Decide if the current directory in the tree has changed or not
-        // (if not, the checked files will be restored later, when the grid is repopulated)
+        // (if not, the checked files in the grid will be restored later, when the grid is repopulated)
         myDataGrid.PopulateReason reason = myDataGrid.PopulateReason.viewDirChanged;
 
-        if (sender != null)
+
+        if (_useTasks)
         {
-            if (sender == _cb_Recursive)
+            if (sender != null)
             {
-                // This happens when we're changing the state of [cb_Recursive] checkbox
-                reason = myDataGrid.PopulateReason.recursionChanged_After;
-                _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+                // sender == _cb_Recursive -- When we're changing the state of [cb_Recursive] checkbox
+                // sender != _cb_Recursive -- When we're actually clicking the node in the tree
+
+                // Hope this local variables will be treated properly by the task...
+                TreeNode selectedNode = (sender == _cb_Recursive)
+                    ? _tree.Obj().SelectedNode
+                    : e.Node;
+
+                reason = (sender == _cb_Recursive)
+                    ? myDataGrid.PopulateReason.recursionChanged_After
+                    : myDataGrid.PopulateReason.dirChanged;
+
+                // This means, we will have to execute _tree.nodeSelected, which may take a LONG time
+                if (_tree_onAfterSelect_Task == null || _tree_onAfterSelect_Task.IsCompleted)
+                {
+                    _tokenSource = new System.Threading.CancellationTokenSource();
+                }
+                else
+                {
+                    _tokenSource.Cancel();                                              // Cancel current operation
+                    _tree_onAfterSelect_Task.Wait();                                    // Wait for it to actually finish
+                    _tokenSource = new System.Threading.CancellationTokenSource();      // Proceed with the new task
+                }
+
+
+                // Create a task
+                _tree_onAfterSelect_Task = new System.Threading.Tasks.Task(() =>
+                {
+                    int cancelled = _tree.nodeSelected(selectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
+
+                    if (cancelled != -1)
+                    {
+                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate
+                        {
+                            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                            _dataGrid.Enable(true);
+                        }));
+                    }
+
+                }, _tokenSource.Token);
+
+
+                // Execute the task
+                _tree_onAfterSelect_Task.Start();
             }
             else
             {
-                // This happens when we're actually clicking the node in the tree
-                reason = myDataGrid.PopulateReason.dirChanged;
-
-                _tree.nodeSelected(e.Node, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
-
-                // Set Form's header text
-                _form.Text = e.Node.FullPath;
+                // No task needed, as the list is already populated
+                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                _dataGrid.Enable(true);
             }
         }
+        else
+        {
+            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 
-        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+            if (sender != null)
+            {
+                if (sender == _cb_Recursive)
+                {
+                    // This happens when we're changing the state of [cb_Recursive] checkbox
+                    reason = myDataGrid.PopulateReason.recursionChanged_After;
+                    _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+                }
+                else
+                {
+                    // This happens when we're actually clicking the node in the tree
+                    reason = myDataGrid.PopulateReason.dirChanged;
 
-        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
-        _dataGrid.Enable(true);
+                    _tree.nodeSelected(e.Node, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+
+                    // Set Form's header text
+                    _form.Text = e.Node.FullPath;
+                }
+            }
+
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+
+            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
+            _dataGrid.Enable(true);
+        }
 
         return;
     }
@@ -341,6 +408,7 @@ public class myTree_DataGrid_Manager
 
         // Update widgets
         _dataGrid.update();
+        _tree.update();
 
 
         // Check our history:

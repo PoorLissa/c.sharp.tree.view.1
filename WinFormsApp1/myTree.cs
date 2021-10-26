@@ -423,6 +423,99 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Populates the supplied list with directory and file names
+    // Returns the number of errors
+    // ref int itemsFound parameters receive the number of items found
+    // Cancelable version: to be used with Threading.Task
+    public int nodeSelected(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, System.Threading.CancellationToken token, bool useRecursion = false)
+    {
+        int res = 0;
+        filesExt.Clear();
+
+        if (useRecursion)
+        {
+            dirsFound  = 0;
+            filesFound = 0;
+
+            var listTmpDirs  = new List<myTreeListDataItem>();
+            var listTmpFiles = new List<myTreeListDataItem>();
+            var stack        = new Stack<myTreeListDataItem>(20);
+
+            // Get all subfolders in current folder
+            _logic.getDirectories(n.Name, listTmpDirs, doClear: true, doSort: true);
+
+            if (token.IsCancellationRequested)
+                return -1;
+
+            for (int i = listTmpDirs.Count - 1; i >= 0; i--)
+                stack.Push(listTmpDirs[i]);
+
+            if (token.IsCancellationRequested)
+                return -1;
+
+            // Get all files in current folder
+            _logic.getFiles(n.Name, listTmpFiles, doClear: true, doSort: true);
+            filesFound += listTmpFiles.Count;
+
+            if (token.IsCancellationRequested)
+                return -1;
+
+            foreach (var file in listTmpFiles)
+                filesExt.Add(file);
+
+            if (token.IsCancellationRequested)
+                return -1;
+
+            while (stack.Count > 0)
+            {
+                // Break the loop in case the cancellation was requested
+                if (token.IsCancellationRequested)
+                    return -1;
+
+                myTreeListDataItem currentDir = stack.Pop();
+
+                filesExt.Add(currentDir);
+                dirsFound++;
+
+                _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true, doSort: true);
+                filesFound += listTmpFiles.Count;
+
+                if (token.IsCancellationRequested)
+                    return -1;
+
+                foreach (var file in listTmpFiles)
+                    filesExt.Add(file);
+
+                _logic.getDirectories(currentDir.Name, listTmpDirs, doClear: true, doSort: true);
+
+                if (token.IsCancellationRequested)
+                    return -1;
+
+                for (int i = listTmpDirs.Count - 1; i >= 0; i--)
+                    stack.Push(listTmpDirs[i]);
+            }
+        }
+        else
+        {
+            // Get directories first
+            res += _logic.getDirectories(n.Name, filesExt, doClear: false);
+
+            dirsFound = filesExt.Count;
+
+            // Get files next
+            res += _logic.getFiles(n.Name, filesExt, doClear: false);
+
+            filesFound = filesExt.Count - dirsFound;
+
+            // Sort the results
+            filesExt.Sort();
+        }
+
+        return res;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Disallow redrawing of nodes
     public void AllowRedrawing(bool val)
     {
@@ -786,6 +879,27 @@ public class myTree
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
         PropertyInfo pi = _tree.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
         pi.SetValue(_tree, true, null);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Update Tree's state
+    public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
+    {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myTree.update", "");
+        #endif
+
+        if (updatedList != null)
+        {
+            // Update from the supplied [updateList]
+        }
+        else
+        {
+            // Update from global list
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
