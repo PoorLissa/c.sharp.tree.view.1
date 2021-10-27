@@ -444,33 +444,32 @@ public class myTree
             // Get all subfolders in current folder
             _logic.getDirectories(n.Name, listTmpDirs, doClear: true, doSort: true);
 
-            if (token.IsCancellationRequested)
-                return -1;
+            //if (token.IsCancellationRequested)                return -1;
 
             for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                 stack.Push(listTmpDirs[i]);
 
-            if (token.IsCancellationRequested)
-                return -1;
+            //if (token.IsCancellationRequested)                return -1;
 
             // Get all files in current folder
             _logic.getFiles(n.Name, listTmpFiles, doClear: true, doSort: true);
             filesFound += listTmpFiles.Count;
 
-            if (token.IsCancellationRequested)
-                return -1;
+            //if (token.IsCancellationRequested)                return -1;
 
             foreach (var file in listTmpFiles)
                 filesExt.Add(file);
 
-            if (token.IsCancellationRequested)
-                return -1;
+            //if (token.IsCancellationRequested)                return -1;
 
             while (stack.Count > 0)
             {
                 // Break the loop in case the cancellation was requested
                 if (token.IsCancellationRequested)
+                {
+                    filesExt.Clear();
                     return -1;
+                }
 
                 myTreeListDataItem currentDir = stack.Pop();
 
@@ -480,16 +479,14 @@ public class myTree
                 _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true, doSort: true);
                 filesFound += listTmpFiles.Count;
 
-                if (token.IsCancellationRequested)
-                    return -1;
+                //if (token.IsCancellationRequested)                    return -1;
 
                 foreach (var file in listTmpFiles)
                     filesExt.Add(file);
 
                 _logic.getDirectories(currentDir.Name, listTmpDirs, doClear: true, doSort: true);
 
-                if (token.IsCancellationRequested)
-                    return -1;
+                //if (token.IsCancellationRequested)                    return -1;
 
                 for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                     stack.Push(listTmpDirs[i]);

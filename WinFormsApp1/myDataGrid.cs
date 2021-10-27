@@ -722,6 +722,8 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    public int zzz = 0;
+
     // Customize the look of the whole widget
     public void OnPaint(object sender, PaintEventArgs e)
     {
@@ -734,8 +736,9 @@ public class myDataGrid
         {
             e.Graphics.FillRectangle(_disabledStateBrush, e.ClipRectangle);
 
-            if (_doUseRecursion)
+            if (_doUseRecursion && zzz == 1)
             {
+                zzz = 0;
                 var font = _dataGrid.Font;
                 using (Font f = new Font(font.Name, 25, font.Style, font.Unit, font.GdiCharSet))
                 {

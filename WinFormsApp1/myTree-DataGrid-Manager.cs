@@ -136,6 +136,8 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    int cnt = 0;
+
     // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
@@ -167,19 +169,49 @@ public class myTree_DataGrid_Manager
                 if (_tree_onAfterSelect_Task == null || _tree_onAfterSelect_Task.IsCompleted)
                 {
                     _tokenSource = new System.Threading.CancellationTokenSource();
+
+                    _richTextBox.Text += $"_tokenSource.New(1) -- created {cnt} : {selectedNode.Name}\n";
                 }
                 else
                 {
                     _tokenSource.Cancel();                                              // Cancel current operation
+
+                    _richTextBox.Text += $"_tokenSource.Cancel() -- called {cnt} : {selectedNode.Name}\n";
+
                     _tree_onAfterSelect_Task.Wait();                                    // Wait for it to actually finish
+
+                    _richTextBox.Text += $"_tokenSource.Wait() -- finished {cnt} : {selectedNode.Name}\n";
+
+                    //_tokenSource.Dispose();
+
                     _tokenSource = new System.Threading.CancellationTokenSource();      // Proceed with the new task
+
+                    _richTextBox.Text += $"_tokenSource.New(2) -- created {cnt} : {selectedNode.Name}\n";
+
+                    cnt++;
+
+/*
+                    _tokenSource.New(1) -- created 2 : C:\
+                    _tokenSource.Cancel() -- called 2 : D:\Games
+                    _tokenSource.Wait() -- finished 2 : D:\Games
+                    _tokenSource.New(2) -- created 2 : D:\Games
+                    _tokenSource.New(1) -- created 3 : C:\
+                    _tokenSource.Cancel() -- called 3 : D:\Games
+                    _tokenSource.Wait() -- finished 3 : D:\Games
+                    _tokenSource.New(2) -- created 3 : D:\Games
+                    _tokenSource.New(1) -- created 4 : D:\aaa       --- waited for this for too long
+*/
                 }
 
 
                 // Create a task
                 _tree_onAfterSelect_Task = new System.Threading.Tasks.Task(() =>
                 {
+                    string name = selectedNode.Name;
+
                     int cancelled = _tree.nodeSelected(selectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
+
+                    //_richTextBox.Invoke(new MethodInvoker(delegate { _richTextBox.Text += $"_tree.nodeSelected -- finished: {name}\n";  }));
 
                     if (cancelled != -1)
                     {
@@ -195,6 +227,20 @@ public class myTree_DataGrid_Manager
 
                 // Execute the task
                 _tree_onAfterSelect_Task.Start();
+
+
+/*
+                new System.Threading.Tasks.Task(() =>
+                {
+                    Task.Delay(1500).Wait();
+
+                    if (_tree_onAfterSelect_Task.Status == TaskStatus.Running)
+                    {
+                        _dataGrid.zzz = 1;
+                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.Obj().Invalidate(); }));
+                    }
+                }).Start();
+*/
             }
             else
             {
