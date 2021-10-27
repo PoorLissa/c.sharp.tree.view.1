@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using myControls;
 
 
 namespace WinFormsApp1
@@ -12,7 +12,8 @@ namespace WinFormsApp1
 
         private myTree_DataGrid_Manager myTDGManager = null;
 
-        private myComboBox myCb = null;
+        private myControls.myComboBox myCb = null;
+        private myControls.myTextBox  myTb = null;
 
         // --------------------------------------------------------------------------------
 
@@ -43,7 +44,8 @@ namespace WinFormsApp1
 
             myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
 
-            myCb = new myComboBox(this.comboBox1, "Select option");
+            myCb = new myControls.myComboBox(this.comboBox1, "Select option");
+            myTb = new myControls.myTextBox (this.textBox2, "Filter text");
         }
 
         // --------------------------------------------------------------------------------

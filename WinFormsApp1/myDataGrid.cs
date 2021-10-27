@@ -37,6 +37,8 @@ public class myDataGrid
 
     private myDataGrid_Cache _cache = null;
 
+    private string _recursionMessage = "";
+
     // --------------------------------------------------------------------------------------------------------
 
     public enum Columns
@@ -738,9 +740,10 @@ public class myDataGrid
             if (_doUseRecursion && _doShowRecursionMsg)
             {
                 var font = _dataGrid.Font;
-                using (Font f = new Font(font.Name, 25, font.Style, font.Unit, font.GdiCharSet))
+                //using (Font f = new Font(font.Name, 20, font.Style, font.Unit, font.GdiCharSet))
+                using (Font f = new Font("Arial", 20, font.Style, font.Unit, font.GdiCharSet))
                 {
-                    e.Graphics.DrawString("Recursive Search...", f, Brushes.LightGray, e.ClipRectangle, strFormat_CellId);
+                    e.Graphics.DrawString(_recursionMessage, f, Brushes.Gray, e.ClipRectangle, strFormat_CellId);
                 }
 
                 _doShowRecursionMsg = false;
@@ -1155,12 +1158,13 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    public void displayRecursionMsg()
+    public void displayRecursionMsg(string msg)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.displayRecursionMsg", "");
         #endif
 
+        _recursionMessage = msg;
         _doShowRecursionMsg = true;
         _dataGrid.Invalidate();
     }

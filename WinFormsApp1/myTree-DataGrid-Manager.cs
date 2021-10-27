@@ -197,6 +197,8 @@ public class myTree_DataGrid_Manager
                 // Create a task
                 _tree_onAfterSelect_Task = new System.Threading.Tasks.Task(() =>
                 {
+                    bool doShowNextMsg = false;
+
                     _tokenSource.Token.ThrowIfCancellationRequested();
 
                     // Create child task and Start it immediately
@@ -214,7 +216,8 @@ public class myTree_DataGrid_Manager
                         if (_tree_onAfterSelect_Task.Status == TaskStatus.Running)
                         {
                             // Go ahead and signal the _dataGrid
-                            _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.displayRecursionMsg(); }));
+                            _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.displayRecursionMsg("Recursive Search in Progress..."); }));
+                            doShowNextMsg = true;
                         }
 
                     }, _tokenSource.Token, TaskCreationOptions.AttachedToParent).Start();
@@ -226,6 +229,8 @@ public class myTree_DataGrid_Manager
 
                     _tokenSource.Token.ThrowIfCancellationRequested();
 
+                    if (doShowNextMsg)
+                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.displayRecursionMsg($"Populating the List:\n Total {_nDirs + _nFiles} items found"); }));
 
                     _dataGrid.Obj().Invoke(new MethodInvoker(delegate
                     {
