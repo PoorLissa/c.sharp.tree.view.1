@@ -13,6 +13,7 @@ public class myDataGrid
     private DataGridViewRow _myTemplateRow = null;
 
     private bool _doUseRecursion = false;
+    private bool _doShowRecursionMsg = false;
 
     private Image _imgDir         = null;
     private Image _imgFile        = null;
@@ -722,8 +723,6 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    public int zzz = 0;
-
     // Customize the look of the whole widget
     public void OnPaint(object sender, PaintEventArgs e)
     {
@@ -736,14 +735,15 @@ public class myDataGrid
         {
             e.Graphics.FillRectangle(_disabledStateBrush, e.ClipRectangle);
 
-            if (_doUseRecursion && zzz == 1)
+            if (_doUseRecursion && _doShowRecursionMsg)
             {
-                zzz = 0;
                 var font = _dataGrid.Font;
                 using (Font f = new Font(font.Name, 25, font.Style, font.Unit, font.GdiCharSet))
                 {
                     e.Graphics.DrawString("Recursive Search...", f, Brushes.LightGray, e.ClipRectangle, strFormat_CellId);
                 }
+
+                _doShowRecursionMsg = false;
             }
         }
 
@@ -1155,6 +1155,18 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    public void displayRecursionMsg()
+    {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.displayRecursionMsg", "");
+        #endif
+
+        _doShowRecursionMsg = true;
+        _dataGrid.Invalidate();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Update DataGrid's state
     public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
@@ -1210,16 +1222,8 @@ public class myDataGrid
     // Visual style applies via OnPaint() event
     public void Enable(bool mode)
     {
-        if (mode == false)
-        {
-            _dataGrid.Enabled = false;
-        }
-        else
-        {
-            _dataGrid.Enabled = true;
-        }
-
-        return;
+        _doShowRecursionMsg = false;
+        _dataGrid.Enabled = mode;
     }
 
     // --------------------------------------------------------------------------------------------------------

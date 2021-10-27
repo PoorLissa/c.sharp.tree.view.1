@@ -136,8 +136,6 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    int cnt = 0;
-
     // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
@@ -153,8 +151,8 @@ public class myTree_DataGrid_Manager
         {
             if (sender != null)
             {
-                // sender == _cb_Recursive -- When we're changing the state of [cb_Recursive] checkbox
-                // sender != _cb_Recursive -- When we're actually clicking the node in the tree
+                // sender == _cb_Recursive -- We're changing the state of [cb_Recursive] checkbox
+                // sender != _cb_Recursive -- We're actually clicking the node in the tree
 
                 // Hope this local variables will be treated properly by the task...
                 TreeNode selectedNode = (sender == _cb_Recursive)
@@ -168,79 +166,78 @@ public class myTree_DataGrid_Manager
                 // This means, we will have to execute _tree.nodeSelected, which may take a LONG time
                 if (_tree_onAfterSelect_Task == null || _tree_onAfterSelect_Task.IsCompleted)
                 {
-                    _tokenSource = new System.Threading.CancellationTokenSource();
-
-                    _richTextBox.Text += $"_tokenSource.New(1) -- created {cnt} : {selectedNode.Name}\n";
+                    _tokenSource?.Dispose();
                 }
                 else
                 {
-                    _tokenSource.Cancel();                                              // Cancel current operation
+                    // Cancel current task
+                    _tokenSource.Cancel();
 
-                    _richTextBox.Text += $"_tokenSource.Cancel() -- called {cnt} : {selectedNode.Name}\n";
-
-                    _tree_onAfterSelect_Task.Wait();                                    // Wait for it to actually finish
-
-                    _richTextBox.Text += $"_tokenSource.Wait() -- finished {cnt} : {selectedNode.Name}\n";
-
-                    //_tokenSource.Dispose();
-
-                    _tokenSource = new System.Threading.CancellationTokenSource();      // Proceed with the new task
-
-                    _richTextBox.Text += $"_tokenSource.New(2) -- created {cnt} : {selectedNode.Name}\n";
-
-                    cnt++;
-
-/*
-                    _tokenSource.New(1) -- created 2 : C:\
-                    _tokenSource.Cancel() -- called 2 : D:\Games
-                    _tokenSource.Wait() -- finished 2 : D:\Games
-                    _tokenSource.New(2) -- created 2 : D:\Games
-                    _tokenSource.New(1) -- created 3 : C:\
-                    _tokenSource.Cancel() -- called 3 : D:\Games
-                    _tokenSource.Wait() -- finished 3 : D:\Games
-                    _tokenSource.New(2) -- created 3 : D:\Games
-                    _tokenSource.New(1) -- created 4 : D:\aaa       --- waited for this for too long
-*/
+                    try
+                    {
+                        // Wait for current task to actually finish:
+                        // Waiting on a cancelled task results in exception thrown
+                        _tree_onAfterSelect_Task.Wait();
+                    }
+                    catch (AggregateException ex)
+                    {
+                        _globalFileListExt.Clear();
+                    }
+                    finally
+                    {
+                        _tokenSource.Dispose();
+                    }
                 }
+
+
+                // Start new task
+                _tokenSource = new System.Threading.CancellationTokenSource();
 
 
                 // Create a task
                 _tree_onAfterSelect_Task = new System.Threading.Tasks.Task(() =>
                 {
-                    string name = selectedNode.Name;
+                    _tokenSource.Token.ThrowIfCancellationRequested();
 
-                    int cancelled = _tree.nodeSelected(selectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
-
-                    //_richTextBox.Invoke(new MethodInvoker(delegate { _richTextBox.Text += $"_tree.nodeSelected -- finished: {name}\n";  }));
-
-                    if (cancelled != -1)
+                    // Create child task and Start it immediately
+                    new System.Threading.Tasks.Task(() =>
                     {
-                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate
+                        // Wait a bit and then signal _dataGrid to draw some text over the disabled DataGridView widget
+                        for (int i = 0; _tree_onAfterSelect_Task.Status == TaskStatus.Running && i < 6; i++)
                         {
-                            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
-                            _dataGrid.Enable(true);
-                        }));
-                    }
+                            // Check for cancellation token
+                            _tokenSource.Token.ThrowIfCancellationRequested();
+
+                            Task.Delay(100).Wait();
+                        }
+
+                        if (_tree_onAfterSelect_Task.Status == TaskStatus.Running)
+                        {
+                            // Go ahead and signal the _dataGrid
+                            _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.displayRecursionMsg(); }));
+                        }
+
+                    }, _tokenSource.Token, TaskCreationOptions.AttachedToParent).Start();
+
+
+                    // Get all the directory and file names
+                    _tree.nodeSelected_Cancellable(selectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
+
+
+                    _tokenSource.Token.ThrowIfCancellationRequested();
+
+
+                    _dataGrid.Obj().Invoke(new MethodInvoker(delegate
+                    {
+                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                        _dataGrid.Enable(true);
+                    }));
 
                 }, _tokenSource.Token);
 
 
                 // Execute the task
                 _tree_onAfterSelect_Task.Start();
-
-
-/*
-                new System.Threading.Tasks.Task(() =>
-                {
-                    Task.Delay(1500).Wait();
-
-                    if (_tree_onAfterSelect_Task.Status == TaskStatus.Running)
-                    {
-                        _dataGrid.zzz = 1;
-                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.Obj().Invalidate(); }));
-                    }
-                }).Start();
-*/
             }
             else
             {

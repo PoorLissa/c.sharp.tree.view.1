@@ -427,8 +427,10 @@ public class myTree
     // Returns the number of errors
     // ref int itemsFound parameters receive the number of items found
     // Cancelable version: to be used with Threading.Task
-    public int nodeSelected(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, System.Threading.CancellationToken token, bool useRecursion = false)
+    public int nodeSelected_Cancellable(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, System.Threading.CancellationToken token, bool useRecursion = false)
     {
+        token.ThrowIfCancellationRequested();
+
         int res = 0;
         filesExt.Clear();
 
@@ -439,37 +441,27 @@ public class myTree
 
             var listTmpDirs  = new List<myTreeListDataItem>();
             var listTmpFiles = new List<myTreeListDataItem>();
-            var stack        = new Stack<myTreeListDataItem>(20);
+            var stack        = new Stack<myTreeListDataItem>(100);
 
             // Get all subfolders in current folder
             _logic.getDirectories(n.Name, listTmpDirs, doClear: true, doSort: true);
 
-            //if (token.IsCancellationRequested)                return -1;
-
             for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                 stack.Push(listTmpDirs[i]);
 
-            //if (token.IsCancellationRequested)                return -1;
+            token.ThrowIfCancellationRequested();
 
             // Get all files in current folder
             _logic.getFiles(n.Name, listTmpFiles, doClear: true, doSort: true);
             filesFound += listTmpFiles.Count;
 
-            //if (token.IsCancellationRequested)                return -1;
-
-            foreach (var file in listTmpFiles)
-                filesExt.Add(file);
-
-            //if (token.IsCancellationRequested)                return -1;
+            for (int i = 0; i < listTmpFiles.Count; i++)
+                filesExt.Add(listTmpFiles[i]);
 
             while (stack.Count > 0)
             {
                 // Break the loop in case the cancellation was requested
-                if (token.IsCancellationRequested)
-                {
-                    filesExt.Clear();
-                    return -1;
-                }
+                token.ThrowIfCancellationRequested();
 
                 myTreeListDataItem currentDir = stack.Pop();
 
@@ -479,14 +471,12 @@ public class myTree
                 _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true, doSort: true);
                 filesFound += listTmpFiles.Count;
 
-                //if (token.IsCancellationRequested)                    return -1;
+                for (int i = 0; i < listTmpFiles.Count; i++)
+                    filesExt.Add(listTmpFiles[i]);
 
-                foreach (var file in listTmpFiles)
-                    filesExt.Add(file);
+                token.ThrowIfCancellationRequested();
 
                 _logic.getDirectories(currentDir.Name, listTmpDirs, doClear: true, doSort: true);
-
-                //if (token.IsCancellationRequested)                    return -1;
 
                 for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                     stack.Push(listTmpDirs[i]);
