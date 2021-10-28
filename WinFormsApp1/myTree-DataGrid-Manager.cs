@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -46,7 +47,17 @@ public struct myTree_DataGrid_Manager_Initializer
 
 
 
-public class myTree_DataGrid_Manager
+interface ImyTree_DataGrid_Manager
+{
+    void getSelectedFiles(List<myTreeListDataItem> list);   // Obtain the list of selected files
+    List<myTreeListDataItem> getSelectedFiles();            // Obtain the list of selected files
+    void update(List<myTreeListDataItem> list, bool mode);  // Update all the widgets' state using the data from [updatedList]
+    void allowBackup(bool mode);                            // Allow or disallow the use of backup
+};
+
+
+
+public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 {
     // --------------------------------------------------------------------------------
 
@@ -66,7 +77,8 @@ public class myTree_DataGrid_Manager
     private bool _doShowDirs   = true;
     private bool _doShowFiles  = true;
     private bool _useRecursion = false;
-    private bool _useTasks     = true;                              // Defines if async tasks should be used for building file tree. If [true], build process can be cancelled
+    private bool _useBackup    = true;                              // Allow the use of backups
+    private bool _useTasks     = true;                              // Defines if async Tasks should be used for building file tree. If [true], build process can be cancelled
 
     private int  _nDirs;                                            // Stores the number of folders found in the last [nodeSelected] call
     private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
@@ -86,9 +98,6 @@ public class myTree_DataGrid_Manager
 
         _globalFileListExt = new List<myTreeListDataItem>();
 
-        _tree     = new myTree     (mtdgmi.tv, path, expandEmpty);
-        _dataGrid = new myDataGrid (mtdgmi.dg, _globalFileListExt);
-
         _form         = mtdgmi.form;
         _cb_ShowFiles = mtdgmi.cb_ShowFiles;
         _cb_ShowDirs  = mtdgmi.cb_ShowDirs;
@@ -101,6 +110,9 @@ public class myTree_DataGrid_Manager
         _cb_Recursive.Checked = false;
 
         _tb_Filter.PlaceholderText = "Filter text";
+
+        _tree = new myTree(mtdgmi.tv, _globalFileListExt, path, expandEmpty, _richTextBox);
+        _dataGrid = new myDataGrid(mtdgmi.dg, _globalFileListExt);
 
         // Set up events for the components:
         _tree.Obj().AfterSelect  += new TreeViewEventHandler        (tree_onAfterSelect);
@@ -136,6 +148,13 @@ public class myTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    public void allowBackup(bool mode)
+    {
+        _useBackup = mode;
+    }
+
+    // --------------------------------------------------------------------------------
+
     // Selecting a tree node (using mouse or keyboard)
     private void tree_onAfterSelect(object sender, TreeViewEventArgs e)
     {
@@ -163,6 +182,11 @@ public class myTree_DataGrid_Manager
                     ? myDataGrid.PopulateReason.recursionChanged_After
                     : myDataGrid.PopulateReason.dirChanged;
 
+
+                // Set Form's header text
+                _form.Text = selectedNode.FullPath;
+
+
                 // This means, we will have to execute _tree.nodeSelected, which may take a LONG time
                 if (_tree_onAfterSelect_Task == null || _tree_onAfterSelect_Task.IsCompleted)
                 {
@@ -179,7 +203,7 @@ public class myTree_DataGrid_Manager
                         // Waiting on a cancelled task results in exception thrown
                         _tree_onAfterSelect_Task.Wait();
                     }
-                    catch (AggregateException ex)
+                    catch (AggregateException)
                     {
                         _globalFileListExt.Clear();
                     }
@@ -224,7 +248,7 @@ public class myTree_DataGrid_Manager
 
 
                     // Get all the directory and file names
-                    _tree.nodeSelected_Cancellable(selectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
+                    _tree.nodeSelected_Cancellable(selectedNode, ref _nDirs, ref _nFiles, _tokenSource.Token, _useRecursion);
 
 
                     _tokenSource.Token.ThrowIfCancellationRequested();
@@ -261,14 +285,14 @@ public class myTree_DataGrid_Manager
                 {
                     // This happens when we're changing the state of [cb_Recursive] checkbox
                     reason = myDataGrid.PopulateReason.recursionChanged_After;
-                    _tree.nodeSelected(_tree.Obj().SelectedNode, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+                    _tree.nodeSelected(_tree.Obj().SelectedNode, ref _nDirs, ref _nFiles, _useRecursion);
                 }
                 else
                 {
                     // This happens when we're actually clicking the node in the tree
                     reason = myDataGrid.PopulateReason.dirChanged;
 
-                    _tree.nodeSelected(e.Node, _globalFileListExt, ref _nDirs, ref _nFiles, _useRecursion);
+                    _tree.nodeSelected(e.Node, ref _nDirs, ref _nFiles, _useRecursion);
 
                     // Set Form's header text
                     _form.Text = e.Node.FullPath;
@@ -399,20 +423,22 @@ public class myTree_DataGrid_Manager
     // --------------------------------------------------------------------------------
 
     // Update all the widgets' state using the data from [updatedList]
-    public void update(List<myTreeListDataItem> updatedList)
+    public void update(List<myTreeListDataItem> updatedList, bool updDependent)
     {
         // We're only going to update the global list here;
         // Every dependent widged must implement its own method to update itself from the global list
 
         // Before updating the global list, we need to make a backup
         // to be able to restore all the files to their original names later
-        if (_backup == null)
+        if (_useBackup)
         {
-            _backup = new myBackup();
+            if (_backup == null)
+            {
+                _backup = new myBackup();
+            }
+
+            _backup.saveState(_globalFileListExt, updatedList);
         }
-
-
-        _backup.saveState(_globalFileListExt, updatedList);
 
 
         // For every changed directory:
@@ -454,13 +480,16 @@ public class myTree_DataGrid_Manager
         }
 
 
-        // Update widgets
-        _dataGrid.update();
-        _tree.update();
+        // Update dependent widgets
+        if (updDependent)
+        {
+            _dataGrid.update();
+            _tree.update(_backup, updatedList);
+        }
 
 
         // Check our history:
-        if (false)
+#if false
         {
             string s = _backup.getHistory();
 
@@ -468,8 +497,9 @@ public class myTree_DataGrid_Manager
             _richTextBox.Text += s + "\n";
             _richTextBox.Text += " ----------------------\n";
         }
+#endif
 
-        if (false)
+#if false
         {
             _richTextBox.Text += " --- global list so far ---\n";
 
@@ -478,9 +508,9 @@ public class myTree_DataGrid_Manager
 
             _richTextBox.Text += " ----------------------\n";
         }
+#endif
 
         return;
     }
 };
 
-https://www.dotnetforall.com/correct-way-provide-input-parameter-task/

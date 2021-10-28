@@ -1198,7 +1198,7 @@ public class myDataGrid
         }
         else
         {
-            // Update from global list
+            // Update from global list (default option)
             for (int i = 0; i < _dataGrid.Rows.Count; i++)
             {
                 DataGridViewRow row = _dataGrid.Rows[i];

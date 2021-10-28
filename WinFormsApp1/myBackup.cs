@@ -174,14 +174,11 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
+    // Given file, returns its history list (if any)
     public List<string> getHistory(string fileName)
     {
         if (_mapIndex.ContainsKey(fileName))
-        {
-            int map_id = _mapIndex[fileName];
-
-            return _historyList[map_id].getHistory();
-        }
+            return _historyList[_mapIndex[fileName]].getHistory();
 
         return null;
     }

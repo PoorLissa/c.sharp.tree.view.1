@@ -71,7 +71,7 @@ namespace WinFormsApp1
             }
 #endif
 
-            myTDGManager.update(list_copy);
+            myTDGManager.update(list_copy, true);
         }
 
         // --------------------------------------------------------------------------------

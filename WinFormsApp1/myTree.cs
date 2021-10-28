@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -37,14 +38,19 @@ public class myTree
     private int _winVer  = 0;
     private int _treeDpi = 0;
 
-    private List<myTreeListDataItem> _dirsListTmpExt = null;
+    // Going to hold a reference to the global list of files
+    private readonly List<myTreeListDataItem> _globalFileListExtRef = null;
+    private          List<myTreeListDataItem> _dirsListTmpExt       = null;
+
+    private RichTextBox _richTextBox = null;
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myTree(TreeView tv, string path, bool expandEmpty)
+    public myTree(TreeView tv, List<myTreeListDataItem> listGlobal, string path, bool expandEmpty, RichTextBox rb = null)
     {
         _tree  = tv;
         _logic = new myTreeLogic();
+        _richTextBox = rb;
 
         _foreColor = tv.ForeColor;
         _fontSize  = tv.Font.Size;
@@ -53,6 +59,7 @@ public class myTree
         _allowRedrawing = true;
 
         _dirsListTmpExt = new List<myTreeListDataItem>();
+        _globalFileListExtRef = listGlobal;
 
         init();
         setPath(path, useDummies: true, expandEmpty: expandEmpty);
@@ -96,7 +103,7 @@ public class myTree
                 string text = (label.Length > 0) ? " (" : "(";
                 text += drive.Name.Substring(0, 2) + ")";
 
-                TreeNode newNode = _tree.Nodes.Add(drive.Name, label + text);
+                TreeNode newNode = _tree.Nodes.Add(drive.Name, label + text);       // .Add(newNode.Name, newNode.Text)
                 newNode.NodeFont = getNodeFont(0);
 
                 // Each yet unopened node will contain this secret node
@@ -354,7 +361,7 @@ public class myTree
     // Populates the supplied list with directory and file names
     // Returns the number of errors
     // ref int itemsFound parameters receive the number of items found
-    public int nodeSelected(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, bool useRecursion = false)
+    public int nodeSelected(TreeNode n, ref int dirsFound, ref int filesFound, bool useRecursion = false)
     {
         int res = 0;
 
@@ -363,7 +370,7 @@ public class myTree
             dirsFound = 0;
             filesFound = 0;
 
-            filesExt.Clear();
+            _globalFileListExtRef.Clear();
             var listTmpDirs  = new List<myTreeListDataItem>();
             var listTmpFiles = new List<myTreeListDataItem>();
 
@@ -381,20 +388,20 @@ public class myTree
             listTmpFiles.Sort();
             filesFound += listTmpFiles.Count;
             foreach (var file in listTmpFiles)
-                filesExt.Add(file);
+                _globalFileListExtRef.Add(file);
 
             while (stack.Count > 0)
             {
                 myTreeListDataItem currentDir = stack.Pop();
 
-                filesExt.Add(currentDir);
+                _globalFileListExtRef.Add(currentDir);
                 dirsFound++;
 
                 _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true);
                 listTmpFiles.Sort();
                 filesFound += listTmpFiles.Count;
                 foreach (var file in listTmpFiles)
-                    filesExt.Add(file);
+                    _globalFileListExtRef.Add(file);
 
                 _logic.getDirectories(currentDir.Name, listTmpDirs, doClear: true);
                 listTmpDirs.Sort();
@@ -405,17 +412,17 @@ public class myTree
         else
         {
             // Get directories first
-            res += _logic.getDirectories(n.Name, filesExt, doClear: true);
+            res += _logic.getDirectories(n.Name, _globalFileListExtRef, doClear: true);
 
-            dirsFound = filesExt.Count;
+            dirsFound = _globalFileListExtRef.Count;
 
             // Get files next
-            res += _logic.getFiles(n.Name, filesExt, doClear: false);
+            res += _logic.getFiles(n.Name, _globalFileListExtRef, doClear: false);
 
-            filesFound = filesExt.Count - dirsFound;
+            filesFound = _globalFileListExtRef.Count - dirsFound;
 
             // Sort the results
-            filesExt.Sort();
+            _globalFileListExtRef.Sort();
         }
 
         return res;
@@ -427,12 +434,12 @@ public class myTree
     // Returns the number of errors
     // ref int itemsFound parameters receive the number of items found
     // Cancelable version: to be used with Threading.Task
-    public int nodeSelected_Cancellable(TreeNode n, List<myTreeListDataItem> filesExt, ref int dirsFound, ref int filesFound, System.Threading.CancellationToken token, bool useRecursion = false)
+    public int nodeSelected_Cancellable(TreeNode n, ref int dirsFound, ref int filesFound, System.Threading.CancellationToken token, bool useRecursion = false)
     {
         token.ThrowIfCancellationRequested();
 
         int res = 0;
-        filesExt.Clear();
+        _globalFileListExtRef.Clear();
 
         if (useRecursion)
         {
@@ -444,19 +451,19 @@ public class myTree
             var stack        = new Stack<myTreeListDataItem>(100);
 
             // Get all subfolders in current folder
-            _logic.getDirectories(n.Name, listTmpDirs, doClear: true, doSort: true);
-
+            _logic.getDirectories(getFullPath(n), listTmpDirs, doClear: true, doSort: true);
+            
             for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                 stack.Push(listTmpDirs[i]);
 
             token.ThrowIfCancellationRequested();
 
             // Get all files in current folder
-            _logic.getFiles(n.Name, listTmpFiles, doClear: true, doSort: true);
+            _logic.getFiles(getFullPath(n), listTmpFiles, doClear: true, doSort: true);
             filesFound += listTmpFiles.Count;
 
             for (int i = 0; i < listTmpFiles.Count; i++)
-                filesExt.Add(listTmpFiles[i]);
+                _globalFileListExtRef.Add(listTmpFiles[i]);
 
             while (stack.Count > 0)
             {
@@ -465,14 +472,14 @@ public class myTree
 
                 myTreeListDataItem currentDir = stack.Pop();
 
-                filesExt.Add(currentDir);
+                _globalFileListExtRef.Add(currentDir);
                 dirsFound++;
 
                 _logic.getFiles(currentDir.Name, listTmpFiles, doClear: true, doSort: true);
                 filesFound += listTmpFiles.Count;
 
                 for (int i = 0; i < listTmpFiles.Count; i++)
-                    filesExt.Add(listTmpFiles[i]);
+                    _globalFileListExtRef.Add(listTmpFiles[i]);
 
                 token.ThrowIfCancellationRequested();
 
@@ -485,17 +492,17 @@ public class myTree
         else
         {
             // Get directories first
-            res += _logic.getDirectories(n.Name, filesExt, doClear: false);
+            res += _logic.getDirectories(getFullPath(n), _globalFileListExtRef, doClear: false);
 
-            dirsFound = filesExt.Count;
+            dirsFound = _globalFileListExtRef.Count;
 
             // Get files next
-            res += _logic.getFiles(n.Name, filesExt, doClear: false);
+            res += _logic.getFiles(getFullPath(n), _globalFileListExtRef, doClear: false);
 
-            filesFound = filesExt.Count - dirsFound;
+            filesFound = _globalFileListExtRef.Count - dirsFound;
 
             // Sort the results
-            filesExt.Sort();
+            _globalFileListExtRef.Sort();
         }
 
         return res;
@@ -537,6 +544,29 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
+    private string getFullPath(TreeNode n)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        TreeNode tmp = n;
+
+        while (tmp.Level != 0)
+        {
+            sb.Insert(0, tmp.Text);
+            sb.Insert(0, '\\');
+            tmp = tmp.Parent;
+        }
+
+        int pos = tmp.Text.LastIndexOf(':')-1;
+
+        sb.Insert(0, tmp.Text.Substring(pos, 2));
+
+        if (sb.Length == 2)
+            sb.Append("\\");
+
+        return sb.ToString();
+    }
+
     // Tree Node Expand Event
     // Should be called from TreeView::BeforeExpand
     // Should be preceeded by AllowRedrawing(false), and should be followed by tree.AllowRedrawing(true);
@@ -548,7 +578,7 @@ public class myTree
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
 
             n.Nodes.Clear();
-            _logic.getDirectories(n.Name, _dirsListTmpExt, doClear: true);
+            _logic.getDirectories(getFullPath(n), _dirsListTmpExt, doClear: true);
 
             if (_dirsListTmpExt.Count > 0)
             {
@@ -559,8 +589,9 @@ public class myTree
 
                 foreach (var dir in _dirsListTmpExt)
                 {
-                    string key  = dir.Name;                                         // Full path
                     string text = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Only name
+                    //string key  = dir.Name;                                       // Full path
+                    string key = text;                                              // Full path
 
                     var newNode = new TreeNode(key);
                     newNode.Name = key;
@@ -568,6 +599,8 @@ public class myTree
                     newNode.NodeFont = getNodeFont(n.Level);
                     newNode.ForeColor = dir.isHidden ? Color.Gray : Color.Black;
                     addDummySubNode(ref newNode);
+
+                    error here
 
                     childNodes[i++] = newNode;
                 }
@@ -594,7 +627,7 @@ public class myTree
     {
         // If [_doUseDummies] parameter is set to true, it does not check if the folder actually has any subfoldes
         // Otherwise, it checks for it and only adds the dummy if the folder does have at least one subfolder
-        if (_doUseDummies == true || _logic.folderHasSubfolders(node.Name))
+        if (_doUseDummies == true || _logic.folderHasSubfolders(getFullPath(node)))
         {
             node.Nodes.Add("[?]", "[?]");
         }
@@ -689,7 +722,7 @@ public class myTree
                 {
                     if (!n.IsExpanded)
                     {
-                        if (!_logic.folderHasSubfolders(n.Name))
+                        if (!_logic.folderHasSubfolders(getFullPath(n)))
                         {
                             n.Expand();
                         }
@@ -736,7 +769,7 @@ public class myTree
 
                         if (!isNodeExpanded)
                         {
-                            if (!_logic.folderHasSubfolders(n.Name))
+                            if (!_logic.folderHasSubfolders(getFullPath(n)))
                             {
                                 if (_tree.InvokeRequired)
                                 {
@@ -792,7 +825,7 @@ public class myTree
 
                 // Select all the nodes that don't have any subfolders in them
                 foreach (var node in list1)
-                    if (!_logic.folderHasSubfolders(node.Name))
+                    if (!_logic.folderHasSubfolders(getFullPath(node)))
                         list2.Add(node);
 
                 // Clear subnodes of all selected nodes
@@ -862,6 +895,10 @@ public class myTree
     // Set double buffering to reduce flickering
     private void setDoubleBuffering()
     {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myTree.setDoubleBuffering", "");
+        #endif
+
         // Set double buffering to reduce flickering:
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
         PropertyInfo pi = _tree.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -871,19 +908,54 @@ public class myTree
     // --------------------------------------------------------------------------------------------------------
 
     // Update Tree's state
-    public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
+    public void update(myBackup backUp, List<myTreeListDataItem> updatedList)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myTree.update", "");
         #endif
 
-        if (updatedList != null)
+        TreeNode n = _tree.SelectedNode;
+
+        if (n.Nodes.Count == 1 && n.Nodes[0].Text == "[?]")
         {
-            // Update from the supplied [updateList]
+            // node has not been opened yet -- no need to update it
         }
         else
         {
-            // Update from global list
+            string nodeName = n.Name;
+
+            AllowRedrawing(false);
+
+            // For each updated item: get its history info from the backUp
+            for (int i = 0; i < updatedList.Count; i++)
+            {
+                // The tree does not contain any files, so skip them
+                if (updatedList[i].isDir)
+                {
+                    var fileNameHistory = backUp.getHistory(updatedList[i].Name);
+
+                    if (fileNameHistory != null)
+                    {
+                        // History list shall contain at least 2 items (if not null)
+                        var curr = fileNameHistory[fileNameHistory.Count - 1];
+                        var prev = fileNameHistory[fileNameHistory.Count - 2];
+
+                        string oldName = prev[(n.Name.Length + 1)..];
+                        string newName = curr[(n.Name.Length + 1)..];
+
+                        for (int j = 0; j < n.Nodes.Count; j++)
+                        {
+                            if (n.Nodes[j].Text == oldName)
+                            {
+                                n.Nodes[j].Text = newName;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            AllowRedrawing(true);
         }
 
         return;
