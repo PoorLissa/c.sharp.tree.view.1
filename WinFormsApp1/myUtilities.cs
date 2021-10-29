@@ -253,6 +253,58 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+    public static void zzz()
+    {
+        string str = "bbb";
+        string   s = "c:\\aaa\\bbb";
+
+        string res = fastStrCompare2(str, s, 7, 2);
+
+        int a = 1;
+    }
+
+    public static string fastStrCompare2(string str, string s, int pos, int len)
+    {
+        len = (len < 0) ? s.Length - pos : len;
+
+        if (len != str.Length)
+            return "err 1";
+
+        string s1 = "";
+        string s2 = "";
+
+        for (int i = 0; i < len; i++)
+        {
+            s1 += str[i];
+            s2 += s[pos + i];
+
+            if (str[i] != s[pos + i])
+            {
+                return $"err 2: '{s1}' != '{s2}'";
+            }
+        }
+
+        return $"ok: '{s1}' == '{s2}'";
+    }
+
+
+    // Checks if string [str] equals to s.Substr(pos, len) -- without extracting the substring
+    public static bool fastStrCompare(string str, string s, int pos, int len)
+    {
+        len = (len < 0) ? s.Length - pos : len;
+
+        if (len != str.Length)
+            return false;
+
+        for (int i = 0; i < len; i++)
+            if (str[i] != s[pos+i])
+                return false;
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Log message
     // Only for simple debugging purposes
     public static void logMsg(string func, string msg)

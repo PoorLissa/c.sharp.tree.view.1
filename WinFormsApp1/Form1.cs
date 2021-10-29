@@ -75,5 +75,14 @@ namespace WinFormsApp1
         }
 
         // --------------------------------------------------------------------------------
+
+        private void btn_Rename_Click(object sender, EventArgs e)
+        {
+            myStupidRenamer1 ren = new myStupidRenamer1(myTDGManager);
+
+            ren.rename(0);
+        }
+
+        // --------------------------------------------------------------------------------
     }
 }

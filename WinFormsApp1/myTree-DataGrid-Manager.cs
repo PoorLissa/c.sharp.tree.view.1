@@ -440,6 +440,35 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             _backup.saveState(_globalFileListExt, updatedList);
         }
 
+/*
+        BEFORE RENAME:
+
+            REAL:
+                c:\dirA\folderA\fileA.txt
+
+            GLOBAL:
+                c:\dirA
+                c:\dirA\folderA
+                c:\dirA\folderA\fileA.txt
+
+        AFTER RENAME (which should be done in a backwards fashion):
+                c:\dirA\folderA\fileA.txt   ==> c:\dirA\folderA\fileB.txt
+                c:\dirA\folderA             ==> c:\dirA\folderB
+                c:\dirA                     ==> c:\dirB
+
+            REAL:
+                c:\dirB\folderB\fileB.txt
+
+            GLOBAL:
+                c:\dirA
+                c:\dirA\folderA
+                c:\dirA\folderA\fileA.txt
+
+            UPDATED:
+                c:\dirB
+                c:\dirA\folderB
+                c:\dirA\folderA\fileB.txt
+*/
 
         // For every changed directory:
         for (int i = 0; i < updatedList.Count; i++)

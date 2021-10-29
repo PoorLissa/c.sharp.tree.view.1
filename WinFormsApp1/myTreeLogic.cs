@@ -248,4 +248,60 @@ public class myTreeLogic
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    // Gets starting node, initial path to its subnode, and changed path to the same subnode
+    // Updates subnode's name and text accordingly
+    public bool updateNode(TreeNode node, string oldPath, string newPath)
+    {
+        int pos = 0, i = 0;
+
+        // Check if [oldPath] contains this node's name at the proper level
+        {
+            while (i++ != node.Level)
+                pos = oldPath.IndexOf('\\', pos) + 1;
+
+            if (!myUtils.fastStrCompare(node.Name, oldPath, pos, node.Name.Length))
+                return false;
+
+            pos += node.Name.Length;
+            if (oldPath[pos] != '\\')
+                return false;
+        }
+
+        // Travel down the node's subtree until we reach the end of [oldPath]
+        while (pos > 0)
+        {
+            // Secret node encountered: do nothing and return true (the subtree hasn't been built yet)
+            if (node.Nodes.Count == 1 && node.Nodes[0].Name == "[?]")
+                return true;
+
+            i = pos + 1;
+            pos = oldPath.IndexOf('\\', i);
+
+            // Check if node exists in the tree and move into it
+            bool found = false;
+            for (int j = 0; j < node.Nodes.Count; j++)
+            {
+                if (myUtils.fastStrCompare(node.Nodes[j].Name, oldPath, i, pos - i))
+                {
+                    found = true;
+                    node = node.Nodes[j];
+                    break;
+                }
+            }
+
+            if (!found)
+                return false;
+        }
+
+        // Extract new name from [newPath] and update the node
+        string newName = newPath[i..];
+
+        node.Name = newName;
+        node.Text = newName;
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 }

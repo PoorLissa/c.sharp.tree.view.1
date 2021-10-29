@@ -940,9 +940,10 @@ public class myTree
             AllowRedrawing(false);
 
             // For each updated item: get its history info from the backUp
-            for (int i = 0; i < updatedList.Count; i++)
+            // In order to properly address recursive mode, iterate backwards
+            for (int i = updatedList.Count - 1; i >= 0; i--)
             {
-                // The tree does not contain any files, so skip files
+                // Skip files, as the tree contains only directories
                 if (updatedList[i].isDir)
                 {
                     var fileNameHistory = backUp.getHistory(updatedList[i].Name);
@@ -953,17 +954,10 @@ public class myTree
                         var curr = fileNameHistory[fileNameHistory.Count - 1];
                         var prev = fileNameHistory[fileNameHistory.Count - 2];
 
-                        string oldName = prev[(prev.LastIndexOf('\\')+1)..];
-                        string newName = curr[(curr.LastIndexOf('\\')+1)..];
-
-                        for (int j = 0; j < n.Nodes.Count; j++)
+                        // Using old and new path, update corresponding subnode
+                        if (!_logic.updateNode(n, prev, curr))
                         {
-                            if (n.Nodes[j].Name == oldName)
-                            {
-                                n.Nodes[j].Name = newName;
-                                n.Nodes[j].Text = newName;
-                                break;
-                            }
+                            MessageBox.Show($"Could not update subnode:\n{n.Name}\n{prev}\n{curr}", "Error", MessageBoxButtons.OK);
                         }
                     }
                 }

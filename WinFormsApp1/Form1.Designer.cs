@@ -39,6 +39,7 @@ namespace WinFormsApp1
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.btn_Rename = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,11 +141,22 @@ namespace WinFormsApp1
             this.textBox2.Size = new System.Drawing.Size(212, 31);
             this.textBox2.TabIndex = 10;
             // 
+            // btn_Rename
+            // 
+            this.btn_Rename.Location = new System.Drawing.Point(1887, 176);
+            this.btn_Rename.Name = "btn_Rename";
+            this.btn_Rename.Size = new System.Drawing.Size(112, 94);
+            this.btn_Rename.TabIndex = 11;
+            this.btn_Rename.Text = "Rename";
+            this.btn_Rename.UseVisualStyleBackColor = true;
+            this.btn_Rename.Click += new System.EventHandler(this.btn_Rename_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2043, 1083);
+            this.Controls.Add(this.btn_Rename);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
@@ -176,6 +188,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button btn_Rename;
     }
 }
 
