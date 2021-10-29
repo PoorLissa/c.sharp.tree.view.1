@@ -363,11 +363,13 @@ public class myTree
     // ref int itemsFound parameters receive the number of items found
     public int nodeSelected(TreeNode n, ref int dirsFound, ref int filesFound, bool useRecursion = false)
     {
+
+        // This func is broken, as it still uses [n.Name], which is not a full path anymore
         int res = 0;
 
         if (useRecursion)
         {
-            dirsFound = 0;
+            dirsFound  = 0;
             filesFound = 0;
 
             _globalFileListExtRef.Clear();
@@ -441,6 +443,8 @@ public class myTree
         int res = 0;
         _globalFileListExtRef.Clear();
 
+        string path = getFullPath(n);
+
         if (useRecursion)
         {
             dirsFound  = 0;
@@ -451,7 +455,7 @@ public class myTree
             var stack        = new Stack<myTreeListDataItem>(100);
 
             // Get all subfolders in current folder
-            _logic.getDirectories(getFullPath(n), listTmpDirs, doClear: true, doSort: true);
+            _logic.getDirectories(path, listTmpDirs, doClear: true, doSort: true);
             
             for (int i = listTmpDirs.Count - 1; i >= 0; i--)
                 stack.Push(listTmpDirs[i]);
@@ -459,7 +463,7 @@ public class myTree
             token.ThrowIfCancellationRequested();
 
             // Get all files in current folder
-            _logic.getFiles(getFullPath(n), listTmpFiles, doClear: true, doSort: true);
+            _logic.getFiles(path, listTmpFiles, doClear: true, doSort: true);
             filesFound += listTmpFiles.Count;
 
             for (int i = 0; i < listTmpFiles.Count; i++)
@@ -492,12 +496,12 @@ public class myTree
         else
         {
             // Get directories first
-            res += _logic.getDirectories(getFullPath(n), _globalFileListExtRef, doClear: false);
+            res += _logic.getDirectories(path, _globalFileListExtRef, doClear: false);
 
             dirsFound = _globalFileListExtRef.Count;
 
             // Get files next
-            res += _logic.getFiles(getFullPath(n), _globalFileListExtRef, doClear: false);
+            res += _logic.getFiles(path, _globalFileListExtRef, doClear: false);
 
             filesFound = _globalFileListExtRef.Count - dirsFound;
 
@@ -544,11 +548,11 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Build full path to the node by going up the tree
     private string getFullPath(TreeNode n)
     {
-        StringBuilder sb = new StringBuilder();
-
         TreeNode tmp = n;
+        StringBuilder sb = new StringBuilder();
 
         while (tmp.Level != 0)
         {
@@ -557,15 +561,15 @@ public class myTree
             tmp = tmp.Parent;
         }
 
-        int pos = tmp.Text.LastIndexOf(':')-1;
-
-        sb.Insert(0, tmp.Text.Substring(pos, 2));
+        sb.Insert(0, tmp.Text.Substring(tmp.Text.LastIndexOf(':')-1, 2));
 
         if (sb.Length == 2)
             sb.Append("\\");
 
         return sb.ToString();
     }
+
+    // --------------------------------------------------------------------------------------------------------
 
     // Tree Node Expand Event
     // Should be called from TreeView::BeforeExpand
@@ -585,24 +589,21 @@ public class myTree
                 _dirsListTmpExt.Sort();
 
                 TreeNode[] childNodes = new TreeNode[_dirsListTmpExt.Count];
-                int i = 0;
 
-                foreach (var dir in _dirsListTmpExt)
+                for(int i = 0; i < _dirsListTmpExt.Count; i++)
                 {
-                    string text = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Only name
-                    //string key  = dir.Name;                                       // Full path
-                    string key = text;                                              // Full path
+                    var dir = _dirsListTmpExt[i];
+
+                    string key = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Get only name from full path
 
                     var newNode = new TreeNode(key);
                     newNode.Name = key;
-                    newNode.Text = text;
+                    newNode.Text = key;
                     newNode.NodeFont = getNodeFont(n.Level);
                     newNode.ForeColor = dir.isHidden ? Color.Gray : Color.Black;
-                    addDummySubNode(ref newNode);
+                    addDummySubNode(ref newNode, dir.Name);
 
-                    error here
-
-                    childNodes[i++] = newNode;
+                    childNodes[i] = newNode;
                 }
 
                 n.Nodes.AddRange(childNodes);
@@ -623,11 +624,11 @@ public class myTree
     // --------------------------------------------------------------------------------------------------------
 
     // Adds dummy subnode to a node (thus, it will have a plus icon and can be expanded later)
-    private void addDummySubNode(ref TreeNode node)
+    private void addDummySubNode(ref TreeNode node, string fullPath)
     {
         // If [_doUseDummies] parameter is set to true, it does not check if the folder actually has any subfoldes
         // Otherwise, it checks for it and only adds the dummy if the folder does have at least one subfolder
-        if (_doUseDummies == true || _logic.folderHasSubfolders(getFullPath(node)))
+        if (_doUseDummies == true || _logic.folderHasSubfolders(fullPath))
         {
             node.Nodes.Add("[?]", "[?]");
         }
@@ -922,14 +923,12 @@ public class myTree
         }
         else
         {
-            string nodeName = n.Name;
-
             AllowRedrawing(false);
 
             // For each updated item: get its history info from the backUp
             for (int i = 0; i < updatedList.Count; i++)
             {
-                // The tree does not contain any files, so skip them
+                // The tree does not contain any files, so skip files
                 if (updatedList[i].isDir)
                 {
                     var fileNameHistory = backUp.getHistory(updatedList[i].Name);
@@ -940,13 +939,14 @@ public class myTree
                         var curr = fileNameHistory[fileNameHistory.Count - 1];
                         var prev = fileNameHistory[fileNameHistory.Count - 2];
 
-                        string oldName = prev[(n.Name.Length + 1)..];
-                        string newName = curr[(n.Name.Length + 1)..];
+                        string oldName = prev[(prev.LastIndexOf('\\')+1)..];
+                        string newName = curr[(curr.LastIndexOf('\\')+1)..];
 
                         for (int j = 0; j < n.Nodes.Count; j++)
                         {
-                            if (n.Nodes[j].Text == oldName)
+                            if (n.Nodes[j].Name == oldName)
                             {
+                                n.Nodes[j].Name = newName;
                                 n.Nodes[j].Text = newName;
                                 break;
                             }
