@@ -35,6 +35,8 @@ public class myTree
 
     private Font [] _nodeFonts = null;
 
+    private StringBuilder pathStrBuilder = null;
+
     private int _winVer  = 0;
     private int _treeDpi = 0;
 
@@ -96,18 +98,25 @@ public class myTree
             _tree.DrawMode  = TreeViewDrawMode.OwnerDrawAll;
             _tree.DrawNode += new DrawTreeNodeEventHandler(myTree_DrawNode);
 
+            pathStrBuilder = new StringBuilder();
+
             // Populate the first level of the tree
             foreach (var drive in System.IO.DriveInfo.GetDrives())
             {
-                string label = drive.IsReady ? drive.VolumeLabel : "";
-                string text = (label.Length > 0) ? " (" : "(";
-                text += drive.Name.Substring(0, 2) + ")";
+                pathStrBuilder.Clear();
 
-                TreeNode newNode = _tree.Nodes.Add(drive.Name, label + text);       // .Add(newNode.Name, newNode.Text)
-                newNode.NodeFont = getNodeFont(0);
+                pathStrBuilder.Append(drive.IsReady ? drive.VolumeLabel : null);
+                pathStrBuilder.Append(pathStrBuilder.Length > 0 ? " (" : "(");
+                pathStrBuilder.Append(drive.Name[0]);
+                pathStrBuilder.Append(drive.Name[1]);
+                pathStrBuilder.Append(")");
+
+                // .Add(driveNode.Name, driveNode.Text)
+                TreeNode driveNode = _tree.Nodes.Add(drive.Name, pathStrBuilder.ToString());
+                driveNode.NodeFont = getNodeFont(0);
 
                 // Each yet unopened node will contain this secret node
-                newNode.Nodes.Add("[?]", "[?]");
+                driveNode.Nodes.Add("[?]", "[?]");
             }
         }
     }
@@ -548,25 +557,30 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Build full path to the node by going up the tree
+    // Builds full path from the root to the node
     private string getFullPath(TreeNode n)
     {
-        TreeNode tmp = n;
-        StringBuilder sb = new StringBuilder();
+        pathStrBuilder.Clear();
 
-        while (tmp.Level != 0)
+        while (n.Level != 0)
         {
-            sb.Insert(0, tmp.Text);
-            sb.Insert(0, '\\');
-            tmp = tmp.Parent;
+            pathStrBuilder.Insert(0, n.Name);
+            pathStrBuilder.Insert(0, '\\');
+            n = n.Parent;
         }
 
-        sb.Insert(0, tmp.Text.Substring(tmp.Text.LastIndexOf(':')-1, 2));
+        // Add drive name
+        if (pathStrBuilder.Length == 0)
+        {
+            pathStrBuilder.Append(n.Name);              // sb = 'c:\\'
+        }
+        else
+        {
+            pathStrBuilder.Insert(0, n.Name[1]);        // sb.insert('c:')
+            pathStrBuilder.Insert(0, n.Name[0]);
+        }
 
-        if (sb.Length == 2)
-            sb.Append("\\");
-
-        return sb.ToString();
+        return pathStrBuilder.ToString();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -644,14 +658,14 @@ public class myTree
     // expanding empty directories to remove the plus icon from them.
     public void setPath(string path, bool useDummies, bool expandEmpty)
     {
+        _logic.getLastValidPath(ref path);
+
         if (path.Length > 0)
         {
             AllowRedrawing(false);
 
             bool _doUseDummies_old = _doUseDummies;
             _doUseDummies = useDummies ? true : _doUseDummies;
-
-            _logic.getLastValidPath(ref path);
 
             TreeNode last = null;
 
@@ -917,7 +931,7 @@ public class myTree
 
         TreeNode n = _tree.SelectedNode;
 
-        if (n.Nodes.Count == 1 && n.Nodes[0].Text == "[?]")
+        if (n.Nodes.Count == 1 && n.Nodes[0].Name == "[?]")
         {
             // node has not been opened yet -- no need to update it
         }

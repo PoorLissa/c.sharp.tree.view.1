@@ -253,6 +253,8 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Log message
+    // Only for simple debugging purposes
     public static void logMsg(string func, string msg)
     {
         string path = "WriteText.txt";

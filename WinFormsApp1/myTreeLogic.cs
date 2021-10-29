@@ -226,6 +226,7 @@ public class myTreeLogic
     // --------------------------------------------------------------------------------------------------------
 
     // Cut the leftmost part of the path and return it
+    // Modify path: reduce it by the part that was cut
     public string getLeftmostPartFromPath(ref string path)
     {
         string res = "";
@@ -234,7 +235,7 @@ public class myTreeLogic
 
         if (index > 0)
         {
-            res = path.Substring(0, index);
+            res  = path.Substring(0, index);
             path = path.Substring(index + 1);
         }
         else
