@@ -260,7 +260,7 @@ public class myTreeLogic
             while (i++ != node.Level)
                 pos = oldPath.IndexOf('\\', pos) + 1;
 
-            if (!myUtils.fastStrCompare(node.Name, oldPath, pos, node.Name.Length))
+            if (!myUtils.fastStrCompare(node.Name, oldPath, pos, node.Name.Length, caseSensitive: false))
                 return false;
 
             pos += node.Name.Length;
@@ -282,7 +282,7 @@ public class myTreeLogic
             bool found = false;
             for (int j = 0; j < node.Nodes.Count; j++)
             {
-                if (myUtils.fastStrCompare(node.Nodes[j].Name, oldPath, i, pos - i))
+                if (myUtils.fastStrCompare(node.Nodes[j].Name, oldPath, i, pos - i, caseSensitive: false))
                 {
                     found = true;
                     node = node.Nodes[j];

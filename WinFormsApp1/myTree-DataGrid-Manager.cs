@@ -129,7 +129,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
 
         _tb_Filter.TextChanged    += new EventHandler(tb_Filter_onTextChanged);
-        _tb_FilterOut.TextChanged += new EventHandler(tb_FilterOut_onTextChanged);
+        _tb_FilterOut.TextChanged += new EventHandler(tb_Filter_onTextChanged);
 
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
     }
@@ -277,7 +277,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
                     _dataGrid.Obj().Invoke(new MethodInvoker(delegate
                     {
-                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
                         _dataGrid.Enable(true);
                     }));
 
@@ -290,7 +290,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             else
             {
                 // No task needed, as the list is already populated
-                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
                 _dataGrid.Enable(true);
             }
         }
@@ -318,7 +318,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                 }
             }
 
-            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
 
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
             _dataGrid.Enable(true);
@@ -388,14 +388,19 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Filter string changed
     private void tb_Filter_onTextChanged(object sender, EventArgs e)
     {
-        _filterStr = (sender as TextBox).Text;
-
+        TextBox tb = (TextBox)(sender);
         var reason = myDataGrid.PopulateReason.filterChanged;
 
-        if (_dataGrid.Obj().RowCount < 10000 || _filterStr.Length == 0)
+        if (tb.Name == _tb_Filter.Name)
+            _filterStr = tb.Text;
+
+        if (tb.Name == _tb_FilterOut.Name)
+            _filterOutStr = tb.Text;
+
+        if (_dataGrid.Obj().RowCount < 10000)
         {
             // Populate dataGrid immediately, as this won't take much time anyway
-            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
         }
         else
         {
@@ -404,9 +409,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             // Delay the populating task until the user stops typing
             if (_filterDelayCnt == 0)
             {
-                _tb_Filter.BackColor = Color.LightGoldenrodYellow;
+                tb.BackColor = Color.LightGoldenrodYellow;
 
-                var delayedTask = new Task(
+                new Task(
+
                     delegate
                     {
                         _filterDelayCnt = 2;
@@ -423,8 +429,8 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                         _form.Invoke(new MethodInvoker(
                             delegate
                             {
-                                _tb_Filter.BackColor = Color.White;
-                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
+                                tb.BackColor = Color.White;
                             })
                         );
 
@@ -432,72 +438,9 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
                         return;
                     }
-                );
 
-                delayedTask.Start();
-            }
-            else
-            {
-                // Keep increasing the counter while the user is typing
-                _filterDelayCnt++;
-            }
-        }
+                ).Start();
 
-        return;
-    }
-
-    // --------------------------------------------------------------------------------
-
-    // FilterOut string changed
-    private void tb_FilterOut_onTextChanged(object sender, EventArgs e)
-    {
-        _filterOutStr = (sender as TextBox).Text;
-
-        var reason = myDataGrid.PopulateReason.filterChanged;
-
-        if (_dataGrid.Obj().RowCount < 10000 || _filterStr.Length == 0)
-        {
-            // Populate dataGrid immediately, as this won't take much time anyway
-            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
-        }
-        else
-        {
-            // Too much rows in the grid.
-            // Don't want to repopulate the grid each time the user enters new char in a filter box.
-            // Delay the populating task until the user stops typing
-            if (_filterDelayCnt == 0)
-            {
-                _tb_Filter.BackColor = Color.LightGoldenrodYellow;
-
-                var delayedTask = new Task(
-                    delegate
-                    {
-                        _filterDelayCnt = 2;
-
-                        while (_filterDelayCnt > 1)
-                        {
-                            _filterDelayCnt = 1;
-
-                            // If the user has not typed anything while this delay's in progress,
-                            // assume it's time to finally populate the grid
-                            Task.Delay(500).Wait();
-                        }
-
-                        _form.Invoke(new MethodInvoker(
-                            delegate
-                            {
-                                _tb_Filter.BackColor = Color.White;
-                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
-                            })
-                        );
-
-                        _filterDelayCnt = 0;
-
-                        return;
-                    }
-                );
-
-                delayedTask.Start();
             }
             else
             {

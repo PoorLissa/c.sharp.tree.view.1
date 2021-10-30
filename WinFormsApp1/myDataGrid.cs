@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -323,7 +324,7 @@ public class myDataGrid
 
     // Populate GridView with known amount of rows
     // Single pass
-    private void Populate_Fast(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
+    private void Populate_Fast(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.Populate_Fast", "");
@@ -382,7 +383,7 @@ public class myDataGrid
 
     // Populate GridView with unknown amount of rows
     // Multiple pass
-    private void Populate_Slow(System.Collections.Generic.List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr)
+    private void Populate_Slow(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr, string filterOutStr)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.Populate_Slow", "");
@@ -394,10 +395,8 @@ public class myDataGrid
 
         if (Count > 0)
         {
-            filterStr = filterStr.ToLower();
-
             // Select only the indexes of the items we need
-            var selectedItems = new System.Collections.Generic.List<int>();
+            var selectedItems = new List<int>();
 
             for(int i = 0; i < list.Count; i++)
             {
@@ -414,10 +413,14 @@ public class myDataGrid
                 if (!isDir && !doShowFiles)
                     continue;
 
-                string fileName = list[i].Name.Substring(list[i].Name.LastIndexOf("\\") + 1).ToLower();
+                int filePos = list[i].Name.LastIndexOf('\\') + 1;
 
-                // Skip everything that does not match the search string
-                if (!fileName.Contains(filterStr))
+                // Skip everything that does not match the search string [filterStr]
+                if (filterStr.Length > 0 && !myUtils.fastStrContains(filterStr, list[i].Name, filePos, -1, false))
+                    continue;
+
+                // Skip everything that DOES match the search string [filterOutStr]
+                if (filterOutStr.Length > 0 && myUtils.fastStrContains(filterOutStr, list[i].Name, filePos, -1, false))
                     continue;
 
                 selectedItems.Add(i);
@@ -531,7 +534,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "")
+    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "", string filterOutStr = "")
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.Populate", "");
@@ -549,7 +552,7 @@ public class myDataGrid
             _dataGrid.Rows.Clear();
         }
 
-        if (filterStr.Length == 0)
+        if (filterStr.Length == 0 && filterOutStr.Length == 0)
         {
             // Populate GridView with known amount of rows -- Single pass
             Populate_Fast(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles);
@@ -557,7 +560,7 @@ public class myDataGrid
         else
         {
             // Populate GridView with unknown amount of rows -- Multiple pass
-            Populate_Slow(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr);
+            Populate_Slow(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr, filterOutStr);
         }
 
         // Try to restore the selection from before:

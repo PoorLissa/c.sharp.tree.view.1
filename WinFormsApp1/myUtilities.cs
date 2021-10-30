@@ -253,6 +253,7 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+#if false
     public static void zzz()
     {
         string str = "bbb";
@@ -286,21 +287,93 @@ public class myUtils
 
         return $"ok: '{s1}' == '{s2}'";
     }
+#endif
 
+    // --------------------------------------------------------------------------------------------------------
+
+    // Converts character to lower case
+    // Eng: A =   65, Z =   90, a =   97, z =  122
+    // Rus: А = 1040, Я = 1071, а = 1072, я = 1103 + ё = 1105 + Ё = 1025
+    public static void charToLowerCase(ref char ch)
+    {
+        // Eng + Rus
+        if ((ch >= 65 && ch <= 90) || (ch >= 1040 && ch <= 1071))
+           ch += (char)(32);
+
+        // Rus 'Ё'
+        if (ch == 1025)
+            ch = (char)(1105);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 
     // Checks if string [str] equals to s.Substr(pos, len) -- without extracting the substring
-    public static bool fastStrCompare(string str, string s, int pos, int len)
+    public static bool fastStrCompare(string str, string s, int pos, int len, bool caseSensitive)
     {
         len = (len < 0) ? s.Length - pos : len;
 
         if (len != str.Length)
             return false;
 
-        for (int i = 0; i < len; i++)
-            if (str[i] != s[pos+i])
-                return false;
+        if (caseSensitive)
+        {
+            for (int i = 0; i < len; i++)
+                if (str[i] != s[pos + i])
+                    return false;
+        }
+        else
+        {
+            for (int i = 0; i < len; i++)
+            {
+                char ch1 = str[i];
+                char ch2 = s[pos+i];
+
+                charToLowerCase(ref ch1);
+                charToLowerCase(ref ch2);
+
+                if (ch1 != ch2)
+                    return false;
+            }
+        }
 
         return true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Checks if s.Substr(pos, len) contains string [str] -- without extracting the substring
+    // Eng: A =   65, z =  122
+    // Rus: А = 1040, я = 1103
+    public static bool fastStrContains(string str, string s, int pos, int len, bool caseSensitive)
+    {
+        len = (len < 0) ? s.Length - pos : len;
+
+        if (caseSensitive)
+        {
+            for (int i = 0; i <= len - str.Length; i++)
+                if (str[0] == s[pos + i])
+                    if (myUtils.fastStrCompare(str, s, pos + i, str.Length, caseSensitive))
+                        return true;
+        }
+        else
+        {
+            char ch1 = str[0];
+            charToLowerCase(ref ch1);
+
+            for (int i = 0; i <= len - str.Length; i++)
+            {
+                char ch2 = s[pos+i];
+                charToLowerCase(ref ch2);
+
+                if (ch1 == ch2)
+                    if (myUtils.fastStrCompare(str, s, pos + i, str.Length, caseSensitive))
+                        return true;
+            }
+        }
+
+        return false;
     }
 
     // --------------------------------------------------------------------------------------------------------
