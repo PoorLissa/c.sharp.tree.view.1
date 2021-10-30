@@ -185,6 +185,7 @@ public class myTree
             bool isNodeEmpty    = e.Node.Nodes.Count == 0;
             bool isNodeHovered  = (e.State & TreeNodeStates.Hot) != 0;
             bool isNodeClicked  = (e.State & TreeNodeStates.Focused) != 0;
+            bool isNodeSelected = (e.State & TreeNodeStates.Selected) != 0;
             bool isHidden       = e.Node.ForeColor == Color.Gray;
             bool doErase        = false;
             bool doDrawIcon     = true;
@@ -216,7 +217,7 @@ public class myTree
             }
 
             // The node that was selected before the user selected another one
-            if ((e.State & TreeNodeStates.Selected) != 0)
+            if (isNodeSelected)
             {
                 xAdjustmentText += xAdjustmentText == 0 ? 0 : 1;
                 backBrush = Brushes.AliceBlue;
@@ -344,13 +345,16 @@ public class myTree
             }
 
             // If the node is clicked or hovered upon, draw a focus rectangle
-            if (isNodeHovered || isNodeClicked)
+            if (isNodeHovered || isNodeClicked || (isNodeSelected && !_tree.Focused))
             {
                 x = e.Node.Bounds.X - 2;
                 y = e.Node.Bounds.Y + 1;
 
                 var rect = new Rectangle(x, y, drawWidth - 2, e.Node.Bounds.Height - 3);
                 Color focusPenColor = Color.LightBlue;
+
+                if (isNodeSelected)
+                    focusPenColor = Color.LightSlateGray;
 
                 if (isNodeClicked)
                     focusPenColor = Color.CornflowerBlue;

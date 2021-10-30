@@ -27,8 +27,9 @@ namespace WinFormsApp1
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
-                path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
+                path = @"d:\Games\-= Games =-\Uninstall";
+                path = @"d:\test\-= Games =-\Uninstall";
             }
 
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
@@ -40,12 +41,15 @@ namespace WinFormsApp1
             mtdgmi.cb_ShowDirs  = cb_ShowDirs;
             mtdgmi.cb_ShowFiles = cb_ShowFiles;
             mtdgmi.tb_Filter    = textBox1;
+            mtdgmi.tb_FilterOut = textBox2;
             mtdgmi.richTextBox  = richTextBox1;
 
             myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
 
             myCb = new myControls.myComboBox(this.comboBox1, "Select option");
-            myTb = new myControls.myTextBox (this.textBox2, "Filter text");
+            myTb = new myControls.myTextBox (this.textBox3, "Filter text");
+
+            richTextBox1.Text += path + "\n" + expandEmpty.ToString();
         }
 
         // --------------------------------------------------------------------------------
@@ -80,7 +84,19 @@ namespace WinFormsApp1
         {
             myStupidRenamer1 ren = new myStupidRenamer1(myTDGManager);
 
-            ren.rename(0);
+            int param = 0;
+
+            if (cb_Option_01.Checked)
+            {
+                param = 1;
+            }
+
+            if (cb_Option_02.Checked)
+            {
+                param = 2;
+            }
+
+            ren.rename(param);
         }
 
         // --------------------------------------------------------------------------------

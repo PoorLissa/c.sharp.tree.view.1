@@ -42,6 +42,7 @@ public struct myTree_DataGrid_Manager_Initializer
     public CheckBox         cb_ShowDirs;
     public CheckBox         cb_Recursive;
     public TextBox          tb_Filter;
+    public TextBox          tb_FilterOut;
     public RichTextBox      richTextBox;
 }
 
@@ -68,6 +69,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private CheckBox    _cb_ShowDirs  = null;
     private CheckBox    _cb_Recursive = null;
     private TextBox     _tb_Filter    = null;
+    private TextBox     _tb_FilterOut = null;
     private RichTextBox _richTextBox  = null;
 
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
@@ -84,6 +86,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
 
     private string _filterStr = "";                                 // To use with filtering event
+    private string _filterOutStr = "";                              // To use with filtering event
     private int    _filterDelayCnt = 0;                             // To use with filtering event (to delay filtering)
 
     private CancellationTokenSource _tokenSource = null;
@@ -103,13 +106,15 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _cb_ShowDirs  = mtdgmi.cb_ShowDirs;
         _cb_Recursive = mtdgmi.cb_Recursive;
         _tb_Filter    = mtdgmi.tb_Filter;
+        _tb_FilterOut = mtdgmi.tb_FilterOut;
         _richTextBox  = mtdgmi.richTextBox;
 
         _cb_ShowFiles.Checked = true;
         _cb_ShowDirs.Checked  = true;
         _cb_Recursive.Checked = false;
 
-        _tb_Filter.PlaceholderText = "Filter text";
+        _tb_Filter.PlaceholderText = "Filter";
+        _tb_FilterOut.PlaceholderText = "Filter Out";
 
         _tree = new myTree(mtdgmi.tv, _globalFileListExt, path, expandEmpty, _richTextBox);
         _dataGrid = new myDataGrid(mtdgmi.dg, _globalFileListExt);
@@ -123,7 +128,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
         _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
 
-        _tb_Filter.TextChanged += new EventHandler(tb_Filter_onTextChanged);
+        _tb_Filter.TextChanged    += new EventHandler(tb_Filter_onTextChanged);
+        _tb_FilterOut.TextChanged += new EventHandler(tb_FilterOut_onTextChanged);
+
+        _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
     }
 
     // --------------------------------------------------------------------------------
@@ -151,6 +159,17 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     public void allowBackup(bool mode)
     {
         _useBackup = mode;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Finalizing method. Allows to save state when the app is about to close
+    private void finalize()
+    {
+        if (_backup != null)
+        {
+            _backup.saveHistoryToFile();
+        }
     }
 
     // --------------------------------------------------------------------------------
@@ -359,10 +378,80 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    private void _form_onFormClosing(object sender, FormClosingEventArgs e)
+    {
+        finalize();
+    }
+
+    // --------------------------------------------------------------------------------
+
     // Filter string changed
     private void tb_Filter_onTextChanged(object sender, EventArgs e)
     {
         _filterStr = (sender as TextBox).Text;
+
+        var reason = myDataGrid.PopulateReason.filterChanged;
+
+        if (_dataGrid.Obj().RowCount < 10000 || _filterStr.Length == 0)
+        {
+            // Populate dataGrid immediately, as this won't take much time anyway
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+        }
+        else
+        {
+            // Too much rows in the grid.
+            // Don't want to repopulate the grid each time the user enters new char in a filter box.
+            // Delay the populating task until the user stops typing
+            if (_filterDelayCnt == 0)
+            {
+                _tb_Filter.BackColor = Color.LightGoldenrodYellow;
+
+                var delayedTask = new Task(
+                    delegate
+                    {
+                        _filterDelayCnt = 2;
+
+                        while (_filterDelayCnt > 1)
+                        {
+                            _filterDelayCnt = 1;
+
+                            // If the user has not typed anything while this delay's in progress,
+                            // assume it's time to finally populate the grid
+                            Task.Delay(500).Wait();
+                        }
+
+                        _form.Invoke(new MethodInvoker(
+                            delegate
+                            {
+                                _tb_Filter.BackColor = Color.White;
+                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr);
+                            })
+                        );
+
+                        _filterDelayCnt = 0;
+
+                        return;
+                    }
+                );
+
+                delayedTask.Start();
+            }
+            else
+            {
+                // Keep increasing the counter while the user is typing
+                _filterDelayCnt++;
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // FilterOut string changed
+    private void tb_FilterOut_onTextChanged(object sender, EventArgs e)
+    {
+        _filterOutStr = (sender as TextBox).Text;
 
         var reason = myDataGrid.PopulateReason.filterChanged;
 

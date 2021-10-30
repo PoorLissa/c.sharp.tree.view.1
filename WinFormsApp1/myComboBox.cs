@@ -119,7 +119,7 @@ namespace myControls
 
             if (!System.IO.File.Exists(path))
             {
-                System.IO.File.CreateText(path);
+                System.IO.File.CreateText(path).Dispose();
             }
 
             string s = "";

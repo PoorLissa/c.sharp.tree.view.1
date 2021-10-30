@@ -70,6 +70,33 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
+    public void saveHistoryToFile(string file = null)
+    {
+        string hist = getHistory();
+
+        if (hist.Length > 0)
+        {
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+
+            path += (file != null) ? file : "\\__History.txt";
+
+            if (!System.IO.File.Exists(path))
+            {
+                System.IO.File.CreateText(path).Dispose();
+            }
+
+            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+            {
+                sw.WriteLine(hist);
+                sw.WriteLine("---------------------------------------------------");
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
     public void saveState(List<myTreeListDataItem> globalList, List<myTreeListDataItem> updatedList)
     {
         if (_mapIndex == null)

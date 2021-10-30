@@ -38,26 +38,38 @@ namespace WinFormsApp1
             this.cb_Recursive = new System.Windows.Forms.CheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.btn_Rename = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cb_Option_02 = new System.Windows.Forms.CheckBox();
+            this.cb_Option_01 = new System.Windows.Forms.CheckBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
             // 
             this.treeView1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
             this.treeView1.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.treeView1.ItemHeight = 33;
-            this.treeView1.Location = new System.Drawing.Point(11, 12);
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(633, 1061);
+            this.treeView1.Size = new System.Drawing.Size(444, 735);
             this.treeView1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1431, 12);
+            this.button1.Location = new System.Drawing.Point(1110, 3);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(274, 163);
+            this.button1.Size = new System.Drawing.Size(93, 98);
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -65,18 +77,21 @@ namespace WinFormsApp1
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(1420, 308);
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(611, 764);
+            this.richTextBox1.Size = new System.Drawing.Size(329, 595);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // cb_ShowDirs
             // 
             this.cb_ShowDirs.AutoSize = true;
-            this.cb_ShowDirs.Location = new System.Drawing.Point(1431, 192);
+            this.cb_ShowDirs.Location = new System.Drawing.Point(964, 13);
+            this.cb_ShowDirs.Margin = new System.Windows.Forms.Padding(2);
             this.cb_ShowDirs.Name = "cb_ShowDirs";
-            this.cb_ShowDirs.Size = new System.Drawing.Size(171, 29);
+            this.cb_ShowDirs.Size = new System.Drawing.Size(114, 19);
             this.cb_ShowDirs.TabIndex = 3;
             this.cb_ShowDirs.Text = "Show Directories";
             this.cb_ShowDirs.UseVisualStyleBackColor = true;
@@ -84,9 +99,10 @@ namespace WinFormsApp1
             // cb_ShowFiles
             // 
             this.cb_ShowFiles.AutoSize = true;
-            this.cb_ShowFiles.Location = new System.Drawing.Point(1431, 227);
+            this.cb_ShowFiles.Location = new System.Drawing.Point(964, 34);
+            this.cb_ShowFiles.Margin = new System.Windows.Forms.Padding(2);
             this.cb_ShowFiles.Name = "cb_ShowFiles";
-            this.cb_ShowFiles.Size = new System.Drawing.Size(121, 29);
+            this.cb_ShowFiles.Size = new System.Drawing.Size(81, 19);
             this.cb_ShowFiles.TabIndex = 5;
             this.cb_ShowFiles.Text = "Show Files";
             this.cb_ShowFiles.UseVisualStyleBackColor = true;
@@ -94,29 +110,33 @@ namespace WinFormsApp1
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(651, 12);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGridView1.Location = new System.Drawing.Point(444, 0);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(763, 1060);
+            this.dataGridView1.Size = new System.Drawing.Size(510, 735);
             this.dataGridView1.TabIndex = 6;
             // 
             // cb_Recursive
             // 
             this.cb_Recursive.AutoSize = true;
-            this.cb_Recursive.Location = new System.Drawing.Point(1431, 262);
+            this.cb_Recursive.Location = new System.Drawing.Point(964, 55);
+            this.cb_Recursive.Margin = new System.Windows.Forms.Padding(2);
             this.cb_Recursive.Name = "cb_Recursive";
-            this.cb_Recursive.Size = new System.Drawing.Size(111, 29);
+            this.cb_Recursive.Size = new System.Drawing.Size(76, 19);
             this.cb_Recursive.TabIndex = 7;
             this.cb_Recursive.Text = "Recursive";
             this.cb_Recursive.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1630, 188);
+            this.textBox1.Location = new System.Drawing.Point(964, 78);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "filter";
-            this.textBox1.Size = new System.Drawing.Size(201, 31);
+            this.textBox1.Size = new System.Drawing.Size(142, 23);
             this.textBox1.TabIndex = 8;
             // 
             // comboBox1
@@ -128,49 +148,118 @@ namespace WinFormsApp1
             "333",
             "444",
             "555"});
-            this.comboBox1.Location = new System.Drawing.Point(1751, 20);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox1.Location = new System.Drawing.Point(6, 6);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(212, 33);
+            this.comboBox1.Size = new System.Drawing.Size(150, 23);
             this.comboBox1.TabIndex = 9;
             // 
-            // textBox2
+            // textBox3
             // 
-            this.textBox2.Location = new System.Drawing.Point(1751, 61);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(212, 31);
-            this.textBox2.TabIndex = 10;
+            this.textBox3.Location = new System.Drawing.Point(6, 31);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(150, 23);
+            this.textBox3.TabIndex = 10;
             // 
             // btn_Rename
             // 
-            this.btn_Rename.Location = new System.Drawing.Point(1887, 176);
+            this.btn_Rename.Location = new System.Drawing.Point(1207, 3);
+            this.btn_Rename.Margin = new System.Windows.Forms.Padding(2);
             this.btn_Rename.Name = "btn_Rename";
-            this.btn_Rename.Size = new System.Drawing.Size(112, 94);
+            this.btn_Rename.Size = new System.Drawing.Size(95, 98);
             this.btn_Rename.TabIndex = 11;
             this.btn_Rename.Text = "Rename";
             this.btn_Rename.UseVisualStyleBackColor = true;
             this.btn_Rename.Click += new System.EventHandler(this.btn_Rename_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(959, 133);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(343, 602);
+            this.tabControl1.TabIndex = 12;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.Controls.Add(this.cb_Option_02);
+            this.tabPage1.Controls.Add(this.cb_Option_01);
+            this.tabPage1.Controls.Add(this.comboBox1);
+            this.tabPage1.Controls.Add(this.textBox3);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(335, 574);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            // 
+            // cb_Option_02
+            // 
+            this.cb_Option_02.AutoSize = true;
+            this.cb_Option_02.Location = new System.Drawing.Point(6, 99);
+            this.cb_Option_02.Name = "cb_Option_02";
+            this.cb_Option_02.Size = new System.Drawing.Size(204, 19);
+            this.cb_Option_02.TabIndex = 12;
+            this.cb_Option_02.Text = "Remove symbols on the left of \'_\' ";
+            this.cb_Option_02.UseVisualStyleBackColor = true;
+            // 
+            // cb_Option_01
+            // 
+            this.cb_Option_01.AutoSize = true;
+            this.cb_Option_01.Location = new System.Drawing.Point(6, 74);
+            this.cb_Option_01.Name = "cb_Option_01";
+            this.cb_Option_01.Size = new System.Drawing.Size(212, 19);
+            this.cb_Option_01.TabIndex = 11;
+            this.cb_Option_01.Text = "Remove symbols on the right of \'_\' ";
+            this.cb_Option_01.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.richTextBox1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(335, 601);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(964, 105);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.PlaceholderText = "filter";
+            this.textBox2.Size = new System.Drawing.Size(142, 23);
+            this.textBox2.TabIndex = 13;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2043, 1083);
-            this.Controls.Add(this.btn_Rename);
+            this.ClientSize = new System.Drawing.Size(1307, 735);
             this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.btn_Rename);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cb_Recursive);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.cb_ShowFiles);
             this.Controls.Add(this.cb_ShowDirs);
-            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.treeView1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,8 +276,14 @@ namespace WinFormsApp1
         private System.Windows.Forms.CheckBox cb_Recursive;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button btn_Rename;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.CheckBox cb_Option_02;
+        private System.Windows.Forms.CheckBox cb_Option_01;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
 

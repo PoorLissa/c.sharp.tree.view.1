@@ -13,45 +13,67 @@ public class myStupidRenamer1
 
     // -------------------------------------------------------------
 
-    public void rename(int n = 0)
+    // Actual file renaming
+    private void Rename(myTreeListDataItem item, string newName)
     {
-        var list = _manager.getSelectedFiles();
-
-        // Files are renamed in normal order
-        foreach (var item in list)
+        if (newName != null && item.Name != newName)
         {
-            if (item.isDir)
-                continue;
+            bool ok = true;
 
-            switch (n)
+            try
             {
-                case 1:
-                    ren1_func(item);
-                    break;
+                if (item.isDir)
+                    System.IO.Directory.Move(item.Name, newName);
+                else
+                    System.IO.File.Move(item.Name, newName);
+            }
+            catch(System.Exception)
+            {
+                ok = false;
+            }
 
-                default:
-                    ren0_func(item);
-                    break;
+            if (ok)
+            {
+                item.Name = newName;
             }
         }
+    }
 
-        // Folders are renamed in backwards order
-        for (int i = list.Count - 1; i >= 0; i--)
+    // -------------------------------------------------------------
+
+    // Public Rename func
+    public void rename(int param = 0)
+    {
+        var list_original = _manager.getSelectedFiles();
+
+        // Make a copy, as otherwise we're going to change the global list from [myTree_DataGrid_Manager]
+        var list = myTreeListDataItem.copyList(list_original);
+
+        for (int j = 0; j < 2; j++)
         {
-            var item = list[i];
+            bool isDir = (j == 0);
 
-            if (!item.isDir)
-                continue;
-
-            switch (n)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
-                case 1:
-                    ren1_func(item);
-                    break;
+                var item = list[i];
 
-                default:
-                    ren0_func(item);
-                    break;
+                if (item.isDir == isDir)
+                {
+                    switch (param)
+                    {
+                        case 0:
+                            ren0_func(item);
+                            break;
+
+                        case 1:
+                            ren1_func(item);
+                            break;
+
+                        case 2:
+                            ren2_func(item);
+                            break;
+                    }
+                }
             }
         }
 
@@ -64,6 +86,8 @@ public class myStupidRenamer1
 
     private void ren0_func(myTreeListDataItem item)
     {
+        return;
+
         string oldName = item.Name;
 
         if (item.isDir)
@@ -79,23 +103,54 @@ public class myStupidRenamer1
         }
     }
 
+    // -------------------------------------------------------------
+
+    // Remove symbols on the right of '_'
     private void ren1_func(myTreeListDataItem item)
     {
         string oldName = item.Name;
+        string newName = null;
 
-        int pos = oldName.LastIndexOf('\\');
-            pos = oldName.IndexOf('_', pos+1);
+        int pos_file = oldName.LastIndexOf('\\');
+        int pos      = oldName.LastIndexOf('_');
 
-            item.Name = item.Name.Substring(0, pos);
-
-        if (item.isDir)
+        if (pos > pos_file)
         {
-//            System.IO.Directory.Move(oldName, item.Name);
+            if (item.isDir)
+            {
+                newName = oldName.Substring(0, pos);
+            }
+            else
+            {
+                int pos_ext = oldName.LastIndexOf('.');
+                newName = oldName.Substring(0, pos) + oldName.Substring(pos_ext);
+            }
+
+            Rename(item, newName);
         }
-        else
+
+        return;
+    }
+
+    // -------------------------------------------------------------
+
+    // Remove symbols on the left of '_'
+    private void ren2_func(myTreeListDataItem item)
+    {
+        string oldName = item.Name;
+        string newName = null;
+
+        int pos_file = oldName.LastIndexOf('\\');
+        int pos = oldName.IndexOf('_', pos_file);
+
+        if (pos > pos_file)
         {
-//            System.IO.File.Move(oldName, item.Name);
+            newName = oldName.Substring(0, pos_file + 1) + oldName.Substring(pos + 1);
+
+            Rename(item, newName);
         }
+
+        return;
     }
 
     // -------------------------------------------------------------
