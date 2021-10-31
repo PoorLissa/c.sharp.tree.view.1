@@ -395,8 +395,8 @@ public class myDataGrid
 
         if (Count > 0)
         {
-            // Select only the indexes of the items we need
-            var selectedItems = new List<int>();
+            // Select only indexes of the items we need
+            var selectedItems = new List<int>(Count);
 
             for(int i = 0; i < list.Count; i++)
             {
@@ -416,11 +416,11 @@ public class myDataGrid
                 int filePos = list[i].Name.LastIndexOf('\\') + 1;
 
                 // Skip everything that does not match the search string [filterStr]
-                if (filterStr.Length > 0 && !myUtils.fastStrContains(filterStr, list[i].Name, filePos, -1, false))
+                if (filterStr.Length > 0 && !myUtils.fastStrContains(filterStr, list[i].Name, filePos, -1, caseSensitive: false))
                     continue;
 
                 // Skip everything that DOES match the search string [filterOutStr]
-                if (filterOutStr.Length > 0 && myUtils.fastStrContains(filterOutStr, list[i].Name, filePos, -1, false))
+                if (filterOutStr.Length > 0 && myUtils.fastStrContains(filterOutStr, list[i].Name, filePos, -1, caseSensitive: false))
                     continue;
 
                 selectedItems.Add(i);
