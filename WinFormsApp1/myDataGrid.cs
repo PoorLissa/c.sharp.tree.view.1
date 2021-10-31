@@ -26,14 +26,14 @@ public class myDataGrid
     private Brush _disabledStateBrush = null;
 
     // Going to hold a reference to the global list of files
-    private readonly System.Collections.Generic.List<myTreeListDataItem> _globalFileListExtRef = null;
+    private readonly List<myTreeListDataItem> _globalFileListExtRef = null;
 
     // Containers to store the state of selected items between grid repopulations
-    private System.Collections.Generic.HashSet<   int> currentlySelectedIds   = null;
-    private System.Collections.Generic.HashSet<string> currentlySelectedNames = null;
+    private HashSet<   int> currentlySelectedIds   = null;
+    private HashSet<string> currentlySelectedNames = null;
 
     // StringFormat for CellId custom text drawing
-    private StringFormat strFormat_CellId = null;
+    private StringFormat strFormat_CellId   = null;
     private StringFormat strFormat_CellName = null;
 
     private myDataGrid_Cache _cache = null;
@@ -54,7 +54,7 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myDataGrid(DataGridView dgv, System.Collections.Generic.List<myTreeListDataItem> listGlobal)
+    public myDataGrid(DataGridView dgv, List<myTreeListDataItem> listGlobal)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.myDataGrid", "");
@@ -1102,12 +1102,22 @@ public class myDataGrid
     // Key Down Event
     private void on_KeyDown(object sender, KeyEventArgs e)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.on_KeyDown", "");
-        #endif
+#endif
 
-        switch (e.KeyData)
+        int currRow = _dataGrid.CurrentRow.Index;
+
+        switch (e.KeyCode)
         {
+            // Default widget's reaction
+            case Keys.Up:
+            case Keys.PageUp:
+            case Keys.Down:
+            case Keys.PageDown:
+            case Keys.F4:
+                return;
+
             case Keys.Space: {
 
                     // Change checked state of each selected row
@@ -1122,7 +1132,41 @@ public class myDataGrid
 
                 }
                 break;
+
+            case Keys.Home: {
+
+                    if (_dataGrid.Rows.Count > 0)
+                    {
+                        _dataGrid.ClearSelection();
+                        _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
+
+                        if (e.Modifiers == Keys.Shift)                                      // Select everything from current up to home
+                            for (int i = currRow; i >= 0; i--)
+                                _dataGrid.Rows[i].Selected = true;
+
+                        _dataGrid.CurrentRow.Selected = true;
+                    }
+                }
+                break;
+
+            case Keys.End: {
+
+                    if (_dataGrid.Rows.Count > 0)
+                    {
+                        _dataGrid.ClearSelection();
+                        _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count - 1];     // Jump to the botton
+
+                        if (e.Modifiers == Keys.Shift)                                      // Select everything from current down to the bottom
+                            for (int i = currRow; i < _dataGrid.Rows.Count; i++)
+                                _dataGrid.Rows[i].Selected = true;
+
+                        _dataGrid.CurrentRow.Selected = true;
+                    }
+                }
+                break;
         }
+
+        e.Handled = true;
 
         return;
     }
