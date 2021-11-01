@@ -10,6 +10,7 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     private string  _fileName;
     private bool    _isDir;
     private bool    _isHidden;
+    private bool    _isChanged;
 
     public int Id
     {
@@ -33,6 +34,12 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     {
         get {  return _isHidden; }
         set { _isHidden = value; }
+    }
+
+    public bool isChanged
+    {
+        get {  return _isChanged; }
+        set { _isChanged = value; }
     }
 
     // --------------------------------------------------------------------------------
@@ -64,23 +71,12 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     {
         var item = new myTreeListDataItem(_fileName);
 
-        item._id       = _id;
-        item.isDir     = _isDir;
-        item._isHidden = _isHidden;
+        item._id        = _id;
+        item.isDir      = _isDir;
+        item._isHidden  = _isHidden;
+        item._isChanged = _isChanged;
 
         return item;
-    }
-
-    // --------------------------------------------------------------------------------
-
-    public static System.Collections.Generic.List<myTreeListDataItem> copyList(System.Collections.Generic.List<myTreeListDataItem> other)
-    {
-        var copy = new System.Collections.Generic.List<myTreeListDataItem>(other.Count);
-
-        for (int i = 0; i < other.Count; i++)
-            copy.Add(other[i].Clone());
-
-        return copy;
     }
 
     // --------------------------------------------------------------------------------

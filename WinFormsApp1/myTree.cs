@@ -950,18 +950,22 @@ public class myTree
                 // Skip files, as the tree contains only directories
                 if (updatedList[i].isDir)
                 {
-                    var fileNameHistory = backUp.getHistory(updatedList[i].Name);
-
-                    if (fileNameHistory != null)
+                    if (updatedList[i].isChanged)
                     {
-                        // History list shall contain at least 2 items (if not null)
-                        var curr = fileNameHistory[fileNameHistory.Count - 1];
-                        var prev = fileNameHistory[fileNameHistory.Count - 2];
+                        var fileNameHistory = backUp.getHistory(updatedList[i].Name);
 
-                        // Using old and new path, update corresponding subnode
-                        if (!_logic.updateNode(n, prev, curr))
+                        if (fileNameHistory != null)
                         {
-                            MessageBox.Show($"Could not update subnode:\n{n.Name}\n{prev}\n{curr}", "Error", MessageBoxButtons.OK);
+                            // History list shall contain at least 2 items (if not null)
+                            var curr = fileNameHistory[fileNameHistory.Count - 1];
+                            var prev = fileNameHistory[fileNameHistory.Count - 2];
+
+                            // Using old and new paths, update corresponding subnode
+                            if (!_logic.updateNode(n, prev, curr))
+                            {
+                                MessageBox.Show($"Could not update subnode:\n{n.Name}\n{prev}\n{curr}", "Tree Error",
+                                    MessageBoxButtons.OK);
+                            }
                         }
                     }
                 }

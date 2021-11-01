@@ -130,3 +130,19 @@ D:\test\bbb_111\072_560b123c8bc56.jpg :
 
 D:\test\bbb_111 : 
 
+C:\_maxx\test\img2_small.png : 
+
+C:\_maxx\test\img1_large.png : 
+
+C:\_maxx\test\img2_small.png : 
+
+C:\_maxx\test\img1_large.png : 
+
+C:\_maxx\test\img2_small.png : 
+
+C:\_maxx\test\img1_large.png : 
+
+C:\_maxx\test\img2_small.png : 
+
+C:\_maxx\test\img1_large.png : 
+

@@ -49,10 +49,10 @@ public struct myTree_DataGrid_Manager_Initializer
 
 interface ImyTree_DataGrid_Manager
 {
-    void getSelectedFiles(List<myTreeListDataItem> list);   // Obtain the list of selected files
-    List<myTreeListDataItem> getSelectedFiles();            // Obtain the list of selected files
-    void update(List<myTreeListDataItem> list, bool mode);  // Update all the widgets' state using the data from [updatedList]
-    void allowBackup(bool mode);                            // Allow or disallow the use of backup
+    void getSelectedFiles(List<myTreeListDataItem> list);       // Obtain the list of selected files
+    List<myTreeListDataItem> getSelectedFiles(bool asCopy);     // Obtain the list of selected files
+    void update(List<myTreeListDataItem> list, bool mode);      // Update all the widgets' state using the data from [updatedList]
+    void allowBackup(bool mode);                                // Allow or disallow the use of backup
 };
 
 
@@ -144,11 +144,21 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // --------------------------------------------------------------------------------
 
     // Public interface method: obtain the list of selected files
-    public List<myTreeListDataItem> getSelectedFiles()
+    public List<myTreeListDataItem> getSelectedFiles(bool asCopy)
     {
         var list = new List<myTreeListDataItem>();
 
         _dataGrid.getSelectedFiles(list);
+
+        if (asCopy)
+        {
+            var copy = new List<myTreeListDataItem>(list.Count);
+
+            for (int i = 0; i < list.Count; i++)
+                copy.Add(list[i].Clone());
+
+            list = copy;
+        }
 
         return list;
     }
@@ -546,29 +556,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             _dataGrid.update();
             _tree.update(_backup, updatedList);
         }
-
-
-        // Check our history:
-#if false
-        {
-            string s = _backup.getHistory();
-
-            _richTextBox.Text += " --- history so far ---\n";
-            _richTextBox.Text += s + "\n";
-            _richTextBox.Text += " ----------------------\n";
-        }
-#endif
-
-#if false
-        {
-            _richTextBox.Text += " --- global list so far ---\n";
-
-            foreach (var item in _globalFileListExt)
-                _richTextBox.Text += item.Name + "\n";
-
-            _richTextBox.Text += " ----------------------\n";
-        }
-#endif
 
         return;
     }

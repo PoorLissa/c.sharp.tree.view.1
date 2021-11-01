@@ -9,7 +9,7 @@ namespace WinFormsApp1
     {
         // --------------------------------------------------------------------------------
 
-        private myTree_DataGrid_Manager myTDGManager = null;
+        private myRenamerApp app = null;
 
         private myControls.myComboBox myCb = null;
         private myControls.myTextBox  myTb = null;
@@ -26,83 +26,63 @@ namespace WinFormsApp1
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
-                path = @"c:\_maxx\002 - music";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\002 - music";
+                path = @"c:\_maxx\test\asdasdad";
             }
 
+            init(path, expandEmpty);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void init(string path, bool expandEmpty)
+        {
+            // myTree_DataGrid's controls:
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
+                mtdgmi.form         = this;
+                mtdgmi.tv           = treeView1;
+                mtdgmi.dg           = dataGridView1;
+                mtdgmi.cb_Recursive = cb_Recursive;
+                mtdgmi.cb_ShowDirs  = cb_ShowDirs;
+                mtdgmi.cb_ShowFiles = cb_ShowFiles;
+                mtdgmi.tb_Filter    = textBox1;
+                mtdgmi.tb_FilterOut = textBox2;
+                mtdgmi.richTextBox  = richTextBox1;
 
-            mtdgmi.form         = this;
-            mtdgmi.tv           = treeView1;
-            mtdgmi.dg           = dataGridView1;
-            mtdgmi.cb_Recursive = cb_Recursive;
-            mtdgmi.cb_ShowDirs  = cb_ShowDirs;
-            mtdgmi.cb_ShowFiles = cb_ShowFiles;
-            mtdgmi.tb_Filter    = textBox1;
-            mtdgmi.tb_FilterOut = textBox2;
-            mtdgmi.richTextBox  = richTextBox1;
+            // Every control that myRenamerApp must be aware of:
+            var mraControls = new myRenamerApp_Controls();
+                mraControls.option_001_ch_01 = this.checkBox1;
+                mraControls.option_001_ch_02 = this.checkBox2;
+                mraControls.option_001_ch_03 = this.checkBox3;
+                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, "Delimiter");
 
-            myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+            // myRenamerApp
+            app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
 
             myCb = new myControls.myComboBox(this.comboBox1, "Select option");
-            myTb = new myControls.myTextBox (this.textBox3, "Filter text");
+            myTb = new myControls.myTextBox(this.textBox3, "Filter text");
         }
 
         // --------------------------------------------------------------------------------
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var list = myTDGManager.getSelectedFiles();
-
-            var list_copy = myTreeListDataItem.copyList(list);
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                list_copy[i].Name += "_z";
-            }
-
-            richTextBox1.Clear();
-
-#if false
-            for (int i = 0; i < list.Count; i++)
-            {
-                richTextBox1.Text += list[i].Name + "\n";
-                richTextBox1.Text += list_copy[i].Name + "\n";
-            }
-#endif
-
-            myTDGManager.update(list_copy, true);
         }
 
         // --------------------------------------------------------------------------------
 
         private void btn_Rename_Click(object sender, EventArgs e)
         {
-            myStupidRenamer1 ren = new myStupidRenamer1(myTDGManager);
-
-            int param = 0;
-
-            if (cb_Option_01.Checked)
-            {
-                param = 1;
-            }
-
-            if (cb_Option_02.Checked)
-            {
-                param = 2;
-            }
-
-            ren.rename(param);
+            app.Rename();
         }
 
         // --------------------------------------------------------------------------------
 
         private void btn_Undo_Click(object sender, EventArgs e)
         {
-            myStupidRenamer1 ren = new myStupidRenamer1(myTDGManager);
-            
-            ren.undo();
+            app.Undo_Rename();
         }
 
         // --------------------------------------------------------------------------------

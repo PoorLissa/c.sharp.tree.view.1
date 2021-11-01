@@ -692,7 +692,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Get a list of files that are currently checked in the GridView
-    public void getSelectedFiles(System.Collections.Generic.List<myTreeListDataItem> list)
+    public void getSelectedFiles(List<myTreeListDataItem> list)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.getSelectedFiles", "");
@@ -703,7 +703,7 @@ public class myDataGrid
         list.Add($"-- Total number of items in List: {originalFilesList.Count}");
         list.Add($"-- Total number of items in Grid: {_dataGrid.Rows.Count}");
 */
-        // Get all checked directories and files
+        // Get all checked directories and files from the grid
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];

@@ -31,6 +31,11 @@ namespace myControls
             {
                 int dpi = _cb.DeviceDpi;
 
+                _cb.AutoCompleteMode = AutoCompleteMode.Suggest;
+                _cb.AutoCompleteSource = AutoCompleteSource.ListItems;
+
+                _cb.DropDownWidth = 300;
+
                 // Add and subscribe to events
                 setUpEvents();
 
@@ -49,15 +54,15 @@ namespace myControls
             _cb.TextChanged    += new EventHandler      (on_TextChanged);
             _cb.DropDown       += new EventHandler      (on_DropDownOpened);
             _cb.DropDownClosed += new EventHandler      (on_DropDownClosed);
-//      _cb.HandleDestroyed += new EventHandler         (on_HandleDestroyed);
+
+//          _cb.HandleDestroyed += new EventHandler         (on_HandleDestroyed);
         }
 
         // --------------------------------------------------------------------------------------------------------
 
-        private void on_TextChanged(object sender, EventArgs e)
+        public ComboBox Obj()
         {
-            ComboBox cb = (ComboBox)(sender);
-            _placeholder.Visible = cb.Text.Length == 0;
+            return _cb;
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -67,7 +72,6 @@ namespace myControls
             // Text placeholder
             _placeholder.Left = _cb.Left + 2;
             _placeholder.Top = _cb.Top + 4;
-            _placeholder.Visible = true;
 
             _placeholder.Width = _cb.Width - 33;
             _placeholder.Height = _cb.Height - 5;
@@ -77,11 +81,19 @@ namespace myControls
             _placeholder.MouseClick += new MouseEventHandler(on_Placeholder_MouseClick);
 
             var font = _cb.Font;
-            _placeholder.Font =
-                new System.Drawing.Font(font.Name, font.Size - 1, font.Style, font.Unit, font.GdiCharSet);
+            _placeholder.Font = new System.Drawing.Font(font.Name, font.Size - 1, font.Style, font.Unit, font.GdiCharSet);
 
             _cb.Parent.Controls.Add(_placeholder);
             _placeholder.BringToFront();
+            _placeholder.Visible = true;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        private void on_TextChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)(sender);
+            _placeholder.Visible = (cb.Text.Length == 0);
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -89,6 +101,7 @@ namespace myControls
         private void on_Placeholder_MouseClick(object sender, MouseEventArgs e)
         {
             _placeholder.Visible = false;
+            _cb.Focus();
             _cb.DroppedDown = true;
         }
 
@@ -105,8 +118,19 @@ namespace myControls
         {
             ComboBox cb = (ComboBox)(sender);
 
+            // With AutoCompleteMode, pressing Enter on AutoSuggested item does not result in selecting that item --
+            // in case the dropdown also is opened at that time.
+            // So we need to close the dropdown before we sellect an item in AutoSuggest.
+            // But we don't want to close it until some actual value has been typed in.
+            if (e.KeyCode != Keys.ShiftKey)
+                _cb.DroppedDown = false;
+
             if (e.KeyCode == Keys.Enter)
             {
+                foreach (var item in cb.Items)
+                    if (item.ToString() == cb.Text)
+                        return;
+
                 cb.Items.Add(cb.Text);
             }
         }
@@ -147,7 +171,7 @@ namespace myControls
         private void on_DropDownClosed(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)(sender);
-            _placeholder.Visible = cb.Text.Length == 0;
+            _placeholder.Visible = (cb.Text.Length == 0);
         }
 
         // --------------------------------------------------------------------------------------------------------

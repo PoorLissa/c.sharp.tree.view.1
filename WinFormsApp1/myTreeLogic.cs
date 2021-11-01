@@ -61,6 +61,7 @@ public class myTreeLogic
                     var File = new myTreeListDataItem(file);
                     File.isDir = false;
                     File.isHidden = isHidden || isSystem;
+                    File.isChanged = false;
                     listExt.Add(File);
                 }
 
@@ -109,6 +110,7 @@ public class myTreeLogic
                     var Dir = new myTreeListDataItem(d);
                     Dir.isDir = true;
                     Dir.isHidden = isHidden || isSystem;
+                    Dir.isChanged = false;
                     listExt.Add(Dir);
                 }
 

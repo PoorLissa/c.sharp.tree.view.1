@@ -396,4 +396,24 @@ public class myUtils
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    public static void strBuilderAppend(StringBuilder sb, string str, int pos, int len = -1)
+    {
+        len = (len < 0) ? str.Length - pos : len;
+
+        int oldLen = sb.Length;
+        int newLen = sb.Length + len;
+
+        if (newLen > sb.Capacity)
+            sb.Capacity = newLen * 2;
+
+        sb.Length = newLen;
+
+        for (int i = 0; i < len; i++)
+        {
+            sb[oldLen + i] = str[pos + i];
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
