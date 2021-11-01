@@ -386,7 +386,7 @@ public class myUtils
         
         if (!System.IO.File.Exists(path))
         {
-            System.IO.File.CreateText(path);
+            System.IO.File.CreateText(path).Dispose();
         }
 
         using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))

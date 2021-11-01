@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -572,6 +571,13 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 #endif
 
         return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public myBackup getBackup()
+    {
+        return _backup;
     }
 };
 

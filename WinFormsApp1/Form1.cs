@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using myControls;
+
 
 
 namespace WinFormsApp1
@@ -48,51 +47,9 @@ namespace WinFormsApp1
 
             myCb = new myControls.myComboBox(this.comboBox1, "Select option");
             myTb = new myControls.myTextBox (this.textBox3, "Filter text");
-
-            richTextBox1.Text += path + "\n" + expandEmpty.ToString();
-
-
-            if (false)
-            {
-                string str = "bbb";
-                string s = "c:\\aaa\\bbb";
-
-                int pos = s.LastIndexOf('\\') + 1;
-
-                bool bbb = fastStrContains(str, s, pos, -1);
-
-                int a = 1;
-            }
         }
 
         // --------------------------------------------------------------------------------
-
-        // Checks if s.Substr(pos, len) contains string [str] -- without extracting the substring
-        // Eng: A =   65, z =  122
-        // Rus: А = 1040, я = 1103
-        public static bool fastStrContains(string str, string s, int pos, int len)
-        {
-            len = (len < 0) ? s.Length - pos : len;
-
-            for (int i = 0; i < len - str.Length; i++)
-            {
-                char ch1 = str[i];
-                char ch2 = s[pos+i];
-
-                if (ch1 == ch2)
-                {
-                    // Checks if string [str] equals to s.Substr(pos, len) -- without extracting the substring
-
-                    bool bbb = myUtils.fastStrCompare(str, s, pos + i, str.Length, caseSensitive: false);
-
-                    if (bbb)
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -137,6 +94,15 @@ namespace WinFormsApp1
             }
 
             ren.rename(param);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void btn_Undo_Click(object sender, EventArgs e)
+        {
+            myStupidRenamer1 ren = new myStupidRenamer1(myTDGManager);
+            
+            ren.undo();
         }
 
         // --------------------------------------------------------------------------------

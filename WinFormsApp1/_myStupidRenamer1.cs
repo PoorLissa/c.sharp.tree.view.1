@@ -49,9 +49,10 @@ public class myStupidRenamer1
         // Make a copy, as otherwise we're going to change the global list from [myTree_DataGrid_Manager]
         var list = myTreeListDataItem.copyList(list_original);
 
+        // Rename files first, then rename folders
         for (int j = 0; j < 2; j++)
         {
-            bool isDir = (j == 0);
+            bool isDir = (j != 0);
 
             for (int i = list.Count - 1; i >= 0; i--)
             {
@@ -59,6 +60,8 @@ public class myStupidRenamer1
 
                 if (item.isDir == isDir)
                 {
+                    myUtils.logMsg(item.Name, "");
+
                     switch (param)
                     {
                         case 0:
@@ -149,6 +152,49 @@ public class myStupidRenamer1
 
             Rename(item, newName);
         }
+
+        return;
+    }
+
+    // -------------------------------------------------------------
+
+    // Revert selected files to their original names
+    // todo: fix this:
+    // - Recursively rename this: \test\bbb_111\001_zzz.txt     -- remove symbold on the right of '_'
+    // - Try to restore -- files won't be restored, as the history is not right
+    public void undo()
+    {
+        var list_original = _manager.getSelectedFiles();
+
+        var list_copy = myTreeListDataItem.copyList(list_original);
+
+        for (int i = list_copy.Count - 1; i >= 0; i--)
+        {
+            if (!list_copy[i].isDir)
+            {
+                var historyList = _manager.getBackup().getHistory(list_copy[i].Name);
+
+                if (historyList != null)
+                {
+                    Rename(list_copy[i], historyList[0]);
+                }
+            }
+        }
+
+        for (int i = list_copy.Count - 1; i >= 0; i--)
+        {
+            if (list_copy[i].isDir)
+            {
+                var historyList = _manager.getBackup().getHistory(list_copy[i].Name);
+
+                if (historyList != null)
+                {
+                    Rename(list_copy[i], historyList[0]);
+                }
+            }
+        }
+
+        _manager.update(list_copy, true);
 
         return;
     }

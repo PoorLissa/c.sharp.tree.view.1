@@ -1116,6 +1116,7 @@ public class myDataGrid
             case Keys.Down:
             case Keys.PageDown:
             case Keys.F4:
+            case Keys.A:
                 return;
 
             case Keys.Space: {

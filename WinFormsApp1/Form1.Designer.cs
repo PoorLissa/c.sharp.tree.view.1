@@ -46,6 +46,7 @@ namespace WinFormsApp1
             this.cb_Option_01 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.btn_Undo = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -81,7 +82,7 @@ namespace WinFormsApp1
             this.richTextBox1.Location = new System.Drawing.Point(3, 3);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(329, 595);
+            this.richTextBox1.Size = new System.Drawing.Size(329, 568);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
@@ -222,7 +223,7 @@ namespace WinFormsApp1
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(335, 601);
+            this.tabPage2.Size = new System.Drawing.Size(335, 574);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -236,11 +237,22 @@ namespace WinFormsApp1
             this.textBox2.Size = new System.Drawing.Size(142, 23);
             this.textBox2.TabIndex = 13;
             // 
+            // btn_Undo
+            // 
+            this.btn_Undo.Location = new System.Drawing.Point(1258, 104);
+            this.btn_Undo.Name = "btn_Undo";
+            this.btn_Undo.Size = new System.Drawing.Size(44, 22);
+            this.btn_Undo.TabIndex = 14;
+            this.btn_Undo.Text = "Undo";
+            this.btn_Undo.UseVisualStyleBackColor = true;
+            this.btn_Undo.Click += new System.EventHandler(this.btn_Undo_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1307, 735);
+            this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btn_Rename);
@@ -284,6 +296,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.CheckBox cb_Option_02;
         private System.Windows.Forms.CheckBox cb_Option_01;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button btn_Undo;
     }
 }
 
