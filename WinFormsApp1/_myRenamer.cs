@@ -113,8 +113,8 @@ public class myRenamer
         // Option 2: Remove [num] symbols starting at position [pos]
         if (_controls.option_002_ch_01.Checked)
         {
-            num = (int)_controls.option_002_num_1.Value;
-            pos = (int)_controls.option_002_num_2.Value;
+            num = (int)(_controls.option_002_num_1.Value);
+            pos = (int)(_controls.option_002_num_2.Value);
 
             if (pos < name.Length)
             {
