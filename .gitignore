@@ -4,10 +4,4 @@
 
 /.vs
 /WinFormsApp1/obj
-/WinFormsApp1/bin/Debug/netcoreapp3.1/WinFormsApp1.pdb
-/WinFormsApp1/bin/Debug/netcoreapp3.1/__History.txt 
-/WinFormsApp1/bin/Debug/netcoreapp3.1/WriteText.txt
-/WinFormsApp1/bin/Release/netcoreapp3.1/WinFormsApp1.pdb
-/WinFormsApp1/bin/Release/netcoreapp3.1/__History.txt 
-/WinFormsApp1/bin/Release/netcoreapp3.1/WriteText.txt
-/WinFormsApp1/bin/Release/netcoreapp3.1/publish
+/WinFormsApp1/bin

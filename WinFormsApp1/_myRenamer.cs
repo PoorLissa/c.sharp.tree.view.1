@@ -71,14 +71,14 @@ public class myRenamer
         }
         else
         {
-            name = (pos_ext > pos_file)
+            name = (pos_ext >= pos_file)
                         ? item.Name.Substring(pos_file, pos_ext - pos_file)
                         : item.Name.Substring(pos_file);
         }
 
         // --------------------------------------------------------------------------------
 
-        // Option 1-1: Remove symbols before the delimiter is found. Start from beginning
+        // Option 1-1: Remove symbols before the [delimiter] is found. Start from [beginning]
         if (_controls.option_001_ch_01.Checked)
         {
             bool removeDelim = _controls.option_001_ch_03.Checked;
@@ -93,7 +93,7 @@ public class myRenamer
             }
         }
 
-        // Option 1-2: Remove symbols before the delimiter is found. Start from end
+        // Option 1-2: Remove symbols before the [delimiter] is found. Start from [end]
         if (_controls.option_001_ch_02.Checked)
         {
             bool removeDelim = _controls.option_001_ch_03.Checked;
@@ -110,27 +110,21 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 2: Remove n symbols starting at position pos
+        // Option 2: Remove [num] symbols starting at position [pos]
         if (_controls.option_002_ch_01.Checked)
         {
             num = (int)_controls.option_002_num_1.Value;
             pos = (int)_controls.option_002_num_2.Value;
 
-            if (!_controls.option_002_ch_02.Checked)
+            if (pos < name.Length)
             {
-                if (pos < name.Length)
-                {
-                    if (pos + num > name.Length)
-                        num = name.Length - pos;
+                if (pos + num > name.Length)
+                    num = name.Length - pos;
 
-                    name = name.Remove(pos, num);
-                }
-            }
-            else
-            {
-                // 1_2_3_4_5
+                if (_controls.option_002_ch_02.Checked)
+                    pos = name.Length - (pos + num);
 
-
+                name = name.Remove(pos, num);
             }
         }
 
@@ -148,7 +142,7 @@ public class myRenamer
         }
         else
         {
-            if (pos_ext > pos_file)
+            if (pos_ext >= pos_file)
                 newName = item.Name.Substring(0, pos_file) + name + item.Name.Substring(pos_ext);
             else
                 newName = item.Name.Substring(0, pos_file) + name;
@@ -163,8 +157,8 @@ public class myRenamer
 
     // Revert selected files to their original names
     // todo: fix this:
-    // - Recursively rename this: \test\bbb_111\001_zzz.txt     -- remove symbold on the right of '_'
-    // - Try to restore -- files won't be restored, as the history is not right
+    // - Recursively rename this: \test\bbb_111\001_zzz.txt     -- remove symbols on the right of '_'
+    // - Try to restore -- files won't be restored, as the history is not valid (upper level dirs are not updated)
     // todo: when fixed, make it as a nested loop, not 2 loops
     public void undo()
     {
