@@ -32,10 +32,13 @@ public class myRenamerApp
 
     private void init()
     {
+        // Option 1
         var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
 
         _controls.option_001_ch_01.CheckedChanged += checkboxChanged_CommonEvent;
         _controls.option_001_ch_02.CheckedChanged += checkboxChanged_CommonEvent;
+
+        _controls.option_001_ch_03.Checked = true;
 
         _controls.option_001_cb_01.Obj().Items.Add("_");
         _controls.option_001_cb_01.Obj().Items.Add("_aaa_");

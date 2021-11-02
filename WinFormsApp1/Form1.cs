@@ -27,9 +27,9 @@ namespace WinFormsApp1
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
-                path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
                 path = @"c:\_maxx\test\asdasdad";
+                path = @"d:\test\-= Games =-\Uninstall";
             }
 
             init(path, expandEmpty);

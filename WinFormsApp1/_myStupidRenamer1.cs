@@ -48,7 +48,7 @@ public class myRenamer
 
         if (err.Length > 0)
         {
-            MessageBox.Show(err, "Error", MessageBoxButtons.OK);
+            MessageBox.Show(err, "myRenamer::Rename: Error", MessageBoxButtons.OK);
         }
 
         _manager.update(list, true);

@@ -306,31 +306,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         else
         {
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
-
-            if (sender != null)
-            {
-                if (sender == _cb_Recursive)
-                {
-                    // This happens when we're changing the state of [cb_Recursive] checkbox
-                    reason = myDataGrid.PopulateReason.recursionChanged_After;
-                    _tree.nodeSelected(_tree.Obj().SelectedNode, ref _nDirs, ref _nFiles, _useRecursion);
-                }
-                else
-                {
-                    // This happens when we're actually clicking the node in the tree
-                    reason = myDataGrid.PopulateReason.dirChanged;
-
-                    _tree.nodeSelected(e.Node, ref _nDirs, ref _nFiles, _useRecursion);
-
-                    // Set Form's header text
-                    _form.Text = e.Node.FullPath;
-                }
-            }
-
-            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
-
             System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
-            _dataGrid.Enable(true);
         }
 
         return;
