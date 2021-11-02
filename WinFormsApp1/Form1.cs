@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"c:\_maxx\test\asdasdad";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\test\asdasdad";
             }
 
             init(path, expandEmpty);
@@ -57,6 +57,11 @@ namespace WinFormsApp1
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
                 mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, "Delimiter");
+
+                mraControls.option_002_ch_01 = this.checkBox5;
+                mraControls.option_002_ch_02 = this.checkBox4;
+                mraControls.option_002_num_1 = this.numericUpDown1;
+                mraControls.option_002_num_2 = this.numericUpDown2;
 
             // myRenamerApp
             app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);

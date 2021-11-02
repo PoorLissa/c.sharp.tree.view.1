@@ -542,5 +542,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     {
         return _backup;
     }
+
+    // --------------------------------------------------------------------------------
 };
 

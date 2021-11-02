@@ -9,12 +9,7 @@ public class myRenamer
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myRenamer(myTree_DataGrid_Manager manager)
-    {
-        _manager = manager;
-    }
-
-    public myRenamer(myTree_DataGrid_Manager manager, myRenamerApp_Controls controls)
+    public myRenamer(myTree_DataGrid_Manager manager, myRenamerApp_Controls controls = null)
     {
         _manager  = manager;
         _controls = controls;
@@ -26,7 +21,6 @@ public class myRenamer
     public void Rename()
     {
         var list = _manager.getSelectedFiles(asCopy: true);
-
         string err = "";
 
         // Rename files first, then rename folders
@@ -41,7 +35,8 @@ public class myRenamer
 
                 if (item.isDir == isDir)
                 {
-                    tryEveryOption(item, ref err);
+                    // Go through every option that the User has selected and apply all the changes to file name
+                    applyOptions(item, ref err);
                 }
             }
         }
@@ -58,29 +53,30 @@ public class myRenamer
 
     // --------------------------------------------------------------------------------------------------------
 
-    // todo: rewrite it to use string builder
-    private void tryEveryOption(myTreeListDataItem item, ref string err)
+    // Go through every option that the User has selected and apply the changes to file name
+    // todo: rewrite it to use string builder (which can be tricky, as SB does not have indexof() and other such methods)
+    private void applyOptions(myTreeListDataItem item, ref string err)
     {
-        int pos = 0;
+        int pos = 0, num = 0;
         int pos_file = item.Name.LastIndexOf('\\') + 1;
         int pos_ext  = item.Name.LastIndexOf('.');
 
         string newName = null;
         string name = null;
 
+        // Extract name without extension (or just full folder name)
         if (item.isDir)
         {
             name = item.Name.Substring(pos_file);
         }
         else
         {
-            if (pos_ext > pos_file)
-                name = item.Name.Substring(pos_file, pos_ext - pos_file);
-            else
-                name = item.Name.Substring(pos_file);
+            name = (pos_ext > pos_file)
+                        ? item.Name.Substring(pos_file, pos_ext - pos_file)
+                        : item.Name.Substring(pos_file);
         }
 
-
+        // --------------------------------------------------------------------------------
 
         // Option 1-1: Remove symbols before the delimiter is found. Start from beginning
         if (_controls.option_001_ch_01.Checked)
@@ -112,7 +108,39 @@ public class myRenamer
             }
         }
 
+        // --------------------------------------------------------------------------------
 
+        // Option 2: Remove n symbols starting at position pos
+        if (_controls.option_002_ch_01.Checked)
+        {
+            num = (int)_controls.option_002_num_1.Value;
+            pos = (int)_controls.option_002_num_2.Value;
+
+            if (!_controls.option_002_ch_02.Checked)
+            {
+                if (pos < name.Length)
+                {
+                    if (pos + num > name.Length)
+                        num = name.Length - pos;
+
+                    name = name.Remove(pos, num);
+                }
+            }
+            else
+            {
+                // 1_2_3_4_5
+
+
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // --------------------------------------------------------------------------------
+
+        // Option 100: Remove n symbols starting at position of substring [s]
+
+        // --------------------------------------------------------------------------------
 
         if (item.isDir)
         {
