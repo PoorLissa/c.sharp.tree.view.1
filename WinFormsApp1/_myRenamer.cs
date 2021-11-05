@@ -1,6 +1,17 @@
 ﻿using System.Text;
 using System.Windows.Forms;
 
+/*
+    Adding new subpanels to Tab Control:
+	    - in Properties window, find and select from the dropdown list first divider panel (panel_div_0)
+	    - with pressed Ctrl, click any existing content panel that is located lower than the selected divider panel
+	    - copy the 2 panels from the UI window: Ctrl+C
+	    - select panel 'panel_base' in Properties window from the dropdown list of widgets
+	    - click anywhere on the black background around the UI window
+	    - press Ctrl+V
+	    - the copied panels are inserted at the bottom into 'panel_base'
+*/
+
 
 public class myRenamer
 {
@@ -64,7 +75,7 @@ public class myRenamer
         string newName = null;
         string name = null;
 
-        // Extract name without extension (or just full folder name)
+        // Extract name without extension (in case offolder, just its full name)
         if (item.isDir)
         {
             name = item.Name.Substring(pos_file);
@@ -78,7 +89,7 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 1-1: Remove symbols before the [delimiter] is found. Start from [beginning]
+        // Option 1-1: Remove symbols before the [delimiter] is found
         if (_controls.option_001_ch_01.Checked)
         {
             bool removeDelim = _controls.option_001_ch_03.Checked;
@@ -86,25 +97,22 @@ public class myRenamer
 
             if (delim != null && delim.Length > 0)
             {
-                pos = name.IndexOf(delim);
+                if (_controls.option_001_ch_02.Checked)
+                {
+                    // Start from [end]
+                    pos = name.LastIndexOf(delim);
 
-                if (pos != -1)
-                    name = name.Substring(pos + (removeDelim ? delim.Length : 0));
-            }
-        }
+                    if (pos != -1)
+                        name = name.Substring(0, pos + (removeDelim ? 0 : delim.Length));
+                }
+                else
+                {
+                    // Start from [beginning]
+                    pos = name.IndexOf(delim);
 
-        // Option 1-2: Remove symbols before the [delimiter] is found. Start from [end]
-        if (_controls.option_001_ch_02.Checked)
-        {
-            bool removeDelim = _controls.option_001_ch_03.Checked;
-            string delim     = _controls.option_001_cb_01.Obj().Text;
-
-            if (delim != null && delim.Length > 0)
-            {
-                pos = name.LastIndexOf(delim);
-
-                if (pos != -1)
-                    name = name.Substring(0, pos + (removeDelim ? 0 : delim.Length));
+                    if (pos != -1)
+                        name = name.Substring(pos + (removeDelim ? delim.Length : 0));
+                }
             }
         }
 
@@ -130,9 +138,43 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
+        // Option 3: Remove n symbols before or after the position of substring [str]
+        if (_controls.option_003_ch_01.Checked)
+        {
+            if (_controls.option_003_rb_01.Checked || _controls.option_003_rb_02.Checked)
+            {
+                string delim = _controls.option_003_tb_01.Text;
+
+                if (delim != null && delim.Length > 0)
+                {
+                    num = (int)(_controls.option_003_num_1.Value);
+                    pos = name.IndexOf(delim);
+
+                    if (pos >= 0)
+                    {
+                        if (_controls.option_003_rb_02.Checked)
+                        {
+                            pos += delim.Length;
+
+                            if (pos + num > name.Length)
+                                num = name.Length - pos;
+                        }
+                        else
+                        {
+                            if (pos < num)
+                                num = pos;
+
+                            pos -= num;
+                        }
+
+                        name = name.Remove(pos, num);
+                    }
+                }
+            }
+        }
+
         // --------------------------------------------------------------------------------
 
-        // Option 100: Remove n symbols starting at position of substring [s]
 
         // --------------------------------------------------------------------------------
 

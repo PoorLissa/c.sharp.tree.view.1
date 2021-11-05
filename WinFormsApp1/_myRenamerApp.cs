@@ -14,6 +14,12 @@ public class myRenamerApp_Controls
     public CheckBox                 option_002_ch_02 = null;
     public NumericUpDown            option_002_num_1 = null;
     public NumericUpDown            option_002_num_2 = null;
+
+    public CheckBox                 option_003_ch_01 = null;
+    public NumericUpDown            option_003_num_1 = null;
+    public RadioButton              option_003_rb_01 = null;
+    public RadioButton              option_003_rb_02 = null;
+    public TextBox                  option_003_tb_01 = null;
 };
 
 
@@ -56,19 +62,6 @@ public class myRenamerApp
 
         do
         {
-            if (cb.Name == _controls.option_001_ch_01.Name)
-            {
-                if (cb.Checked)
-                    _controls.option_001_ch_02.Checked = false;
-                break;
-            }
-
-            if (cb.Name == _controls.option_001_ch_02.Name)
-            {
-                if (cb.Checked)
-                    _controls.option_001_ch_01.Checked = false;
-                break;
-            }
 
         } while (false);
 
@@ -80,12 +73,9 @@ public class myRenamerApp
     private void init()
     {
         // Common checkbox changed event
-        var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
+//      var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
 
         // Option 1
-        _controls.option_001_ch_01.CheckedChanged += checkboxChanged_CommonEvent;
-        _controls.option_001_ch_02.CheckedChanged += checkboxChanged_CommonEvent;
-
         _controls.option_001_ch_03.Checked = true;
 
         _controls.option_001_cb_01.Obj().Items.Add("_");
