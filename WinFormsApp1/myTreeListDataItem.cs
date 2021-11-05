@@ -7,6 +7,7 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     // --------------------------------------------------------------------------------
 
     private int     _id;
+    private int     _num;
     private string  _fileName;
     private bool    _isDir;
     private bool    _isHidden;
@@ -42,6 +43,12 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
         set { _isChanged = value; }
     }
 
+    public int num
+    {
+        get {  return _num; }
+        set { _num = value; }
+    }
+
     // --------------------------------------------------------------------------------
 
     // Default comparer:
@@ -75,6 +82,7 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
         item.isDir      = _isDir;
         item._isHidden  = _isHidden;
         item._isChanged = _isChanged;
+        item._num       = _num;
 
         return item;
     }

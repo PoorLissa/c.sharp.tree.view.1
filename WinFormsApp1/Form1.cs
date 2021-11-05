@@ -53,6 +53,9 @@ namespace WinFormsApp1
 
             // Every control that myRenamerApp must be aware of:
             var mraControls = new myRenamerApp_Controls();
+
+                mraControls.richTextBox      = this.richTextBox1;
+
                 mraControls.option_001_ch_01 = this.checkBox1;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;

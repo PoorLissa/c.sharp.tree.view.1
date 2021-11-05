@@ -5,6 +5,8 @@ using System.Windows.Forms;
 
 public class myRenamerApp_Controls
 {
+    public RichTextBox              richTextBox      = null;
+
     public CheckBox                 option_001_ch_01 = null;
     public CheckBox                 option_001_ch_02 = null;
     public CheckBox                 option_001_ch_03 = null;

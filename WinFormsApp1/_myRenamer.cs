@@ -37,8 +37,14 @@ public class myRenamer
     // Public Rename func
     public void Rename()
     {
+        var tBefore = System.DateTime.Now.Ticks;
+
         var list = _manager.getSelectedFiles(asCopy: true);
         string err = "";
+
+        var tDiff = (System.DateTime.Now.Ticks - tBefore);
+        System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
+        _controls.richTextBox.AppendText($" called: _manager.getSelectedFiles(asCopy: true);\n it took {elapsedSpan.TotalMilliseconds} ms\n\n");
 
         // Rename files first, then rename folders
         for (int j = 0; j < 2; j++)
@@ -188,15 +194,6 @@ public class myRenamer
         }
 
         // --------------------------------------------------------------------------------
-/*
-        c:\path1\path2\path3\dir_aaa
-        c:\path1\path2\path3\dir_bbb
-        c:\path1\path2\path3\dir_ccc
-        
-        c:\path1\path2\path3\file_001.jpg
-        c:\path1\path2\path3\file_002.jpg
-        c:\path1\path2\path3\file_003.jpg
-*/
 
         // Option 5: Rename using template
         if (_controls.option_005_ch_01.Checked)
@@ -229,7 +226,7 @@ public class myRenamer
                                 cnt++;
                             i += cnt - 1;
 
-                            int NUM = 7777;
+                            int NUM = item.num;
 
                             string strNUM = NUM.ToString();
 

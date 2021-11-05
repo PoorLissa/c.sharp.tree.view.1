@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -703,6 +704,9 @@ public class myDataGrid
         list.Add($"-- Total number of items in List: {originalFilesList.Count}");
         list.Add($"-- Total number of items in Grid: {_dataGrid.Rows.Count}");
 */
+        StringBuilder sb = new StringBuilder(260);
+        Dictionary<string, int> dic = new Dictionary<string, int>();
+
         // Get all checked directories and files from the grid
         for (int i = 0; i < _dataGrid.Rows.Count; i++)
         {
@@ -717,11 +721,33 @@ public class myDataGrid
             {
                 int id = (int)(row.Cells[(int)Columns.colId].Value);
 
+                enumerateFiles(id, ref dic, ref sb);
+
                 // Add unmodified file name
                 // This way, list will contain references to original file names, and not the copies
                 list.Add(_globalFileListExtRef[id]);
             }
         }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Assignes every dir/file an index number
+    private void enumerateFiles(int id, ref Dictionary<string, int> dic, ref StringBuilder sb)
+    {
+        var item = _globalFileListExtRef[id];
+
+        sb.Clear();
+        sb.Append(item.Name, 0, item.Name.LastIndexOf('\\'));
+        sb.Append(item.isDir ? "?d" : "?f");
+
+        string path = sb.ToString();
+
+        item.num = dic.ContainsKey(path) ? dic[path] + 1 : 1;
+
+        dic[path] = item.num;
 
         return;
     }
