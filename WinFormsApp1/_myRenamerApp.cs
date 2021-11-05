@@ -20,6 +20,11 @@ public class myRenamerApp_Controls
     public RadioButton              option_003_rb_01 = null;
     public RadioButton              option_003_rb_02 = null;
     public TextBox                  option_003_tb_01 = null;
+
+    public CheckBox                 option_004_ch_01 = null;
+
+    public CheckBox                 option_005_ch_01 = null;
+    public TextBox                  option_005_tb_01 = null;
 };
 
 
@@ -55,7 +60,7 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Every checkbox that needs additional processing on its Clicked Event should subscribe to this method
+    // Every checkbox that needs additional processing of its Clicked Event should subscribe to this method
     private void checkboxChanged_Common(object sender, EventArgs e)
     {
         CheckBox cb = (CheckBox)(sender);
@@ -86,6 +91,11 @@ public class myRenamerApp
         _controls.option_002_num_1.Value = 1;
         _controls.option_002_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_002_num_2.TextAlign = HorizontalAlignment.Center;
+
+        // Option 3
+        _controls.option_003_num_1.Value = 1;
+        _controls.option_003_num_1.TextAlign = HorizontalAlignment.Center;
+        _controls.option_003_tb_01.PlaceholderText = "Substring";
     }
 
     // --------------------------------------------------------------------------------------------------------

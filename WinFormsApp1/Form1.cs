@@ -69,6 +69,11 @@ namespace WinFormsApp1
                 mraControls.option_003_rb_02 = this.radioButton2;
                 mraControls.option_003_tb_01 = this.textBox4;
 
+                mraControls.option_004_ch_01 = this.checkBox6;
+
+                mraControls.option_005_ch_01 = this.checkBox8;
+                mraControls.option_005_tb_01 = this.textBox5;
+
             // myRenamerApp
             app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
 

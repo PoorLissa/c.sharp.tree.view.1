@@ -12,6 +12,12 @@ using System.Windows.Forms;
 	    - the copied panels are inserted at the bottom into 'panel_base'
 */
 
+/*
+    TODO:
+        - add config file with the ability to save state of widgets
+        - count number of uses for each content panel and sort the panels in most used order
+        - 
+*/
 
 public class myRenamer
 {
@@ -89,7 +95,7 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 1-1: Remove symbols before the [delimiter] is found
+        // Option 1: Remove symbols before the [delimiter] is found
         if (_controls.option_001_ch_01.Checked)
         {
             bool removeDelim = _controls.option_001_ch_03.Checked;
@@ -175,8 +181,74 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
+        // Option 4:
+        if (_controls.option_004_ch_01.Checked)
+        {
+
+        }
 
         // --------------------------------------------------------------------------------
+/*
+        c:\path1\path2\path3\dir_aaa
+        c:\path1\path2\path3\dir_bbb
+        c:\path1\path2\path3\dir_ccc
+        
+        c:\path1\path2\path3\file_001.jpg
+        c:\path1\path2\path3\file_002.jpg
+        c:\path1\path2\path3\file_003.jpg
+*/
+
+        // Option 5: Rename using template
+        if (_controls.option_005_ch_01.Checked)
+        {
+            string strTemplate = _controls.option_005_tb_01.Text;
+
+            StringBuilder res = new StringBuilder(33);
+
+            if (strTemplate != null && strTemplate.Length > 0)
+            {
+                for (int i = 0; i < strTemplate.Length; i++)
+                {
+                    bool doAppendChar = true;
+
+                    switch (strTemplate[i])
+                    {
+                        // Insert original name
+                        case '*':
+                            doAppendChar = false;
+                            res.Append(name);
+                            break;
+
+                        // Insert number
+                        case '#':
+                            doAppendChar = false;
+
+                            // Get number of '#' symbols
+                            int cnt = 1;
+                            while (i + cnt < strTemplate.Length && strTemplate[i + cnt] == '#')
+                                cnt++;
+                            i += cnt - 1;
+
+                            int NUM = 7777;
+
+                            string strNUM = NUM.ToString();
+
+                            for(int j = strNUM.Length; j < cnt; j++)
+                                res.Append('0');
+                            res.Append(strNUM);
+                            break;
+                    }
+
+                    if (doAppendChar)
+                        res.Append(strTemplate[i]);
+                }
+
+                name = res.ToString();
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
 
         if (item.isDir)
         {
