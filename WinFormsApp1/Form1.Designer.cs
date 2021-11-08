@@ -41,7 +41,22 @@ namespace WinFormsApp1
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel_base = new System.Windows.Forms.Panel();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel_content_05 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel_content_04 = new System.Windows.Forms.Panel();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.panel_div_03 = new System.Windows.Forms.Panel();
             this.panel_content_03 = new System.Windows.Forms.Panel();
@@ -70,21 +85,16 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel_base.SuspendLayout();
+            this.panel_content_05.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.panel_content_04.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             this.panel_content_03.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.panel_content_02.SuspendLayout();
@@ -93,7 +103,6 @@ namespace WinFormsApp1
             this.panel_content_01.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // treeView1
@@ -103,15 +112,17 @@ namespace WinFormsApp1
             this.treeView1.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.treeView1.ItemHeight = 33;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(633, 1225);
+            this.treeView1.Size = new System.Drawing.Size(444, 735);
             this.treeView1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1849, 169);
+            this.button1.Location = new System.Drawing.Point(1294, 101);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 37);
+            this.button1.Size = new System.Drawing.Size(93, 22);
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -120,18 +131,20 @@ namespace WinFormsApp1
             // richTextBox1
             // 
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(4, 5);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(677, 955);
+            this.richTextBox1.Size = new System.Drawing.Size(471, 568);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // cb_ShowDirs
             // 
             this.cb_ShowDirs.AutoSize = true;
-            this.cb_ShowDirs.Location = new System.Drawing.Point(1377, 22);
+            this.cb_ShowDirs.Location = new System.Drawing.Point(964, 13);
+            this.cb_ShowDirs.Margin = new System.Windows.Forms.Padding(2);
             this.cb_ShowDirs.Name = "cb_ShowDirs";
-            this.cb_ShowDirs.Size = new System.Drawing.Size(171, 29);
+            this.cb_ShowDirs.Size = new System.Drawing.Size(114, 19);
             this.cb_ShowDirs.TabIndex = 3;
             this.cb_ShowDirs.Text = "Show Directories";
             this.cb_ShowDirs.UseVisualStyleBackColor = true;
@@ -139,9 +152,10 @@ namespace WinFormsApp1
             // cb_ShowFiles
             // 
             this.cb_ShowFiles.AutoSize = true;
-            this.cb_ShowFiles.Location = new System.Drawing.Point(1377, 57);
+            this.cb_ShowFiles.Location = new System.Drawing.Point(964, 34);
+            this.cb_ShowFiles.Margin = new System.Windows.Forms.Padding(2);
             this.cb_ShowFiles.Name = "cb_ShowFiles";
-            this.cb_ShowFiles.Size = new System.Drawing.Size(121, 29);
+            this.cb_ShowFiles.Size = new System.Drawing.Size(81, 19);
             this.cb_ShowFiles.TabIndex = 5;
             this.cb_ShowFiles.Text = "Show Files";
             this.cb_ShowFiles.UseVisualStyleBackColor = true;
@@ -150,36 +164,40 @@ namespace WinFormsApp1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridView1.Location = new System.Drawing.Point(633, 0);
+            this.dataGridView1.Location = new System.Drawing.Point(444, 0);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(729, 1225);
+            this.dataGridView1.Size = new System.Drawing.Size(510, 735);
             this.dataGridView1.TabIndex = 6;
             // 
             // cb_Recursive
             // 
             this.cb_Recursive.AutoSize = true;
-            this.cb_Recursive.Location = new System.Drawing.Point(1377, 92);
+            this.cb_Recursive.Location = new System.Drawing.Point(964, 55);
+            this.cb_Recursive.Margin = new System.Windows.Forms.Padding(2);
             this.cb_Recursive.Name = "cb_Recursive";
-            this.cb_Recursive.Size = new System.Drawing.Size(111, 29);
+            this.cb_Recursive.Size = new System.Drawing.Size(76, 19);
             this.cb_Recursive.TabIndex = 7;
             this.cb_Recursive.Text = "Recursive";
             this.cb_Recursive.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1377, 130);
+            this.textBox1.Location = new System.Drawing.Point(964, 78);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "filter";
-            this.textBox1.Size = new System.Drawing.Size(201, 31);
+            this.textBox1.Size = new System.Drawing.Size(142, 23);
             this.textBox1.TabIndex = 8;
             // 
             // btn_Rename
             // 
-            this.btn_Rename.Location = new System.Drawing.Point(1628, 5);
+            this.btn_Rename.Location = new System.Drawing.Point(1140, 3);
+            this.btn_Rename.Margin = new System.Windows.Forms.Padding(2);
             this.btn_Rename.Name = "btn_Rename";
-            this.btn_Rename.Size = new System.Drawing.Size(425, 163);
+            this.btn_Rename.Size = new System.Drawing.Size(298, 98);
             this.btn_Rename.TabIndex = 11;
             this.btn_Rename.Text = "Rename";
             this.btn_Rename.UseVisualStyleBackColor = true;
@@ -190,22 +208,20 @@ namespace WinFormsApp1
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(1370, 222);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabControl1.Location = new System.Drawing.Point(959, 133);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(693, 1003);
+            this.tabControl1.Size = new System.Drawing.Size(485, 602);
             this.tabControl1.TabIndex = 12;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabPage1.Controls.Add(this.panel_base);
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage1.Size = new System.Drawing.Size(685, 965);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(477, 574);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Rename Options";
             // 
@@ -218,7 +234,7 @@ namespace WinFormsApp1
             this.panel_base.Controls.Add(this.panel6);
             this.panel_base.Controls.Add(this.panel3);
             this.panel_base.Controls.Add(this.panel4);
-            this.panel_base.Controls.Add(this.panel1);
+            this.panel_base.Controls.Add(this.panel_content_05);
             this.panel_base.Controls.Add(this.panel2);
             this.panel_base.Controls.Add(this.panel_content_04);
             this.panel_base.Controls.Add(this.panel_div_03);
@@ -228,41 +244,190 @@ namespace WinFormsApp1
             this.panel_base.Controls.Add(this.panel_div_0);
             this.panel_base.Controls.Add(this.panel_content_01);
             this.panel_base.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_base.Location = new System.Drawing.Point(4, 5);
-            this.panel_base.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_base.Location = new System.Drawing.Point(3, 3);
             this.panel_base.Name = "panel_base";
-            this.panel_base.Size = new System.Drawing.Size(677, 955);
+            this.panel_base.Size = new System.Drawing.Size(471, 568);
             this.panel_base.TabIndex = 21;
+            // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.SystemColors.Control;
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel7.Location = new System.Drawing.Point(0, 575);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(454, 79);
+            this.panel7.TabIndex = 37;
+            // 
+            // panel8
+            // 
+            this.panel8.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(0, 574);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(454, 1);
+            this.panel8.TabIndex = 36;
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.SystemColors.Control;
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(0, 495);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(454, 79);
+            this.panel5.TabIndex = 35;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel6.Location = new System.Drawing.Point(0, 494);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(454, 1);
+            this.panel6.TabIndex = 34;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.SystemColors.Control;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 415);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(454, 79);
+            this.panel3.TabIndex = 33;
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(0, 414);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(454, 1);
+            this.panel4.TabIndex = 32;
+            // 
+            // panel_content_05
+            // 
+            this.panel_content_05.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_05.Controls.Add(this.label3);
+            this.panel_content_05.Controls.Add(this.numericUpDown4);
+            this.panel_content_05.Controls.Add(this.textBox5);
+            this.panel_content_05.Controls.Add(this.checkBox8);
+            this.panel_content_05.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_content_05.Location = new System.Drawing.Point(0, 326);
+            this.panel_content_05.Name = "panel_content_05";
+            this.panel_content_05.Size = new System.Drawing.Size(454, 88);
+            this.panel_content_05.TabIndex = 31;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(209, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 15);
+            this.label3.TabIndex = 37;
+            this.label3.Text = "Starting index";
+            // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.Location = new System.Drawing.Point(294, 44);
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(54, 23);
+            this.numericUpDown4.TabIndex = 36;
+            this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDown4.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(167, 16);
+            this.textBox5.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(238, 23);
+            this.textBox5.TabIndex = 35;
+            // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Location = new System.Drawing.Point(12, 18);
+            this.checkBox8.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(151, 19);
+            this.checkBox8.TabIndex = 1;
+            this.checkBox8.Text = "Rename using template";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 325);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(454, 1);
+            this.panel2.TabIndex = 30;
             // 
             // panel_content_04
             // 
             this.panel_content_04.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_04.Controls.Add(this.label5);
+            this.panel_content_04.Controls.Add(this.label4);
+            this.panel_content_04.Controls.Add(this.numericUpDown5);
+            this.panel_content_04.Controls.Add(this.textBox7);
+            this.panel_content_04.Controls.Add(this.textBox6);
             this.panel_content_04.Controls.Add(this.checkBox6);
             this.panel_content_04.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_04.Location = new System.Drawing.Point(0, 411);
-            this.panel_content_04.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_content_04.Location = new System.Drawing.Point(0, 246);
             this.panel_content_04.Name = "panel_content_04";
-            this.panel_content_04.Size = new System.Drawing.Size(651, 131);
+            this.panel_content_04.Size = new System.Drawing.Size(454, 79);
             this.panel_content_04.TabIndex = 29;
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.Location = new System.Drawing.Point(341, 45);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(54, 23);
+            this.numericUpDown5.TabIndex = 37;
+            this.numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDown5.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(207, 45);
+            this.textBox7.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(129, 23);
+            this.textBox7.TabIndex = 36;
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(207, 20);
+            this.textBox6.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(129, 23);
+            this.textBox6.TabIndex = 35;
             // 
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(26, 39);
+            this.checkBox6.Location = new System.Drawing.Point(12, 22);
+            this.checkBox6.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(447, 29);
+            this.checkBox6.Size = new System.Drawing.Size(191, 19);
             this.checkBox6.TabIndex = 0;
-            this.checkBox6.Text = "Replace occurence of substring with other substring";
+            this.checkBox6.Text = "Replace occurence of substring";
             this.checkBox6.UseVisualStyleBackColor = true;
             // 
             // panel_div_03
             // 
             this.panel_div_03.BackColor = System.Drawing.Color.Gainsboro;
             this.panel_div_03.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_div_03.Location = new System.Drawing.Point(0, 409);
-            this.panel_div_03.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_div_03.Location = new System.Drawing.Point(0, 245);
             this.panel_div_03.Name = "panel_div_03";
-            this.panel_div_03.Size = new System.Drawing.Size(651, 2);
+            this.panel_div_03.Size = new System.Drawing.Size(454, 1);
             this.panel_div_03.TabIndex = 28;
             // 
             // panel_content_03
@@ -275,18 +440,18 @@ namespace WinFormsApp1
             this.panel_content_03.Controls.Add(this.numericUpDown3);
             this.panel_content_03.Controls.Add(this.checkBox7);
             this.panel_content_03.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_03.Location = new System.Drawing.Point(0, 294);
-            this.panel_content_03.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_content_03.Location = new System.Drawing.Point(0, 176);
             this.panel_content_03.Name = "panel_content_03";
-            this.panel_content_03.Size = new System.Drawing.Size(651, 115);
+            this.panel_content_03.Size = new System.Drawing.Size(454, 69);
             this.panel_content_03.TabIndex = 26;
             // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(300, 58);
+            this.radioButton2.Location = new System.Drawing.Point(210, 35);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(73, 29);
+            this.radioButton2.Size = new System.Drawing.Size(49, 19);
             this.radioButton2.TabIndex = 36;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "after";
@@ -295,9 +460,10 @@ namespace WinFormsApp1
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(300, 32);
+            this.radioButton1.Location = new System.Drawing.Point(210, 19);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(89, 29);
+            this.radioButton1.Size = new System.Drawing.Size(59, 19);
             this.radioButton1.TabIndex = 35;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "before";
@@ -305,34 +471,38 @@ namespace WinFormsApp1
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(394, 38);
+            this.textBox4.Location = new System.Drawing.Point(276, 23);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(2);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(183, 31);
+            this.textBox4.Size = new System.Drawing.Size(129, 23);
             this.textBox4.TabIndex = 34;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(204, 42);
+            this.label2.Location = new System.Drawing.Point(143, 25);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 25);
+            this.label2.Size = new System.Drawing.Size(59, 15);
             this.label2.TabIndex = 33;
             this.label2.Text = "symbol(s)";
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(121, 39);
+            this.numericUpDown3.Location = new System.Drawing.Point(85, 23);
+            this.numericUpDown3.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(77, 31);
+            this.numericUpDown3.Size = new System.Drawing.Size(54, 23);
             this.numericUpDown3.TabIndex = 32;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // checkBox7
             // 
             this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(17, 41);
+            this.checkBox7.Location = new System.Drawing.Point(12, 25);
+            this.checkBox7.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(102, 29);
+            this.checkBox7.Size = new System.Drawing.Size(69, 19);
             this.checkBox7.TabIndex = 30;
             this.checkBox7.Text = "Remove";
             this.checkBox7.UseVisualStyleBackColor = true;
@@ -341,10 +511,9 @@ namespace WinFormsApp1
             // 
             this.panel_div_02.BackColor = System.Drawing.Color.Gainsboro;
             this.panel_div_02.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_div_02.Location = new System.Drawing.Point(0, 292);
-            this.panel_div_02.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_div_02.Location = new System.Drawing.Point(0, 175);
             this.panel_div_02.Name = "panel_div_02";
-            this.panel_div_02.Size = new System.Drawing.Size(651, 2);
+            this.panel_div_02.Size = new System.Drawing.Size(454, 1);
             this.panel_div_02.TabIndex = 25;
             // 
             // panel_content_02
@@ -356,43 +525,46 @@ namespace WinFormsApp1
             this.panel_content_02.Controls.Add(this.checkBox4);
             this.panel_content_02.Controls.Add(this.checkBox5);
             this.panel_content_02.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_02.Location = new System.Drawing.Point(0, 152);
-            this.panel_content_02.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_content_02.Location = new System.Drawing.Point(0, 91);
             this.panel_content_02.Name = "panel_content_02";
-            this.panel_content_02.Size = new System.Drawing.Size(651, 140);
+            this.panel_content_02.Size = new System.Drawing.Size(454, 84);
             this.panel_content_02.TabIndex = 24;
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(420, 33);
+            this.numericUpDown2.Location = new System.Drawing.Point(294, 20);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(77, 31);
+            this.numericUpDown2.Size = new System.Drawing.Size(54, 23);
             this.numericUpDown2.TabIndex = 29;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(204, 36);
+            this.label1.Location = new System.Drawing.Point(143, 22);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(209, 25);
+            this.label1.Size = new System.Drawing.Size(137, 15);
             this.label1.TabIndex = 28;
             this.label1.Text = "symbol(s) starting at pos";
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(120, 33);
+            this.numericUpDown1.Location = new System.Drawing.Point(84, 20);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(77, 31);
+            this.numericUpDown1.Size = new System.Drawing.Size(54, 23);
             this.numericUpDown1.TabIndex = 27;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(250, 77);
+            this.checkBox4.Location = new System.Drawing.Point(175, 46);
+            this.checkBox4.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(153, 29);
+            this.checkBox4.Size = new System.Drawing.Size(102, 19);
             this.checkBox4.TabIndex = 26;
             this.checkBox4.Text = "Start from end";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -400,9 +572,10 @@ namespace WinFormsApp1
             // checkBox5
             // 
             this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(17, 35);
+            this.checkBox5.Location = new System.Drawing.Point(12, 21);
+            this.checkBox5.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(102, 29);
+            this.checkBox5.Size = new System.Drawing.Size(69, 19);
             this.checkBox5.TabIndex = 25;
             this.checkBox5.Text = "Remove";
             this.checkBox5.UseVisualStyleBackColor = true;
@@ -411,10 +584,9 @@ namespace WinFormsApp1
             // 
             this.panel_div_0.BackColor = System.Drawing.Color.Gainsboro;
             this.panel_div_0.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_div_0.Location = new System.Drawing.Point(0, 150);
-            this.panel_div_0.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel_div_0.Location = new System.Drawing.Point(0, 90);
             this.panel_div_0.Name = "panel_div_0";
-            this.panel_div_0.Size = new System.Drawing.Size(651, 2);
+            this.panel_div_0.Size = new System.Drawing.Size(454, 1);
             this.panel_div_0.TabIndex = 22;
             // 
             // panel_content_01
@@ -426,25 +598,26 @@ namespace WinFormsApp1
             this.panel_content_01.Controls.Add(this.checkBox1);
             this.panel_content_01.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_content_01.Location = new System.Drawing.Point(0, 0);
-            this.panel_content_01.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_01.Name = "panel_content_01";
-            this.panel_content_01.Size = new System.Drawing.Size(651, 150);
+            this.panel_content_01.Size = new System.Drawing.Size(454, 90);
             this.panel_content_01.TabIndex = 21;
             // 
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(47, 59);
+            this.comboBox2.Location = new System.Drawing.Point(33, 35);
+            this.comboBox2.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(183, 33);
+            this.comboBox2.Size = new System.Drawing.Size(129, 23);
             this.comboBox2.TabIndex = 18;
             // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(250, 60);
+            this.checkBox3.Location = new System.Drawing.Point(175, 36);
+            this.checkBox3.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(206, 29);
+            this.checkBox3.Size = new System.Drawing.Size(139, 19);
             this.checkBox3.TabIndex = 17;
             this.checkBox3.Text = "Remove the delimiter";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -452,10 +625,9 @@ namespace WinFormsApp1
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(250, 88);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkBox2.Location = new System.Drawing.Point(175, 53);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(153, 29);
+            this.checkBox2.Size = new System.Drawing.Size(102, 19);
             this.checkBox2.TabIndex = 16;
             this.checkBox2.Text = "Start from end";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -463,10 +635,9 @@ namespace WinFormsApp1
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(17, 22);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.checkBox1.Location = new System.Drawing.Point(12, 13);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(368, 29);
+            this.checkBox1.Size = new System.Drawing.Size(245, 19);
             this.checkBox1.TabIndex = 15;
             this.checkBox1.Text = "Remove any symbols before the delimiter";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -474,11 +645,10 @@ namespace WinFormsApp1
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.richTextBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 34);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage2.Size = new System.Drawing.Size(685, 965);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(477, 574);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "RichEdit";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -488,11 +658,10 @@ namespace WinFormsApp1
             this.tabPage3.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabPage3.Controls.Add(this.comboBox1);
             this.tabPage3.Controls.Add(this.textBox3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 34);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabPage3.Size = new System.Drawing.Size(685, 965);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(477, 574);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Test";
             // 
@@ -505,142 +674,61 @@ namespace WinFormsApp1
             "333",
             "444",
             "555"});
-            this.comboBox1.Location = new System.Drawing.Point(24, 28);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox1.Location = new System.Drawing.Point(17, 17);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(213, 33);
+            this.comboBox1.Size = new System.Drawing.Size(150, 23);
             this.comboBox1.TabIndex = 11;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(24, 70);
+            this.textBox3.Location = new System.Drawing.Point(17, 42);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(2);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(213, 31);
+            this.textBox3.Size = new System.Drawing.Size(150, 23);
             this.textBox3.TabIndex = 12;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(1377, 175);
+            this.textBox2.Location = new System.Drawing.Point(964, 105);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
             this.textBox2.PlaceholderText = "filter";
-            this.textBox2.Size = new System.Drawing.Size(201, 31);
+            this.textBox2.Size = new System.Drawing.Size(142, 23);
             this.textBox2.TabIndex = 13;
             // 
             // btn_Undo
             // 
-            this.btn_Undo.Location = new System.Drawing.Point(1989, 169);
-            this.btn_Undo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btn_Undo.Location = new System.Drawing.Point(1392, 101);
             this.btn_Undo.Name = "btn_Undo";
-            this.btn_Undo.Size = new System.Drawing.Size(64, 37);
+            this.btn_Undo.Size = new System.Drawing.Size(45, 22);
             this.btn_Undo.TabIndex = 14;
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
             this.btn_Undo.Click += new System.EventHandler(this.btn_Undo_Click);
             // 
-            // panel1
+            // label4
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.panel1.Controls.Add(this.textBox5);
-            this.panel1.Controls.Add(this.checkBox8);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 544);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(651, 96);
-            this.panel1.TabIndex = 31;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(167, 45);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(30, 15);
+            this.label4.TabIndex = 38;
+            this.label4.Text = "with";
             // 
-            // panel2
+            // label5
             // 
-            this.panel2.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 542);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(651, 2);
-            this.panel2.TabIndex = 30;
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.SystemColors.Control;
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 642);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(651, 131);
-            this.panel3.TabIndex = 33;
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 640);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(651, 2);
-            this.panel4.TabIndex = 32;
-            // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.SystemColors.Control;
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 775);
-            this.panel5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(651, 131);
-            this.panel5.TabIndex = 35;
-            // 
-            // panel6
-            // 
-            this.panel6.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(0, 773);
-            this.panel6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(651, 2);
-            this.panel6.TabIndex = 34;
-            // 
-            // panel7
-            // 
-            this.panel7.BackColor = System.Drawing.SystemColors.Control;
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(0, 908);
-            this.panel7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(651, 131);
-            this.panel7.TabIndex = 37;
-            // 
-            // panel8
-            // 
-            this.panel8.BackColor = System.Drawing.Color.Gainsboro;
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel8.Location = new System.Drawing.Point(0, 906);
-            this.panel8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(651, 2);
-            this.panel8.TabIndex = 36;
-            // 
-            // checkBox8
-            // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Location = new System.Drawing.Point(26, 32);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(224, 29);
-            this.checkBox8.TabIndex = 1;
-            this.checkBox8.Text = "Rename using template";
-            this.checkBox8.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(256, 30);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(321, 31);
-            this.textBox5.TabIndex = 35;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(401, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 15);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "time(s)";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2076, 1225);
+            this.ClientSize = new System.Drawing.Size(1453, 735);
             this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.tabControl1);
@@ -652,6 +740,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.cb_ShowDirs);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.treeView1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
@@ -659,8 +748,12 @@ namespace WinFormsApp1
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel_base.ResumeLayout(false);
+            this.panel_content_05.ResumeLayout(false);
+            this.panel_content_05.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.panel_content_04.ResumeLayout(false);
             this.panel_content_04.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             this.panel_content_03.ResumeLayout(false);
             this.panel_content_03.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
@@ -673,8 +766,6 @@ namespace WinFormsApp1
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -729,10 +820,17 @@ namespace WinFormsApp1
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel_content_05;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown numericUpDown4;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
 

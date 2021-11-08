@@ -187,10 +187,38 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 4:
+        // Option 4: Replace occurence of substring [src] with other string, [dst] -- cnt times
         if (_controls.option_004_ch_01.Checked)
         {
+            string src = _controls.option_004_tb_01.Text;
+            string dst = _controls.option_004_tb_02.Text;
 
+            if (src != null && src.Length > 0)
+            {
+                pos = name.IndexOf(src);
+
+                if (pos >= 0)
+                {
+                    int cnt = (int)(_controls.option_004_num_1.Value);
+                        cnt = cnt > 0 ? cnt : 1000;                         // In case cnt == 0, replace all occurences
+                    int offset = 0;
+
+                    StringBuilder sb = new StringBuilder(name);
+
+                    do
+                    {
+                        sb.Remove(pos + offset, src.Length);
+                        sb.Insert(pos + offset, dst);
+
+                        pos = name.IndexOf(src, pos + 1);
+
+                        offset += (dst.Length - src.Length);
+                    }
+                    while (pos >= 0 && --cnt != 0);
+
+                    name = sb.ToString();
+                }
+            }
         }
 
         // --------------------------------------------------------------------------------
@@ -226,9 +254,9 @@ public class myRenamer
                                 cnt++;
                             i += cnt - 1;
 
-                            int NUM = item.num;
+                            int n = (int)(_controls.option_005_num_1.Value) + item.num - 1;
 
-                            string strNUM = NUM.ToString();
+                            string strNUM = n.ToString();
 
                             for(int j = strNUM.Length; j < cnt; j++)
                                 res.Append('0');

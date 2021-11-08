@@ -24,9 +24,13 @@ public class myRenamerApp_Controls
     public TextBox                  option_003_tb_01 = null;
 
     public CheckBox                 option_004_ch_01 = null;
+    public TextBox                  option_004_tb_01 = null;
+    public TextBox                  option_004_tb_02 = null;
+    public NumericUpDown            option_004_num_1 = null;
 
     public CheckBox                 option_005_ch_01 = null;
     public TextBox                  option_005_tb_01 = null;
+    public NumericUpDown            option_005_num_1 = null;
 };
 
 
@@ -44,6 +48,8 @@ public class myRenamerApp
         _myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
 
         init();
+
+        rePositionPanels();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -98,8 +104,29 @@ public class myRenamerApp
         _controls.option_003_num_1.Value = 1;
         _controls.option_003_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_003_tb_01.PlaceholderText = "Substring";
+
+        // Option 4
+        _controls.option_004_tb_01.PlaceholderText = "src";
+        _controls.option_004_tb_02.PlaceholderText = "dest";
+
+        // Option 5
+        _controls.option_005_tb_01.PlaceholderText = "[### - *]";
     }
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void rePositionPanels()
+    {
+        // todo: implement repositioning in most used order
+
+/*
+        this.panel_content_05.BringToFront();
+        this.panel_content_04.BringToFront();
+        this.panel_content_03.BringToFront();
+        this.panel_content_02.BringToFront();
+        this.panel_content_01.BringToFront();
+*/
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
