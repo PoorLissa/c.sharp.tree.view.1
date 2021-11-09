@@ -309,6 +309,24 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Converts character to upper case
+    // Eng: A =   65, Z =   90, a =   97, z =  122
+    // Rus: А = 1040, Я = 1071, а = 1072, я = 1103 + ё = 1105 + Ё = 1025
+    public static void charToUpperCase(ref char ch)
+    {
+        // Eng + Rus
+        if ((ch >= 97 && ch <= 122) || (ch >= 1072 && ch <= 1103))
+            ch -= (char)(32);
+
+        // Rus 'Ё'
+        if (ch == 1105)
+            ch = (char)(1025);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Checks if string [str] equals to s.Substr(pos, len) -- without extracting the substring
     public static bool fastStrCompare(string str, string s, int pos, int len, bool caseSensitive)
     {

@@ -36,8 +36,17 @@ public class myRenamerApp_Controls
     public TextBox                  option_005_tb_01 = null;
     public NumericUpDown            option_005_num_1 = null;
 
-    // unused yet
     public CheckBox                 option_006_ch_01 = null;
+    public CheckBox                 option_006_ch_02 = null;
+    public CheckBox                 option_006_ch_04 = null;
+    public RadioButton              option_006_rb_01 = null;
+    public RadioButton              option_006_rb_02 = null;
+    public RadioButton              option_006_rb_05 = null;
+    public CheckBox                 option_006_ch_03 = null;
+    public RadioButton              option_006_rb_03 = null;
+    public RadioButton              option_006_rb_04 = null;
+
+    // unused yet
     public CheckBox                 option_007_ch_01 = null;
     public CheckBox                 option_008_ch_01 = null;
 };
@@ -94,14 +103,24 @@ public class myRenamerApp
             _ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"] = _controls.option_001_cb_01.getChanges();
         }
 
-        // --- Save usage statistics for selectable options ---
+        // --- Save usage statistics for each selectable option ---
         foreach (var item in _controls.optionList)
         {
             string param = $"myCheckBoxCounters.{item.Name}";
-            string val = _ini[param];
-            int num = item.Tag != null ? (int)(item.Tag) : 0;
-            num += (val != null) ? Int32.Parse(val) : 0;
-            _ini[param] = num.ToString();
+
+            string sValOld = _ini[param];
+            int    nValNew = (item.Tag != null) ? (int)(item.Tag) : 0;
+
+            // Update ini-file:
+            // -- if usage statistics has changed
+            // -- if the option item has not beed added to ini-file yet
+            if (nValNew > 0 || sValOld == null)
+            {
+                int nValOld = (sValOld != null) ? Int32.Parse(sValOld) : 0;
+
+                nValNew += nValOld;
+                _ini[param] = nValNew.ToString();
+            }
         }
 
         _ini.save();
@@ -162,6 +181,8 @@ public class myRenamerApp
     // Reposition option panels in most used order
     private void rePositionPanels()
     {
+        var tBefore = DateTime.Now.Ticks;
+
         Control panel_base = _controls.option_001_ch_01.Parent.Parent as Control;
 
         // Collect each option's main checkboxes into a list
@@ -250,6 +271,10 @@ public class myRenamerApp
         }
 
         list.Clear();
+
+        var tDiff = (DateTime.Now.Ticks - tBefore);
+        TimeSpan elapsedSpan = new TimeSpan(tDiff);
+        _controls.richTextBox.AppendText($"call to _manager.rePositionPanels() took {elapsedSpan.TotalMilliseconds} ms\n");
 
         return;
     }

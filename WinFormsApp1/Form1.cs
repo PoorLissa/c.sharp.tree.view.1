@@ -81,8 +81,17 @@ namespace WinFormsApp1
                 mraControls.option_005_tb_01 = this.textBox5;
                 mraControls.option_005_num_1 = this.numericUpDown4;
 
-                // unused yet
                 mraControls.option_006_ch_01 = this.checkBox_Option_006;
+                mraControls.option_006_ch_02 = this.checkBox1;
+                mraControls.option_006_ch_03 = this.checkBox5;
+                mraControls.option_006_ch_04 = this.checkBox6;
+                mraControls.option_006_rb_01 = this.radioButton3;
+                mraControls.option_006_rb_02 = this.radioButton4;
+                mraControls.option_006_rb_03 = this.radioButton5;
+                mraControls.option_006_rb_04 = this.radioButton6;
+                mraControls.option_006_rb_05 = this.radioButton7;
+
+                // unused yet
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
                 mraControls.option_008_ch_01 = this.checkBox_Option_008;
 

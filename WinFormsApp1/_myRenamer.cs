@@ -19,7 +19,7 @@ public class myRenamer
 {
     private myRenamerApp_Controls   _controls   = null;
     private myTree_DataGrid_Manager _manager    = null;
-    private List<CheckBox>          _optionList = null;
+    private List<string>            _shortWords = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ public class myRenamer
 
         var tDiff = (System.DateTime.Now.Ticks - tBefore);
         System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
-        _controls.richTextBox.AppendText($" called: _manager.getSelectedFiles(asCopy: true);\n it took {elapsedSpan.TotalMilliseconds} ms\n\n");
+        _controls.richTextBox.AppendText($"call to _manager.getSelectedFiles(asCopy: true) took {elapsedSpan.TotalMilliseconds} ms\n");
 
 
         // For every checked option, update its usage counter
@@ -88,9 +88,10 @@ public class myRenamer
         int pos_ext  = item.Name.LastIndexOf('.');
 
         string newName = null;
-        string name = null;
+        string name    = null;
+        string ext     = null;
 
-        // Extract name without extension (in case offolder, just its full name)
+        // Extract name without extension (in case of folder, just its full name)
         if (item.isDir)
         {
             name = item.Name.Substring(pos_file);
@@ -100,6 +101,10 @@ public class myRenamer
             name = (pos_ext >= pos_file)
                         ? item.Name.Substring(pos_file, pos_ext - pos_file)
                         : item.Name.Substring(pos_file);
+
+            ext = (pos_ext >= pos_file)
+                ? item.Name.Substring(pos_ext)
+                : "";
         }
 
         // --------------------------------------------------------------------------------
@@ -277,6 +282,48 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
+        // Option 6: File name to UPPER/lower case
+        if (_controls.option_006_ch_01.Checked)
+        {
+            if (_controls.option_006_ch_02.Checked)
+            {
+                _shortWords = new List<string>();
+
+                _shortWords.Add("in");
+                _shortWords.Add("a");
+                _shortWords.Add("of");
+
+                if (_controls.option_006_rb_01.Checked)
+                {
+                    name = name.ToUpper();
+                }
+
+                if (_controls.option_006_rb_02.Checked)
+                {
+                    name = name.ToLower();
+                }
+
+                if (_controls.option_006_rb_05.Checked)
+                {
+                    renToCamelCase(ref name, skipShortWords: _controls.option_006_ch_04.Checked);
+                }
+            }
+
+            if (_controls.option_006_ch_03.Checked)
+            {
+                if (_controls.option_006_rb_03.Checked)
+                {
+                    ext = ext.ToUpper();
+                }
+
+                if (_controls.option_006_rb_04.Checked)
+                {
+                    ext = ext.ToLower();
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
 
         if (item.isDir)
         {
@@ -285,7 +332,7 @@ public class myRenamer
         else
         {
             if (pos_ext >= pos_file)
-                newName = item.Name.Substring(0, pos_file) + name + item.Name.Substring(pos_ext);
+                newName = item.Name.Substring(0, pos_file) + name + ext;
             else
                 newName = item.Name.Substring(0, pos_file) + name;
         }
@@ -380,6 +427,7 @@ public class myRenamer
     // --------------------------------------------------------------------------------------------------------
 
     // Count the number of uses of the selected option
+    // Store it in the Tag property
     private void updateCnt(object obj)
     {
         var cb = obj as CheckBox;
@@ -400,5 +448,40 @@ public class myRenamer
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void renToCamelCase(ref string name, bool skipShortWords)
+    {
+        StringBuilder sb = new StringBuilder(name.ToLower());
+
+        for (int i = 0; i < sb.Length; i++)
+        {
+            if (i == 0 || sb[i-1] == ' ')
+            {
+                if (skipShortWords)
+                {
+                    // Extract current word and check if it belongs to the [_shortWords] list
+
+                    int pos = name.IndexOf(' ', i);
+
+                    for (int j = 0; j < _shortWords.Count; j++)
+                    {
+                        bool isInList = myUtils.fastStrCompare(_shortWords[j], name, i, pos - i, caseSensitive: false);
+                            ...
+                    }
+                }
+                else
+                {
+                    char ch = sb[i];
+                    myUtils.charToUpperCase(ref ch);
+                    sb[i] = ch;
+                }
+            }
+        }
+
+        name = sb.ToString();
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
 
