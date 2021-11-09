@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"c:\_maxx\test\asdasdad";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\test\asdasdad";
             }
 
             init(path, expandEmpty);
@@ -53,33 +53,41 @@ namespace WinFormsApp1
 
             // Every control that myRenamerApp must be aware of:
             var mraControls = new myRenamerApp_Controls();
-
+            {
                 mraControls.richTextBox      = this.richTextBox1;
 
-                mraControls.option_001_ch_01 = this.checkBox1;
+                mraControls.option_001_ch_01 = this.checkBox_Option_001;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
                 mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, "Delimiter");
 
-                mraControls.option_002_ch_01 = this.checkBox5;
+                mraControls.option_002_ch_01 = this.checkBox_Option_002;
                 mraControls.option_002_ch_02 = this.checkBox4;
                 mraControls.option_002_num_1 = this.numericUpDown1;
                 mraControls.option_002_num_2 = this.numericUpDown2;
 
-                mraControls.option_003_ch_01 = this.checkBox7;
+                mraControls.option_003_ch_01 = this.checkBox_Option_003;
                 mraControls.option_003_num_1 = this.numericUpDown3;
                 mraControls.option_003_rb_01 = this.radioButton1;
                 mraControls.option_003_rb_02 = this.radioButton2;
                 mraControls.option_003_tb_01 = this.textBox4;
 
-                mraControls.option_004_ch_01 = this.checkBox6;
+                mraControls.option_004_ch_01 = this.checkBox_Option_004;
                 mraControls.option_004_tb_01 = this.textBox6;
                 mraControls.option_004_tb_02 = this.textBox7;
                 mraControls.option_004_num_1 = this.numericUpDown5;
 
-                mraControls.option_005_ch_01 = this.checkBox8;
+                mraControls.option_005_ch_01 = this.checkBox_Option_005;
                 mraControls.option_005_tb_01 = this.textBox5;
                 mraControls.option_005_num_1 = this.numericUpDown4;
+
+                // unused yet
+                mraControls.option_006_ch_01 = this.checkBox_Option_006;
+                mraControls.option_007_ch_01 = this.checkBox_Option_007;
+                mraControls.option_008_ch_01 = this.checkBox_Option_008;
+
+                // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
+            }
 
             // myRenamerApp
             app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);

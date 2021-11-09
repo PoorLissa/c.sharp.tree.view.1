@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -12,17 +14,12 @@ using System.Windows.Forms;
 	    - the copied panels are inserted at the bottom into 'panel_base'
 */
 
-/*
-    TODO:
-        - add config file with the ability to save state of widgets
-        - count number of uses for each content panel and sort the panels in most used order
-        - 
-*/
 
 public class myRenamer
 {
-    private myRenamerApp_Controls   _controls = null;
-    private myTree_DataGrid_Manager _manager  = null;
+    private myRenamerApp_Controls   _controls   = null;
+    private myTree_DataGrid_Manager _manager    = null;
+    private List<CheckBox>          _optionList = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -45,6 +42,12 @@ public class myRenamer
         var tDiff = (System.DateTime.Now.Ticks - tBefore);
         System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
         _controls.richTextBox.AppendText($" called: _manager.getSelectedFiles(asCopy: true);\n it took {elapsedSpan.TotalMilliseconds} ms\n\n");
+
+
+        // For every checked option, update its usage counter
+        foreach (var item in _controls.optionList)
+            updateCnt(item);
+
 
         // Rename files first, then rename folders
         for (int j = 0; j < 2; j++)
@@ -369,6 +372,27 @@ public class myRenamer
                 item.Name = newName;
                 item.isChanged = true;
             }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Count the number of uses of the selected option
+    private void updateCnt(object obj)
+    {
+        var cb = obj as CheckBox;
+
+        if (cb.Checked)
+        {
+            if (cb.Tag == null)
+            {
+                cb.Tag = new int();
+                cb.Tag = 0;
+            }
+
+            cb.Tag = (int)(cb.Tag) + 1;
         }
 
         return;

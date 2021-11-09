@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Windows.Forms;
 
 
 public class ini_file_base
 {
 	// map to hold the data
-	Dictionary<string, iniMapData> _dic = null;
+	private Dictionary<string, iniMapData> _dic = null;
 
-	static string iniFileName = null;
-	static string exeFileName = null;
+	private static string iniFileName = null;
+	private static string exeFileName = null;
+
+    private int isChanged = -1;
 
 	// -------------------------------------------------------------------------------------------------------------------
 
 	public struct iniMapData
 	{
-		public string origParamName;
-		public string origSectionName;
+		public string paramName;
+		public string sectionName;
 		public string paramData;
 		public string comment;
 	};
@@ -24,44 +29,116 @@ public class ini_file_base
 	// -------------------------------------------------------------------------------------------------------------------
 
 	public ini_file_base()
-	{
-	}
+    {
+        isChanged = -1;
+    }
 
 	// -------------------------------------------------------------------------------------------------------------------
 
-	public void read()
-	{
-		read_dic();
-	}
+	public string read()
+    {
+        string err = null;
+
+        try
+        {
+            read_dic();
+        }
+        catch (Exception ex)
+        {
+            err = ex.Message;
+        }
+
+        isChanged = 0;
+
+        return err;
+    }
 
 	// -------------------------------------------------------------------------------------------------------------------
 
-	// Get map with all the ini-data
-	public Dictionary<string, iniMapData> getDic()
+    public string save()
+    {
+        string err = null;
+
+        if (isChanged > 0)
+        {
+            try
+            {
+                save_dic();
+            }
+            catch (Exception ex)
+            {
+                err = ex.Message;
+            }
+        }
+
+        return err;
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+
+    // Get map with all the ini-data
+    public Dictionary<string, iniMapData> getDic()
 	{
-		return null;
+		return _dic;
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------------------
 
-	// Get parameter by its name
-	public string getParam(string name)
-	{
-		//const std::wstring& operator [] (const std::wstring);
+    // Get single parameter by its name (Section_Name.Param_Name)
+    public string this[string param]
+    {
+        get => getValue(param);
+        set => setValue(param, value);
+    }
 
-		return "";
-	}
+    // -------------------------------------------------------------------------------------------------------------------
 
-	// -------------------------------------------------------------------------------------------------------------------
+    // Value getter for [public string this[string param]]
+    private string getValue(string param)
+    {
+        if (_dic != null && _dic.ContainsKey(param))
+        {
+            return _dic[param].paramData;
+        }
 
-	// Read ini file as a string, as-is
-	private void read_raw(ref string res)
+        return null;
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+
+    // Value setter for [public string this[string param]]
+    private void setValue(string param, string value)
+    {
+        int pos = param.IndexOf('.');
+
+        if (pos > 0)
+        {
+            isChanged++;
+
+            var sectionName = new StringBuilder(param, 0, pos + 1, pos + 1);
+            var paramName   = new StringBuilder(param);
+            var paramData   = new StringBuilder(value);
+            var comment     = new StringBuilder();
+
+            mapData(sectionName, paramName, paramData, comment);
+        }
+
+        return;
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+
+    // Read ini file as a string, as-is
+    private void read_raw(ref string res)
 	{
 		string fileName = get_ini_path();
 
 		if (fileName.Length > 0)
 		{
-			res = System.IO.File.ReadAllText(fileName);
+            if (System.IO.File.Exists(fileName))
+            {
+                res = System.IO.File.ReadAllText(fileName);
+            }
 		}
 
 		return;
@@ -72,72 +149,74 @@ public class ini_file_base
 	// Read ini file into map
 	private void read_dic()
 	{
-		// Get line bounded by '\n' symbols
-		int getLine(ref string src, ref string res, ref int pos)
+        // Get line bounded by '\n' symbols
+        int getLine(ref string src, ref StringBuilder line, ref int pos)
 		{
-			res = "";
+			line.Clear();
 
-			while (pos < src.Length)
-			{
-				if (src[pos] == '\n' || src[pos] == '\r')
-					break;
-				res += src[pos++];
-			}
+            int i = pos;
 
-			pos = (pos == src.Length) ? 0 : pos + 1;
+            if (pos < src.Length)
+            {
+                pos = src.IndexOf(Environment.NewLine, pos + 1);
 
-			return pos;
+                if (pos < 0)
+                    pos = src.Length;
+
+                for (; i < pos; i++)
+                {
+                    line.Append(src[i]);
+                }
+
+                if (pos == src.Length)
+                    pos = 0;
+            }
+
+            trimSB(ref line);
+
+            return pos;
 		};
 
-		// Put the data into map
-		void mapData(string sectionName, string paramName, string paramData, string comment)
-		{
-			//trim(paramData, L" \n\r\t");
-
-			string pName = paramName.ToLower();
-
-			var data = new iniMapData();
-
-			data.origSectionName = sectionName;
-			data.origParamName = paramName;
-			data.paramData = paramData;
-			data.comment = comment;
-
-			_dic[pName] = data;
-		};
 
 		// ------------------------------------------------------------
 
-		string rawFile = Environment.NewLine;
-		read_raw(ref rawFile);
 
-		if (rawFile.Length > 0)
+		string rawFile = null;
+        read_raw(ref rawFile);
+
+
+		if (rawFile != null && rawFile.Length > 0)
 		{
-			string line = null;
-			int pos = 0;
+            var lineSB        = new StringBuilder();
+            var sectionNameSB = new StringBuilder();
+            var paramNameSB   = new StringBuilder();
+            var paramDataSB   = new StringBuilder();
+            var commentarySB  = new StringBuilder();
 
-			string sectionName = null, paramName = null, paramData = null, commentary = null;
+            int pos = 0;
 
-			while (getLine(ref rawFile, ref line, ref pos) != 0)
-			{
-				int len = line.Length;
+            while (getLine(ref rawFile, ref lineSB, ref pos) != 0)
+            {
+                string line = lineSB.ToString();
 
-				// Empty line indicates the end of current record
-				if (len == 0)
+				// Empty line indicates the end of current section
+				if (line.Length == 0)
 				{
-					mapData(sectionName, paramName, paramData, commentary);
+                    mapData(sectionNameSB, paramNameSB, paramDataSB, commentarySB);
 
-					sectionName = "";
-					paramName = "";
-					paramData = "";
-					commentary = "";
-					continue;
+                    sectionNameSB.Clear();
+                    commentarySB.Clear();
+
+                    continue;
 				}
 
 				// Commentary
 				if (line[0] == '#' || line[0] == ';')
 				{
-					commentary = (commentary == null || commentary.Length == 0) ? line : commentary + "\n" + line;
+                    if (commentarySB.Length > 0)
+                        commentarySB.Append('\n');
+
+                    commentarySB.Append(lineSB);
 					continue;
 				}
 
@@ -145,8 +224,8 @@ public class ini_file_base
 				if (line[0] == '[')
 				{
 					int Pos = line.IndexOf(']');
-					sectionName = line.Substring(1, Pos - 1);
-					sectionName += ".";
+                    sectionNameSB.Append(line, 1, Pos - 1);
+                    sectionNameSB.Append('.');
 					continue;
 				}
 
@@ -155,34 +234,36 @@ public class ini_file_base
 				if (line.IndexOf('=') >= 0)
 				{
 					// Save current record
-					if (paramData.Length >= 0)
+					if (paramDataSB.Length != 0)
 					{
-						mapData(sectionName, paramName, paramData, commentary);
-					}
+                        mapData(sectionNameSB, paramNameSB, paramDataSB, commentarySB);
+                    }
 
 					// Start the new one
 					int Pos = line.IndexOf('=') + 1;
 
-					paramName = line.Substring(0, Pos - 1);
-					//trim(paramName, L" \n\r\t");
-					paramName = sectionName + paramName;
+                    paramNameSB.Append(line, 0, Pos - 1);
+                    trimSB(ref paramNameSB);
+					paramNameSB.Insert(0, sectionNameSB);
 
-					paramData = line.Substring(Pos);
-					continue;
+					paramDataSB.Append(line, Pos, line.Length-Pos);
+                    continue;
 				}
 
 				// Multiline parameter data:
 				{
-					paramData += ' ';
-					paramData += line;
+					paramDataSB.Append(' ');
+					paramDataSB.Append(line);
 				}
 			}
 
-			if (paramName.Length > 0)
+			if (paramNameSB.Length > 0)
 			{
-				mapData(sectionName, paramName, paramData, commentary);
+				mapData(sectionNameSB, paramNameSB, paramDataSB, commentarySB);
 			}
 		}
+
+        rawFile = null;
 
 		return;
 	}
@@ -230,370 +311,166 @@ public class ini_file_base
 		return res;
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------------------
 
-	// Trim string on the right and left
-	//private void trim(string str, const char*)	{	}
+    private void trimSB(ref StringBuilder sb)
+    {
+        bool doStop = false;
+
+        // Trim the line
+        while (sb.Length > 0 && doStop != true)
+        {
+            int oldLen = sb.Length;
+
+            if (sb[0] == ' ' || sb[0] == '\t' || sb[0] == '\n' || sb[0] == '\r')
+                sb.Remove(0, 1);
+
+            int back = sb.Length - 1;
+
+            if (sb[back] == ' ' || sb[back] == '\t' || sb[back] == '\n' || sb[back] == '\r' || sb[back] == ';')
+                sb.Remove(back, 1);
+
+            if (sb.Length == oldLen)
+                doStop = true;
+        }
+
+        return;
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+
+    // Put the data into map
+    // Existing data wth the same key will be replaced
+    private void mapData(StringBuilder sectionName, StringBuilder paramName, StringBuilder paramData, StringBuilder comment)
+    {
+        if (sectionName.Length > 0 || paramName.Length > 0 || paramData.Length > 0 || comment.Length > 0)
+        {
+            if (_dic == null)
+            {
+                _dic = new Dictionary<string, iniMapData>();
+            }
+
+            trimSB(ref paramData);
+
+            string paramNameStr = paramName.ToString();
+
+            if (_dic.ContainsKey(paramNameStr))
+            {
+                var data = _dic[paramNameStr];
+                data.paramData = paramData.ToString();
+                _dic[paramNameStr] = data;
+            }
+            else
+            {
+                var data = new iniMapData();
+
+                data.sectionName = sectionName.ToString();
+                data.paramName = paramNameStr;
+                data.paramData = paramData.ToString();
+                data.comment = comment.ToString();
+
+                if (data.sectionName.Length == 0)
+                {
+                    paramName.Append(comment);
+                }
+
+                _dic[paramName.ToString()] = data;
+            }
+
+            paramName.Clear();
+            paramData.Clear();
+
+            isChanged += isChanged >= 0 ? 1 : 0;
+        }
+
+        return;
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
+
+    // Save ini-data to file
+    private void save_dic()
+    {
+        if (_dic != null)
+        {
+            var tmpDic = new Dictionary<string, StringBuilder>();
+
+            foreach (var item in _dic)
+            {
+                // Comment that does not belong to a section
+                if (item.Value.comment != null && item.Value.comment.Length > 0 && item.Value.sectionName.Length == 0)
+                {
+                    StringBuilder commentSB = new StringBuilder();
+
+                    commentSB.Append(item.Value.comment);
+                    commentSB.Append(Environment.NewLine);
+
+                    tmpDic[commentSB.ToString()] = commentSB;
+                }
+
+                // Store sections in order to aggregate parameters
+                if (item.Value.sectionName != null && item.Value.sectionName.Length > 0)
+                {
+                    string sectionName = item.Value.sectionName.Substring(0, item.Value.sectionName.Length - 1);
+
+                    StringBuilder sectionSB = null;
+
+                    if (tmpDic.ContainsKey(sectionName))
+                    {
+                        sectionSB = tmpDic[sectionName];
+                    }
+                    else
+                    {
+                        sectionSB = new StringBuilder();
+
+                        if (item.Value.comment.Length > 0)
+                        {
+                            sectionSB.Append(item.Value.comment);
+                            sectionSB.Append(Environment.NewLine);
+                        }
+
+                        sectionSB.Append('[');
+                        sectionSB.Append(sectionName);
+                        sectionSB.Append(']');
+                        sectionSB.Append(Environment.NewLine);
+                    }
+
+                    if (item.Value.paramName != null && item.Value.paramName.Length > 0)
+                    {
+                        int pos = item.Value.paramName.IndexOf('.') + 1;
+                        sectionSB.Append(item.Value.paramName, pos, item.Value.paramName.Length - pos);
+                        sectionSB.Append(" = ");
+                    }
+
+                    if (item.Value.paramData != null && item.Value.paramData.Length > 0)
+                    {
+                        sectionSB.Append(item.Value.paramData);
+                        sectionSB.Append(';');
+                        sectionSB.Append(Environment.NewLine);
+                    }
+
+                    tmpDic[sectionName] = sectionSB;
+                }
+            }
+
+            var data = new StringBuilder();
+
+            foreach (var item in tmpDic)
+            {
+                data.Append(item.Value);
+                data.Append(Environment.NewLine);
+            }
+
+            string path = get_ini_path();
+
+            System.IO.File.CreateText(path).Dispose();
+
+            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+            {
+                sw.WriteLine(data);
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------------------------------
 };
-
-
-#if false
-
-            var ini = new ini_file_base();
-
-            ini.read();
-
-            var aaa = ini.getDic();
-
-            Console.WriteLine(ini.getParam(""));
-
-            Console.ReadKey();
-
-#endif
-
-#if false
-
- include "stdafx.h"
- include "__ini_file.h"
-
-// -----------------------------------------------------------------------------------------------
-
-
-// --- INI_FILE_BASE ---
-
-
-ini_file_base::ini_file_base()
-{
-}
-// -----------------------------------------------------------------------------------------------
-
-ini_file_base::~ini_file_base()
-{
-
-}
-// -----------------------------------------------------------------------------------------------
-
-// Get full path to this program's .exe file
-std::string* ini_file_base::get_exe_path()
-{
-	return get_file_path('e');
-}
-// -----------------------------------------------------------------------------------------------
-
-// Get full path to this program's .ini file
-std::string* ini_file_base::get_ini_path()
-{
-	return get_file_path('i');
-}
-// -----------------------------------------------------------------------------------------------
-
-// Get .exe or .ini fileName
-std::string* ini_file_base::get_file_path(const char file)
-{
-	std::string *res = nullptr;
-
-	static std::string iniFileName("");
-	static std::string exeFileName("");
-
-	if (iniFileName.empty() && exeFileName.empty())
-	{
-		TCHAR path[MAX_PATH];
-
-		int len = GetModuleFileName(NULL, path, MAX_PATH);
-
-		if (len)
-		{
-			exeFileName = std::string(&path[0], &path[len]);
-
-			std::transform(exeFileName.begin(), exeFileName.end(), exeFileName.begin(), ::tolower);
-
-			int pos = exeFileName.find_last_of('.');
-
-			iniFileName = exeFileName.substr(0, pos + 1) + "ini";
-		}
-	}
-
-	switch (file)
-	{
-		case 'i':
-			res = &iniFileName;
-			break;
-
-		case 'e':
-			res = &exeFileName;
-			break;
-	}
-
-	return res;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Make file NOT hidden, system or readOnly, because in Windows 7 fstream::open fails for hidden files
-// OR:
-// Make file hidden
-void ini_file_base::makeVisible(const char *file, bool visible)
-{
-	if (file)
-	{
-		DWORD attr = GetFileAttributesA(file);
-
-		if (visible)
-		{
-			if (attr & FILE_ATTRIBUTE_HIDDEN || attr & FILE_ATTRIBUTE_SYSTEM || attr & FILE_ATTRIBUTE_READONLY)
-			{
-				DWORD removeAttr = FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY;
-				SetFileAttributesA(file, attr & ~removeAttr);
-			}
-		}
-		else
-		{
-			SetFileAttributesA(file, attr | FILE_ATTRIBUTE_HIDDEN);
-		}
-	}
-
-	return;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Trim string on the right and left
-void ini_file_base::trim(std::wstring &str, const wchar_t *symbols)
-{
-	size_t pos1 = str.find_first_not_of(symbols, 0);
-	size_t pos2 = str.find_last_not_of(symbols);
-
-	if (pos1 == std::string::npos)
-		str.clear();
-
-	str = str.substr(pos1, pos2 - pos1 + 1);
-
-	return;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Read ini file as a string, as-is
-void ini_file_base::read_raw(std::wstring &res)
-{
-	res.clear();
-
-	std::string *fileName = get_ini_path();
-
-	if (fileName->length())
-	{
-		std::wfstream file;
-		std::wstring  line;
-
-		// Make .ini NOT hidden, system or readOnly, because in Windows 7 fstream::open fails for hidden files:
-		makeVisible(fileName->c_str(), true);
-
-		// If the file exists, we read data from it. Otherwise, we create it.
-		file.open(*fileName, std::wfstream::in | std::wfstream::app);
-
-		if (file.is_open())
-		{
-			//file.imbue(std::locale("rus_rus.866"));
-			file.imbue(std::locale("rus_rus.1251"));
-
-			while (std::getline(file, line))
-			{
-				res += line;
-				res += '\n';
-			}
-
-			file.close();
-
-			// Make .ini hidden
-			makeVisible(fileName->c_str(), false);
-		}
-	}
-
-	return;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Read ini file into map
-void ini_file_base::read_map()
-{
-	// Get line bounded by '\n' symbols
-	auto getLine = [](std::wstring &src, std::wstring &res, size_t &pos) -> size_t
-	{
-		res.clear();
-
-		while(pos < src.length())
-		{
-			if (src[pos] == '\n')
-				break;
-			res += src[pos++];
-		}
-
-		pos = (pos == src.length()) ? 0u : pos + 1;
-
-		return pos;
-	};
-
-	// Put the data into map
-	auto mapData = [&](std::wstring sectionName, std::wstring paramName, std::wstring paramData, std::wstring comment)
-	{
-		trim(paramData, L" \n\r\t");
-
-		std::wstring pName(paramName);
-
-		std::transform(pName.begin(), pName.end(), pName.begin(),
-			[](unsigned char c) {
-				return ::tolower(c); 
-			}
-		);
-
-		iniMapData data;
-
-		data.origSectionName = sectionName;
-		data.origParamName	 = paramName;
-		data.paramData		 = paramData;
-		data.comment		 = comment;
-
-		// wtf?..
-		if (!_map.count(pName))
-			_map[pName].paramData += paramData;
-
-		_map[pName] = data;
-	};
-
-	// ---------------------------------------
-
-	std::wstring rawFile;
-	read_raw(rawFile);
-
-	if (rawFile.length())
-	{
-		std::wstring line;
-		size_t pos = 0u;
-
-		std::wstring sectionName, paramName, paramData, commentary;
-
-		while (getLine(rawFile, line, pos))
-		{
-			size_t len = line.length();
-
-			// Empty line indicates the end of current record
-			if (!len)
-			{
-				mapData(sectionName, paramName, paramData, commentary);
-
-				sectionName.clear();
-				paramName.clear();
-				paramData.clear();
-				commentary.clear();
-				continue;
-			}
-
-			// Commentary
-			if (line[0] == '#' || line[0] == ';')
-			{
-				commentary = commentary.empty() ? line : commentary + L"\n" + line;
-				//commentary = line;
-				continue;
-			}
-
-			// [ marks the beginning of section
-			if (line[0] == '[')
-			{
-				size_t Pos = line.find_first_of(']');
-				sectionName = line.substr(1, Pos-1);
-				sectionName += L".";
-				continue;
-			}
-
-			// Text before '=' marks parameter name
-			// This is also a point where current record might end
-			if (line.find('=') != std::string::npos)
-			{
-				// Save current record
-				if (paramData.length())
-				{
-					mapData(sectionName, paramName, paramData, commentary);
-				}
-
-				// Start the new one
-				size_t Pos = line.find_first_of('=') + 1;
-
-				paramName = line.substr(0, Pos - 1);
-				trim(paramName, L" \n\r\t");
-				paramName = sectionName + paramName;
-
-				paramData = line.substr(Pos);
-				continue;
-			}
-
-			// Multiline parameter data:
-			{
-				paramData += ' ';
-				paramData += line;
-			}
-		}
-
-		if (!paramName.empty())
-		{
-			mapData(sectionName, paramName, paramData, commentary);
-		}
-	}
-
-	return;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Get the map with all the ini-data
-const std::map<std::wstring, ini_file_base::iniMapData> & ini_file_base::getMap() const
-{
-	return _map;
-}
-// -----------------------------------------------------------------------------------------------
-
-// Get parameter by its name
-const std::wstring& ini_file_base::operator[](const std::wstring paramName)
-{
-	std::wstring param(paramName);
-
-	std::transform(param.begin(), param.end(), param.begin(),
-		[](unsigned char c) {
-			return ::tolower(c);
-		}
-	);
-
-	return _map[param].paramData;
-}
-// -----------------------------------------------------------------------------------------------
-
-void ini_file_base::read()
-{
-	read_map();
-
-	return;
-}
-// -----------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------
-
-
-// --- INI_FILE ---
-
-
-// Read data from the .ini-file
-int ini_file::read_ini_file(bool doReadProfiles /*default=false*/)
-{
-	return 1;
-}
-// -----------------------------------------------------------------------------------------------
-
-ini_file::ini_file() : ini_file_base()
-{
-
-}
-// -----------------------------------------------------------------------------------------------
-
-ini_file::~ini_file()
-{
-
-}
-// -----------------------------------------------------------------------------------------------
-
-
-#endif

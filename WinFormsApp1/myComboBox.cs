@@ -12,6 +12,8 @@ namespace myControls
         ComboBox _cb = null;
         Label _placeholder = null;
 
+        private bool _isChanged = false;
+
         // --------------------------------------------------------------------------------------------------------
 
         public myComboBox(ComboBox cb, string placeholder = "...")
@@ -54,8 +56,6 @@ namespace myControls
             _cb.TextChanged    += new EventHandler      (on_TextChanged);
             _cb.DropDown       += new EventHandler      (on_DropDownOpened);
             _cb.DropDownClosed += new EventHandler      (on_DropDownClosed);
-
-//          _cb.HandleDestroyed += new EventHandler         (on_HandleDestroyed);
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -63,6 +63,50 @@ namespace myControls
         public ComboBox Obj()
         {
             return _cb;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        public bool isChanged()
+        {
+            return _isChanged;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        public void setItems(string data)
+        {
+            if (data != null)
+            {
+                int pos1 = 0;
+                int pos2 = 0;
+
+                do
+                {
+                    pos2 = data.IndexOf('?', pos1);
+                    _cb.Items.Add(data.Substring(pos1, pos2 - pos1));
+                    pos1 = pos2 + 1;
+
+                } while (pos2 != data.Length - 1);
+
+            }
+
+            return;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        public string getChanges()
+        {
+            var sb = new System.Text.StringBuilder();
+
+            for (int i = 0; i < _cb.Items.Count; i++)
+            {
+                sb.Append(_cb.Items[i].ToString());
+                sb.Append('?');
+            }
+
+            return sb.ToString();
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -132,6 +176,7 @@ namespace myControls
                         return;
 
                 cb.Items.Add(cb.Text);
+                _isChanged = true;
             }
         }
 

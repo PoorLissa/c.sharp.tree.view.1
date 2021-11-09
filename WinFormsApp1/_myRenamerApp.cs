@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 
 
 public class myRenamerApp_Controls
 {
+    public List<CheckBox>           optionList       = null;            // List of each option panel's main checkboxes
+
     public RichTextBox              richTextBox      = null;
 
     public CheckBox                 option_001_ch_01 = null;
@@ -31,6 +35,11 @@ public class myRenamerApp_Controls
     public CheckBox                 option_005_ch_01 = null;
     public TextBox                  option_005_tb_01 = null;
     public NumericUpDown            option_005_num_1 = null;
+
+    // unused yet
+    public CheckBox                 option_006_ch_01 = null;
+    public CheckBox                 option_007_ch_01 = null;
+    public CheckBox                 option_008_ch_01 = null;
 };
 
 
@@ -39,6 +48,15 @@ public class myRenamerApp
 {
     private myRenamerApp_Controls   _controls     = null;
     private myTree_DataGrid_Manager _myTDGManager = null;
+    private ini_file_base           _ini          = null;
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private class iniItem1
+    {
+        public int    _data;
+        public string _name;
+    };
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -68,6 +86,29 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void Application_onExit(object sender, EventArgs e)
+    {
+        // --- Save state of the controls that can be modified by the User ---
+        if (_controls.option_001_cb_01.isChanged())
+        {
+            _ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"] = _controls.option_001_cb_01.getChanges();
+        }
+
+        // --- Save usage statistics for selectable options ---
+        foreach (var item in _controls.optionList)
+        {
+            string param = $"myCheckBoxCounters.{item.Name}";
+            string val = _ini[param];
+            int num = item.Tag != null ? (int)(item.Tag) : 0;
+            num += (val != null) ? Int32.Parse(val) : 0;
+            _ini[param] = num.ToString();
+        }
+
+        _ini.save();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Every checkbox that needs additional processing of its Clicked Event should subscribe to this method
     private void checkboxChanged_Common(object sender, EventArgs e)
     {
@@ -85,15 +126,18 @@ public class myRenamerApp
 
     private void init()
     {
+        _ini = new ini_file_base();
+        _ini.read();
+
+        // Subscribe to ApplicationExit event to finalize stuff
+        Application.ApplicationExit += new EventHandler(Application_onExit);
+
         // Common checkbox changed event
-//      var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
+        //      var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
 
         // Option 1
         _controls.option_001_ch_03.Checked = true;
-
-        _controls.option_001_cb_01.Obj().Items.Add("_");
-        _controls.option_001_cb_01.Obj().Items.Add("_aaa_");
-        _controls.option_001_cb_01.Obj().Items.Add("img");
+        _controls.option_001_cb_01.setItems(_ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"]);
 
         // Option 2
         _controls.option_002_num_1.Value = 1;
@@ -115,17 +159,99 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Reposition option panels in most used order
     private void rePositionPanels()
     {
-        // todo: implement repositioning in most used order
+        Control panel_base = _controls.option_001_ch_01.Parent.Parent as Control;
 
-/*
-        this.panel_content_05.BringToFront();
-        this.panel_content_04.BringToFront();
-        this.panel_content_03.BringToFront();
-        this.panel_content_02.BringToFront();
-        this.panel_content_01.BringToFront();
-*/
+        // Collect each option's main checkboxes into a list
+        if (_controls.optionList == null)
+        {
+            _controls.optionList = new List<CheckBox>();
+
+            for (int i = 0; i < panel_base.Controls.Count; i++)
+            {
+                var control = panel_base.Controls[i];
+
+                if (control is Panel)
+                {
+                    for (int j = 0; j < control.Controls.Count; j++)
+                    {
+                        var subControl = control.Controls[j];
+
+                        if (subControl.Name.StartsWith("checkBox_Option_"))
+                        {
+                            _controls.optionList.Add(subControl as CheckBox);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // -------------------------------------------------------------
+
+        var dic = _ini.getDic();
+        var list = new List<iniItem1>();
+
+        // Get options from [myCheckBoxCounters] section in ini-file and put them into a list
+        foreach (var item in dic)
+        {
+            if (item.Key.Contains("myCheckBoxCounters"))
+            {
+                var listItem = new iniItem1();
+
+                listItem._data = Int32.Parse(item.Value.paramData);
+                listItem._name = item.Key.Substring(item.Key.IndexOf('.') + 1);
+
+                list.Add(listItem);
+            }
+        }
+
+        if (list.Count > 0)
+        {
+            // Sort list using custom sorter method with the respect to int value
+            list.Sort((iniItem1 a, iniItem1 b) =>
+            {
+                if (a._data != b._data)
+                    return (a._data > b._data) ? -1 : 1;
+                return 0;
+            });
+
+            void addDelimiterPanel()
+            {
+                var delim = new Panel();
+                delim.Height = 2;
+                delim.Dock = DockStyle.Top;
+                delim.BackColor = Color.LightGray;
+                panel_base.Controls.Add(delim);
+                delim.BringToFront();
+            }
+
+            addDelimiterPanel();
+
+            // Find option panels and sort them within [panel_base]
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < _controls.optionList.Count; j++)
+                {
+                    if (list[i]._name == _controls.optionList[j].Name)
+                    {
+                        var panel = _controls.optionList[j].Parent as Panel;
+                        panel.BringToFront();
+
+                        // Also add delimiter panel
+                        addDelimiterPanel();
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        list.Clear();
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
