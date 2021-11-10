@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -445,13 +446,36 @@ public class myTree
             filesFound = _globalFileListExtRef.Count - dirsFound;
 
             // Sort the results
-            _globalFileListExtRef.Sort();
+            //_globalFileListExtRef.Sort(CompareDinosByLength);
+
+            var tBefore = DateTime.Now.Ticks;
+
+            _globalFileListExtRef.Sort();                         // 5.7 - 6.4 ms
+
+            //_globalFileListExtRef.Sort(CompareDinosByLength);       // 5.7 - 6.4 ms
+
+            TimeSpan elapsedSpan = new TimeSpan(DateTime.Now.Ticks - tBefore);
+
+            _richTextBox.Invoke(new MethodInvoker(delegate
+            {
+                _richTextBox.AppendText($"It took {elapsedSpan.TotalMilliseconds} ms{Environment.NewLine}");
+            }));
+
+
         }
 
         return res;
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    private static int CompareDinosByLength(myTreeListDataItem x, myTreeListDataItem y)
+    {
+        if (x.isDir != y.isDir)
+            return x.isDir ? -1 : 1;
+
+        return String.Compare(x.Name, y.Name, null, CompareOptions.OrdinalIgnoreCase);
+    }
 
     // Disallow redrawing of nodes
     public void AllowRedrawing(bool val)

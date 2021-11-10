@@ -318,6 +318,39 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
+        // Option 7: Find numeric sequence and prepend it with zeroes
+        if (_controls.option_007_ch_01.Checked)
+        {
+            num = (int)(_controls.option_007_num_1.Value);  // Total final length of numeric sequence
+            pos = (int)(_controls.option_007_num_2.Value);  // Number of numeric sequence in the file name
+
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (myUtils.charIsDigit(name[i]))
+                {
+                    int offset = 0;
+                    myUtils.getInt_fromString(name, i, ref offset);
+
+                    if (pos-- == 1)
+                    {
+                        // Now offset shows us the length of this numeric sequence
+                        var sb = new StringBuilder(name);
+
+                        for (int j = 0; j < (num - offset); j++)
+                            sb.Insert(i, '0');
+
+                        name = sb.ToString();
+                        break;
+                    }
+
+                    i += offset;
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
+
         if (item.isDir)
         {
             newName = item.Name.Substring(0, pos_file) + name;

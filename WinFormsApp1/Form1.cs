@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"c:\_maxx\test\asdasdad";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\test\aaa";
             }
 
             init(path, expandEmpty);
@@ -92,8 +92,11 @@ namespace WinFormsApp1
                 mraControls.option_006_rb_05 = this.radioButton7;
                 mraControls.option_006_cb_01 = new myControls.myComboBox(this.comboBox3, "Short Words");
 
-                // unused yet
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
+                mraControls.option_007_num_1 = this.numericUpDown6;
+                mraControls.option_007_num_2 = this.numericUpDown7;
+
+                // unused yet
                 mraControls.option_008_ch_01 = this.checkBox_Option_008;
 
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
@@ -111,6 +114,37 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string[] arr =
+            {
+                "aaa",
+                "aaa-123",
+                "aaa-222-bbb",
+                "aaa-333-bbb-444",
+                "aaa-333-bbb-444-ccc",
+            };
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                string sss = arr[i];
+
+                for (int j = 0; j < sss.Length; j++)
+                {
+                    char ch = sss[j];
+
+                    if (myUtils.charIsDigit(ch))
+                    {
+                        int offset = 1;
+
+                        int num = myUtils.getInt_fromString(sss, j, ref offset);
+
+                        richTextBox1.AppendText($" str = {sss}, pos = {j}, num = {num}, offset = {offset}\n");
+
+                        j += offset;
+                    }
+                }
+            }
+
+            ;
         }
 
         // --------------------------------------------------------------------------------

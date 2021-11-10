@@ -253,44 +253,6 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
-#if false
-    public static void zzz()
-    {
-        string str = "bbb";
-        string   s = "c:\\aaa\\bbb";
-
-        string res = fastStrCompare2(str, s, 7, 2);
-
-        int a = 1;
-    }
-
-    public static string fastStrCompare2(string str, string s, int pos, int len)
-    {
-        len = (len < 0) ? s.Length - pos : len;
-
-        if (len != str.Length)
-            return "err 1";
-
-        string s1 = "";
-        string s2 = "";
-
-        for (int i = 0; i < len; i++)
-        {
-            s1 += str[i];
-            s2 += s[pos + i];
-
-            if (str[i] != s[pos + i])
-            {
-                return $"err 2: '{s1}' != '{s2}'";
-            }
-        }
-
-        return $"ok: '{s1}' == '{s2}'";
-    }
-#endif
-
-    // --------------------------------------------------------------------------------------------------------
-
     public static bool charIsLetter(char ch)
     {
         if ((ch >= 65 && ch <= 90) || (ch >= 1040 && ch <= 1071))
@@ -303,6 +265,38 @@ public class myUtils
             return true;
 
         return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Extracts numeric characters starting from position [pos] and returns them as an integer
+    public static int getInt_fromString(string s, int pos, ref int offset)
+    {
+        int res = 0;
+        offset = 0;
+        char ch;
+
+        do
+        {
+            ch = s[pos++];
+
+            if (!charIsDigit(ch))
+                break;
+
+            res *= 10;
+            res += (int)(ch - 48);
+            offset++;
+
+        } while (pos < s.Length);
+
+        return res;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public static bool charIsDigit(char ch)
+    {
+        return (ch > 47 && ch < 58);
     }
 
     // --------------------------------------------------------------------------------------------------------

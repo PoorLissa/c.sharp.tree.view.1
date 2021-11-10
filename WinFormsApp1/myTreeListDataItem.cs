@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Windows.Forms;
 
 
 public class myTreeListDataItem : IComparable<myTreeListDataItem>
@@ -52,16 +52,73 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     // --------------------------------------------------------------------------------
 
     // Default comparer:
-    // - Directories precede files
-    // - Case insensitive
+    // -- Directories precede files
+    // -- Case insensitive
+    public int CompareTo_old(myTreeListDataItem other)
+    {
+        if (_isDir != other._isDir)
+            return _isDir ? -1 : 1;
+
+        return String.Compare(_fileName, other._fileName, null, System.Globalization.CompareOptions.IgnoreCase);
+    }
+
+    // Default comparer:
+    // -- Directories precede files
+    // -- Non CaseSensitive
+    // -- Uses alpha-numeric sort:
+    //  [name]
+    //  _name
+    //  aaa
+    //  bbb
+    //  file (1)
+    //  file (11)
+    //  file (111)
+    //  ггг
+    //  яяя
     public int CompareTo(myTreeListDataItem other)
     {
         if (_isDir != other._isDir)
             return _isDir ? -1 : 1;
 
-        int length = _fileName.Length > other._fileName.Length ? _fileName.Length : other._fileName.Length;
+        int i = 0;
+        int res = _fileName.Length < other._fileName.Length ? -1 : 1;
+        int minLen = res < 0 ? _fileName.Length : other._fileName.Length;
 
-        return String.Compare(_fileName, 0, other._fileName, 0, length, null, System.Globalization.CompareOptions.IgnoreCase);
+        while (i < minLen)
+        {
+            char ch1 =  this._fileName[i];
+            char ch2 = other._fileName[i];
+
+            if (myUtils.charIsDigit(ch1) && myUtils.charIsDigit(ch2))
+            {
+                int offset = 0;
+
+                int n1 = myUtils.getInt_fromString( this._fileName, i, ref offset);
+                int n2 = myUtils.getInt_fromString(other._fileName, i, ref offset);
+
+                if (n1 != n2)
+                    return n1 < n2 ? -1 : 1;
+
+                i += offset;
+            }
+            else
+            {
+                if (ch1 != ch2)
+                {
+                    myUtils.charToLowerCase(ref ch1);
+                    myUtils.charToLowerCase(ref ch2);
+
+                    if (ch1 != ch2)
+                    {
+                        return ch1 < ch2 ? -1 : 1;
+                    }
+                }
+            }
+
+            i++;
+        }
+
+        return res;
     }
 
     // --------------------------------------------------------------------------------
