@@ -108,6 +108,21 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
                     myUtils.charToLowerCase(ref ch1);
                     myUtils.charToLowerCase(ref ch2);
 
+                    // Change sorting order for '_', '[', ']' -- put them before numbers and letters
+                    if (ch1 > 90 && ch1 < 96)
+                    {
+                        if (ch1 == '[') ch1 = (char)(10);
+                        if (ch1 == ']') ch1 = (char)(11);
+                        if (ch1 == '_') ch1 = (char)(12);
+                    }
+
+                    if (ch2 > 90 && ch2 < 96)
+                    {
+                        if (ch2 == '[') ch2 = (char)(10);
+                        if (ch2 == ']') ch2 = (char)(11);
+                        if (ch2 == '_') ch2 = (char)(12);
+                    }
+
                     if (ch1 != ch2)
                     {
                         return ch1 < ch2 ? -1 : 1;

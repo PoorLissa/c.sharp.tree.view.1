@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\test\aaa";
+                path = @"d:\test\-= Games =-\Uninstall";
             }
 
             init(path, expandEmpty);
