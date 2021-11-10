@@ -256,7 +256,7 @@ namespace WinFormsApp1
             // 
             // panel7
             // 
-            this.panel7.BackColor = System.Drawing.SystemColors.Control;
+            this.panel7.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel7.Controls.Add(this.checkBox_Option_008);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel7.Location = new System.Drawing.Point(0, 727);
@@ -277,7 +277,7 @@ namespace WinFormsApp1
             // 
             // panel5
             // 
-            this.panel5.BackColor = System.Drawing.SystemColors.Control;
+            this.panel5.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel5.Controls.Add(this.checkBox_Option_007);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 648);
@@ -298,7 +298,7 @@ namespace WinFormsApp1
             // 
             // panel3
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.Control;
+            this.panel3.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel3.Controls.Add(this.groupBox2);
             this.panel3.Controls.Add(this.groupBox1);
             this.panel3.Controls.Add(this.checkBox_Option_006);
@@ -451,7 +451,7 @@ namespace WinFormsApp1
             // 
             // panel_content_05
             // 
-            this.panel_content_05.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_05.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_05.Controls.Add(this.label3);
             this.panel_content_05.Controls.Add(this.numericUpDown4);
             this.panel_content_05.Controls.Add(this.textBox5);
@@ -505,7 +505,7 @@ namespace WinFormsApp1
             // 
             // panel_content_04
             // 
-            this.panel_content_04.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_04.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_04.Controls.Add(this.label5);
             this.panel_content_04.Controls.Add(this.label4);
             this.panel_content_04.Controls.Add(this.numericUpDown5);
@@ -578,7 +578,7 @@ namespace WinFormsApp1
             // 
             // panel_content_03
             // 
-            this.panel_content_03.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_03.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_03.Controls.Add(this.radioButton2);
             this.panel_content_03.Controls.Add(this.radioButton1);
             this.panel_content_03.Controls.Add(this.textBox4);
@@ -655,7 +655,7 @@ namespace WinFormsApp1
             // 
             // panel_content_02
             // 
-            this.panel_content_02.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_02.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_02.Controls.Add(this.numericUpDown2);
             this.panel_content_02.Controls.Add(this.label1);
             this.panel_content_02.Controls.Add(this.numericUpDown1);
@@ -719,7 +719,7 @@ namespace WinFormsApp1
             // 
             // panel_content_01
             // 
-            this.panel_content_01.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_content_01.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_01.Controls.Add(this.comboBox2);
             this.panel_content_01.Controls.Add(this.checkBox3);
             this.panel_content_01.Controls.Add(this.checkBox2);
