@@ -19,7 +19,6 @@ public class myRenamer
 {
     private myRenamerApp_Controls   _controls   = null;
     private myTree_DataGrid_Manager _manager    = null;
-    private List<string>            _shortWords = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -287,12 +286,6 @@ public class myRenamer
         {
             if (_controls.option_006_ch_02.Checked)
             {
-                _shortWords = new List<string>();
-
-                _shortWords.Add("in");
-                _shortWords.Add("a");
-                _shortWords.Add("of");
-
                 if (_controls.option_006_rb_01.Checked)
                 {
                     name = name.ToUpper();
@@ -450,31 +443,70 @@ public class myRenamer
 
     private void renToCamelCase(ref string name, bool skipShortWords)
     {
+        // Every word found directly on the right of these substrings must start with capital letter
+        string[] arr = { " - ", "; " };
+
         StringBuilder sb = new StringBuilder(name.ToLower());
+
+        bool firstLetterFound = false;
 
         for (int i = 0; i < sb.Length; i++)
         {
+            // New word is starting from here
             if (i == 0 || sb[i-1] == ' ')
             {
+                // Extract current word and check if it belongs to the [_shortWords] list
                 if (skipShortWords)
                 {
-                    // Extract current word and check if it belongs to the [_shortWords] list
+                    // But first, check if we still should start this word with Capital letter:
+                    bool mustBeCapital = (i == 0) || !firstLetterFound;
 
-                    int pos = name.IndexOf(' ', i);
-
-                    for (int j = 0; j < _shortWords.Count; j++)
+                    // Still check if must be capital letter...
+                    if (!mustBeCapital)
                     {
-                        bool isInList = myUtils.fastStrCompare(_shortWords[j], name, i, pos - i, caseSensitive: false);
-                            ...
+                        for (int j = 0; j < arr.Length; j++)
+                        {
+                            if (i >= arr[j].Length)
+                            {
+                                bool found_InArr = myUtils.fastStrCompare(arr[j], name, i - arr[j].Length, arr[j].Length, caseSensitive: false);
+
+                                if (found_InArr)
+                                {
+                                    mustBeCapital = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!mustBeCapital)
+                    {
+                        bool found_InList = false;
+                        int pos = name.IndexOf(' ', i);
+
+                        var _shortWords = _controls.option_006_cb_01.Obj().Items;
+
+                        for (int j = 0; j < _shortWords.Count; j++)
+                        {
+                            found_InList = myUtils.fastStrCompare(_shortWords[j].ToString(), name, i, pos - i, caseSensitive: false);
+
+                            if (found_InList)
+                                break;
+                        }
+
+                        if (found_InList)
+                            continue;
                     }
                 }
-                else
-                {
-                    char ch = sb[i];
-                    myUtils.charToUpperCase(ref ch);
-                    sb[i] = ch;
-                }
+
+                char ch = sb[i];
+                myUtils.charToUpperCase(ref ch);
+                sb[i] = ch;
             }
+
+            if (!firstLetterFound)
+                if (myUtils.charIsLetter(sb[i]))
+                    firstLetterFound = true;
         }
 
         name = sb.ToString();

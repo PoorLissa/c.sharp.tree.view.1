@@ -39,6 +39,7 @@ public class myRenamerApp_Controls
     public CheckBox                 option_006_ch_01 = null;
     public CheckBox                 option_006_ch_02 = null;
     public CheckBox                 option_006_ch_04 = null;
+    public myControls.myComboBox    option_006_cb_01 = null;
     public RadioButton              option_006_rb_01 = null;
     public RadioButton              option_006_rb_02 = null;
     public RadioButton              option_006_rb_05 = null;
@@ -101,6 +102,11 @@ public class myRenamerApp
         if (_controls.option_001_cb_01.isChanged())
         {
             _ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"] = _controls.option_001_cb_01.getChanges();
+        }
+
+        if (_controls.option_006_cb_01.isChanged())
+        {
+            _ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"] = _controls.option_006_cb_01.getChanges();
         }
 
         // --- Save usage statistics for each selectable option ---
@@ -174,6 +180,9 @@ public class myRenamerApp
 
         // Option 5
         _controls.option_005_tb_01.PlaceholderText = "[### - *]";
+
+        // Option 6
+        _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -213,68 +222,72 @@ public class myRenamerApp
         // -------------------------------------------------------------
 
         var dic = _ini.getDic();
-        var list = new List<iniItem1>();
 
-        // Get options from [myCheckBoxCounters] section in ini-file and put them into a list
-        foreach (var item in dic)
+        if (dic != null)
         {
-            if (item.Key.Contains("myCheckBoxCounters"))
+            var list = new List<iniItem1>();
+
+            // Get options from [myCheckBoxCounters] section in ini-file and put them into a list
+            foreach (var item in dic)
             {
-                var listItem = new iniItem1();
-
-                listItem._data = Int32.Parse(item.Value.paramData);
-                listItem._name = item.Key.Substring(item.Key.IndexOf('.') + 1);
-
-                list.Add(listItem);
-            }
-        }
-
-        if (list.Count > 0)
-        {
-            // Sort list using custom sorter method with the respect to int value
-            list.Sort((iniItem1 a, iniItem1 b) =>
-            {
-                if (a._data != b._data)
-                    return (a._data > b._data) ? -1 : 1;
-                return 0;
-            });
-
-            void addDelimiterPanel()
-            {
-                var delim = new Panel();
-                delim.Height = 2;
-                delim.Dock = DockStyle.Top;
-                delim.BackColor = Color.LightGray;
-                panel_base.Controls.Add(delim);
-                delim.BringToFront();
-            }
-
-            addDelimiterPanel();
-
-            // Find option panels and sort them within [panel_base]
-            for (int i = 0; i < list.Count; i++)
-            {
-                for (int j = 0; j < _controls.optionList.Count; j++)
+                if (item.Key.Contains("myCheckBoxCounters"))
                 {
-                    if (list[i]._name == _controls.optionList[j].Name)
+                    var listItem = new iniItem1();
+
+                    listItem._data = Int32.Parse(item.Value.paramData);
+                    listItem._name = item.Key.Substring(item.Key.IndexOf('.') + 1);
+
+                    list.Add(listItem);
+                }
+            }
+
+            if (list.Count > 0)
+            {
+                // Sort list using custom sorter method with the respect to int value
+                list.Sort((iniItem1 a, iniItem1 b) =>
+                {
+                    if (a._data != b._data)
+                        return (a._data > b._data) ? -1 : 1;
+                    return 0;
+                });
+
+                void addDelimiterPanel()
+                {
+                    var delim = new Panel();
+                    delim.Height = 2;
+                    delim.Dock = DockStyle.Top;
+                    delim.BackColor = Color.LightGray;
+                    panel_base.Controls.Add(delim);
+                    delim.BringToFront();
+                }
+
+                addDelimiterPanel();
+
+                // Find option panels and sort them within [panel_base]
+                for (int i = 0; i < list.Count; i++)
+                {
+                    for (int j = 0; j < _controls.optionList.Count; j++)
                     {
-                        var panel = _controls.optionList[j].Parent as Panel;
-                        panel.BringToFront();
+                        if (list[i]._name == _controls.optionList[j].Name)
+                        {
+                            var panel = _controls.optionList[j].Parent as Panel;
+                            panel.BringToFront();
 
-                        // Also add delimiter panel
-                        addDelimiterPanel();
+                            // Also add delimiter panel
+                            addDelimiterPanel();
 
-                        break;
+                            break;
+                        }
                     }
                 }
             }
+
+            list.Clear();
+
+            var tDiff = (DateTime.Now.Ticks - tBefore);
+            TimeSpan elapsedSpan = new TimeSpan(tDiff);
+            _controls.richTextBox.AppendText($"call to _manager.rePositionPanels() took {elapsedSpan.TotalMilliseconds} ms\n");
         }
-
-        list.Clear();
-
-        var tDiff = (DateTime.Now.Ticks - tBefore);
-        TimeSpan elapsedSpan = new TimeSpan(tDiff);
-        _controls.richTextBox.AppendText($"call to _manager.rePositionPanels() took {elapsedSpan.TotalMilliseconds} ms\n");
 
         return;
     }

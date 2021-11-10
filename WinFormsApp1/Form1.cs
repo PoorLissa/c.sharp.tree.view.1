@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\test\asdasdad";
+                path = @"d:\test\-= Games =-\Uninstall";
             }
 
             init(path, expandEmpty);
@@ -90,6 +90,7 @@ namespace WinFormsApp1
                 mraControls.option_006_rb_03 = this.radioButton5;
                 mraControls.option_006_rb_04 = this.radioButton6;
                 mraControls.option_006_rb_05 = this.radioButton7;
+                mraControls.option_006_cb_01 = new myControls.myComboBox(this.comboBox3, "Short Words");
 
                 // unused yet
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
