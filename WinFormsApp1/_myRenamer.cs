@@ -431,10 +431,13 @@ public class myRenamer
             try
             {
                 if (item.isDir)
-                    System.IO.Directory.Move(item.Name, newName);
-
-                if (!item.isDir)
+                {
+                    renameDirectory(item.Name, newName);
+                }
+                else
+                {
                     System.IO.File.Move(item.Name, newName);
+                }
             }
             catch (System.Exception ex)
             {
@@ -448,6 +451,30 @@ public class myRenamer
                 item.isChanged = true;
             }
         }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    void renameDirectory(string oldName, string newName)
+    {
+        bool sameName = myUtils.fastStrCompare(oldName, newName, 0, -1, caseSensitive: false);
+
+        // If the names differ only in case, Directory.Move() won't be able to rename this dir
+        // Need to rename to some tmp name first
+        if (sameName)
+        {
+            string tmp = newName + "_tmp";
+
+            while (System.IO.Directory.Exists(tmp))
+                tmp += "_";
+
+            System.IO.Directory.Move(oldName, tmp);
+            oldName = tmp;
+        }
+
+        System.IO.Directory.Move(oldName, newName);
 
         return;
     }
