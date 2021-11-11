@@ -195,8 +195,8 @@ public class myTree
             bool doDrawIcon     = true;
             Image expandImg     = null;
 
-            System.Drawing.Brush backBrush = _treeBackBrush;
-            System.Drawing.Brush fontBrush = Brushes.Black;
+            Brush backBrush = _treeBackBrush;
+            Brush fontBrush = Brushes.Black;
 
             int x = 0, y = 0, gradientBrush = 0;
             int yAdjustment     = 0;
@@ -457,7 +457,7 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    private void on_MouseEnter(object sender, System.EventArgs e)
+    private void on_MouseEnter(object sender, EventArgs e)
     {
         _tree.Focus();
     }

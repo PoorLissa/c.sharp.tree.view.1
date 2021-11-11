@@ -132,6 +132,8 @@ namespace WinFormsApp1
             app.Undo_Rename();
         }
 
+        // --------------------------------------------------------------------------------
+
         private void tabPage1_MouseEnter(object sender, EventArgs e)
         {
             this.panel_base.Focus();
