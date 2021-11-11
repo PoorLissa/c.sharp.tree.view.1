@@ -73,6 +73,7 @@ namespace WinFormsApp1
                 mraControls.option_003_tb_01 = this.textBox4;
 
                 mraControls.option_004_ch_01 = this.checkBox_Option_004;
+                mraControls.option_004_ch_02 = this.checkBox7;
                 mraControls.option_004_tb_01 = this.textBox6;
                 mraControls.option_004_tb_02 = this.textBox7;
                 mraControls.option_004_num_1 = this.numericUpDown5;
@@ -114,36 +115,6 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] arr =
-            {
-                "aaa",
-                "aaa-123",
-                "aaa-222-bbb",
-                "aaa-333-bbb-444",
-                "aaa-333-bbb-444-ccc",
-            };
-
-            for (int i = 0; i < arr.Length; i++)
-            {
-                string sss = arr[i];
-
-                for (int j = 0; j < sss.Length; j++)
-                {
-                    char ch = sss[j];
-
-                    if (myUtils.charIsDigit(ch))
-                    {
-                        int offset = 1;
-
-                        int num = myUtils.getInt_fromString(sss, j, ref offset);
-
-                        richTextBox1.AppendText($" str = {sss}, pos = {j}, num = {num}, offset = {offset}\n");
-
-                        j += offset;
-                    }
-                }
-            }
-
             ;
         }
 

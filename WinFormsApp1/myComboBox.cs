@@ -89,6 +89,7 @@ namespace myControls
 
                 } while (pos2 != data.Length - 1);
 
+                _cb.Sorted = true;
             }
 
             return;

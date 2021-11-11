@@ -28,6 +28,7 @@ public class myRenamerApp_Controls
     public TextBox                  option_003_tb_01 = null;
 
     public CheckBox                 option_004_ch_01 = null;
+    public CheckBox                 option_004_ch_02 = null;
     public TextBox                  option_004_tb_01 = null;
     public TextBox                  option_004_tb_02 = null;
     public NumericUpDown            option_004_num_1 = null;

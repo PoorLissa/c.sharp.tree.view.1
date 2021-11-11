@@ -200,9 +200,11 @@ public class myRenamer
             string src = _controls.option_004_tb_01.Text;
             string dst = _controls.option_004_tb_02.Text;
 
+            ref string strRef = ref (_controls.option_004_ch_02.Checked ? ref ext : ref name);
+
             if (src != null && src.Length > 0)
             {
-                pos = name.IndexOf(src);
+                pos = strRef.IndexOf(src);
 
                 if (pos >= 0)
                 {
@@ -210,20 +212,20 @@ public class myRenamer
                         cnt = cnt > 0 ? cnt : 1000;                         // In case cnt == 0, replace all occurences
                     int offset = 0;
 
-                    StringBuilder sb = new StringBuilder(name);
+                    StringBuilder sb = new StringBuilder(strRef);
 
                     do
                     {
                         sb.Remove(pos + offset, src.Length);
                         sb.Insert(pos + offset, dst);
 
-                        pos = name.IndexOf(src, pos + 1);
+                        pos = strRef.IndexOf(src, pos + 1);
 
                         offset += (dst.Length - src.Length);
                     }
                     while (pos >= 0 && --cnt != 0);
 
-                    name = sb.ToString();
+                    strRef = sb.ToString();
                 }
             }
         }
