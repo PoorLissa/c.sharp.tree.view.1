@@ -95,6 +95,9 @@ public class myTree
 
             createDrawingPrimitives();
 
+            // Set up events
+            _tree.MouseEnter += new EventHandler(on_MouseEnter);
+
             // Configure the TreeView control for owner-draw and add a handler for the DrawNode event
             _tree.DrawMode  = TreeViewDrawMode.OwnerDrawAll;
             _tree.DrawNode += new DrawTreeNodeEventHandler(myTree_DrawNode);
@@ -446,22 +449,7 @@ public class myTree
             filesFound = _globalFileListExtRef.Count - dirsFound;
 
             // Sort the results
-            //_globalFileListExtRef.Sort(CompareDinosByLength);
-
-            var tBefore = DateTime.Now.Ticks;
-
-            _globalFileListExtRef.Sort();                         // 5.7 - 6.4 ms
-
-            //_globalFileListExtRef.Sort(CompareDinosByLength);       // 5.7 - 6.4 ms
-
-            TimeSpan elapsedSpan = new TimeSpan(DateTime.Now.Ticks - tBefore);
-
-            _richTextBox.Invoke(new MethodInvoker(delegate
-            {
-                _richTextBox.AppendText($"It took {elapsedSpan.TotalMilliseconds} ms{Environment.NewLine}");
-            }));
-
-
+            _globalFileListExtRef.Sort();
         }
 
         return res;
@@ -469,13 +457,12 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    private static int CompareDinosByLength(myTreeListDataItem x, myTreeListDataItem y)
+    private void on_MouseEnter(object sender, System.EventArgs e)
     {
-        if (x.isDir != y.isDir)
-            return x.isDir ? -1 : 1;
-
-        return String.Compare(x.Name, y.Name, null, CompareOptions.OrdinalIgnoreCase);
+        _tree.Focus();
     }
+
+    // --------------------------------------------------------------------------------------------------------
 
     // Disallow redrawing of nodes
     public void AllowRedrawing(bool val)

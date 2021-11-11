@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
@@ -184,6 +185,7 @@ public class myDataGrid
         _dataGrid.CellMouseUp    += new DataGridViewCellMouseEventHandler(on_CellMouseUp);
         _dataGrid.CellMouseEnter += new DataGridViewCellEventHandler(on_CellMouseEnter);
         _dataGrid.CellMouseLeave += new DataGridViewCellEventHandler(on_CellMouseLeave);
+        _dataGrid.MouseEnter     += new EventHandler(on_MouseEnter);
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
@@ -1121,6 +1123,13 @@ public class myDataGrid
             _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
 
         _dataGrid.InvalidateRow(e.RowIndex);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void on_MouseEnter(object sender, System.EventArgs e)
+    {
+        _dataGrid.Focus();
     }
 
     // --------------------------------------------------------------------------------------------------------
