@@ -131,6 +131,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tb_FilterOut.TextChanged += new EventHandler(tb_Filter_onTextChanged);
 
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
+
+        // To be able to react to F5 refresh command
+        _form.KeyDown += new KeyEventHandler(on_KeyDown);
+        _form.KeyPreview = true;
     }
 
     // --------------------------------------------------------------------------------
@@ -200,9 +204,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             {
                 // sender == _cb_Recursive -- We're changing the state of [cb_Recursive] checkbox
                 // sender != _cb_Recursive -- We're actually clicking the node in the tree
+                //                         -- Or F5 key has been pressed
 
                 // Hope this local variables will be treated properly by the task...
-                TreeNode selectedNode = (sender == _cb_Recursive)
+                TreeNode selectedNode = (sender == _cb_Recursive || sender == this)
                     ? _tree.Obj().SelectedNode
                     : e.Node;
 
@@ -357,6 +362,24 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _dataGrid.setRecursiveMode(_useRecursion);
 
         tree_onAfterSelect(sender, null);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    private void on_KeyDown(object sender, KeyEventArgs e)
+    {
+        switch (e.KeyCode)
+        {
+            case Keys.F5: {
+
+                    tree_onAfterSelect(this, null);
+                    e.Handled = true;
+
+                }
+                break;
+        }
 
         return;
     }

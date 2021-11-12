@@ -7,20 +7,29 @@ using System.Windows.Forms;
 
 namespace myControls
 {
+    public enum SortMode
+    {
+        None,
+        Sorted,
+        LastOnTop
+    };
+
     public class myComboBox
     {
         ComboBox _cb = null;
         Label _placeholder = null;
 
-        private bool _isChanged = false;
+        private bool     _isChanged = false;
+        private SortMode _sort;
 
         // --------------------------------------------------------------------------------------------------------
 
-        public myComboBox(ComboBox cb, string placeholder = "...")
+        public myComboBox(ComboBox cb, SortMode sort, string placeholder = "...")
         {
             _cb = cb;
             _placeholder = new Label();
             _placeholder.Text = placeholder;
+            _sort = sort;
 
             init();
         }
@@ -33,7 +42,7 @@ namespace myControls
             {
                 int dpi = _cb.DeviceDpi;
 
-                _cb.AutoCompleteMode = AutoCompleteMode.Suggest;
+                _cb.AutoCompleteMode   = AutoCompleteMode.Suggest;
                 _cb.AutoCompleteSource = AutoCompleteSource.ListItems;
 
                 _cb.DropDownWidth = 300;
@@ -74,6 +83,7 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
+        // Adds items to combobox from string
         public void setItems(string data)
         {
             if (data != null)
@@ -89,7 +99,8 @@ namespace myControls
 
                 } while (pos2 != data.Length - 1);
 
-                _cb.Sorted = true;
+                if(_sort == SortMode.Sorted)
+                    _cb.Sorted = true;
             }
 
             return;
@@ -97,6 +108,7 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
+        // Retrieve all combobox's items as a string
         public string getChanges()
         {
             var sb = new System.Text.StringBuilder();
@@ -172,36 +184,26 @@ namespace myControls
 
             if (e.KeyCode == Keys.Enter)
             {
-                foreach (var item in cb.Items)
+                for(int i = 0; i < cb.Items.Count; i++)
+                {
+                    var item = cb.Items[i];
+
                     if (item.ToString() == cb.Text)
+                    {
+                        if (_sort == SortMode.LastOnTop)
+                        {
+                            cb.Items.RemoveAt(i);
+                            cb.Items.Insert(0, item);
+                            cb.SelectedIndex = 0;
+                            _isChanged = true;
+                        }
+
                         return;
+                    }
+                }
 
-                cb.Items.Add(cb.Text);
+                cb.Items.Insert(0, cb.Text);
                 _isChanged = true;
-            }
-        }
-
-        // --------------------------------------------------------------------------------------------------------
-
-        private void on_HandleDestroyed(object sender, EventArgs e)
-        {
-            string path = "_cBox.txt";
-
-            if (!System.IO.File.Exists(path))
-            {
-                System.IO.File.CreateText(path).Dispose();
-            }
-
-            string s = "";
-
-            for (int i = 0; i < _cb.Items.Count; i++)
-            {
-                s += _cb.Items[i].ToString() + "|";
-            }
-
-            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
-            {
-                sw.WriteLine(s);
             }
         }
 
@@ -221,7 +223,6 @@ namespace myControls
         }
 
         // --------------------------------------------------------------------------------------------------------
-
     };
 
 };

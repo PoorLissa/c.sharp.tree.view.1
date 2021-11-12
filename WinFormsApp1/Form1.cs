@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-
+using myControls;
 
 
 namespace WinFormsApp1
@@ -28,8 +28,8 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"c:\_maxx\test\aaa";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\test\aaa";
             }
 
             init(path, expandEmpty);
@@ -59,7 +59,7 @@ namespace WinFormsApp1
                 mraControls.option_001_ch_01 = this.checkBox_Option_001;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
-                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, "Delimiter");
+                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, SortMode.LastOnTop,  "Delimiter");
 
                 mraControls.option_002_ch_01 = this.checkBox_Option_002;
                 mraControls.option_002_ch_02 = this.checkBox4;
@@ -91,14 +91,14 @@ namespace WinFormsApp1
                 mraControls.option_006_rb_03 = this.radioButton5;
                 mraControls.option_006_rb_04 = this.radioButton6;
                 mraControls.option_006_rb_05 = this.radioButton7;
-                mraControls.option_006_cb_01 = new myControls.myComboBox(this.comboBox3, "Short Words");
+                mraControls.option_006_cb_01 = new myControls.myComboBox(this.comboBox3, SortMode.Sorted, "Short Words");
 
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
                 mraControls.option_007_num_1 = this.numericUpDown6;
                 mraControls.option_007_num_2 = this.numericUpDown7;
 
-                // unused yet
                 mraControls.option_008_ch_01 = this.checkBox_Option_008;
+                mraControls.option_008_num_1 = this.numericUpDown8;
 
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
             }
@@ -107,8 +107,8 @@ namespace WinFormsApp1
             app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
 
             // Test controls
-            myCb = new myControls.myComboBox(this.comboBox1, "Select option");
-            myTb = new myControls.myTextBox(this.textBox3, "Filter text");
+            //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
+            //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
         }
 
         // --------------------------------------------------------------------------------

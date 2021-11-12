@@ -151,6 +151,11 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
+    // Known issue:
+    // Sometimes this will lead to invalid history.
+    // Say, we have folders 1, 2, 3. Each of them is renamed:
+    // 1 -> 2, 2 -> 3, 3 -> 4
+    // In this case, the history will contain only a single record: 1 -> 2 -> 3 -> 4
     private void store_map(List<myTreeListDataItem> globalList, int id, List<myTreeListDataItem> updatedList, int i)
     {
         string oldName = globalList[id].Name;

@@ -12,6 +12,10 @@ using System.Windows.Forms;
 	    - click anywhere on the black background around the UI window
 	    - press Ctrl+V
 	    - the copied panels are inserted at the bottom into 'panel_base'
+
+    todo
+        - Finish Simulate
+        - Add preview function
 */
 
 
@@ -26,6 +30,34 @@ public class myRenamer
     {
         _manager  = manager;
         _controls = controls;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private bool Simulate()
+    {
+        bool res = true;
+
+        var list = _manager.getSelectedFiles(asCopy: true);
+        string err = "";
+
+        // Files first, then folders
+        for (int j = 0; j < 2; j++)
+        {
+            bool isDir = (j != 0);
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                var item = list[i];
+
+                if (item.isDir == isDir)
+                {
+                    applyOptions(item, ref err);
+                }
+            }
+        }
+
+        return res;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -352,6 +384,42 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
+        // Option 8: Find numeric sequence and increase/decrease it it by number n
+        if (_controls.option_008_ch_01.Checked)
+        {
+            num = (int)(_controls.option_008_num_1.Value);  // Number to add to the sequence
+//            pos = (int)(_controls.option_007_num_2.Value);  // Number of numeric sequence in the file name
+
+            pos = 1;
+
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (myUtils.charIsDigit(name[i]))
+                {
+                    int offset = 0;
+                    int currentNum = myUtils.getInt_fromString(name, i, ref offset);
+
+                    if (pos-- == 1)
+                    {
+                        // Now offset shows us the length of this numeric sequence
+                        var sb = new StringBuilder(name);
+
+                        currentNum += num;
+
+                        sb.Remove(i, offset);
+                        sb.Insert(i, currentNum.ToString());
+
+                        name = sb.ToString();
+                        break;
+                    }
+
+                    i += offset;
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
 
         if (item.isDir)
         {
@@ -380,8 +448,59 @@ public class myRenamer
     public void undo()
     {
         var list = _manager.getSelectedFiles(asCopy: true);
-
         string err = "";
+
+#if false
+
+        for (int step = 0; step < 2; step++)
+        {
+            // Files
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (!list[i].isDir)
+                {
+                    var historyList = _manager.getBackup().getHistory(list[i].Name);
+
+                    if (historyList != null)
+                    {
+                        if (step == 0)
+                        {
+                            RenamePhysical(list[i], historyList[0] + ".tmp", ref err);
+                        }
+
+                        if (step == 1)
+                        {
+                            RenamePhysical(list[i], historyList[0], ref err);
+                        }
+                    }
+                }
+            }
+
+            // Directories
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].isDir)
+                {
+                    var historyList = _manager.getBackup().getHistory(list[i].Name);
+
+                    if (historyList != null)
+                    {
+                        if (step == 0)
+                        {
+                            RenamePhysical(list[i], historyList[0] + ".tmp", ref err);
+                        }
+
+                        if (step == 1)
+                        {
+                            RenamePhysical(list[i], historyList[0], ref err);
+                        }
+                    }
+                }
+            }
+
+        }
+
+#else
 
         for (int i = list.Count - 1; i >= 0; i--)
         {
@@ -396,6 +515,7 @@ public class myRenamer
             }
         }
 
+        // Directories
         for (int i = list.Count - 1; i >= 0; i--)
         {
             if (list[i].isDir)
@@ -408,6 +528,8 @@ public class myRenamer
                 }
             }
         }
+
+#endif
 
         if (err.Length > 0)
         {

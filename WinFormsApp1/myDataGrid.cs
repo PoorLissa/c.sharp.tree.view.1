@@ -174,7 +174,7 @@ public class myDataGrid
             myUtils.logMsg("myDataGrid.setUpEvents", "");
         #endif
 
-        // Customize whole widget appearance (not used for now)
+        // Customize whole widget appearance
         _dataGrid.Paint += new PaintEventHandler(OnPaint);
 
         // Customize individual cell appearance
@@ -1141,7 +1141,7 @@ public class myDataGrid
             myUtils.logMsg("myDataGrid.on_KeyDown", "");
 #endif
 
-        int currRow = _dataGrid.CurrentRow.Index;
+        int currRow = _dataGrid.RowCount > 0 ? _dataGrid.CurrentRow.Index : -1;
 
         switch (e.KeyCode)
         {
@@ -1151,6 +1151,7 @@ public class myDataGrid
             case Keys.Down:
             case Keys.PageDown:
             case Keys.F4:
+            case Keys.F5:
             case Keys.A:
                 return;
 

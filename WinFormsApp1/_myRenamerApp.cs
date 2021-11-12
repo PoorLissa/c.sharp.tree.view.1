@@ -52,8 +52,8 @@ public class myRenamerApp_Controls
     public NumericUpDown            option_007_num_1 = null;
     public NumericUpDown            option_007_num_2 = null;
 
-    // unused yet
     public CheckBox                 option_008_ch_01 = null;
+    public NumericUpDown            option_008_num_1 = null;
 };
 
 
@@ -187,6 +187,10 @@ public class myRenamerApp
 
         // Option 6
         _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);
+
+        // Option 8
+        _controls.option_008_num_1.Minimum = -1000;
+        _controls.option_008_num_1.Maximum = +1000;
     }
 
     // --------------------------------------------------------------------------------------------------------
