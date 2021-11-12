@@ -62,6 +62,51 @@ public class myRenamer
 
     // --------------------------------------------------------------------------------------------------------
 
+    private void renTo_TmpName(myTreeListDataItem item, ref string err)
+    {
+        int num = 0;
+        var sb = new StringBuilder(item.Name);
+        sb.Append("#");
+
+        try
+        {
+            while (true)
+            {
+                if (item.isDir)
+                {
+                    if (!System.IO.Directory.Exists(sb.ToString()))
+                    {
+                        System.IO.Directory.Move(item.Name, sb.ToString());
+                        break;
+                    }
+                }
+                else
+                {
+                    if (!System.IO.File.Exists(sb.ToString()))
+                    {
+                        System.IO.File.Move(item.Name, sb.ToString());
+                        break;
+                    }
+                }
+
+                sb.Clear();
+                sb.Append(item.Name);
+                sb.Append("#");
+                sb.Append(num++);
+            }
+        }
+        catch (System.Exception ex)
+        {
+            err += ex.Message + "\n";
+        }
+
+        item.Name = sb.ToString();
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Public Rename func
     public void Rename()
     {
@@ -80,30 +125,56 @@ public class myRenamer
             updateCnt(item);
 
 
-        // Rename files first, then rename folders
-        for (int j = 0; j < 2; j++)
+        // Step 1: rename to tmp names
         {
-            bool isDir = (j != 0);
-
-            // Rename everything in backwards order
-            for (int i = list.Count - 1; i >= 0; i--)
+            // Rename files first, then rename folders
+            for (int j = 0; j < 2; j++)
             {
-                var item = list[i];
+                bool isDir = (j != 0);
 
-                if (item.isDir == isDir)
+                // Rename everything to tmp in backwards order
+                for (int i = list.Count - 1; i >= 0; i--)
+                    if (list[i].isDir == isDir)
+                        renTo_TmpName(list[i], ref err);
+            }
+
+            if (err.Length > 0)
+            {
+                MessageBox.Show(err, "myRenamer.Rename: Error 1", MessageBoxButtons.OK);
+            }
+
+            _manager.update(list, true, false);
+        }
+
+
+        // Step 2: apply options and make a final rename
+        {
+            // Rename files first, then rename folders
+            for (int j = 0; j < 2; j++)
+            {
+                bool isDir = (j != 0);
+
+                // Rename everything in backwards order
+                for (int i = list.Count - 1; i >= 0; i--)
                 {
-                    // Go through every option that the User has selected and apply all the changes to file name
-                    applyOptions(item, ref err);
+                    var item = list[i];
+
+                    if (item.isDir == isDir)
+                    {
+                        // Go through every option that the User has selected and apply all the changes to file name
+                        applyOptions(item, ref err);
+                    }
                 }
             }
-        }
 
-        if (err.Length > 0)
-        {
-            MessageBox.Show(err, "myRenamer::Rename: Error", MessageBoxButtons.OK);
-        }
+            if (err.Length > 0)
+            {
+                MessageBox.Show(err, "myRenamer.Rename: Error 2", MessageBoxButtons.OK);
+            }
 
-        _manager.update(list, true);
+            _manager.update(list, true, true);
+
+        }
 
         return;
     }
@@ -117,24 +188,26 @@ public class myRenamer
         int pos = 0, num = 0;
         int pos_file = item.Name.LastIndexOf('\\') + 1;
         int pos_ext  = item.Name.LastIndexOf('.');
+        int pos_tmp  = item.Name.LastIndexOf('#');
 
         string newName = null;
         string name    = null;
         string ext     = null;
 
-        // Extract name without extension (in case of folder, just its full name)
+        // Extract name and extension:
         if (item.isDir)
         {
-            name = item.Name.Substring(pos_file);
+            // In case of folder, just its full name
+            name = item.Name.Substring(pos_file, pos_tmp - pos_file);
         }
         else
         {
             name = (pos_ext >= pos_file)
                         ? item.Name.Substring(pos_file, pos_ext - pos_file)
-                        : item.Name.Substring(pos_file);
+                        : item.Name.Substring(pos_file, pos_tmp - pos_file);
 
             ext = (pos_ext >= pos_file)
-                ? item.Name.Substring(pos_ext)
+                ? item.Name.Substring(pos_ext, pos_tmp - pos_ext)
                 : "";
         }
 
@@ -450,8 +523,6 @@ public class myRenamer
         var list = _manager.getSelectedFiles(asCopy: true);
         string err = "";
 
-#if false
-
         for (int step = 0; step < 2; step++)
         {
             // Files
@@ -465,7 +536,7 @@ public class myRenamer
                     {
                         if (step == 0)
                         {
-                            RenamePhysical(list[i], historyList[0] + ".tmp", ref err);
+                            RenamePhysical(list[i], historyList[1], ref err);
                         }
 
                         if (step == 1)
@@ -487,7 +558,7 @@ public class myRenamer
                     {
                         if (step == 0)
                         {
-                            RenamePhysical(list[i], historyList[0] + ".tmp", ref err);
+                            RenamePhysical(list[i], historyList[1], ref err);
                         }
 
                         if (step == 1)
@@ -498,45 +569,14 @@ public class myRenamer
                 }
             }
 
-        }
-
-#else
-
-        for (int i = list.Count - 1; i >= 0; i--)
-        {
-            if (!list[i].isDir)
+            if (err.Length > 0)
             {
-                var historyList = _manager.getBackup().getHistory(list[i].Name);
-
-                if (historyList != null)
-                {
-                    RenamePhysical(list[i], historyList[0], ref err);
-                }
+                MessageBox.Show(err, "Error", MessageBoxButtons.OK);
             }
+
+            bool updWidgets = (step > 0);
+            _manager.update(list, true, updWidgets);
         }
-
-        // Directories
-        for (int i = list.Count - 1; i >= 0; i--)
-        {
-            if (list[i].isDir)
-            {
-                var historyList = _manager.getBackup().getHistory(list[i].Name);
-
-                if (historyList != null)
-                {
-                    RenamePhysical(list[i], historyList[0], ref err);
-                }
-            }
-        }
-
-#endif
-
-        if (err.Length > 0)
-        {
-            MessageBox.Show(err, "Error", MessageBoxButtons.OK);
-        }
-
-        _manager.update(list, true);
 
         return;
     }
@@ -554,7 +594,7 @@ public class myRenamer
             {
                 if (item.isDir)
                 {
-                    renameDirectory(item.Name, newName);
+                    System.IO.Directory.Move(item.Name, newName);
                 }
                 else
                 {
@@ -573,30 +613,6 @@ public class myRenamer
                 item.isChanged = true;
             }
         }
-
-        return;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
-    void renameDirectory(string oldName, string newName)
-    {
-        bool sameName = myUtils.fastStrCompare(oldName, newName, 0, -1, caseSensitive: false);
-
-        // If the names differ only in case, Directory.Move() won't be able to rename this dir
-        // Need to rename to some tmp name first
-        if (sameName)
-        {
-            string tmp = newName + "_tmp";
-
-            while (System.IO.Directory.Exists(tmp))
-                tmp += "_";
-
-            System.IO.Directory.Move(oldName, tmp);
-            oldName = tmp;
-        }
-
-        System.IO.Directory.Move(oldName, newName);
 
         return;
     }

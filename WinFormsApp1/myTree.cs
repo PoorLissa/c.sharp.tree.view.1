@@ -894,8 +894,12 @@ public class myTree
                         if (fileNameHistory != null)
                         {
                             // History list shall contain at least 2 items (if not null)
+                            // upd.:
+                            // With the latest changes (2-step renaming with tmp iteration in the middle),
+                            // the history shall contain at least 3 items at this point: name_orig -> name_tmp -> name_final
+                            // We want to compare original name with final name here:
                             var curr = fileNameHistory[fileNameHistory.Count - 1];
-                            var prev = fileNameHistory[fileNameHistory.Count - 2];
+                            var prev = fileNameHistory[fileNameHistory.Count - 3];
 
                             // Using old and new paths, update corresponding subnode
                             if (!_logic.updateNode(n, prev, curr))

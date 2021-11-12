@@ -49,10 +49,10 @@ public struct myTree_DataGrid_Manager_Initializer
 
 interface ImyTree_DataGrid_Manager
 {
-    void getSelectedFiles(List<myTreeListDataItem> list);       // Obtain the list of selected files
-    List<myTreeListDataItem> getSelectedFiles(bool asCopy);     // Obtain the list of selected files
-    void update(List<myTreeListDataItem> list, bool mode);      // Update all the widgets' state using the data from [updatedList]
-    void allowBackup(bool mode);                                // Allow or disallow the use of backup
+    void getSelectedFiles(List<myTreeListDataItem> list);           // Obtain the list of selected files
+    List<myTreeListDataItem> getSelectedFiles(bool asCopy);         // Obtain the list of selected files
+    void update(List<myTreeListDataItem> list, bool u1, bool u2);   // Update all the widgets' state using the data from [updatedList]
+    void allowBackup(bool mode);                                    // Allow or disallow the use of backup
 };
 
 
@@ -463,7 +463,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // --------------------------------------------------------------------------------
 
     // Update all the widgets' state using the data from [updatedList]
-    public void update(List<myTreeListDataItem> updatedList, bool updDependent)
+    public void update(List<myTreeListDataItem> updatedList, bool updGlobal, bool updDependent)
     {
         // We're only going to update the global list here;
         // Every dependent widged must implement its own method to update itself from the global list
@@ -510,44 +510,47 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                 c:\dirA\folderA\fileB.txt
 */
 
-        // For every changed directory:
-        for (int i = 0; i < updatedList.Count; i++)
+        // Update Global List
+        if (updGlobal)
         {
-            int id = updatedList[i].Id;
-
-            if (_globalFileListExt[id].Name != updatedList[i].Name)
+            // For every changed directory:
+            for (int i = 0; i < updatedList.Count; i++)
             {
-                // In case the recursion is enabled,
-                // we need to update all the global list's items that have been affected by the latest change
-                if (_useRecursion && updatedList[i].isDir)
+                int id = updatedList[i].Id;
+
+                if (_globalFileListExt[id].Name != updatedList[i].Name)
                 {
-                    int j = id + 1;
-                    string oldPath = _globalFileListExt[id].Name;
-                    string name;
-
-                    while (j < _globalFileListExt.Count && _globalFileListExt[j].Name.Contains(oldPath))
+                    // In case the recursion is enabled,
+                    // we need to update all the global list's items that have been affected by the latest change
+                    if (_useRecursion && updatedList[i].isDir)
                     {
-                        name = updatedList[i].Name + _globalFileListExt[j].Name[oldPath.Length..];
+                        int j = id + 1;
+                        string oldPath = _globalFileListExt[id].Name;
+                        string name;
 
-                        _globalFileListExt[j].Name = name;
-                        j++;
+                        while (j < _globalFileListExt.Count && _globalFileListExt[j].Name.Contains(oldPath))
+                        {
+                            name = updatedList[i].Name + _globalFileListExt[j].Name[oldPath.Length..];
+
+                            _globalFileListExt[j].Name = name;
+                            j++;
+                        }
+
+                        j = i + 1;
+
+                        while (j < updatedList.Count && updatedList[j].Name.Contains(oldPath))
+                        {
+                            name = updatedList[i].Name + updatedList[j].Name[oldPath.Length..];
+                            updatedList[j].Name = name;
+                            j++;
+                        }
                     }
 
-                    j = i + 1;
-
-                    while (j < updatedList.Count && updatedList[j].Name.Contains(oldPath))
-                    {
-                        name = updatedList[i].Name + updatedList[j].Name[oldPath.Length..];
-                        updatedList[j].Name = name;
-                        j++;
-                    }
+                    // Update current 
+                    _globalFileListExt[id].Name = updatedList[i].Name;
                 }
-
-                // Update current 
-                _globalFileListExt[id].Name = updatedList[i].Name;
             }
         }
-
 
         // Update dependent widgets
         if (updDependent)
