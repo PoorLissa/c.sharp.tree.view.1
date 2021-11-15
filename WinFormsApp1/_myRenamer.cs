@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -457,7 +458,7 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 8: Find numeric sequence and increase/decrease it it by number n
+        // Option 8: Find numeric sequence and increase/decrease it by number n
         if (_controls.option_008_ch_01.Checked)
         {
             num = (int)(_controls.option_008_num_1.Value);  // Number to add to the sequence
@@ -489,6 +490,78 @@ public class myRenamer
                     i += offset;
                 }
             }
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 9: Remove characters based on the user's selection:
+        if (_controls.option_009_ch_01.Checked)
+        {
+            int i = 0;
+
+            Func<char, bool> func = null;
+
+            // Letters
+            if (_controls.option_009_rb_01.Checked)
+            {
+                func = (char ch) => { return !myUtils.charIsLetter(ch); };
+
+                for (; i < name.Length; i++)
+                    if (!myUtils.charIsLetter(name[i]))
+                        break;
+            }
+
+            // Non-Letters
+            if (_controls.option_009_rb_02.Checked)
+            {
+                for (; i < name.Length; i++)
+                    if (myUtils.charIsLetter(name[i]))
+                        break;
+            }
+
+            // Numbers
+            if (_controls.option_009_rb_03.Checked)
+            {
+                for (; i < name.Length; i++)
+                    if (!myUtils.charIsDigit(name[i]))
+                        break;
+            }
+
+            // Non-Numbers
+            if (_controls.option_009_rb_04.Checked)
+            {
+                for (; i < name.Length; i++)
+                    if (myUtils.charIsDigit(name[i]))
+                        break;
+            }
+
+            // White Spaces
+            if (_controls.option_009_rb_05.Checked)
+            {
+                for (; i < name.Length; i++)
+                    if (!Char.IsWhiteSpace(name[i]))
+                        break;
+            }
+
+            // Special Characters
+            if (_controls.option_009_rb_06.Checked)
+            {
+                for (; i < name.Length; i++)
+                    if (myUtils.charIsDigit(name[i]) || myUtils.charIsLetter(name[i]) || name[i] == ' ')
+                        break;
+            }
+
+            // Any characters from the token string
+            if (_controls.option_009_rb_07.Checked)
+            {
+                string tokens = _controls.option_009_tb_01.Text;
+
+                for (; i < name.Length; i++)
+                    if (!tokens.Contains(name[i]))
+                        break;
+            }
+
+            name = name.Substring(i, name.Length - i);
         }
 
         // --------------------------------------------------------------------------------
@@ -592,6 +665,13 @@ public class myRenamer
 
             try
             {
+                bool itemExists = System.IO.Directory.Exists(newName) || System.IO.File.Exists(newName);
+
+                if (itemExists)
+                {
+                    getUniqueName(ref newName, item.isDir);
+                }
+
                 if (item.isDir)
                 {
                     System.IO.Directory.Move(item.Name, newName);
@@ -613,6 +693,53 @@ public class myRenamer
                 item.isChanged = true;
             }
         }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Extend the name until no item with such name exists: test.txt ==> test_.00001.txt
+    private void getUniqueName(ref string name, bool isDir)
+    {
+        int pos_file = name.LastIndexOf('\\') + 1;
+        int pos_ext  = name.LastIndexOf('.');
+        int insert_point = name.Length;
+
+        // Find a point where new symbols will be added (at the end of the dir name or just before the extension for file)
+        if (!isDir && pos_ext > pos_file)
+        {
+            insert_point = pos_ext;
+        }
+
+        bool itemExists = true;
+        StringBuilder sb = new StringBuilder(name);
+        int num = 1;
+
+        do
+        {
+            // Remove excess from previous iteration
+            if (sb.Length > name.Length)
+                sb.Remove(insert_point, 5 + 2);
+
+            // Add number
+            sb.Insert(insert_point, num.ToString());
+
+            // Prepend the number with zeroes to the total length of 5
+            while (sb.Length - name.Length != 5)
+                sb.Insert(insert_point, "0");
+
+            // Add delimiter
+            sb.Insert(insert_point, "_.");
+
+            itemExists = System.IO.Directory.Exists(sb.ToString()) || System.IO.File.Exists(sb.ToString());
+
+            if (++num > 99999)
+                throw new Exception("File already exists. Could not find a new name for it.");
+
+        } while (itemExists);
+
+        name = sb.ToString();
 
         return;
     }

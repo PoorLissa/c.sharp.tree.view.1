@@ -41,7 +41,19 @@ namespace WinFormsApp1
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel_base = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.radioButton14 = new System.Windows.Forms.RadioButton();
+            this.radioButton12 = new System.Windows.Forms.RadioButton();
+            this.radioButton13 = new System.Windows.Forms.RadioButton();
+            this.radioButton11 = new System.Windows.Forms.RadioButton();
+            this.radioButton10 = new System.Windows.Forms.RadioButton();
+            this.radioButton9 = new System.Windows.Forms.RadioButton();
+            this.radioButton8 = new System.Windows.Forms.RadioButton();
+            this.checkBox_Option_009 = new System.Windows.Forms.CheckBox();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.checkBox_Option_008 = new System.Windows.Forms.CheckBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
@@ -98,12 +110,15 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
-            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel_base.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
@@ -122,7 +137,6 @@ namespace WinFormsApp1
             this.panel_content_01.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -242,6 +256,7 @@ namespace WinFormsApp1
             // panel_base
             // 
             this.panel_base.AutoScroll = true;
+            this.panel_base.Controls.Add(this.panel1);
             this.panel_base.Controls.Add(this.panel7);
             this.panel_base.Controls.Add(this.panel5);
             this.panel_base.Controls.Add(this.panel3);
@@ -257,6 +272,129 @@ namespace WinFormsApp1
             this.panel_base.Size = new System.Drawing.Size(677, 955);
             this.panel_base.TabIndex = 21;
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel1.Controls.Add(this.checkBox8);
+            this.panel1.Controls.Add(this.groupBox3);
+            this.panel1.Controls.Add(this.checkBox_Option_009);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 1336);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(651, 337);
+            this.panel1.TabIndex = 38;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.textBox8);
+            this.groupBox3.Controls.Add(this.radioButton14);
+            this.groupBox3.Controls.Add(this.radioButton12);
+            this.groupBox3.Controls.Add(this.radioButton13);
+            this.groupBox3.Controls.Add(this.radioButton11);
+            this.groupBox3.Controls.Add(this.radioButton10);
+            this.groupBox3.Controls.Add(this.radioButton9);
+            this.groupBox3.Controls.Add(this.radioButton8);
+            this.groupBox3.Location = new System.Drawing.Point(17, 57);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(620, 221);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(256, 174);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(338, 31);
+            this.textBox8.TabIndex = 36;
+            // 
+            // radioButton14
+            // 
+            this.radioButton14.AutoSize = true;
+            this.radioButton14.Location = new System.Drawing.Point(25, 175);
+            this.radioButton14.Name = "radioButton14";
+            this.radioButton14.Size = new System.Drawing.Size(211, 29);
+            this.radioButton14.TabIndex = 6;
+            this.radioButton14.TabStop = true;
+            this.radioButton14.Text = "Any of the Characters:";
+            this.radioButton14.UseVisualStyleBackColor = true;
+            // 
+            // radioButton12
+            // 
+            this.radioButton12.AutoSize = true;
+            this.radioButton12.Location = new System.Drawing.Point(25, 150);
+            this.radioButton12.Name = "radioButton12";
+            this.radioButton12.Size = new System.Drawing.Size(179, 29);
+            this.radioButton12.TabIndex = 5;
+            this.radioButton12.TabStop = true;
+            this.radioButton12.Text = "Special Characters";
+            this.radioButton12.UseVisualStyleBackColor = true;
+            // 
+            // radioButton13
+            // 
+            this.radioButton13.AutoSize = true;
+            this.radioButton13.Location = new System.Drawing.Point(25, 125);
+            this.radioButton13.Name = "radioButton13";
+            this.radioButton13.Size = new System.Drawing.Size(143, 29);
+            this.radioButton13.TabIndex = 4;
+            this.radioButton13.TabStop = true;
+            this.radioButton13.Text = "White Spaces";
+            this.radioButton13.UseVisualStyleBackColor = true;
+            // 
+            // radioButton11
+            // 
+            this.radioButton11.AutoSize = true;
+            this.radioButton11.Location = new System.Drawing.Point(25, 100);
+            this.radioButton11.Name = "radioButton11";
+            this.radioButton11.Size = new System.Drawing.Size(151, 29);
+            this.radioButton11.TabIndex = 3;
+            this.radioButton11.TabStop = true;
+            this.radioButton11.Text = "Non-Numbers";
+            this.radioButton11.UseVisualStyleBackColor = true;
+            // 
+            // radioButton10
+            // 
+            this.radioButton10.AutoSize = true;
+            this.radioButton10.Location = new System.Drawing.Point(25, 75);
+            this.radioButton10.Name = "radioButton10";
+            this.radioButton10.Size = new System.Drawing.Size(110, 29);
+            this.radioButton10.TabIndex = 2;
+            this.radioButton10.TabStop = true;
+            this.radioButton10.Text = "Numbers";
+            this.radioButton10.UseVisualStyleBackColor = true;
+            // 
+            // radioButton9
+            // 
+            this.radioButton9.AutoSize = true;
+            this.radioButton9.Location = new System.Drawing.Point(25, 50);
+            this.radioButton9.Name = "radioButton9";
+            this.radioButton9.Size = new System.Drawing.Size(130, 29);
+            this.radioButton9.TabIndex = 1;
+            this.radioButton9.TabStop = true;
+            this.radioButton9.Text = "Non-Letters";
+            this.radioButton9.UseVisualStyleBackColor = true;
+            // 
+            // radioButton8
+            // 
+            this.radioButton8.AutoSize = true;
+            this.radioButton8.Location = new System.Drawing.Point(25, 25);
+            this.radioButton8.Name = "radioButton8";
+            this.radioButton8.Size = new System.Drawing.Size(89, 29);
+            this.radioButton8.TabIndex = 0;
+            this.radioButton8.TabStop = true;
+            this.radioButton8.Text = "Letters";
+            this.radioButton8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Option_009
+            // 
+            this.checkBox_Option_009.AutoSize = true;
+            this.checkBox_Option_009.Location = new System.Drawing.Point(14, 21);
+            this.checkBox_Option_009.Name = "checkBox_Option_009";
+            this.checkBox_Option_009.Size = new System.Drawing.Size(541, 29);
+            this.checkBox_Option_009.TabIndex = 2;
+            this.checkBox_Option_009.Text = "Remove symbols at the beginning of the file name by category:";
+            this.checkBox_Option_009.UseVisualStyleBackColor = true;
+            // 
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -268,6 +406,20 @@ namespace WinFormsApp1
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(651, 132);
             this.panel7.TabIndex = 37;
+            // 
+            // numericUpDown8
+            // 
+            this.numericUpDown8.Location = new System.Drawing.Point(308, 19);
+            this.numericUpDown8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.numericUpDown8.Name = "numericUpDown8";
+            this.numericUpDown8.Size = new System.Drawing.Size(77, 31);
+            this.numericUpDown8.TabIndex = 39;
+            this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDown8.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // checkBox_Option_008
             // 
@@ -875,19 +1027,15 @@ namespace WinFormsApp1
             this.btn_Undo.UseVisualStyleBackColor = true;
             this.btn_Undo.Click += new System.EventHandler(this.btn_Undo_Click);
             // 
-            // numericUpDown8
+            // checkBox8
             // 
-            this.numericUpDown8.Location = new System.Drawing.Point(308, 19);
-            this.numericUpDown8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.numericUpDown8.Name = "numericUpDown8";
-            this.numericUpDown8.Size = new System.Drawing.Size(77, 31);
-            this.numericUpDown8.TabIndex = 39;
-            this.numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numericUpDown8.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.Location = new System.Drawing.Point(23, 284);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(478, 29);
+            this.checkBox8.TabIndex = 4;
+            this.checkBox8.Text = "Remove any symbols until the selected condition is met";
+            this.checkBox8.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -912,8 +1060,13 @@ namespace WinFormsApp1
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel_base.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
@@ -942,7 +1095,6 @@ namespace WinFormsApp1
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1020,6 +1172,18 @@ namespace WinFormsApp1
         private System.Windows.Forms.NumericUpDown numericUpDown7;
         private System.Windows.Forms.CheckBox checkBox7;
         private System.Windows.Forms.NumericUpDown numericUpDown8;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox checkBox_Option_009;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton radioButton11;
+        private System.Windows.Forms.RadioButton radioButton10;
+        private System.Windows.Forms.RadioButton radioButton9;
+        private System.Windows.Forms.RadioButton radioButton8;
+        private System.Windows.Forms.RadioButton radioButton12;
+        private System.Windows.Forms.RadioButton radioButton13;
+        private System.Windows.Forms.RadioButton radioButton14;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.CheckBox checkBox8;
     }
 }
 

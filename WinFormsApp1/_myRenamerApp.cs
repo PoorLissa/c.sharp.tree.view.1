@@ -54,6 +54,17 @@ public class myRenamerApp_Controls
 
     public CheckBox                 option_008_ch_01 = null;
     public NumericUpDown            option_008_num_1 = null;
+
+    public CheckBox                 option_009_ch_01 = null;
+    public RadioButton              option_009_rb_01 = null;
+    public RadioButton              option_009_rb_02 = null;
+    public RadioButton              option_009_rb_03 = null;
+    public RadioButton              option_009_rb_04 = null;
+    public RadioButton              option_009_rb_05 = null;
+    public RadioButton              option_009_rb_06 = null;
+    public RadioButton              option_009_rb_07 = null;
+    public TextBox                  option_009_tb_01 = null;
+    public CheckBox                 option_009_ch_02 = null;
 };
 
 
