@@ -494,74 +494,117 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 9: Remove characters based on the user's selection:
+        // Option 9: Remove characters at the beginning of the file name, based on the user's selection:
         if (_controls.option_009_ch_01.Checked)
         {
-            int i = 0;
-
             Func<char, bool> func = null;
 
             // Letters
             if (_controls.option_009_rb_01.Checked)
             {
                 func = (char ch) => { return !myUtils.charIsLetter(ch); };
-
-                for (; i < name.Length; i++)
-                    if (!myUtils.charIsLetter(name[i]))
-                        break;
             }
 
             // Non-Letters
             if (_controls.option_009_rb_02.Checked)
             {
-                for (; i < name.Length; i++)
-                    if (myUtils.charIsLetter(name[i]))
-                        break;
+                func = (char ch) => { return myUtils.charIsLetter(ch); };
             }
 
             // Numbers
             if (_controls.option_009_rb_03.Checked)
             {
-                for (; i < name.Length; i++)
-                    if (!myUtils.charIsDigit(name[i]))
-                        break;
+                func = (char ch) => { return !myUtils.charIsDigit(ch); };
             }
 
             // Non-Numbers
             if (_controls.option_009_rb_04.Checked)
             {
-                for (; i < name.Length; i++)
-                    if (myUtils.charIsDigit(name[i]))
-                        break;
+                func = (char ch) => { return myUtils.charIsDigit(ch); };
             }
 
             // White Spaces
             if (_controls.option_009_rb_05.Checked)
             {
-                for (; i < name.Length; i++)
-                    if (!Char.IsWhiteSpace(name[i]))
-                        break;
+                func = (char ch) => { return !Char.IsWhiteSpace(ch); };
             }
 
             // Special Characters
             if (_controls.option_009_rb_06.Checked)
             {
-                for (; i < name.Length; i++)
-                    if (myUtils.charIsDigit(name[i]) || myUtils.charIsLetter(name[i]) || name[i] == ' ')
-                        break;
+                func = (char ch) => { return myUtils.charIsDigit(ch) || myUtils.charIsLetter(ch) || ch == ' '; };
             }
 
             // Any characters from the token string
             if (_controls.option_009_rb_07.Checked)
             {
-                string tokens = _controls.option_009_tb_01.Text;
-
-                for (; i < name.Length; i++)
-                    if (!tokens.Contains(name[i]))
-                        break;
+                func = (char ch) =>
+                {
+                    string tokens = _controls.option_009_tb_01.Text;
+                    return !tokens.Contains(ch);
+                };
             }
 
-            name = name.Substring(i, name.Length - i);
+            // -------------------------------------------------
+
+            // Iterate through the file name until the condition is met
+            for (pos = 0; pos < name.Length; pos++)
+            {
+                bool res = _controls.option_009_ch_02.Checked
+                                ? !func(name[pos])
+                                :  func(name[pos]);
+                if (res)
+                    break;
+            }
+
+            // Trim everything before [pos]
+            name = name.Substring(pos, name.Length - pos);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 10: Swap left and right parts of the file name
+        if (_controls.option_010_ch_01.Checked)
+        {
+            throw new Exception("opt 10 not implemented");
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 11: Insert date of creation/modification
+        if (_controls.option_011_ch_01.Checked)
+        {
+            var dt = System.IO.File.GetCreationTime(item.Name);
+
+            string str = dt.ToString();
+
+            throw new Exception("opt 11 not implemented\n\n" + str);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 12: Prepend every capital letter with a whitespace
+        if (_controls.option_012_ch_01.Checked)
+        {
+            bool isChanged = false;
+            var sb = new StringBuilder(name);
+
+            for (int i = name.Length - 1; i >= 0; i--)
+            {
+                if (myUtils.charIsCapitalLetter(name[i]))
+                {
+                    if (i > 0 && name[i - 1] != ' ')
+                    {
+                        isChanged = true;
+                        sb.Insert(i, ' ');
+                    }
+                }
+            }
+
+            if (isChanged)
+            {
+                name = sb.ToString();
+            }
         }
 
         // --------------------------------------------------------------------------------

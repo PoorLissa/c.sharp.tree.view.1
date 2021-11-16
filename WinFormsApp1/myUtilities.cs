@@ -269,6 +269,19 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
+    public static bool charIsCapitalLetter(char ch)
+    {
+        if ((ch >= 65 && ch <= 90) || (ch >= 1040 && ch <= 1071))
+            return true;
+
+        if (ch == 1105)
+            return true;
+
+        return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Extracts numeric characters starting from position [pos] and returns them as an integer
     public static int getInt_fromString(string s, int pos, ref int offset)
     {

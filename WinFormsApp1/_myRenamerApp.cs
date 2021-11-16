@@ -65,6 +65,11 @@ public class myRenamerApp_Controls
     public RadioButton              option_009_rb_07 = null;
     public TextBox                  option_009_tb_01 = null;
     public CheckBox                 option_009_ch_02 = null;
+
+    public CheckBox                 option_010_ch_01 = null;
+    public CheckBox                 option_011_ch_01 = null;
+
+    public CheckBox                 option_012_ch_01 = null;
 };
 
 
@@ -99,14 +104,28 @@ public class myRenamerApp
 
     public void Rename()
     {
-        new myRenamer(_myTDGManager, _controls).Rename();
+        try
+        {
+            new myRenamer(_myTDGManager, _controls).Rename();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename files", MessageBoxButtons.OK);
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------
 
     public void Undo_Rename()
     {
-        new myRenamer(_myTDGManager).undo();
+        try
+        {
+            new myRenamer(_myTDGManager).undo();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "myRenamerApp: Failed to undo", MessageBoxButtons.OK);
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------

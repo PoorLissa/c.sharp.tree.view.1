@@ -90,6 +90,8 @@ public class myBackup
                 sw.WriteLine(hist);
                 sw.WriteLine("---------------------------------------------------");
             }
+
+            System.IO.File.SetAttributes(path, System.IO.FileAttributes.Hidden);
         }
 
         return;
