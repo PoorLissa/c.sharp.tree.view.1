@@ -458,13 +458,11 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 8: Find numeric sequence and increase/decrease it by number n
+        // Option 8: Find numeric sequence number [pos] and increase/decrease it by value of [num]
         if (_controls.option_008_ch_01.Checked)
         {
             num = (int)(_controls.option_008_num_1.Value);  // Number to add to the sequence
-//            pos = (int)(_controls.option_007_num_2.Value);  // Number of numeric sequence in the file name
-
-            pos = 1;
+            pos = (int)(_controls.option_008_num_2.Value);  // Number of numeric sequence in the file name
 
             for (int i = 0; i < name.Length; i++)
             {
@@ -480,8 +478,18 @@ public class myRenamer
 
                         currentNum += num;
 
+                        string currentNumStr = currentNum.ToString();
+
                         sb.Remove(i, offset);
-                        sb.Insert(i, currentNum.ToString());
+                        sb.Insert(i, currentNumStr);
+
+                        if (offset > currentNumStr.Length)
+                        {
+                            while (offset-- != currentNumStr.Length)
+                            {
+                                sb.Insert(i, '0');
+                            }
+                        }
 
                         name = sb.ToString();
                         break;
@@ -566,7 +574,19 @@ public class myRenamer
         // Option 10: Swap left and right parts of the file name
         if (_controls.option_010_ch_01.Checked)
         {
-            throw new Exception("opt 10 not implemented");
+            string delim = _controls.option_010_tb_01.Text;
+
+            pos = name.IndexOf(delim);
+
+            if (pos > 0)
+            {
+                var sb = new StringBuilder(name, pos + delim.Length, name.Length - pos - delim.Length, name.Length);
+
+                sb.Insert(sb.Length, delim);
+                sb.Insert(sb.Length, name.Substring(0, pos));
+
+                name = sb.ToString();
+            }
         }
 
         // --------------------------------------------------------------------------------
@@ -574,11 +594,48 @@ public class myRenamer
         // Option 11: Insert date of creation/modification
         if (_controls.option_011_ch_01.Checked)
         {
-            var dt = System.IO.File.GetCreationTime(item.Name);
+            string mask = _controls.option_011_tb_01.Text;
 
-            string str = dt.ToString();
+            if (mask.Length > 0)
+            {
+                DateTime dt = DateTime.Now;
 
-            throw new Exception("opt 11 not implemented\n\n" + str);
+                // Last Write
+                if (_controls.option_011_rb_01.Checked)
+                {
+                    dt = System.IO.File.GetLastWriteTime(item.Name);
+                }
+
+                // Creation
+                if (_controls.option_011_rb_02.Checked)
+                {
+                    dt = System.IO.File.GetCreationTime(item.Name);
+                }
+
+                // Last Access
+                if (_controls.option_011_rb_03.Checked)
+                {
+                    dt = System.IO.File.GetLastAccessTime(item.Name);
+                }
+
+                mask = dt.ToString(mask);
+
+                var sb = new StringBuilder(33 + mask.Length);
+
+                for (int i = 0; i < mask.Length; i++)
+                {
+                    if (mask[i] == '*')
+                    {
+                        sb.Append(name);
+                    }
+                    else
+                    {
+                        sb.Append(mask[i]);
+                    }
+                }
+
+                name = sb.ToString();
+            }
         }
 
         // --------------------------------------------------------------------------------

@@ -54,6 +54,7 @@ public class myRenamerApp_Controls
 
     public CheckBox                 option_008_ch_01 = null;
     public NumericUpDown            option_008_num_1 = null;
+    public NumericUpDown            option_008_num_2 = null;
 
     public CheckBox                 option_009_ch_01 = null;
     public RadioButton              option_009_rb_01 = null;
@@ -67,7 +68,13 @@ public class myRenamerApp_Controls
     public CheckBox                 option_009_ch_02 = null;
 
     public CheckBox                 option_010_ch_01 = null;
+    public TextBox                  option_010_tb_01 = null;
+
     public CheckBox                 option_011_ch_01 = null;
+    public RadioButton              option_011_rb_01 = null;
+    public RadioButton              option_011_rb_02 = null;
+    public RadioButton              option_011_rb_03 = null;
+    public TextBox                  option_011_tb_01 = null;
 
     public CheckBox                 option_012_ch_01 = null;
 };
@@ -221,6 +228,15 @@ public class myRenamerApp
         // Option 8
         _controls.option_008_num_1.Minimum = -1000;
         _controls.option_008_num_1.Maximum = +1000;
+
+        _controls.option_008_num_1.Value = 1;
+        _controls.option_008_num_2.Value = 1;
+
+        // Option 10
+        _controls.option_010_tb_01.PlaceholderText = "Delimiter";
+
+        // Option 11:
+        _controls.option_011_tb_01.Text = "yyyy.MM.dd - *";
     }
 
     // --------------------------------------------------------------------------------------------------------

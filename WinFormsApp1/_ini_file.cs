@@ -294,8 +294,8 @@ public class ini_file_base
 
 		if (iniFileName == null && exeFileName == null)
 		{
-			exeFileName = AppDomain.CurrentDomain.BaseDirectory + "\\__ini.exe";
-			iniFileName = AppDomain.CurrentDomain.BaseDirectory + "\\__ini.ini";
+			exeFileName = AppDomain.CurrentDomain.BaseDirectory + "__ini.exe";
+			iniFileName = AppDomain.CurrentDomain.BaseDirectory + "__ini.ini";
 		}
 
 		switch (file)
@@ -464,6 +464,14 @@ public class ini_file_base
 
             string path = get_ini_path();
 
+            // Make visible (if exists)
+            if (System.IO.File.Exists(path))
+            {
+                FileAttributes attributes = File.GetAttributes(path);
+                System.IO.File.SetAttributes(path, attributes & ~FileAttributes.Hidden);
+            }
+
+            // Overwrite the file
             System.IO.File.CreateText(path).Dispose();
 
             using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
@@ -471,6 +479,7 @@ public class ini_file_base
                 sw.WriteLine(data);
             }
 
+            // Make hidden
             System.IO.File.SetAttributes(path, FileAttributes.Hidden);
         }
     }
