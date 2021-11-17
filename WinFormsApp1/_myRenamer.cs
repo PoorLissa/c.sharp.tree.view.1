@@ -73,21 +73,21 @@ public class myRenamer
         {
             while (true)
             {
-                if (item.isDir)
+                string newName = sb.ToString();
+                bool itemExists = System.IO.Directory.Exists(newName) || System.IO.File.Exists(newName);
+
+                if (!itemExists)
                 {
-                    if (!System.IO.Directory.Exists(sb.ToString()))
+                    if (item.isDir)
                     {
-                        System.IO.Directory.Move(item.Name, sb.ToString());
-                        break;
+                        System.IO.Directory.Move(item.Name, newName);
                     }
-                }
-                else
-                {
-                    if (!System.IO.File.Exists(sb.ToString()))
+                    else
                     {
-                        System.IO.File.Move(item.Name, sb.ToString());
-                        break;
+                        System.IO.File.Move(item.Name, newName);
                     }
+
+                    break;
                 }
 
                 sb.Clear();
@@ -174,7 +174,6 @@ public class myRenamer
             }
 
             _manager.update(list, true, true);
-
         }
 
         return;
