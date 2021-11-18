@@ -39,6 +39,7 @@ public class myRenamer
     {
         bool res = true;
 
+#if false
         var list = _manager.getSelectedFiles(asCopy: true);
         string err = "";
 
@@ -53,11 +54,11 @@ public class myRenamer
 
                 if (item.isDir == isDir)
                 {
-                    applyOptions(item, ref err);
+                    //applyOptions(item, ref err);
                 }
             }
         }
-
+#endif
         return res;
     }
 
@@ -141,7 +142,8 @@ public class myRenamer
 
             if (err.Length > 0)
             {
-                MessageBox.Show(err, "myRenamer.Rename: Error 1", MessageBoxButtons.OK);
+                MessageBox.Show(err, "myRenamer.Rename: Error in pt.1", MessageBoxButtons.OK);
+                err = string.Empty;
             }
 
             _manager.update(list, true, false);
@@ -150,6 +152,8 @@ public class myRenamer
 
         // Step 2: apply options and make a final rename
         {
+            int cntUnique = 0;
+
             // Rename files first, then rename folders
             for (int j = 0; j < 2; j++)
             {
@@ -162,15 +166,26 @@ public class myRenamer
 
                     if (item.isDir == isDir)
                     {
-                        // Go through every option that the User has selected and apply all the changes to file name
-                        applyOptions(item, ref err);
+                        // Go through every option that the User has selected and apply all the changes to get a new file name
+                        string newName = applyOptions(item);
+
+                        // Finally, rename the file
+                        bool ok = RenamePhysical(item, newName, ref err);
+
+                        cntUnique += (ok ? 0 : 1);
                     }
                 }
             }
 
+            if (cntUnique > 0)
+            {
+                MessageBox.Show($"{cntUnique} file(s) have name conflict.\nThese files will be renamed using unique postfixed names", "myRenamer.Rename: Warning", MessageBoxButtons.OK);
+            }
+
             if (err.Length > 0)
             {
-                MessageBox.Show(err, "myRenamer.Rename: Error 2", MessageBoxButtons.OK);
+                MessageBox.Show(err, "myRenamer.Rename: Error in pt.2", MessageBoxButtons.OK);
+                err = string.Empty;
             }
 
             _manager.update(list, true, true);
@@ -183,7 +198,7 @@ public class myRenamer
 
     // Go through every option that the User has selected and apply the changes to file name
     // todo: rewrite it to use string builder (which can be tricky, as SB does not have indexof() and other such methods)
-    private void applyOptions(myTreeListDataItem item, ref string err)
+    private string applyOptions(myTreeListDataItem item)
     {
         int pos = 0, num = 0;
         int pos_file = item.Name.LastIndexOf('\\') + 1;
@@ -678,9 +693,7 @@ public class myRenamer
                 newName = item.Name.Substring(0, pos_file) + name;
         }
 
-        RenamePhysical(item, newName, ref err);
-
-        return;
+        return newName;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -756,8 +769,12 @@ public class myRenamer
     // --------------------------------------------------------------------------------------------------------
 
     // Actual physical file renaming
-    private void RenamePhysical(myTreeListDataItem item, string newName, ref string err)
+    // Returns true if the item was renamed as planned
+    // Returns false, if [newName] dir/file already exists (which means the current item has been given a unique name)
+    private bool RenamePhysical(myTreeListDataItem item, string newName, ref string err)
     {
+        bool res = true;
+
         if (newName != null && item.Name != newName)
         {
             bool ok = true;
@@ -768,6 +785,7 @@ public class myRenamer
 
                 if (itemExists)
                 {
+                    res = false;
                     getUniqueName(ref newName, item.isDir);
                 }
 
@@ -793,7 +811,7 @@ public class myRenamer
             }
         }
 
-        return;
+        return res;
     }
 
     // --------------------------------------------------------------------------------------------------------

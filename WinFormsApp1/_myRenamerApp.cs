@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 public class myRenamerApp_Controls
 {
-    public List<CheckBox>           optionList       = null;            // List of each option panel's main checkboxes
+    public List<CheckBox>           optionList       = null;    // List of each option panel's main checkboxes
 
     public RichTextBox              richTextBox      = null;
 
