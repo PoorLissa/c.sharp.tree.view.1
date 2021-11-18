@@ -1137,8 +1137,9 @@ public class myDataGrid
     // Key Down Event
     private void on_KeyDown(object sender, KeyEventArgs e)
     {
+        //return;
 #if DEBUG_TRACE
-            myUtils.logMsg("myDataGrid.on_KeyDown", "");
+        myUtils.logMsg("myDataGrid.on_KeyDown", "");
 #endif
 
         int currRow = _dataGrid.RowCount > 0 ? _dataGrid.CurrentRow.Index : -1;
@@ -1166,7 +1167,6 @@ public class myDataGrid
                             cb.Value = !(bool)(cb.Value);
                         }
                     }
-
                 }
                 break;
 
@@ -1174,6 +1174,54 @@ public class myDataGrid
 
                     if (_dataGrid.Rows.Count > 0)
                     {
+
+                        if (e.Modifiers == Keys.Shift)
+                        {
+                            //_dataGrid.ClearSelection();
+                            //_dataGrid.CurrentCell = _dataGrid[0, 0];
+
+                            _dataGrid.CurrentCell = _dataGrid[0, 0];
+                            _dataGrid.FirstDisplayedScrollingRowIndex = 0;
+
+                            //_dataGrid.FirstDisplayedCell = _dataGrid[0, 0];
+
+                            for (int i = 0; i <= currRow; i++)
+                            //for (int i = currRow; i >= 0; i--)
+                            {
+                                var cell = _dataGrid.CurrentCell;
+                                var row  = _dataGrid.CurrentRow;
+
+                                int a = 1;
+
+                                //_dataGrid.FirstDisplayedScrollingRowIndex = i;
+
+                                _dataGrid.Rows[i].Selected = true;
+
+                                //_dataGrid.FirstDisplayedCell.Selected = true;
+                            }
+
+                            _dataGrid.FirstDisplayedCell.Selected = true;
+
+                            //_dataGrid.FirstDisplayedScrollingRowIndex = 0;
+
+                            int currRow2 = _dataGrid.RowCount > 0 ? _dataGrid.CurrentRow.Index : -1;
+
+                            //for (int i = 0; i < currRow-1; i++) _dataGrid.Rows[i].Selected = true;
+
+                            //_dataGrid.CurrentCell = _dataGrid[0, 0];
+
+                            //_dataGrid.CurrentRow.Selected = true;
+
+                            //_dataGrid.Rows[0].Selected = true;
+                        }
+                        else
+                        {
+                            _dataGrid.ClearSelection();
+                            _dataGrid.CurrentCell = _dataGrid[0, 0];
+
+                            _dataGrid.CurrentRow.Selected = true;
+                        }
+/*
                         _dataGrid.ClearSelection();
                         _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
 
@@ -1182,6 +1230,7 @@ public class myDataGrid
                                 _dataGrid.Rows[i].Selected = true;
 
                         _dataGrid.CurrentRow.Selected = true;
+*/
                     }
                 }
                 break;

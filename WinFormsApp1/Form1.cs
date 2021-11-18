@@ -138,7 +138,24 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ;
+            int aaa = dataGridView1.ColumnCount;
+
+            var dg = dataGridView1;
+
+            string s =  $"CurrentRow = {dg.CurrentRow.Index}\n";
+            s +=        $"FirstDisplayedCell = {dg.FirstDisplayedCell.RowIndex}\n";
+            s += $"FirstDisplayedScrollingRowIndex = {dg.FirstDisplayedScrollingRowIndex}\n";
+            s += $"FirstDisplayedScrollingColumnHiddenWidth = {dg.FirstDisplayedScrollingColumnHiddenWidth}\n";
+            s += $"IsCurrentCellDirty = {dg.IsCurrentCellDirty.ToString()}\n";
+            s += $"NewRowIndex = {dg.NewRowIndex}\n";
+            s += $"SelectedCells.Count = {dg.SelectedCells.Count}\n";
+
+            foreach (var row in dg.SelectedRows)
+            {
+                s += $"row = {row.ToString()}\n";
+            }
+
+            MessageBox.Show(s, "", MessageBoxButtons.OK);
         }
 
         // --------------------------------------------------------------------------------
