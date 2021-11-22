@@ -138,24 +138,21 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int aaa = dataGridView1.ColumnCount;
-
             var dg = dataGridView1;
 
-            string s =  $"CurrentRow = {dg.CurrentRow.Index}\n";
-            s +=        $"FirstDisplayedCell = {dg.FirstDisplayedCell.RowIndex}\n";
-            s += $"FirstDisplayedScrollingRowIndex = {dg.FirstDisplayedScrollingRowIndex}\n";
-            s += $"FirstDisplayedScrollingColumnHiddenWidth = {dg.FirstDisplayedScrollingColumnHiddenWidth}\n";
-            s += $"IsCurrentCellDirty = {dg.IsCurrentCellDirty.ToString()}\n";
-            s += $"NewRowIndex = {dg.NewRowIndex}\n";
-            s += $"SelectedCells.Count = {dg.SelectedCells.Count}\n";
+            var visibleRowsCount = dg.DisplayedRowCount(true);
+            var firstDisplayedRowIndex = dg.FirstDisplayedCell.RowIndex;
+            var lastvisibleRowIndex = (firstDisplayedRowIndex + visibleRowsCount) - 1;
 
-            foreach (var row in dg.SelectedRows)
+            richTextBox1.Clear();
+
+            for (int rowIndex = firstDisplayedRowIndex; rowIndex <= lastvisibleRowIndex; rowIndex++)
             {
-                s += $"row = {row.ToString()}\n";
+                richTextBox1.AppendText(dg[3, rowIndex].Value.ToString());
+                richTextBox1.AppendText("\n");
             }
 
-            MessageBox.Show(s, "", MessageBoxButtons.OK);
+            //MessageBox.Show(s, "", MessageBoxButtons.OK);
         }
 
         // --------------------------------------------------------------------------------

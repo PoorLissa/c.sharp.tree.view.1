@@ -696,6 +696,13 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    public void getVisibleFiles(List<myTreeListDataItem> list)
+    {
+        ...
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Get a list of files that are currently checked in the GridView
     public void getSelectedFiles(List<myTreeListDataItem> list)
     {
@@ -738,7 +745,7 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Assignes every dir/file an index number
+    // Assignes every dir/file an index number (will be used in renaming using template)
     private void enumerateFiles(int id, ref Dictionary<string, int> dic, ref StringBuilder sb)
     {
         var item = _globalFileListExtRef[id];

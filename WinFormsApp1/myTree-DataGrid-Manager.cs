@@ -169,6 +169,28 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    // Public interface method: obtain the list of selected files
+    public List<myTreeListDataItem> getVisibleFiles(bool asCopy)
+    {
+        var list = new List<myTreeListDataItem>();
+
+        _dataGrid.getVisibleFiles(list);
+
+        if (asCopy)
+        {
+            var copy = new List<myTreeListDataItem>(list.Count);
+
+            for (int i = 0; i < list.Count; i++)
+                copy.Add(list[i].Clone());
+
+            list = copy;
+        }
+
+        return list;
+    }
+
+    // --------------------------------------------------------------------------------
+
     public void allowBackup(bool mode)
     {
         _useBackup = mode;
