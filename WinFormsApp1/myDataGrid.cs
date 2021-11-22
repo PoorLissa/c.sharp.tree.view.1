@@ -5,20 +5,19 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
+
 /*
     Wrapper class around DataGridView widget.
     Allows customization and provides public methods to work with the widget.
-
-    todo:
-        - fix this one: a) select a row in the middle b) press shift+home c) press shift+arrow-down --> selected rows are behaving strange
 */
+
 
 public class myDataGrid
 {
     private DataGridView    _dataGrid      = null;
     private DataGridViewRow _myTemplateRow = null;
 
-    private bool _doUseRecursion = false;
+    private bool _doUseRecursion     = false;
     private bool _doShowRecursionMsg = false;
 
     private Image _imgDir         = null;
@@ -1149,13 +1148,78 @@ public class myDataGrid
         switch (e.KeyCode)
         {
             // Default widget's reaction
-            case Keys.Up:
             case Keys.PageUp:
-            case Keys.Down:
             case Keys.PageDown:
             case Keys.F4:
             case Keys.F5:
             case Keys.A:
+                return;
+
+            // Up and Down arrow keys work mostly as expected
+            // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
+            // The selection is lost, instead of subtracting items from the selection
+            // In order to address that, added 2 additional handlers for Up and Down keys:
+
+            case Keys.Up: {
+
+                    if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
+                    {
+                        int cnt = 0, i = currRow;
+
+                        // Make sure the selection is contiguous
+                        for (; i >= 0; i--)
+                        {
+                            if (!_dataGrid.Rows[i].Selected)
+                            {
+                                i++;
+                                break;
+                            }
+
+                            cnt++;
+                        }
+
+                        if (cnt == _dataGrid.SelectedRows.Count)
+                        {
+                            i = (i < 0) ? 0 : i;
+                            currRow--;
+                            _dataGrid.CurrentCell = _dataGrid[0, currRow];
+
+                            for (; i != currRow; i++)
+                                _dataGrid.Rows[i].Selected = true;
+
+                            e.Handled = true;
+                        }
+                    }
+                }
+                return;
+
+            case Keys.Down: {
+
+                    if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
+                    {
+                        int cnt = 0, i = currRow;
+
+                        // Make sure the selection is contiguous
+                        for (; i < _dataGrid.RowCount; i++)
+                        {
+                            if (!_dataGrid.Rows[i].Selected)
+                                break;
+
+                            cnt++;
+                        }
+
+                        if (cnt == _dataGrid.SelectedRows.Count)
+                        {
+                            currRow++;
+                            _dataGrid.CurrentCell = _dataGrid[0, currRow];
+
+                            for (cnt = currRow; cnt < i; cnt++)
+                                _dataGrid.Rows[cnt].Selected = true;
+
+                            e.Handled = true;
+                        }
+                    }
+                }
                 return;
 
             case Keys.Space: {
@@ -1228,9 +1292,9 @@ public class myDataGrid
 
     public void setRecursiveMode(bool mode)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.setRecursiveMode", "");
-        #endif
+#endif
 
         _doUseRecursion = mode;
 
@@ -1246,9 +1310,9 @@ public class myDataGrid
 
     public void displayRecursionMsg(string msg)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.displayRecursionMsg", "");
-        #endif
+#endif
 
         _recursionMessage = msg;
         _doShowRecursionMsg = true;
@@ -1260,9 +1324,9 @@ public class myDataGrid
     // Update DataGrid's state
     public void update(System.Collections.Generic.List<myTreeListDataItem> updatedList = null)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.update", "");
-        #endif
+#endif
 
         if (updatedList != null)
         {
