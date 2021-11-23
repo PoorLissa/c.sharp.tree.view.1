@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -125,6 +126,12 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
         _dataGrid.Obj().CellMouseEnter += new DataGridViewCellEventHandler(dataGrid_CellMouseEnter);
 
+
+        _dataGrid.Obj().RowsAdded += new DataGridViewRowsAddedEventHandler(dataGrid_RowsAdded);
+        _dataGrid.Obj().Scroll += new ScrollEventHandler(dataGrid_Scroll);
+        _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler(dataGrid_CellValueChanged);
+
+
         _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
         _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
@@ -137,6 +144,23 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         // To be able to react to F5 refresh command
         _form.KeyDown += new KeyEventHandler(on_KeyDown);
         _form.KeyPreview = true;
+    }
+
+    public void dataGrid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+    {
+        _visibleListNeedsRefreshing = true;
+    }
+
+    public void dataGrid_Scroll(object sender, ScrollEventArgs e)
+    {
+        _visibleListNeedsRefreshing = true;
+    }
+
+    public void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+    {
+        _richTextBox.AppendText("... ");
+        _visibleListNeedsRefreshing = true;
+            ... // this one does not fire every time i click the checkbox
     }
 
     // --------------------------------------------------------------------------------
@@ -372,16 +396,27 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Display tooltip: this row's file name with all the selected options applied
     //
     // todo: get the list only when the grid contents/scroll position changed
-    //
+    //       or maybe not: this func takes ~0.05 ms average to execute
+    private double zzz = 0.0;
+    private double cnt = 0.0;
+    private bool _visibleListNeedsRefreshing = true;
+    private List<myTreeListDataItem> list = null;
+
     private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
+        var tBefore = System.DateTime.Now.Ticks;
+
         var row = _dataGrid.Obj().Rows[e.RowIndex];
         bool isChecked = (bool)(row.Cells[(int)myDataGrid.Columns.colChBox].Value);
 
         if (isChecked)
         {
             // Careful, this is NOT A COPY:
-            var list = getVisibleFiles(asCopy: false);
+            if (_visibleListNeedsRefreshing)
+            {
+                list = getVisibleFiles(asCopy: false);
+                _visibleListNeedsRefreshing = false;
+            }
 
             int firstDisplayedRowIndex = _dataGrid.Obj().FirstDisplayedCell.RowIndex;
             var id = e.RowIndex - firstDisplayedRowIndex;
@@ -389,14 +424,22 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             if (list[id] != null)
             {
                 // Get simulated name and display it
-                _dataGrid.setSimulatedFileName(myRenamer.getInstance().getSimulatedName(list[id]));
+                _dataGrid.setSimulatedName(myRenamer.getInstance().getSimulatedName(list[id]));
                 _dataGrid.Obj().InvalidateRow(e.RowIndex);
             }
         }
         else
         {
-            _dataGrid.setSimulatedFileName(null);
+            _dataGrid.setSimulatedName(null);
         }
+
+        TimeSpan elapsedSpan = new TimeSpan(DateTime.Now.Ticks - tBefore);
+
+        zzz += elapsedSpan.TotalMilliseconds;
+        cnt += 1.0;
+
+        //_richTextBox.Clear();
+        //_richTextBox.AppendText($"dataGrid_CellMouseEnter -- average = {zzz/cnt} ms\n");
 
         return;
     }

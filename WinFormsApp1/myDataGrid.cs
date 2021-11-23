@@ -714,6 +714,9 @@ public class myDataGrid
         var firstDisplayedRowIndex = _dataGrid.FirstDisplayedCell.RowIndex;
         var lastvisibleRowIndex = (firstDisplayedRowIndex + visibleRowsCount) - 1;
 
+        StringBuilder sb = new StringBuilder(260);
+        Dictionary<string, int> dic = new Dictionary<string, int>();
+
         for (int i = firstDisplayedRowIndex; i <= lastvisibleRowIndex; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
@@ -721,7 +724,15 @@ public class myDataGrid
             int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
-            list.Add(isChecked ? _globalFileListExtRef[id] : null);
+            if (isChecked)
+            {
+                enumerateFiles(id, ref dic, ref sb);
+                list.Add(_globalFileListExtRef[id]);
+            }
+            else
+            {
+                list.Add(null);
+            }
         }
 
         return;
@@ -1447,10 +1458,10 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Set simulated name -- to use it as a hover tooltip
-    public void setSimulatedFileName(string name)
+    public void setSimulatedName(string name)
     {
 #if DEBUG_TRACE
-            myUtils.logMsg("myDataGrid.setSimulatedFileName", "");
+            myUtils.logMsg("myDataGrid.setSimulatedName", "");
 #endif
 
         _simulatedFileName = name;
