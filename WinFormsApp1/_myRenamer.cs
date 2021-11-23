@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -22,15 +20,29 @@ using System.Windows.Forms;
 
 public class myRenamer
 {
-    private myRenamerApp_Controls   _controls   = null;
-    private myTree_DataGrid_Manager _manager    = null;
+    private static myRenamer        _instance = null;
+    private myRenamerApp_Controls   _controls = null;
+    private myTree_DataGrid_Manager _manager  = null;
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myRenamer(myTree_DataGrid_Manager manager, myRenamerApp_Controls controls = null)
+    public myRenamer(myTree_DataGrid_Manager manager, myRenamerApp_Controls controls)
     {
         _manager  = manager;
         _controls = controls;
+
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Return the existing instance of the class in a Singleton manner
+    public static myRenamer getInstance()
+    {
+        return _instance;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -105,6 +117,14 @@ public class myRenamer
         item.Name = sb.ToString();
 
         return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Apply all the selected options to a string
+    public string getSimulatedName(myTreeListDataItem item)
+    {
+        return applyOptions(item, getNameOnly: true);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -198,12 +218,13 @@ public class myRenamer
 
     // Go through every option that the User has selected and apply the changes to file name
     // todo: rewrite it to use string builder (which can be tricky, as SB does not have indexof() and other such methods)
-    private string applyOptions(myTreeListDataItem item)
+    private string applyOptions(myTreeListDataItem item, bool getNameOnly = false)
     {
         int pos = 0, num = 0;
         int pos_file = item.Name.LastIndexOf('\\') + 1;
         int pos_ext  = item.Name.LastIndexOf('.');
         int pos_tmp  = item.Name.LastIndexOf('#');
+            pos_tmp  = (pos_tmp < 0) ? item.Name.Length : pos_tmp;      // When doing the simulation, no tmp name exists yet
 
         string newName = null;
         string name    = null;
@@ -680,17 +701,23 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-
-        if (item.isDir)
+        if (getNameOnly == true)
         {
-            newName = item.Name.Substring(0, pos_file) + name;
+            newName = name;
         }
         else
         {
-            if (pos_ext >= pos_file)
-                newName = item.Name.Substring(0, pos_file) + name + ext;
-            else
+            if (item.isDir)
+            {
                 newName = item.Name.Substring(0, pos_file) + name;
+            }
+            else
+            {
+                if (pos_ext >= pos_file)
+                    newName = item.Name.Substring(0, pos_file) + name + ext;
+                else
+                    newName = item.Name.Substring(0, pos_file) + name;
+            }
         }
 
         return newName;

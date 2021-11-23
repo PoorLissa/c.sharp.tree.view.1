@@ -9,6 +9,9 @@ using System.Windows.Forms;
 /*
     Wrapper class around DataGridView widget.
     Allows customization and provides public methods to work with the widget.
+
+    todo:
+        - replace hoverStatus with enum
 */
 
 
@@ -39,10 +42,12 @@ public class myDataGrid
     // StringFormat for CellId custom text drawing
     private StringFormat strFormat_CellId   = null;
     private StringFormat strFormat_CellName = null;
+    private StringFormat strFormat_CellNameTooltip = null;
 
     private myDataGrid_Cache _cache = null;
 
     private string _recursionMessage = "";
+    private string _simulatedFileName = "";
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -164,6 +169,10 @@ public class myDataGrid
         strFormat_CellName.LineAlignment = StringAlignment.Near;
         strFormat_CellName.Alignment = StringAlignment.Far;
 
+        strFormat_CellNameTooltip = new StringFormat(StringFormatFlags.NoWrap);
+        strFormat_CellNameTooltip.LineAlignment = StringAlignment.Center;
+        strFormat_CellNameTooltip.Alignment = StringAlignment.Near;
+
         return;
     }
 
@@ -281,8 +290,9 @@ public class myDataGrid
             row.Cells[(int)Columns.colImage].Value = img;
             row.Cells[(int)Columns.colName ].Value = item.Name[pos..];
 
-            row.DefaultCellStyle.ForeColor = isDir ? System.Drawing.Color.Black : System.Drawing.Color.Brown;
-
+            row.DefaultCellStyle.ForeColor = isDir
+                                                ? Color.Black
+                                                : Color.Brown;
             if (item.isHidden)
             {
                 row.Cells[(int)Columns.colName].Style.ForeColor = Color.Gray;
@@ -698,7 +708,23 @@ public class myDataGrid
 
     public void getVisibleFiles(List<myTreeListDataItem> list)
     {
-        ...
+        list.Clear();
+
+        var visibleRowsCount = _dataGrid.DisplayedRowCount(true);
+        var firstDisplayedRowIndex = _dataGrid.FirstDisplayedCell.RowIndex;
+        var lastvisibleRowIndex = (firstDisplayedRowIndex + visibleRowsCount) - 1;
+
+        for (int i = firstDisplayedRowIndex; i <= lastvisibleRowIndex; i++)
+        {
+            DataGridViewRow row = _dataGrid.Rows[i];
+
+            int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
+            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
+
+            list.Add(isChecked ? _globalFileListExtRef[id] : null);
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -862,7 +888,9 @@ public class myDataGrid
         #endif
 
         bool done = false;
+        bool doPaintTooltip = (hoverStatus == '2' && e.ColumnIndex == (int)Columns.colName);
 
+        // Paint Id column
         if (e.ColumnIndex == (int)Columns.colId)
         {
             var font = isRowSelected ? _cache.getCustomContentFont(e.CellStyle.Font) : e.CellStyle.Font;
@@ -871,16 +899,17 @@ public class myDataGrid
             done = true;
         }
 
-        if (!done)
+        // Paint original content in original style
+        if (!done && !doPaintTooltip)
         {
-            // Paint original content in original style
             e.PaintContent(e.CellBounds);
         }
 
         // Paint path in the right bottom corner on mouse hover
-        if (hoverStatus == '2' && e.ColumnIndex == (int)Columns.colName)
+        if (doPaintTooltip)
         {
             paintCustomRowTooltip(e);
+            paintSimulatedNameTooltip(e);
         }
 
         return;
@@ -902,6 +931,30 @@ public class myDataGrid
         string tooltip = myUtils.condensePath(e, _globalFileListExtRef[id].Name, r, f, strFormat_CellName);
 
         e.Graphics.DrawString(tooltip, f, Brushes.Gray, r, strFormat_CellName);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Paint tooltip: file name with every selected option applied
+    private void paintSimulatedNameTooltip(DataGridViewCellPaintingEventArgs e)
+    {
+        #if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.paintSimulatedNameTooltip", "");
+        #endif
+
+        if (_simulatedFileName != null)
+        {
+            Rectangle r = _cache.getRect(e.CellBounds.X + e.CellStyle.Padding.Left, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
+            Font f = _cache.getCustomContentFont(e.CellStyle.Font);
+
+            e.Graphics.DrawString(_simulatedFileName, f, Brushes.DarkRed, r, strFormat_CellNameTooltip);
+        }
+        else
+        {
+            e.PaintContent(e.CellBounds);
+        }
 
         return;
     }
@@ -1383,10 +1436,25 @@ public class myDataGrid
     // Visual style applies via OnPaint() event
     public void Enable(bool mode)
     {
+#if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.Enable", "");
+#endif
+
         _doShowRecursionMsg = false;
         _dataGrid.Enabled = mode;
     }
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Set simulated name -- to use it as a hover tooltip
+    public void setSimulatedFileName(string name)
+    {
+#if DEBUG_TRACE
+            myUtils.logMsg("myDataGrid.setSimulatedFileName", "");
+#endif
+
+        _simulatedFileName = name;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };

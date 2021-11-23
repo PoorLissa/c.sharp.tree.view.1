@@ -113,7 +113,7 @@ public class myRenamerApp
     {
         try
         {
-            new myRenamer(_myTDGManager, _controls).Rename();
+            myRenamer.getInstance().Rename();
         }
         catch (Exception ex)
         {
@@ -127,7 +127,7 @@ public class myRenamerApp
     {
         try
         {
-            new myRenamer(_myTDGManager).undo();
+            myRenamer.getInstance().undo();
         }
         catch (Exception ex)
         {
@@ -192,6 +192,9 @@ public class myRenamerApp
 
     private void init()
     {
+        // Initialize the instance, so it is available later on
+        new myRenamer(_myTDGManager, _controls);
+
         _ini = new ini_file_base();
         _ini.read();
 

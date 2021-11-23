@@ -123,6 +123,8 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
         _tree.Obj().AfterExpand  += new TreeViewEventHandler        (tree_onAfterExpand);
 
+        _dataGrid.Obj().CellMouseEnter += new DataGridViewCellEventHandler(dataGrid_CellMouseEnter);
+
         _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
         _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
@@ -139,7 +141,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Public interface method: obtain the list of selected files
+    // Public interface method: populate list with currently selected files
     public void getSelectedFiles(List<myTreeListDataItem> filesList)
     {
         _dataGrid.getSelectedFiles(filesList);
@@ -147,7 +149,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Public interface method: obtain the list of selected files
+    // Public interface method: get list of currently selected files
     public List<myTreeListDataItem> getSelectedFiles(bool asCopy)
     {
         var list = new List<myTreeListDataItem>();
@@ -169,7 +171,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Public interface method: obtain the list of selected files
+    // Public interface method: populate list with currently visible files
     public List<myTreeListDataItem> getVisibleFiles(bool asCopy)
     {
         var list = new List<myTreeListDataItem>();
@@ -181,7 +183,16 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             var copy = new List<myTreeListDataItem>(list.Count);
 
             for (int i = 0; i < list.Count; i++)
-                copy.Add(list[i].Clone());
+            {
+                if (list[i] != null)
+                {
+                    copy.Add(list[i].Clone());
+                }
+                else
+                {
+                    copy.Add(null);
+                }
+            }
 
             list = copy;
         }
@@ -354,6 +365,40 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private void tree_onAfterExpand(object sender, TreeViewEventArgs e)
     {
         _tree.AllowRedrawing(true);
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Display tooltip: this row's file name with all the selected options applied
+    //
+    // todo: get the list only when the grid contents/scroll position changed
+    //
+    private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+    {
+        var row = _dataGrid.Obj().Rows[e.RowIndex];
+        bool isChecked = (bool)(row.Cells[(int)myDataGrid.Columns.colChBox].Value);
+
+        if (isChecked)
+        {
+            // Careful, this is NOT A COPY:
+            var list = getVisibleFiles(asCopy: false);
+
+            int firstDisplayedRowIndex = _dataGrid.Obj().FirstDisplayedCell.RowIndex;
+            var id = e.RowIndex - firstDisplayedRowIndex;
+
+            if (list[id] != null)
+            {
+                // Get simulated name and display it
+                _dataGrid.setSimulatedFileName(myRenamer.getInstance().getSimulatedName(list[id]));
+                _dataGrid.Obj().InvalidateRow(e.RowIndex);
+            }
+        }
+        else
+        {
+            _dataGrid.setSimulatedFileName(null);
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------
