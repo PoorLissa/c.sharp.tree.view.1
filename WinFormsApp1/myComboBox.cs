@@ -60,11 +60,12 @@ namespace myControls
 
         private void setUpEvents()
         {
-            _cb.MouseClick     += new MouseEventHandler (on_MouseClick);
-            _cb.KeyDown        += new KeyEventHandler   (on_KeyDown);
-            _cb.TextChanged    += new EventHandler      (on_TextChanged);
-            _cb.DropDown       += new EventHandler      (on_DropDownOpened);
-            _cb.DropDownClosed += new EventHandler      (on_DropDownClosed);
+            _cb.MouseClick               += new MouseEventHandler (on_MouseClick);
+            _cb.KeyDown                  += new KeyEventHandler   (on_KeyDown);
+            _cb.TextChanged              += new EventHandler      (on_TextChanged);
+            _cb.DropDown                 += new EventHandler      (on_DropDownOpened);
+            _cb.DropDownClosed           += new EventHandler      (on_DropDownClosed);
+            _cb.SelectionChangeCommitted += new EventHandler      (on_SelectionChangeCommitted);
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ namespace myControls
         // --------------------------------------------------------------------------------------------------------
 
         // Adds items to combobox from string
-        public void setItems(string data)
+        public void setItems(string data, bool doSelectFirstItem = false)
         {
             if (data != null)
             {
@@ -101,6 +102,11 @@ namespace myControls
 
                 if(_sort == SortMode.Sorted)
                     _cb.Sorted = true;
+
+                if (doSelectFirstItem && _cb.Items.Count > 0)
+                {
+                    _cb.SelectedIndex = 0;
+                }
             }
 
             return;
@@ -220,6 +226,31 @@ namespace myControls
         {
             ComboBox cb = (ComboBox)(sender);
             _placeholder.Visible = (cb.Text.Length == 0);
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        private void on_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)(sender);
+
+            // When selected by mouse, resort the items
+            if (cb.DroppedDown && _sort == SortMode.LastOnTop)
+            {
+                var selectedIndex = cb.SelectedIndex;
+
+                if (selectedIndex > 0)
+                {
+                    var item = cb.SelectedItem;
+
+                    cb.Items.RemoveAt(selectedIndex);
+                    cb.Items.Insert(0, item);
+                    cb.SelectedIndex = 0;
+                    _isChanged = true;
+                }
+            }
+
+            return;
         }
 
         // --------------------------------------------------------------------------------------------------------

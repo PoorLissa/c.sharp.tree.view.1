@@ -79,7 +79,7 @@ namespace WinFormsApp1
                 mraControls.option_004_num_1 = this.numericUpDown5;
 
                 mraControls.option_005_ch_01 = this.checkBox_Option_005;
-                mraControls.option_005_tb_01 = this.textBox5;
+                mraControls.option_005_cb_01 = new myControls.myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
                 mraControls.option_005_num_1 = this.numericUpDown4;
 
                 mraControls.option_006_ch_01 = this.checkBox_Option_006;

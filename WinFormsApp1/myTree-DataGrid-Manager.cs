@@ -378,8 +378,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Display tooltip: this row's file name with all the selected options applied
     private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
-        var tBefore = System.DateTime.Now.Ticks;
-
         var row = _dataGrid.Obj().Rows[e.RowIndex];
         bool isChecked = (bool)(row.Cells[(int)myDataGrid.Columns.colChBox].Value);
 

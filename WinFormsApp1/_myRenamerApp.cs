@@ -1,82 +1,82 @@
-﻿using System;
+﻿using myControls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 
-
 public class myRenamerApp_Controls
 {
-    public List<CheckBox>           optionList       = null;    // List of each option panel's main checkboxes
+    public List<CheckBox>   optionList       = null;    // List of each option panel's main checkboxes
 
-    public RichTextBox              richTextBox      = null;
+    public RichTextBox      richTextBox      = null;
 
-    public CheckBox                 option_001_ch_01 = null;
-    public CheckBox                 option_001_ch_02 = null;
-    public CheckBox                 option_001_ch_03 = null;
-    public myControls.myComboBox    option_001_cb_01 = null;
+    public CheckBox         option_001_ch_01 = null;
+    public CheckBox         option_001_ch_02 = null;
+    public CheckBox         option_001_ch_03 = null;
+    public myComboBox       option_001_cb_01 = null;
 
-    public CheckBox                 option_002_ch_01 = null;
-    public CheckBox                 option_002_ch_02 = null;
-    public NumericUpDown            option_002_num_1 = null;
-    public NumericUpDown            option_002_num_2 = null;
+    public CheckBox         option_002_ch_01 = null;
+    public CheckBox         option_002_ch_02 = null;
+    public NumericUpDown    option_002_num_1 = null;
+    public NumericUpDown    option_002_num_2 = null;
 
-    public CheckBox                 option_003_ch_01 = null;
-    public NumericUpDown            option_003_num_1 = null;
-    public RadioButton              option_003_rb_01 = null;
-    public RadioButton              option_003_rb_02 = null;
-    public TextBox                  option_003_tb_01 = null;
+    public CheckBox         option_003_ch_01 = null;
+    public NumericUpDown    option_003_num_1 = null;
+    public RadioButton      option_003_rb_01 = null;
+    public RadioButton      option_003_rb_02 = null;
+    public TextBox          option_003_tb_01 = null;
 
-    public CheckBox                 option_004_ch_01 = null;
-    public CheckBox                 option_004_ch_02 = null;
-    public TextBox                  option_004_tb_01 = null;
-    public TextBox                  option_004_tb_02 = null;
-    public NumericUpDown            option_004_num_1 = null;
+    public CheckBox         option_004_ch_01 = null;
+    public CheckBox         option_004_ch_02 = null;
+    public TextBox          option_004_tb_01 = null;
+    public TextBox          option_004_tb_02 = null;
+    public NumericUpDown    option_004_num_1 = null;
 
-    public CheckBox                 option_005_ch_01 = null;
-    public TextBox                  option_005_tb_01 = null;
-    public NumericUpDown            option_005_num_1 = null;
+    public CheckBox         option_005_ch_01 = null;
+    public myComboBox       option_005_cb_01 = null;
+    public NumericUpDown    option_005_num_1 = null;
 
-    public CheckBox                 option_006_ch_01 = null;
-    public CheckBox                 option_006_ch_02 = null;
-    public CheckBox                 option_006_ch_04 = null;
-    public myControls.myComboBox    option_006_cb_01 = null;
-    public RadioButton              option_006_rb_01 = null;
-    public RadioButton              option_006_rb_02 = null;
-    public RadioButton              option_006_rb_05 = null;
-    public CheckBox                 option_006_ch_03 = null;
-    public RadioButton              option_006_rb_03 = null;
-    public RadioButton              option_006_rb_04 = null;
+    public CheckBox         option_006_ch_01 = null;
+    public CheckBox         option_006_ch_02 = null;
+    public CheckBox         option_006_ch_04 = null;
+    public myComboBox       option_006_cb_01 = null;
+    public RadioButton      option_006_rb_01 = null;
+    public RadioButton      option_006_rb_02 = null;
+    public RadioButton      option_006_rb_05 = null;
+    public CheckBox         option_006_ch_03 = null;
+    public RadioButton      option_006_rb_03 = null;
+    public RadioButton      option_006_rb_04 = null;
 
-    public CheckBox                 option_007_ch_01 = null;
-    public NumericUpDown            option_007_num_1 = null;
-    public NumericUpDown            option_007_num_2 = null;
+    public CheckBox         option_007_ch_01 = null;
+    public NumericUpDown    option_007_num_1 = null;
+    public NumericUpDown    option_007_num_2 = null;
 
-    public CheckBox                 option_008_ch_01 = null;
-    public NumericUpDown            option_008_num_1 = null;
-    public NumericUpDown            option_008_num_2 = null;
+    public CheckBox         option_008_ch_01 = null;
+    public NumericUpDown    option_008_num_1 = null;
+    public NumericUpDown    option_008_num_2 = null;
 
-    public CheckBox                 option_009_ch_01 = null;
-    public RadioButton              option_009_rb_01 = null;
-    public RadioButton              option_009_rb_02 = null;
-    public RadioButton              option_009_rb_03 = null;
-    public RadioButton              option_009_rb_04 = null;
-    public RadioButton              option_009_rb_05 = null;
-    public RadioButton              option_009_rb_06 = null;
-    public RadioButton              option_009_rb_07 = null;
-    public TextBox                  option_009_tb_01 = null;
-    public CheckBox                 option_009_ch_02 = null;
+    public CheckBox         option_009_ch_01 = null;
+    public RadioButton      option_009_rb_01 = null;
+    public RadioButton      option_009_rb_02 = null;
+    public RadioButton      option_009_rb_03 = null;
+    public RadioButton      option_009_rb_04 = null;
+    public RadioButton      option_009_rb_05 = null;
+    public RadioButton      option_009_rb_06 = null;
+    public RadioButton      option_009_rb_07 = null;
+    public TextBox          option_009_tb_01 = null;
+    public CheckBox         option_009_ch_02 = null;
 
-    public CheckBox                 option_010_ch_01 = null;
-    public TextBox                  option_010_tb_01 = null;
+    public CheckBox         option_010_ch_01 = null;
+    public TextBox          option_010_tb_01 = null;
 
-    public CheckBox                 option_011_ch_01 = null;
-    public RadioButton              option_011_rb_01 = null;
-    public RadioButton              option_011_rb_02 = null;
-    public RadioButton              option_011_rb_03 = null;
-    public TextBox                  option_011_tb_01 = null;
+    public CheckBox         option_011_ch_01 = null;
+    public RadioButton      option_011_rb_01 = null;
+    public RadioButton      option_011_rb_02 = null;
+    public RadioButton      option_011_rb_03 = null;
+    public TextBox          option_011_tb_01 = null;
 
-    public CheckBox                 option_012_ch_01 = null;
+    public CheckBox         option_012_ch_01 = null;
 };
 
 
@@ -143,6 +143,11 @@ public class myRenamerApp
         if (_controls.option_001_cb_01.isChanged())
         {
             _ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"] = _controls.option_001_cb_01.getChanges();
+        }
+
+        if (_controls.option_005_cb_01.isChanged())
+        {
+            _ini[$"myControls.{_controls.option_005_cb_01.Obj().Name}"] = _controls.option_005_cb_01.getChanges();
         }
 
         if (_controls.option_006_cb_01.isChanged())
@@ -223,7 +228,7 @@ public class myRenamerApp
         _controls.option_004_tb_02.PlaceholderText = "dest";
 
         // Option 5
-        _controls.option_005_tb_01.PlaceholderText = "[### - *]";
+        _controls.option_005_cb_01.setItems(_ini[$"myControls.{_controls.option_005_cb_01.Obj().Name}"], doSelectFirstItem: false);
 
         // Option 6
         _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);

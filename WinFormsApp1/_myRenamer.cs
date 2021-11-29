@@ -15,7 +15,6 @@ using System.Windows.Forms;
     todo
         - Finish Simulate (probably don't need to, as I already have a Preview On Hover function)
         - Add undo using the history file
-        - Add history in template renaming module
 */
 
 
@@ -377,7 +376,7 @@ public class myRenamer
         // Option 5: Rename using template
         if (_controls.option_005_ch_01.Checked)
         {
-            string strTemplate = _controls.option_005_tb_01.Text;
+            string strTemplate = _controls.option_005_cb_01.Obj().Text;
 
             StringBuilder res = new StringBuilder(33);
 
