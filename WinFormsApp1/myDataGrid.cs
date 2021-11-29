@@ -724,15 +724,8 @@ public class myDataGrid
             int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
-            if (isChecked)
-            {
-                enumerateFiles(id, ref dic, ref sb);
-                list.Add(_globalFileListExtRef[id]);
-            }
-            else
-            {
-                list.Add(null);
-            }
+            enumerateFiles(id, ref dic, ref sb);
+            list.Add(_globalFileListExtRef[id]);
         }
 
         return;

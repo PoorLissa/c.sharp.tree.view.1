@@ -13,8 +13,9 @@ using System.Windows.Forms;
 	    - the copied panels are inserted at the bottom into 'panel_base'
 
     todo
-        - Finish Simulate
-        - Add preview function
+        - Finish Simulate (probably don't need to, as I already have a Preview On Hover function)
+        - Add undo using the history file
+        - Add history in template renaming module
 */
 
 
@@ -445,7 +446,7 @@ public class myRenamer
                 }
             }
 
-            if (_controls.option_006_ch_03.Checked)
+            if (_controls.option_006_ch_03.Checked && ext != null)
             {
                 if (_controls.option_006_rb_03.Checked)
                 {
@@ -703,7 +704,7 @@ public class myRenamer
 
         if (getNameOnly == true)
         {
-            newName = name;
+            newName = (!item.isDir && pos_ext >= pos_file) ? name + ext : name;
         }
         else
         {

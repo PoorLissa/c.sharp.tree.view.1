@@ -72,6 +72,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private TextBox     _tb_FilterOut = null;
     private RichTextBox _richTextBox  = null;
 
+    private List<myTreeListDataItem> _visibleList = null;
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
 
     private myBackup _backup = null;                                // Keeps the history of all changes made to the file names
@@ -81,6 +82,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private bool _useRecursion = false;
     private bool _useBackup    = true;                              // Allow the use of backups
     private bool _useTasks     = true;                              // Defines if async Tasks should be used for building file tree. If [true], build process can be cancelled
+    private bool _visibleListNeedsRefreshing = true;
 
     private int  _nDirs;                                            // Stores the number of folders found in the last [nodeSelected] call
     private int  _nFiles;                                           // Stores the number of files found in the last [nodeSelected] call
@@ -124,13 +126,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
         _tree.Obj().AfterExpand  += new TreeViewEventHandler        (tree_onAfterExpand);
 
-        _dataGrid.Obj().CellMouseEnter += new DataGridViewCellEventHandler(dataGrid_CellMouseEnter);
-
-
-        _dataGrid.Obj().RowsAdded += new DataGridViewRowsAddedEventHandler(dataGrid_RowsAdded);
-        _dataGrid.Obj().Scroll += new ScrollEventHandler(dataGrid_Scroll);
+        _dataGrid.Obj().CellMouseEnter   += new DataGridViewCellEventHandler(dataGrid_CellMouseEnter);
+        _dataGrid.Obj().RowsAdded        += new DataGridViewRowsAddedEventHandler(dataGrid_RowsAdded);
+        _dataGrid.Obj().Scroll           += new ScrollEventHandler(dataGrid_Scroll);
         _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler(dataGrid_CellValueChanged);
-
 
         _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
@@ -144,23 +143,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         // To be able to react to F5 refresh command
         _form.KeyDown += new KeyEventHandler(on_KeyDown);
         _form.KeyPreview = true;
-    }
-
-    public void dataGrid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-    {
-        _visibleListNeedsRefreshing = true;
-    }
-
-    public void dataGrid_Scroll(object sender, ScrollEventArgs e)
-    {
-        _visibleListNeedsRefreshing = true;
-    }
-
-    public void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-    {
-        _richTextBox.AppendText("... ");
-        _visibleListNeedsRefreshing = true;
-            ... // this one does not fire every time i click the checkbox
     }
 
     // --------------------------------------------------------------------------------
@@ -394,14 +376,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // --------------------------------------------------------------------------------
 
     // Display tooltip: this row's file name with all the selected options applied
-    //
-    // todo: get the list only when the grid contents/scroll position changed
-    //       or maybe not: this func takes ~0.05 ms average to execute
-    private double zzz = 0.0;
-    private double cnt = 0.0;
-    private bool _visibleListNeedsRefreshing = true;
-    private List<myTreeListDataItem> list = null;
-
     private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
         var tBefore = System.DateTime.Now.Ticks;
@@ -414,17 +388,17 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             // Careful, this is NOT A COPY:
             if (_visibleListNeedsRefreshing)
             {
-                list = getVisibleFiles(asCopy: false);
+                _visibleList = getVisibleFiles(asCopy: false);
                 _visibleListNeedsRefreshing = false;
             }
 
             int firstDisplayedRowIndex = _dataGrid.Obj().FirstDisplayedCell.RowIndex;
             var id = e.RowIndex - firstDisplayedRowIndex;
 
-            if (list[id] != null)
+            if (_visibleList[id] != null)
             {
                 // Get simulated name and display it
-                _dataGrid.setSimulatedName(myRenamer.getInstance().getSimulatedName(list[id]));
+                _dataGrid.setSimulatedName(myRenamer.getInstance().getSimulatedName(_visibleList[id]));
                 _dataGrid.Obj().InvalidateRow(e.RowIndex);
             }
         }
@@ -433,15 +407,28 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             _dataGrid.setSimulatedName(null);
         }
 
-        TimeSpan elapsedSpan = new TimeSpan(DateTime.Now.Ticks - tBefore);
-
-        zzz += elapsedSpan.TotalMilliseconds;
-        cnt += 1.0;
-
-        //_richTextBox.Clear();
-        //_richTextBox.AppendText($"dataGrid_CellMouseEnter -- average = {zzz/cnt} ms\n");
-
         return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public void dataGrid_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+    {
+        _visibleListNeedsRefreshing = true;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public void dataGrid_Scroll(object sender, ScrollEventArgs e)
+    {
+        _visibleListNeedsRefreshing = true;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+    {
+        _visibleListNeedsRefreshing = true;
     }
 
     // --------------------------------------------------------------------------------

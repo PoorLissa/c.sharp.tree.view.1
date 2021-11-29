@@ -191,6 +191,7 @@ class myDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
     protected override void OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs e)
     {
         base.OnContentClick(e);
+        this.DataGridView.EndEdit();
     }
 
     // --------------------------------------------------------------------------------------------------------
