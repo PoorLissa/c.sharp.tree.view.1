@@ -717,6 +717,24 @@ public class myDataGrid
         StringBuilder sb = new StringBuilder(260);
         Dictionary<string, int> dic = new Dictionary<string, int>();
 
+        // Now we need to know how many files are selected BEFORE the firstDisplayedRowIndex
+        // todo: this still won't work properly if recursive mode is ON
+        //      need to use Dictionary for that
+        int rowsCheckedBeforeFirstVisible = 0;
+
+        for(int i = 0; i < firstDisplayedRowIndex; i++)
+        {
+            DataGridViewRow row = _dataGrid.Rows[i];
+
+            int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
+            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
+
+            if (isChecked && id < firstDisplayedRowIndex)
+            {
+                rowsCheckedBeforeFirstVisible++;
+            }
+        }
+
         for (int i = firstDisplayedRowIndex; i <= lastvisibleRowIndex; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
@@ -724,7 +742,14 @@ public class myDataGrid
             int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
-            enumerateFiles(id, ref dic, ref sb);
+            if (isChecked)
+            {
+                enumerateFiles(id, ref dic, ref sb);
+
+                // Adjust [num], so it also took into account selected files preceding the visible part of the grid
+                _globalFileListExtRef[id].num += rowsCheckedBeforeFirstVisible;
+            }
+
             list.Add(_globalFileListExtRef[id]);
         }
 
