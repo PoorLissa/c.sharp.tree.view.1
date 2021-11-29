@@ -718,8 +718,10 @@ public class myDataGrid
         Dictionary<string, int> dic = new Dictionary<string, int>();
 
         // Now we need to know how many files are selected BEFORE the firstDisplayedRowIndex
-        // todo: this still won't work properly if recursive mode is ON
-        //      need to use Dictionary for that
+        // todo:
+        //  1. Combine the 2 for loops into one: for (int i = 0; i <= lastvisibleRowIndex; i++)
+        //  2. this still won't work properly if recursive mode is ON
+        //     need to use Dictionary for that
         int rowsCheckedBeforeFirstVisible = 0;
 
         for(int i = 0; i < firstDisplayedRowIndex; i++)
