@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 
 
 public class myTreeListDataItem : IComparable<myTreeListDataItem>
@@ -7,11 +6,14 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
     // --------------------------------------------------------------------------------
 
     private int     _id;
-    private int     _num;
+    private int     _num;           // see description below
     private string  _fileName;
     private bool    _isDir;
     private bool    _isHidden;
     private bool    _isChanged;
+
+    //  _num: Index number used in template numeric renaming('###').
+    //        Depends on the current file selection and will be recalculated each time the user checks or unchecks files in the grid view
 
     public int Id
     {
@@ -43,7 +45,7 @@ public class myTreeListDataItem : IComparable<myTreeListDataItem>
         set { _isChanged = value; }
     }
 
-    public int num
+    public int Num
     {
         get {  return _num; }
         set { _num = value; }

@@ -404,7 +404,7 @@ public class myRenamer
                                 cnt++;
                             i += cnt - 1;
 
-                            int n = (int)(_controls.option_005_num_1.Value) + item.num - 1;
+                            int n = (int)(_controls.option_005_num_1.Value) + item.Num - 1;
 
                             string strNUM = n.ToString();
 

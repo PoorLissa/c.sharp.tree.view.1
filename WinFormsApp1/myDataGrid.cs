@@ -47,7 +47,7 @@ public class myDataGrid
     private myDataGrid_Cache _cache = null;
 
     private string _recursionMessage = "";
-    private string _simulatedFileName = "";
+    private string _simulatedFileName = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -711,48 +711,28 @@ public class myDataGrid
         list.Clear();
 
         var visibleRowsCount = _dataGrid.DisplayedRowCount(true);
-        var firstDisplayedRowIndex = _dataGrid.FirstDisplayedCell.RowIndex;
-        var lastvisibleRowIndex = (firstDisplayedRowIndex + visibleRowsCount) - 1;
+        var firstVisibleRowIndex = _dataGrid.FirstDisplayedCell.RowIndex;
+        var lastvisibleRowIndex  = (firstVisibleRowIndex + visibleRowsCount) - 1;
 
         StringBuilder sb = new StringBuilder(260);
         Dictionary<string, int> dic = new Dictionary<string, int>();
 
-        // Now we need to know how many files are selected BEFORE the firstDisplayedRowIndex
-        // todo:
-        //  1. Combine the 2 for loops into one: for (int i = 0; i <= lastvisibleRowIndex; i++)
-        //  2. this still won't work properly if recursive mode is ON
-        //     need to use Dictionary for that
-        int rowsCheckedBeforeFirstVisible = 0;
-
-        for(int i = 0; i < firstDisplayedRowIndex; i++)
+        for (int i = 0; i <= lastvisibleRowIndex; i++)
         {
             DataGridViewRow row = _dataGrid.Rows[i];
 
-            int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
-            bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
-
-            if (isChecked && id < firstDisplayedRowIndex)
-            {
-                rowsCheckedBeforeFirstVisible++;
-            }
-        }
-
-        for (int i = firstDisplayedRowIndex; i <= lastvisibleRowIndex; i++)
-        {
-            DataGridViewRow row = _dataGrid.Rows[i];
-
-            int  id        =  (int)(row.Cells[(int)Columns.colId].Value);
+            int  id        =  (int)(row.Cells[(int)Columns.colId   ].Value);
             bool isChecked = (bool)(row.Cells[(int)Columns.colChBox].Value);
 
             if (isChecked)
             {
                 enumerateFiles(id, ref dic, ref sb);
-
-                // Adjust [num], so it also took into account selected files preceding the visible part of the grid
-                _globalFileListExtRef[id].num += rowsCheckedBeforeFirstVisible;
             }
 
-            list.Add(_globalFileListExtRef[id]);
+            if (i >= firstVisibleRowIndex)
+            {
+                list.Add(_globalFileListExtRef[id]);
+            }
         }
 
         return;
@@ -802,7 +782,8 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Assignes every dir/file an index number (will be used in renaming using template)
+    // Assign every dir/file a unique index number 1-2-3-... (will be used in renaming using template)
+    // Indexes are unique within every directory
     private void enumerateFiles(int id, ref Dictionary<string, int> dic, ref StringBuilder sb)
     {
         var item = _globalFileListExtRef[id];
@@ -813,9 +794,8 @@ public class myDataGrid
 
         string path = sb.ToString();
 
-        item.num = dic.ContainsKey(path) ? dic[path] + 1 : 1;
-
-        dic[path] = item.num;
+        item.Num = dic.ContainsKey(path) ? dic[path] + 1 : 1;
+        dic[path] = item.Num;
 
         return;
     }

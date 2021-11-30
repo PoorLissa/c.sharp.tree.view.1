@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -177,8 +176,8 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Public interface method: populate list with currently visible files
-    public List<myTreeListDataItem> getVisibleFiles(bool asCopy)
+    // Get list of currently visible files
+    private List<myTreeListDataItem> getVisibleFiles(bool asCopy)
     {
         var list = new List<myTreeListDataItem>();
 

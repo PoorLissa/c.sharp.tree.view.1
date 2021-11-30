@@ -197,7 +197,7 @@ public class myRenamerApp
 
     private void init()
     {
-        // Initialize the instance, so it is available later on
+        // Initialize the instance, so it becomes available later on
         new myRenamer(_myTDGManager, _controls);
 
         _ini = new ini_file_base();
