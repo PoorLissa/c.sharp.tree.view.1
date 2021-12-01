@@ -9,9 +9,6 @@ using System.Windows.Forms;
 /*
     Wrapper class around DataGridView widget.
     Allows customization and provides public methods to work with the widget.
-
-    todo:
-        - replace hoverStatus with enum
 */
 
 
@@ -61,6 +58,11 @@ public class myDataGrid
         dirChanged, viewFileChanged, viewDirChanged, filterChanged, recursionChanged_Before, recursionChanged_After
     };
 
+    private enum HoverStatus
+    {
+        DEFAULT = 2, MOUSE_HAS_LEFT, MOUSE_HOVER
+    };
+
     // --------------------------------------------------------------------------------------------------------
 
     public myDataGrid(DataGridView dgv, List<myTreeListDataItem> listGlobal)
@@ -101,7 +103,7 @@ public class myDataGrid
             setUpEvents();
 
             _dataGrid.RowTemplate.Height = dpi > 96 ? 60 : 40;                              // Row height
-            _dataGrid.RowTemplate.MinimumHeight = 2;                                        // Will be used as a flag for on_MouseEnter / on_MouseLeave events
+            _dataGrid.RowTemplate.MinimumHeight = (int)HoverStatus.DEFAULT;                 // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
             _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
             _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
@@ -845,18 +847,18 @@ public class myDataGrid
 
         if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
         {
-            char hoverStatus   = '0';
-            var row            = _dataGrid.Rows[e.RowIndex];
-            bool isRowSelected = (e.State & DataGridViewElementStates.Selected) != 0;
+            HoverStatus hoverStatus = HoverStatus.DEFAULT;
+            var row                 = _dataGrid.Rows[e.RowIndex];
+            bool isRowSelected      = (e.State & DataGridViewElementStates.Selected) != 0;
 
-            // Check hover status of the row
-            if (row.MinimumHeight > 2)
+            // Check hover status of the row (row.MinimumHeight is used as a flag here)
+            if (row.MinimumHeight > (int)HoverStatus.DEFAULT)
             {
-                hoverStatus = row.MinimumHeight == 4 ? '2' : '1';
+                hoverStatus = (HoverStatus)(row.MinimumHeight);
 
                 // Reset row's hover status to default (but only if the mouse has left the row)
-                if (hoverStatus == '3' && e.ColumnIndex == (int)Columns.colName)
-                    row.MinimumHeight = 2;
+                if (hoverStatus == HoverStatus.MOUSE_HAS_LEFT && e.ColumnIndex == (int)Columns.colName)
+                    row.MinimumHeight = (int)HoverStatus.DEFAULT;
             }
 
             // ---------------------------------------
@@ -892,14 +894,14 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    private void paintCustomContent(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected)
+    private void paintCustomContent(DataGridViewCellPaintingEventArgs e, HoverStatus hoverStatus, bool isRowSelected)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintCustomContent", "");
         #endif
 
         bool done = false;
-        bool doPaintTooltip = (hoverStatus == '2' && e.ColumnIndex == (int)Columns.colName);
+        bool doPaintTooltip = (hoverStatus == HoverStatus.MOUSE_HOVER && e.ColumnIndex == (int)Columns.colName);
 
         // Paint Id column
         if (e.ColumnIndex == (int)Columns.colId)
@@ -973,7 +975,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Paint gradient background of a cell
-    private void paintGradientBgr(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, int x, int y, int w, int h)
+    private void paintGradientBgr(DataGridViewCellPaintingEventArgs e, HoverStatus hoverStatus, bool isRowSelected, int x, int y, int w, int h)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintGradientBgr", "");
@@ -984,7 +986,7 @@ public class myDataGrid
             // Skip columnId
             if (e.ColumnIndex != (int)Columns.colId)
             {
-                e.Graphics.FillRectangle(hoverStatus == '2' ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
+                e.Graphics.FillRectangle(hoverStatus == HoverStatus.MOUSE_HOVER ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
             }
         }
     }
@@ -994,7 +996,7 @@ public class myDataGrid
     // Paint custom border around each row
     // I'm painting it at the time the last cell in a row is painted,
     // But it also needs to be partly restored in the first 2 cells when they're being selected
-    private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isRowSelected, bool isCellIdVisible, int x, int y, int w, int h)
+    private void paintCustomBorder(DataGridViewCellPaintingEventArgs e, HoverStatus hoverStatus, bool isRowSelected, bool isCellIdVisible, int x, int y, int w, int h)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintCustomBorder", "");
@@ -1016,7 +1018,7 @@ public class myDataGrid
     // I'm painting it at the time the last cell in a row is painted,
     // But it also needs to be partly restored in the first 2 cells when they're being selected
     // This version targets the case when columnId is invisible
-    private void paintCustomBorder1(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
+    private void paintCustomBorder1(DataGridViewCellPaintingEventArgs e, HoverStatus hoverStatus, bool isSelected, int x, int y, int w, int h)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintCustomBorder1", "");
@@ -1026,7 +1028,7 @@ public class myDataGrid
         {
             if (e.ColumnIndex <= (int)Columns.colName)
             {
-                var customBorderPen = (hoverStatus == '2') ? Pens.DarkMagenta : Pens.DarkOrange;
+                var customBorderPen = (hoverStatus == HoverStatus.MOUSE_HOVER) ? Pens.DarkMagenta : Pens.DarkOrange;
 
                 if (e.ColumnIndex < (int)Columns.colName)
                 {
@@ -1047,7 +1049,7 @@ public class myDataGrid
         }
         else
         {
-            if (hoverStatus == '2' && (e.ColumnIndex <= (int)Columns.colName))
+            if (hoverStatus == HoverStatus.MOUSE_HOVER && (e.ColumnIndex <= (int)Columns.colName))
             {
                 if (e.ColumnIndex < (int)Columns.colName)
                 {
@@ -1076,7 +1078,7 @@ public class myDataGrid
     // I'm painting it at the time the last cell in a row is painted,
     // But it also needs to be partly restored in the first 2 cells when they're being selected
     // This version targets the case when columnId is visible
-    private void paintCustomBorder2(DataGridViewCellPaintingEventArgs e, char hoverStatus, bool isSelected, int x, int y, int w, int h)
+    private void paintCustomBorder2(DataGridViewCellPaintingEventArgs e, HoverStatus hoverStatus, bool isSelected, int x, int y, int w, int h)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.paintCustomBorder2", "");
@@ -1090,12 +1092,12 @@ public class myDataGrid
             if (e.ColumnIndex <= (int)Columns.colName)
             {
                 doPaint = true;
-                customBorderPen = (hoverStatus == '2') ? Pens.DarkMagenta : Pens.DarkOrange;
+                customBorderPen = (hoverStatus == HoverStatus.MOUSE_HOVER) ? Pens.DarkMagenta : Pens.DarkOrange;
             }
         }
         else
         {
-            if (hoverStatus == '2' && (e.ColumnIndex <= (int)Columns.colName))
+            if (hoverStatus == HoverStatus.MOUSE_HOVER && (e.ColumnIndex <= (int)Columns.colName))
             {
                 doPaint = true;
                 customBorderPen = Pens.DarkOrange;
@@ -1148,7 +1150,7 @@ public class myDataGrid
 
         if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
         {
-            _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
+            _dataGrid.Rows[e.RowIndex].MinimumHeight = (int)(HoverStatus.MOUSE_HOVER);
         }
     }
 
@@ -1179,7 +1181,7 @@ public class myDataGrid
         #endif
 
         // Change row's appearance while mouse is hovering upon it
-        _dataGrid.Rows[e.RowIndex].MinimumHeight = 4;
+        _dataGrid.Rows[e.RowIndex].MinimumHeight = (int)(HoverStatus.MOUSE_HOVER);
         _dataGrid.InvalidateRow(e.RowIndex);
     }
 
@@ -1192,8 +1194,8 @@ public class myDataGrid
         #endif
 
         // Change row's appearance when mouse is leaving it
-        if (_dataGrid.Rows[e.RowIndex].MinimumHeight == 4)
-            _dataGrid.Rows[e.RowIndex].MinimumHeight = 3;
+        if (_dataGrid.Rows[e.RowIndex].MinimumHeight == (int)(HoverStatus.MOUSE_HOVER))
+            _dataGrid.Rows[e.RowIndex].MinimumHeight = (int)(HoverStatus.MOUSE_HAS_LEFT);
 
         _dataGrid.InvalidateRow(e.RowIndex);
     }

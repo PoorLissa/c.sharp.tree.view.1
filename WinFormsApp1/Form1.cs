@@ -179,3 +179,21 @@ namespace WinFormsApp1
         // --------------------------------------------------------------------------------
     }
 }
+
+/*
+    hoverStatus:
+        0   -- start value
+        1   -- when row.minheight == 3 -- means the mouse has left the row
+        2   -- when row.minheight == 4 -- means the row is hovered upon
+        3   --
+        4   -- 
+
+    row.MinHeight:
+        2   -- default value -- 
+        3   -- on mouse leave (if 4, then => 3)
+        4   -- on mouse down; on cell mouse enter
+
+*/
+
+
+

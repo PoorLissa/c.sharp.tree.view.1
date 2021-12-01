@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
 
 /*
     Provides the ability to keep the history of changes and restore file names to the original values
@@ -20,6 +22,9 @@ public class myBackup
     {
         // This list will contain a history of names for a single file
         private List<string> _fileNameHistory = null;
+
+        // Flag indicating whether this item should be saved into the file upon exiting
+        private bool _doSave = true;
 
         public string getLast()
         {
@@ -47,17 +52,29 @@ public class myBackup
         {
             string tab = "\t";
 
-            for (int i = 0; i < _fileNameHistory.Count; i++)
+            if (_doSave)
             {
-                str += i > 0 ? tab : "";
-                str += _fileNameHistory[i];
-                str += '\n';
+                for (int i = 0; i < _fileNameHistory.Count; i++)
+                {
+                    str += i > 0 ? tab : "";
+                    str += _fileNameHistory[i];
+                    str += '\n';
+                }
+
+                str += "\n";
             }
+
+            return;
         }
 
         public ref List<string> getHistory()
         {
             return ref _fileNameHistory;
+        }
+
+        public void doSave(bool mode)
+        {
+            _doSave = mode;
         }
     };
 
@@ -87,7 +104,7 @@ public class myBackup
 
             using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
             {
-                sw.WriteLine(hist);
+                sw.Write(hist);
                 sw.WriteLine("---------------------------------------------------");
             }
 
@@ -158,12 +175,33 @@ public class myBackup
     // Say, we have folders 1, 2, 3. Each of them is renamed:
     // 1 -> 2, 2 -> 3, 3 -> 4
     // In this case, the history will contain only a single record: 1 -> 2 -> 3 -> 4
+    // todo: check this and see if it still is an issue.
     private void store_map(List<myTreeListDataItem> globalList, int id, List<myTreeListDataItem> updatedList, int i)
     {
         string oldName = globalList[id].Name;
         string newName = updatedList[i].Name;
 
+        store_map(oldName, newName, isSaveable: true);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Known issue:
+    // Sometimes this will lead to invalid history.
+    // Say, we have folders 1, 2, 3. Each of them is renamed:
+    // 1 -> 2, 2 -> 3, 3 -> 4
+    // In this case, the history will contain only a single record: 1 -> 2 -> 3 -> 4
+    // todo: check this and see if it still is an issue.
+    private void store_map(string oldName, string newName, bool isSaveable)
+    {
         int map_id = -1;
+
+        if (_mapIndex == null)
+        {
+            _mapIndex = new Dictionary<string, int>();
+        }
 
         if (_mapIndex.ContainsKey(oldName))
         {
@@ -178,6 +216,7 @@ public class myBackup
         else
         {
             var item = new myBackupItem();
+            item.doSave(isSaveable);
             item.Add(oldName, newName);
 
             map_id = _historyList.Count;
@@ -215,6 +254,122 @@ public class myBackup
             return _historyList[_mapIndex[fileName]].getHistory();
 
         return null;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Given file, returns its history list (if any)
+    public void makeSaveable(string fileName)
+    {
+        if (_mapIndex.ContainsKey(fileName))
+            _historyList[_mapIndex[fileName]].doSave(true);
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public bool isEmpty()
+    {
+        return _historyList.Count == 0;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public void loadFromFile()
+    {
+        void trimSB(ref StringBuilder sb)
+        {
+            bool doStop = false;
+
+            // Trim the line
+            while (sb.Length > 0 && doStop != true)
+            {
+                int oldLen = sb.Length;
+
+                if (sb[0] == ' ' || sb[0] == '\t' || sb[0] == '\n' || sb[0] == '\r')
+                    sb.Remove(0, 1);
+
+                int back = sb.Length - 1;
+
+                if (back >= 0)
+                {
+                    if (sb[back] == ' ' || sb[back] == '\t' || sb[back] == '\n' || sb[back] == '\r' || sb[back] == ';')
+                        sb.Remove(back, 1);
+                }
+
+                if (sb.Length == oldLen)
+                    doStop = true;
+            }
+
+            return;
+        }
+
+        // Get line bounded by '\n' symbols
+        int getLine(ref string src, ref StringBuilder line, ref int pos)
+        {
+            line.Clear();
+
+            int i = pos;
+
+            if (pos < src.Length)
+            {
+                pos = src.IndexOf("\n", pos + 1);
+
+                if (pos < 0)
+                    pos = src.Length;
+
+                for (; i < pos; i++)
+                {
+                    line.Append(src[i]);
+                }
+
+                if (pos == src.Length)
+                    pos = 0;
+            }
+
+            trimSB(ref line);
+
+            return pos;
+        };
+
+        // ------------------------------------------------------------
+
+        string path = AppDomain.CurrentDomain.BaseDirectory;
+        path += "\\__History.txt";
+
+        if (System.IO.File.Exists(path))
+        {
+            string rawFile = System.IO.File.ReadAllText(path);
+
+            var lineSB = new StringBuilder();
+            int pos = 0;
+
+            string prevLine = null;
+
+            while (getLine(ref rawFile, ref lineSB, ref pos) != 0)
+            {
+                string line = lineSB.ToString();
+
+                if (line.Length == 0 || line[0] == '-')
+                {
+                    prevLine = null;
+                }
+                else
+                {
+                    if (prevLine == null)
+                    {
+                        prevLine = line;
+                    }
+                    else
+                    {
+                        store_map(prevLine, line, isSaveable: false);
+
+                        prevLine = line;
+                    }
+                }
+            }
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------

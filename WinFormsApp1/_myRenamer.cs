@@ -729,32 +729,35 @@ public class myRenamer
     // todo: fix this:
     // - Recursively rename this: \test\bbb_111\001_zzz.txt     -- remove symbols on the right of '_'
     // - Try to restore -- files won't be restored, as the history is not valid (upper level dirs are not updated)
-    // todo: when fixed, make it as a nested loop, not 2 loops
+    // - also, when fixed, make it as a nested loop, not 2 loops
     public void undo()
     {
         var list = _manager.getSelectedFiles(asCopy: true);
+        var backup = _manager.getBackup();
         string err = "";
 
+        if (backup.isEmpty())
+        {
+            backup.loadFromFile();
+        }
+
+        // 2-step process: rename to tmp name first, rename to the original name next
         for (int step = 0; step < 2; step++)
         {
+            int historyIndex = (step == 0) ? 1 : 0;
+
             // Files
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 if (!list[i].isDir)
                 {
-                    var historyList = _manager.getBackup().getHistory(list[i].Name);
+                    var historyList = backup.getHistory(list[i].Name);
 
                     if (historyList != null)
                     {
-                        if (step == 0)
-                        {
-                            RenamePhysical(list[i], historyList[1], ref err);
-                        }
+                        backup.makeSaveable(list[i].Name);
 
-                        if (step == 1)
-                        {
-                            RenamePhysical(list[i], historyList[0], ref err);
-                        }
+                        RenamePhysical(list[i], historyList[historyIndex], ref err);
                     }
                 }
             }
@@ -764,19 +767,13 @@ public class myRenamer
             {
                 if (list[i].isDir)
                 {
-                    var historyList = _manager.getBackup().getHistory(list[i].Name);
+                    var historyList = backup.getHistory(list[i].Name);
 
                     if (historyList != null)
                     {
-                        if (step == 0)
-                        {
-                            RenamePhysical(list[i], historyList[1], ref err);
-                        }
+                        backup.makeSaveable(list[i].Name);
 
-                        if (step == 1)
-                        {
-                            RenamePhysical(list[i], historyList[0], ref err);
-                        }
+                        RenamePhysical(list[i], historyList[historyIndex], ref err);
                     }
                 }
             }

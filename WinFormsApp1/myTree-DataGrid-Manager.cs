@@ -660,9 +660,13 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     public myBackup getBackup()
     {
+        if (_backup == null)
+        {
+            _backup = new myBackup();
+        }
+
         return _backup;
     }
 
     // --------------------------------------------------------------------------------
 };
-
