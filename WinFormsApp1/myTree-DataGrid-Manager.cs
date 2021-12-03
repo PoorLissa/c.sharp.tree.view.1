@@ -325,12 +325,31 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                     _tokenSource.Token.ThrowIfCancellationRequested();
 
                     if (doShowNextMsg)
-                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate { _dataGrid.displayRecursionMsg($"Populating the List:\n Total {_nDirs + _nFiles} items found"); }));
+                    {
+                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate
+                        {
+                            _dataGrid.displayRecursionMsg(
+                                $"Populating the List:\n Total {_nDirs + _nFiles} items found");
+                        }));
+                    }
 
                     _dataGrid.Obj().Invoke(new MethodInvoker(delegate
                     {
                         _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
                         _dataGrid.Enable(true);
+
+                        // -2 means, the caller is myTree.setPath()
+                        // In this case, we know the user launched the app with a non-empty path param, and we want to make DataGrid selected immediately
+                        if (selectedNode.ImageIndex == -2)
+                        {
+                            selectedNode.ImageIndex = -1;
+
+                            _dataGrid.Obj().Focus();
+
+                            if(_dataGrid.Obj().Rows.Count > 0)
+                                _dataGrid.Obj().Rows[0].Selected = true;
+                        }
+
                     }));
 
                 }, _tokenSource.Token);

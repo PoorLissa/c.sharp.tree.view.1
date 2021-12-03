@@ -637,6 +637,10 @@ public class myTree
                             {
                                 last = node;
                                 _tree.SelectedNode = node;
+
+                                // Mark the node:
+                                // myTree_DataGrid_Manager.tree_onAfterSelect() method will know it needs to make dataGrid's first line selected
+                                node.ImageIndex = -2;
                                 node.Expand();
                             }
 
@@ -652,7 +656,9 @@ public class myTree
 
             // Move up the directory tree and expand all the directories that are empty
             if (expandEmpty)
+            {
                 expandEmptyFolders(last, useDummies);
+            }
         }
 
         return;
