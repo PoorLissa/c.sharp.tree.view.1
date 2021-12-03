@@ -87,6 +87,7 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
+    // todo: do we need to save all the iterations in the session? Or do we need to save only the first and the last?
     public void saveHistoryToFile(string file = null)
     {
         string hist = getHistory();

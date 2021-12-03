@@ -14,7 +14,6 @@ using System.Windows.Forms;
 
     todo
         - Finish Simulate (probably don't need to, as I already have a Preview On Hover function)
-        - Add undo using the history file
 */
 
 
@@ -154,10 +153,17 @@ public class myRenamer
             {
                 bool isDir = (j != 0);
 
-                // Rename everything to tmp in backwards order
+                // Rename everything to tmp in backwards order (only in case the name is going to actually change)
                 for (int i = list.Count - 1; i >= 0; i--)
+                {
                     if (list[i].isDir == isDir)
-                        renTo_TmpName(list[i], ref err);
+                    {
+                        if (applyOptions(list[i]) != list[i].Name)
+                        {
+                            renTo_TmpName(list[i], ref err);
+                        }
+                    }
+                }
             }
 
             if (err.Length > 0)
@@ -233,7 +239,7 @@ public class myRenamer
         // Extract name and extension:
         if (item.isDir)
         {
-            // In case of folder, just its full name
+            // In case of a folder, extract only its full name
             name = item.Name.Substring(pos_file, pos_tmp - pos_file);
         }
         else
@@ -695,6 +701,58 @@ public class myRenamer
 
             if (isChanged)
             {
+                name = sb.ToString();
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 13: Insert user defined string at a custom position:
+        if (_controls.option_013_ch_01.Checked)
+        {
+            string text = _controls.option_013_tb_01.Text;
+
+            if (text.Length > 0)
+            {
+                var sb = new StringBuilder(name);
+                bool atEnd = _controls.option_013_ch_02.Checked;
+
+                // Absolute position
+                if (_controls.option_013_rb_01.Checked)
+                {
+                    pos = (int)_controls.option_013_num_1.Value;
+
+                    if (pos < 0)
+                        pos = 0;
+
+                    if (pos > name.Length)
+                        pos = name.Length;
+
+                    if (atEnd)
+                    {
+                        pos = name.Length - pos;
+                    }
+
+                    sb.Insert(pos, text);
+                }
+
+                // Position of substring
+                if (_controls.option_013_rb_02.Checked)
+                {
+                    string substr = _controls.option_013_tb_02.Text;
+
+                    if (substr.Length > 0)
+                    {
+                        pos = name.IndexOf(substr);
+
+                        if (pos >= 0)
+                        {
+                            pos += atEnd ? substr.Length : 0;
+                            sb.Insert(pos, text);
+                        }
+                    }
+                }
+
                 name = sb.ToString();
             }
         }

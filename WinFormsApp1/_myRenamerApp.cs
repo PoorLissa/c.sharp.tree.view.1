@@ -77,6 +77,14 @@ public class myRenamerApp_Controls
     public TextBox          option_011_tb_01 = null;
 
     public CheckBox         option_012_ch_01 = null;
+
+    public CheckBox         option_013_ch_01 = null;
+    public TextBox          option_013_tb_01 = null;
+    public TextBox          option_013_tb_02 = null;
+    public RadioButton      option_013_rb_01 = null;
+    public RadioButton      option_013_rb_02 = null;
+    public CheckBox         option_013_ch_02 = null;
+    public NumericUpDown    option_013_num_1 = null;
 };
 
 
@@ -195,6 +203,28 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Every radio button that needs additional processing of its Checked Event should subscribe to this method
+    private void radioButtonChecked_Common(object sender, EventArgs e)
+    {
+        RadioButton rb = (RadioButton)(sender);
+
+        do
+        {
+            // While we have only 2 buttons, no need to check the second one
+            if (rb == _controls.option_013_rb_01)
+            {
+                _controls.option_013_ch_02.Text = _controls.option_013_rb_01.Checked
+                                                        ? "Count Position from the End"
+                                                        : "Insert at the Back of the Substring";
+            }
+
+        } while (false);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     private void init()
     {
         // Initialize the instance, so it becomes available later on
@@ -207,7 +237,10 @@ public class myRenamerApp
         Application.ApplicationExit += new EventHandler(Application_onExit);
 
         // Common checkbox changed event
-        //      var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
+        // var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
+
+        // Common radio button checked event
+        var radioButtonChecked_CommonEvent = new EventHandler(radioButtonChecked_Common);
 
         // Option 1
         _controls.option_001_ch_03.Checked = true;
@@ -245,6 +278,13 @@ public class myRenamerApp
 
         // Option 11:
         _controls.option_011_tb_01.Text = "yyyy.MM.dd - *";
+
+        // Option 13:
+        _controls.option_013_num_1.Value = 0;
+        _controls.option_013_tb_01.PlaceholderText = "String";
+        _controls.option_013_tb_02.PlaceholderText = "Substring";
+        _controls.option_013_ch_02.Text = "Count Position from the End";
+        _controls.option_013_rb_01.CheckedChanged += radioButtonChecked_CommonEvent;
     }
 
     // --------------------------------------------------------------------------------------------------------

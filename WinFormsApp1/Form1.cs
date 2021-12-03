@@ -25,7 +25,6 @@ namespace WinFormsApp1
                 expandEmpty = true;
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
-                path = @"c:\_maxx\002 - music\Techno\Microsoft PFE Remediation for Configuration Man\Microsoft Visual Studio\Shared\Entity Framework Tools\NuGet Packages\EntityFramework.5.0.0";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
@@ -122,6 +121,14 @@ namespace WinFormsApp1
                 mraControls.option_011_tb_01 = this.textBox10;
 
                 mraControls.option_012_ch_01 = this.checkBox_Option_012;
+
+                mraControls.option_013_ch_01 = this.checkBox_Option_013;
+                mraControls.option_013_tb_01 = this.textBox5;
+                mraControls.option_013_tb_02 = this.textBox11;
+                mraControls.option_013_rb_01 = this.radioButton20;
+                mraControls.option_013_rb_02 = this.radioButton19;
+                mraControls.option_013_ch_02 = this.checkBox9;
+                mraControls.option_013_num_1 = this.numericUpDown9;
 
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
             }
