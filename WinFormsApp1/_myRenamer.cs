@@ -418,6 +418,23 @@ public class myRenamer
                                 res.Append('0');
                             res.Append(strNUM);
                             break;
+
+                        // Insert other options:
+                        case '?':
+                            doAppendChar = false;
+
+                            pos = strTemplate.IndexOf('?', i+1);
+
+                            if (pos > i)
+                            {
+                                if (myUtils.fastStrCompare("parent", strTemplate, i + 1, pos - i - 1, false))
+                                {
+                                    res.Append(myUtils.getParentName(item.Name, pos_file - 2));
+                                    i = pos - i;
+                                }
+                            }
+
+                            break;
                     }
 
                     if (doAppendChar)

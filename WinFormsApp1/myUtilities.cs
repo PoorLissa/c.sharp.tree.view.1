@@ -457,4 +457,18 @@ public class myUtils
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    // Extracts part of the path to the left of pos, bounded by '\\': c:\aaa\bbb\ccc => return "bbb"
+    public static string getParentName(string path, int pos)
+    {
+        int i = pos;
+
+        for (; i >= 0; i--)
+            if (path[i] == '\\')
+                break;
+
+        return path.Substring(i + 1, pos - i);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };
