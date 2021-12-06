@@ -36,6 +36,8 @@ public class myRenamerApp_Controls
     public CheckBox         option_005_ch_01 = null;
     public myComboBox       option_005_cb_01 = null;
     public NumericUpDown    option_005_num_1 = null;
+    public ComboBox         option_005_cb_02 = null;
+    public Button           option_005_btn_1 = null;
 
     public CheckBox         option_006_ch_01 = null;
     public CheckBox         option_006_ch_02 = null;
@@ -225,6 +227,39 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Every button that needs additional processing of its Clicked Event should subscribe to this method
+    private void buttonClicked_Common(object sender, EventArgs e)
+    {
+        Button btn = (Button)(sender);
+
+        do
+        {
+
+            if (btn == _controls.option_005_btn_1)
+            {
+                switch (_controls.option_005_cb_02.SelectedIndex)
+                {
+                    case 0:
+                        _controls.option_005_cb_01.Obj().Text += "###";
+                        break;
+
+                    case 1:
+                        _controls.option_005_cb_01.Obj().Text += "*";
+                        break;
+
+                    case 2:
+                        _controls.option_005_cb_01.Obj().Text += "%parent%";
+                        break;
+                }
+            }
+
+        } while (false);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     private void init()
     {
         // Initialize the instance, so it becomes available later on
@@ -241,6 +276,9 @@ public class myRenamerApp
 
         // Common radio button checked event
         var radioButtonChecked_CommonEvent = new EventHandler(radioButtonChecked_Common);
+
+        // Common button clicked event
+        var buttonClicked_CommonEvent = new EventHandler(buttonClicked_Common);
 
         // Option 1
         _controls.option_001_ch_03.Checked = true;
@@ -262,6 +300,12 @@ public class myRenamerApp
 
         // Option 5
         _controls.option_005_cb_01.setItems(_ini[$"myControls.{_controls.option_005_cb_01.Obj().Name}"], doSelectFirstItem: false);
+        _controls.option_005_cb_02.Items.Add("Numeric sequence");
+        _controls.option_005_cb_02.Items.Add("Original file name");
+        _controls.option_005_cb_02.Items.Add("Parent folder name");
+        _controls.option_005_cb_02.SelectedIndex = 0;
+        _controls.option_005_cb_02.DropDownStyle = ComboBoxStyle.DropDownList;
+        _controls.option_005_btn_1.Click += buttonClicked_CommonEvent;
 
         // Option 6
         _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);
