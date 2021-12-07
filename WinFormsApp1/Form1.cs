@@ -14,6 +14,8 @@ namespace WinFormsApp1
         private myControls.myComboBox myCb = null;
         private myControls.myTextBox  myTb = null;
 
+        private myControls.mySplitButton mySB = null;
+
         // --------------------------------------------------------------------------------
 
         public Form1(string path, bool expandEmpty)
@@ -141,6 +143,26 @@ namespace WinFormsApp1
             // Test controls
             //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
             //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
+
+            mySB = new mySplitButton(this.button3);
+
+            mySB.addAction(onclick1, "func1");
+            mySB.addAction(onclick2, "func2 that does something");
+            mySB.addAction(onclick3, "func3");
+        }
+
+        private void onclick1(object sender, EventArgs e)
+        {
+            MessageBox.Show("111", "111", MessageBoxButtons.OK);
+        }
+
+        private void onclick2(object sender, EventArgs e)
+        {
+            MessageBox.Show("222", "222", MessageBoxButtons.OK);
+        }
+        private void onclick3(object sender, EventArgs e)
+        {
+            MessageBox.Show("333", "333", MessageBoxButtons.OK);
         }
 
         // --------------------------------------------------------------------------------
@@ -188,21 +210,5 @@ namespace WinFormsApp1
         // --------------------------------------------------------------------------------
     }
 }
-
-/*
-    hoverStatus:
-        0   -- start value
-        1   -- when row.minheight == 3 -- means the mouse has left the row
-        2   -- when row.minheight == 4 -- means the row is hovered upon
-        3   --
-        4   -- 
-
-    row.MinHeight:
-        2   -- default value -- 
-        3   -- on mouse leave (if 4, then => 3)
-        4   -- on mouse down; on cell mouse enter
-
-*/
-
 
 

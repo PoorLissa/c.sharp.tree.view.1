@@ -11,9 +11,6 @@ using System.Windows.Forms;
 	    - click anywhere on the black background around the UI window
 	    - press Ctrl+V
 	    - the copied panels are inserted at the bottom into 'panel_base'
-
-    todo
-        - Finish Simulate (probably don't need to, as I already have a Preview On Hover function)
 */
 
 
@@ -42,35 +39,6 @@ public class myRenamer
     public static myRenamer getInstance()
     {
         return _instance;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
-    private bool Simulate()
-    {
-        bool res = true;
-
-#if false
-        var list = _manager.getSelectedFiles(asCopy: true);
-        string err = "";
-
-        // Files first, then folders
-        for (int j = 0; j < 2; j++)
-        {
-            bool isDir = (j != 0);
-
-            for (int i = list.Count - 1; i >= 0; i--)
-            {
-                var item = list[i];
-
-                if (item.isDir == isDir)
-                {
-                    //applyOptions(item, ref err);
-                }
-            }
-        }
-#endif
-        return res;
     }
 
     // --------------------------------------------------------------------------------------------------------
