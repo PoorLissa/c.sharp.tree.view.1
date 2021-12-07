@@ -149,11 +149,13 @@ namespace myControls
         // Draw divider and an arrow
         private void on_Paint(object sender, PaintEventArgs e)
         {
-            int x = _button.Width - _dividerPos + 3;
+            int x = _button.Width - _dividerPos + 4;
             int y = _button.Height / 2 - 24/2;
 
             e.Graphics.DrawImage(_imgArrow, x, y, 24, 24);
-            e.Graphics.DrawLine(Pens.LightGray, _button.Width - _dividerPos, 4, _button.Width - _dividerPos, _button.Height - 4);
+            e.Graphics.DrawLine(Pens.LightGray, _button.Width - _dividerPos + 0, 4, _button.Width - _dividerPos + 0, _button.Height - 4);
+            e.Graphics.DrawLine(Pens.Gray,      _button.Width - _dividerPos + 1, 4, _button.Width - _dividerPos + 1, _button.Height - 4);
+            e.Graphics.DrawLine(Pens.LightGray, _button.Width - _dividerPos + 2, 4, _button.Width - _dividerPos + 2, _button.Height - 4);
         }
 
         // --------------------------------------------------------------------------------------------------------
