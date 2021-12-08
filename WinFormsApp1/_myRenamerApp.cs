@@ -133,11 +133,11 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
-    public void Undo_Rename()
+    public void Undo(bool useHistoryFile = false)
     {
         try
         {
-            myRenamer.getInstance().undo();
+            myRenamer.getInstance().undo(useHistoryFile);
         }
         catch (Exception ex)
         {

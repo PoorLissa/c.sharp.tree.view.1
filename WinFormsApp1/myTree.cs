@@ -820,9 +820,11 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
+    // todo:
     // Unfinished unused
     // Trying to make it jump to the end of current nodes list
     // called from private void treeView1_KeyDown(object sender, KeyEventArgs e)
+    // the idea: on the right arrow jump to the first of opened node's children. next right arrow makes it jump to the last of its children
     public void aaa(object sender, KeyEventArgs e)
     {
         TreeNode nextNode = null, prevNode = null, startNode = _tree.SelectedNode;

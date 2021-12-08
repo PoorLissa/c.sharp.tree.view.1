@@ -14,7 +14,7 @@ namespace WinFormsApp1
         private myControls.myComboBox myCb = null;
         private myControls.myTextBox  myTb = null;
 
-        private myControls.mySplitButton mySB = null;
+        private myControls.mySplitButton sb_Undo = null;
 
         // --------------------------------------------------------------------------------
 
@@ -144,25 +144,10 @@ namespace WinFormsApp1
             //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
             //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
 
-            mySB = new mySplitButton(this.button3);
+            sb_Undo = new mySplitButton(this.btn_Undo);
 
-            mySB.addAction(onclick1, "func1");
-            mySB.addAction(onclick2, "func2 that does something");
-            mySB.addAction(onclick3, "func3");
-        }
-
-        private void onclick1(object sender, EventArgs e)
-        {
-            MessageBox.Show("111", "111", MessageBoxButtons.OK);
-        }
-
-        private void onclick2(object sender, EventArgs e)
-        {
-            MessageBox.Show("222", "222", MessageBoxButtons.OK);
-        }
-        private void onclick3(object sender, EventArgs e)
-        {
-            MessageBox.Show("333", "333", MessageBoxButtons.OK);
+            sb_Undo.addAction(undo1, "Undo");
+            sb_Undo.addAction(undo2, "Undo using History file");
         }
 
         // --------------------------------------------------------------------------------
@@ -195,9 +180,16 @@ namespace WinFormsApp1
 
         // --------------------------------------------------------------------------------
 
-        private void btn_Undo_Click(object sender, EventArgs e)
+        private void undo1(object sender, EventArgs e)
         {
-            app.Undo_Rename();
+            app.Undo(useHistoryFile: false);
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void undo2(object sender, EventArgs e)
+        {
+            app.Undo(useHistoryFile: true);
         }
 
         // --------------------------------------------------------------------------------

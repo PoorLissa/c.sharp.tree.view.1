@@ -39,11 +39,13 @@ namespace myControls
                 setUpEvents();
                 createDrawingPrimitives(dpi);
 
-                _button.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-                _button.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+                //_button.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+                //_button.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+
+                _button.TextAlign = ContentAlignment.MiddleLeft;
 
                 _button.Padding = new Padding(
-                    _button.Padding.Left - _dividerPos/2,//_button.BackgroundImage.Width,
+                    _button.Padding.Left + _dividerPos - 3,
                     _button.Padding.Top,
                     _button.Padding.Right,
                     _button.Padding.Bottom);

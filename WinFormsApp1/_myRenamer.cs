@@ -773,13 +773,13 @@ public class myRenamer
     // - Recursively rename this: \test\bbb_111\001_zzz.txt     -- remove symbols on the right of '_'
     // - Try to restore -- files won't be restored, as the history is not valid (upper level dirs are not updated)
     // - also, when fixed, make it as a nested loop, not 2 loops
-    public void undo()
+    public void undo(bool useHistoryFile)
     {
         var list = _manager.getSelectedFiles(asCopy: true);
         var backup = _manager.getBackup();
         string err = "";
 
-        if (backup.isEmpty())
+        if (useHistoryFile)
         {
             backup.loadFromFile();
         }

@@ -131,7 +131,6 @@ namespace WinFormsApp1
             this.checkBox_Option_001 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button3 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -183,7 +182,7 @@ namespace WinFormsApp1
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1849, 168);
+            this.button1.Location = new System.Drawing.Point(1776, 168);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(133, 37);
             this.button1.TabIndex = 1;
@@ -1282,7 +1281,6 @@ namespace WinFormsApp1
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Controls.Add(this.comboBox1);
             this.tabPage3.Controls.Add(this.textBox3);
             this.tabPage3.Location = new System.Drawing.Point(4, 34);
@@ -1292,15 +1290,6 @@ namespace WinFormsApp1
             this.tabPage3.Size = new System.Drawing.Size(685, 965);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Test";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(113, 181);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(221, 63);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // comboBox1
             // 
@@ -1334,14 +1323,13 @@ namespace WinFormsApp1
             // 
             // btn_Undo
             // 
-            this.btn_Undo.Location = new System.Drawing.Point(1989, 168);
+            this.btn_Undo.Location = new System.Drawing.Point(1916, 168);
             this.btn_Undo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_Undo.Name = "btn_Undo";
-            this.btn_Undo.Size = new System.Drawing.Size(64, 37);
+            this.btn_Undo.Size = new System.Drawing.Size(137, 37);
             this.btn_Undo.TabIndex = 14;
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
-            this.btn_Undo.Click += new System.EventHandler(this.btn_Undo_Click);
             // 
             // Form1
             // 
@@ -1524,7 +1512,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.ComboBox opt_005_predefined_templates;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
     }
 }
 
