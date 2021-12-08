@@ -223,11 +223,14 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 1: Remove symbols before the [delimiter] is found
+        // Option 1: Remove any symbols until [delimiter] is found
         if (_controls.option_001_ch_01.Checked)
         {
+#if false
             bool removeDelim = _controls.option_001_ch_03.Checked;
             string delim     = _controls.option_001_cb_01.Obj().Text;
+
+            var list = delim.Split(':');
 
             if (delim != null && delim.Length > 0)
             {
@@ -248,6 +251,66 @@ public class myRenamer
                         name = name.Substring(pos + (removeDelim ? delim.Length : 0));
                 }
             }
+#else
+            // isLazy only has effect in case of multiple delimiters divided by ':'
+            // isLazy == true,  means is case of multiple delimiters, keep as much as possible
+            // isLazy == false, means is case of multiple delimiters, remove as much as possible
+
+            bool doRemoveDelim = _controls.option_001_ch_03.Checked;
+            bool startFromEnd  = _controls.option_001_ch_02.Checked;
+            bool isLazy        = _controls.option_001_rb_01.Checked;
+            var delimiters     = _controls.option_001_cb_01.Obj().Text.Split(':');
+
+            // index of delimiter to use
+            int index = -1;
+
+            // final position
+            num = startFromEnd
+                    ? (isLazy ?   -1 : 9999)
+                    : (isLazy ? 9999 :   -1);
+
+            for (int i = 0; i < delimiters.Length; i++)
+            {
+                string delim = delimiters[i];
+
+                if (delim != null && delim.Length > 0)
+                {
+                    pos = startFromEnd
+                            ? name.LastIndexOf(delim)
+                            : name.IndexOf(delim);
+
+                    if (pos != -1)
+                    {
+                        bool pos_vs_num = false;
+
+                        if (startFromEnd)
+                        {
+                            pos_vs_num = isLazy ? (pos > num) : (pos < num);
+                        }
+                        else
+                        {
+                            pos_vs_num = isLazy ? (pos < num) : (pos > num);
+                        }
+
+                        index = (pos_vs_num) ?   i : index;
+                        num   = (pos_vs_num) ? pos : num;
+                    }
+                }
+            }
+
+            if (index != -1)
+            {
+                if (startFromEnd)
+                {
+                    name = name.Substring(0, num + (doRemoveDelim ? 0 : delimiters[index].Length));
+                }
+                else
+                {
+                    name = name.Substring(num + (doRemoveDelim ? delimiters[index].Length : 0));
+                }
+            }
+
+#endif
         }
 
         // --------------------------------------------------------------------------------
@@ -836,8 +899,8 @@ public class myRenamer
     // --------------------------------------------------------------------------------------------------------
 
     // Actual physical file renaming
-    // Returns true if the item was renamed as planned
-    // Returns false, if [newName] dir/file already exists (which means the current item has been given a unique name)
+    // Returns true if the item is renamed as planned
+    // Returns false, if [newName] dir/file already exists (which means the current item is given a unique name)
     private bool RenamePhysical(myTreeListDataItem item, string newName, ref string err)
     {
         bool res = true;

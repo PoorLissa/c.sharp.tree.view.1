@@ -15,6 +15,8 @@ public class myRenamerApp_Controls
     public CheckBox         option_001_ch_02 = null;
     public CheckBox         option_001_ch_03 = null;
     public myComboBox       option_001_cb_01 = null;
+    public RadioButton      option_001_rb_01 = null;
+    public RadioButton      option_001_rb_02 = null;
 
     public CheckBox         option_002_ch_01 = null;
     public CheckBox         option_002_ch_02 = null;
@@ -283,6 +285,7 @@ public class myRenamerApp
         // Option 1
         _controls.option_001_ch_03.Checked = true;
         _controls.option_001_cb_01.setItems(_ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"]);
+        _controls.option_001_rb_01.Checked = true;
 
         // Option 2
         _controls.option_002_num_1.Value = 1;

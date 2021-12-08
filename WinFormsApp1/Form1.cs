@@ -61,6 +61,8 @@ namespace WinFormsApp1
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
                 mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, SortMode.LastOnTop,  "Delimiter");
+                mraControls.option_001_rb_01 = this.radioButton21;
+                mraControls.option_001_rb_02 = this.radioButton18;
 
                 mraControls.option_002_ch_01 = this.checkBox_Option_002;
                 mraControls.option_002_ch_02 = this.checkBox4;
