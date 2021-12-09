@@ -226,32 +226,6 @@ public class myRenamer
         // Option 1: Remove any symbols until [delimiter] is found
         if (_controls.option_001_ch_01.Checked)
         {
-#if false
-            bool removeDelim = _controls.option_001_ch_03.Checked;
-            string delim     = _controls.option_001_cb_01.Obj().Text;
-
-            var list = delim.Split(':');
-
-            if (delim != null && delim.Length > 0)
-            {
-                if (_controls.option_001_ch_02.Checked)
-                {
-                    // Start from [end]
-                    pos = name.LastIndexOf(delim);
-
-                    if (pos != -1)
-                        name = name.Substring(0, pos + (removeDelim ? 0 : delim.Length));
-                }
-                else
-                {
-                    // Start from [beginning]
-                    pos = name.IndexOf(delim);
-
-                    if (pos != -1)
-                        name = name.Substring(pos + (removeDelim ? delim.Length : 0));
-                }
-            }
-#else
             // isLazy only has effect in case of multiple delimiters divided by ':'
             // isLazy == true,  means is case of multiple delimiters, keep as much as possible
             // isLazy == false, means is case of multiple delimiters, remove as much as possible
@@ -309,8 +283,6 @@ public class myRenamer
                     name = name.Substring(num + (doRemoveDelim ? delimiters[index].Length : 0));
                 }
             }
-
-#endif
         }
 
         // --------------------------------------------------------------------------------

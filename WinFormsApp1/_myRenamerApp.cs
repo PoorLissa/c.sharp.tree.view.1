@@ -262,6 +262,65 @@ public class myRenamerApp
 
     // --------------------------------------------------------------------------------------------------------
 
+    ToolTip t = null;
+
+    private void mouseHover_CommonEvent(object sender, EventArgs e)
+    {
+        var control = sender as Control;
+
+        if (t == null)
+        {
+            t = new ToolTip();
+
+            t.AutoPopDelay = 30000;
+            t.InitialDelay = 500;
+            t.ReshowDelay  = 50;
+        }
+
+        string str = sender.ToString();
+
+        do
+        {
+            if (control == _controls.option_001_ch_01)
+            {
+                t.ToolTipTitle = "Remove any symbols until [delimiter] is found";
+
+                str = "Example:\n delimiter = '+': 'someText+File-Name' => 'File-Name'\n\n" +
+
+                      "Delimiter divided by ':' is treated as multiple delimiters\n" +
+                      "Example:\n delimiter = '+:-': 'someText+File-Name' => 'File-Name'\n\n";
+                break;
+            }
+
+            if (control == _controls.option_002_ch_01)
+            {
+                str = "002" + control.Text;
+                break;
+            }
+
+            if (control == _controls.option_003_ch_01)
+            {
+                str = "003" + control.Text;
+                break;
+            }
+
+            if (control == _controls.option_004_ch_01)
+            {
+                str = "004" + control.Text;
+                break;
+            }
+
+            if (control == _controls.option_005_ch_01)
+            {
+                str = "005" + control.Text;
+                break;
+            }
+
+        } while (false);
+
+        t.SetToolTip(control, str);
+    }
+
     private void init()
     {
         // Initialize the instance, so it becomes available later on
@@ -286,20 +345,24 @@ public class myRenamerApp
         _controls.option_001_ch_03.Checked = true;
         _controls.option_001_cb_01.setItems(_ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"]);
         _controls.option_001_rb_01.Checked = true;
+        _controls.option_001_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 2
         _controls.option_002_num_1.Value = 1;
         _controls.option_002_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_002_num_2.TextAlign = HorizontalAlignment.Center;
+        _controls.option_002_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 3
         _controls.option_003_num_1.Value = 1;
         _controls.option_003_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_003_tb_01.PlaceholderText = "Substring";
+        _controls.option_003_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 4
         _controls.option_004_tb_01.PlaceholderText = "src";
         _controls.option_004_tb_02.PlaceholderText = "dest";
+        _controls.option_004_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 5
         _controls.option_005_cb_01.setItems(_ini[$"myControls.{_controls.option_005_cb_01.Obj().Name}"], doSelectFirstItem: false);
@@ -309,6 +372,7 @@ public class myRenamerApp
         _controls.option_005_cb_02.SelectedIndex = 0;
         _controls.option_005_cb_02.DropDownStyle = ComboBoxStyle.DropDownList;
         _controls.option_005_btn_1.Click += buttonClicked_CommonEvent;
+        _controls.option_005_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 6
         _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);
