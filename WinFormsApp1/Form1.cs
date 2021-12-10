@@ -107,6 +107,7 @@ namespace WinFormsApp1
                 mraControls.option_008_num_2 = this.numericUpDown11;
 
                 mraControls.option_009_ch_01 = this.checkBox_Option_009;
+                mraControls.option_009_cb_01 = this.comboBox5;
                 mraControls.option_009_ch_02 = this.checkBox8;
                 mraControls.option_009_rb_01 = this.radioButton8;
                 mraControls.option_009_rb_02 = this.radioButton9;
@@ -119,6 +120,13 @@ namespace WinFormsApp1
 
                 mraControls.option_010_ch_01 = this.checkBox_Option_010;
                 mraControls.option_010_tb_01 = this.textBox9;
+                mraControls.option_010_rb_01 = this.radioButton23;
+                mraControls.option_010_rb_02 = this.radioButton22;
+                mraControls.option_010_num_1 = this.numericUpDown10;
+                mraControls.option_010_num_2 = this.numericUpDown12;
+                mraControls.option_010_num_3 = this.numericUpDown13;
+                mraControls.option_010_num_4 = this.numericUpDown14;
+                mraControls.option_010_ch_02 = this.checkBox10;
 
                 mraControls.option_011_ch_01 = this.checkBox_Option_011;
                 mraControls.option_011_rb_01 = this.radioButton17;

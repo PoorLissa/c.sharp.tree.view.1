@@ -9,7 +9,7 @@ namespace myControls
 {
     public class mySplitButton
     {
-        private Image _imgArrow = null;
+        private static Image _imgArrow = null;
 
         private struct Action
         {
@@ -58,9 +58,9 @@ namespace myControls
 
         private void setUpEvents()
         {
-            _button.KeyPress   += new KeyPressEventHandler(on_KeyPress);
-            _button.MouseClick += new MouseEventHandler(on_MouseClick);
-            _button.Paint      += new PaintEventHandler(on_Paint);
+            _button.KeyPress   += new KeyPressEventHandler  (on_KeyPress);
+            _button.MouseClick += new MouseEventHandler     (on_MouseClick);
+            _button.Paint      += new PaintEventHandler     (on_Paint);
         }
 
         // --------------------------------------------------------------------------------------------------------

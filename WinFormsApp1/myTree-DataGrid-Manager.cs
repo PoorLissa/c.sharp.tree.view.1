@@ -125,10 +125,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
         _tree.Obj().AfterExpand  += new TreeViewEventHandler        (tree_onAfterExpand);
 
-        _dataGrid.Obj().CellMouseEnter   += new DataGridViewCellEventHandler(dataGrid_CellMouseEnter);
-        _dataGrid.Obj().RowsAdded        += new DataGridViewRowsAddedEventHandler(dataGrid_RowsAdded);
-        _dataGrid.Obj().Scroll           += new ScrollEventHandler(dataGrid_Scroll);
-        _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler(dataGrid_CellValueChanged);
+        _dataGrid.Obj().CellMouseEnter   += new DataGridViewCellEventHandler      (dataGrid_CellMouseEnter);
+        _dataGrid.Obj().RowsAdded        += new DataGridViewRowsAddedEventHandler (dataGrid_RowsAdded);
+        _dataGrid.Obj().Scroll           += new ScrollEventHandler                (dataGrid_Scroll);
+        _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler      (dataGrid_CellValueChanged);
 
         _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);

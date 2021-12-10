@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,6 +12,9 @@ using System.Windows.Forms;
 	    - click anywhere on the black background around the UI window
 	    - press Ctrl+V
 	    - the copied panels are inserted at the bottom into 'panel_base'
+
+    todo:
+        - give an option to rename through copy: insted of renaming, leave original file as it is, and copy it with the new name (to some other dir)
 */
 
 
@@ -563,7 +567,7 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 9: Remove characters at the beginning of the file name, based on the user's selection:
+        // Option 9: Remove characters by category:
         if (_controls.option_009_ch_01.Checked)
         {
             Func<char, bool> func = null;
@@ -616,18 +620,79 @@ public class myRenamer
 
             // -------------------------------------------------
 
-            // Iterate through the file name until the condition is met
-            for (pos = 0; pos < name.Length; pos++)
+            void sbAppend(ref StringBuilder sb, char ch)
             {
-                bool res = _controls.option_009_ch_02.Checked
-                                ? !func(name[pos])
-                                :  func(name[pos]);
-                if (res)
-                    break;
+                if (sb == null)
+                    sb = new StringBuilder();
+
+                sb.Append(ch);
             }
 
-            // Trim everything before [pos]
-            name = name.Substring(pos, name.Length - pos);
+            bool checkSymbol(char ch)
+            {
+                return _controls.option_009_ch_02.Checked
+                    ? !func(name[pos])
+                    :  func(name[pos]);
+            }
+
+            void l_to_r(ref int pos)
+            {
+                for (pos = 0; pos < name.Length; pos++)
+                    if (checkSymbol(name[pos]))
+                        return;
+            }
+
+            void r_to_l(ref int pos)
+            {
+                for (pos = name.Length - 1; pos >= 0; pos--)
+                    if (checkSymbol(name[pos]))
+                        return;
+            }
+
+            void everywhere()
+            {
+                StringBuilder sb = null;
+
+                for (pos = 0; pos < name.Length; pos++)
+                    if (checkSymbol(name[pos]))
+                        sbAppend(ref sb, name[pos]);
+
+                if (sb != null && name.Length != sb.Length)
+                    name = sb.ToString();
+            }
+
+            // -------------------------------------------------
+
+            int p1 = -1, p2 = -1;
+
+            switch (_controls.option_009_cb_01.SelectedIndex)
+            {
+                // Start From Left:
+                case 0:
+                    l_to_r(ref pos);
+                    name = name.Substring(pos, name.Length - pos);      // Remove everything before [pos]
+                    break;
+
+                // Start From Right:
+                case 1:
+                    r_to_l(ref pos);
+                    name = name.Substring(0, pos+1);                    // Remove everything after [pos]
+                    break;
+
+                // Start both from Left and Right:
+                case 2:
+                    l_to_r(ref p1);
+                    r_to_l(ref p2);
+
+                    if (p1 <= p2)
+                        name = name.Substring(p1, p2 - p1 + 1);         // Remove everything before p1 and after p2
+                    break;
+
+                // Everywhere:
+                case 3:
+                    everywhere();
+                    break;
+            }
         }
 
         // --------------------------------------------------------------------------------
@@ -635,16 +700,54 @@ public class myRenamer
         // Option 10: Swap left and right parts of the file name
         if (_controls.option_010_ch_01.Checked)
         {
-            string delim = _controls.option_010_tb_01.Text;
+            num = 0;        // Chars to keep in place
+            pos = -1;
 
-            pos = name.IndexOf(delim);
+            bool doSwap = false;
+            string delim = null;
 
-            if (pos > 0)
+            if (_controls.option_010_ch_02.Checked)
             {
-                var sb = new StringBuilder(name, pos + delim.Length, name.Length - pos - delim.Length, name.Length);
+                num = (int)_controls.option_010_num_2.Value;
+            }
 
+            // Swap around Delimiter
+            if (_controls.option_010_rb_01.Checked)
+            {
+                int delimNo = (int)_controls.option_010_num_3.Value;
+                delim = _controls.option_010_tb_01.Text;
+
+                do
+                {
+                    pos = name.IndexOf(delim, pos+1);
+
+                } while (--delimNo > 0);
+
+                if (pos > 0 && pos >= num)
+                {
+                    doSwap = true;
+                }
+            }
+
+            // Swap around Position
+            if (_controls.option_010_rb_02.Checked)
+            {
+                pos = (int)_controls.option_010_num_1.Value;
+
+                if (pos > 0 && pos < name.Length && pos >= num)
+                {
+                    doSwap = true;
+                    delim = name.Substring(pos, (int)_controls.option_010_num_4.Value);
+                }
+            }
+
+            if (doSwap)
+            {
+                var sb = new StringBuilder(name, 0, num, name.Length);
+
+                sb.Insert(sb.Length, name.Substring(pos + delim.Length, name.Length - pos - delim.Length));
                 sb.Insert(sb.Length, delim);
-                sb.Insert(sb.Length, name.Substring(0, pos));
+                sb.Insert(sb.Length, name.Substring(num, pos - num));
 
                 name = sb.ToString();
             }
@@ -653,6 +756,7 @@ public class myRenamer
         // --------------------------------------------------------------------------------
 
         // Option 11: Insert date of creation/modification
+        // todo: move it into template section
         if (_controls.option_011_ch_01.Checked)
         {
             string mask = _controls.option_011_tb_01.Text;

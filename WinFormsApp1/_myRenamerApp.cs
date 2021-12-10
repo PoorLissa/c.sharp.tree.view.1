@@ -61,6 +61,7 @@ public class myRenamerApp_Controls
     public NumericUpDown    option_008_num_2 = null;
 
     public CheckBox         option_009_ch_01 = null;
+    public ComboBox         option_009_cb_01 = null;
     public RadioButton      option_009_rb_01 = null;
     public RadioButton      option_009_rb_02 = null;
     public RadioButton      option_009_rb_03 = null;
@@ -73,6 +74,13 @@ public class myRenamerApp_Controls
 
     public CheckBox         option_010_ch_01 = null;
     public TextBox          option_010_tb_01 = null;
+    public RadioButton      option_010_rb_01 = null;
+    public RadioButton      option_010_rb_02 = null;
+    public NumericUpDown    option_010_num_1 = null;
+    public NumericUpDown    option_010_num_2 = null;
+    public NumericUpDown    option_010_num_3 = null;
+    public NumericUpDown    option_010_num_4 = null;
+    public CheckBox         option_010_ch_02 = null;
 
     public CheckBox         option_011_ch_01 = null;
     public RadioButton      option_011_rb_01 = null;
@@ -383,6 +391,9 @@ public class myRenamerApp
 
         _controls.option_008_num_1.Value = 1;
         _controls.option_008_num_2.Value = 1;
+
+        // Option 9
+        _controls.option_009_cb_01.SelectedIndex = 0;
 
         // Option 10
         _controls.option_010_tb_01.PlaceholderText = "Delimiter";
