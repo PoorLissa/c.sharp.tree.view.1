@@ -70,7 +70,9 @@ namespace WinFormsApp1
                 mraControls.option_002_num_2 = this.numericUpDown2;
 
                 mraControls.option_003_ch_01 = this.checkBox_Option_003;
+                mraControls.option_003_ch_02 = this.checkBox11;
                 mraControls.option_003_num_1 = this.numericUpDown3;
+                mraControls.option_003_num_2 = this.numericUpDown15;
                 mraControls.option_003_rb_01 = this.radioButton1;
                 mraControls.option_003_rb_02 = this.radioButton2;
                 mraControls.option_003_tb_01 = this.textBox4;

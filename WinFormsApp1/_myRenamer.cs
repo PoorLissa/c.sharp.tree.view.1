@@ -311,33 +311,47 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 3: Remove n symbols before or after the position of substring [str]
+        // Option 3: Remove [n] symbols before or after the position of [mth] substring [str]
         if (_controls.option_003_ch_01.Checked)
         {
+//            name = _controls.option_003_tb_01.Text + " - " + _controls.option_003_num_2.Value.ToString(); --- number
+
             if (_controls.option_003_rb_01.Checked || _controls.option_003_rb_02.Checked)
             {
                 string delim = _controls.option_003_tb_01.Text;
 
                 if (delim != null && delim.Length > 0)
                 {
-                    num = (int)(_controls.option_003_num_1.Value);
-                    pos = name.IndexOf(delim);
+                          num = (int)(_controls.option_003_num_1.Value);
+                    int index = (int)(_controls.option_003_num_2.Value);
+                          pos = -1;
+
+                    do
+                    {
+                        pos = name.IndexOf(delim, pos+1);
+
+                    } while (--index != 0);
 
                     if (pos >= 0)
                     {
                         if (_controls.option_003_rb_02.Checked)
                         {
+                            // After
                             pos += delim.Length;
+                            pos -= _controls.option_003_ch_02.Checked ? delim.Length : 0;
+                            num += _controls.option_003_ch_02.Checked ? delim.Length : 0;
 
                             if (pos + num > name.Length)
                                 num = name.Length - pos;
                         }
                         else
                         {
+                            // Before
                             if (pos < num)
                                 num = pos;
 
                             pos -= num;
+                            num += _controls.option_003_ch_02.Checked ? delim.Length : 0;
                         }
 
                         name = name.Remove(pos, num);

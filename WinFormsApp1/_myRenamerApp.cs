@@ -24,7 +24,9 @@ public class myRenamerApp_Controls
     public NumericUpDown    option_002_num_2 = null;
 
     public CheckBox         option_003_ch_01 = null;
+    public CheckBox         option_003_ch_02 = null;
     public NumericUpDown    option_003_num_1 = null;
+    public NumericUpDown    option_003_num_2 = null;
     public RadioButton      option_003_rb_01 = null;
     public RadioButton      option_003_rb_02 = null;
     public TextBox          option_003_tb_01 = null;
@@ -363,6 +365,7 @@ public class myRenamerApp
 
         // Option 3
         _controls.option_003_num_1.Value = 1;
+        _controls.option_003_num_2.Minimum = 1;
         _controls.option_003_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_003_tb_01.PlaceholderText = "Substring";
         _controls.option_003_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
