@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using myControls;
 
@@ -12,9 +13,11 @@ namespace WinFormsApp1
         private myRenamerApp app = null;
 
         private myControls.myComboBox myCb = null;
-        private myControls.myTextBox  myTb = null;
+        private myControls.myTextBox myTb = null;
 
         private myControls.mySplitButton sb_Undo = null;
+
+        private myP p = null;
 
         // --------------------------------------------------------------------------------
 
@@ -26,7 +29,8 @@ namespace WinFormsApp1
             {
                 expandEmpty = true;
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
-                path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
+                path =
+                    @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
@@ -42,25 +46,25 @@ namespace WinFormsApp1
         {
             // myTree_DataGrid's controls:
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
-                mtdgmi.form         = this;
-                mtdgmi.tv           = treeView1;
-                mtdgmi.dg           = dataGridView1;
-                mtdgmi.cb_Recursive = cb_Recursive;
-                mtdgmi.cb_ShowDirs  = cb_ShowDirs;
-                mtdgmi.cb_ShowFiles = cb_ShowFiles;
-                mtdgmi.tb_Filter    = textBox1;
-                mtdgmi.tb_FilterOut = textBox2;
-                mtdgmi.richTextBox  = richTextBox1;
+            mtdgmi.form = this;
+            mtdgmi.tv = treeView1;
+            mtdgmi.dg = dataGridView1;
+            mtdgmi.cb_Recursive = cb_Recursive;
+            mtdgmi.cb_ShowDirs = cb_ShowDirs;
+            mtdgmi.cb_ShowFiles = cb_ShowFiles;
+            mtdgmi.tb_Filter = textBox1;
+            mtdgmi.tb_FilterOut = textBox2;
+            mtdgmi.richTextBox = richTextBox1;
 
             // Every control that myRenamerApp must be aware of:
             var mraControls = new myRenamerApp_Controls();
             {
-                mraControls.richTextBox      = this.richTextBox1;
+                mraControls.richTextBox = this.richTextBox1;
 
                 mraControls.option_001_ch_01 = this.checkBox_Option_001;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
-                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, SortMode.LastOnTop,  "Delimiter");
+                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, SortMode.LastOnTop, "Delimiter");
                 mraControls.option_001_rb_01 = this.radioButton21;
                 mraControls.option_001_rb_02 = this.radioButton18;
 
@@ -212,7 +216,15 @@ namespace WinFormsApp1
         }
 
         // --------------------------------------------------------------------------------
-    }
-}
+    };
 
+    public class myP : Panel
+    {
+        public myP()
+        {
+            ;
+        }
 
+    };
+
+};

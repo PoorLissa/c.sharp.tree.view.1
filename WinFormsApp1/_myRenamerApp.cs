@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 
+
 public class myRenamerApp_Controls
 {
     public List<CheckBox>   optionList       = null;    // List of each option panel's main checkboxes.
@@ -108,6 +109,7 @@ public class myRenamerApp
     private myRenamerApp_Controls   _controls     = null;
     private myTree_DataGrid_Manager _myTDGManager = null;
     private ini_file_base           _ini          = null;
+    private bool _useAlternatingColor = true;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -490,6 +492,8 @@ public class myRenamerApp
 
                 addDelimiterPanel();
 
+                int cnt = 0;
+
                 // Find option panels and sort them within [panel_base]
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -498,6 +502,17 @@ public class myRenamerApp
                         if (list[i]._name == _controls.optionList[j].Name)
                         {
                             var panel = _controls.optionList[j].Parent as Panel;
+
+                            panel.BorderStyle = BorderStyle.FixedSingle;
+
+                            if (_useAlternatingColor)
+                            {
+                                panel.BackColor = (cnt++ % 2 == 0)
+                                    ? Color.FromArgb(50, Color.SeaShell)
+                                    : Color.FromArgb(25, Color.Azure);
+                            }
+
+                            // Make the panel last from the top
                             panel.BringToFront();
 
                             // Also add delimiter panel

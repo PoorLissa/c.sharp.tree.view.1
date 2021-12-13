@@ -157,6 +157,7 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
+            this.panel9 = new WinFormsApp1.myP();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -423,7 +424,7 @@ namespace WinFormsApp1
             // checkBox_Option_013
             // 
             this.checkBox_Option_013.AutoSize = true;
-            this.checkBox_Option_013.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_013.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_013.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_013.Name = "checkBox_Option_013";
             this.checkBox_Option_013.Size = new System.Drawing.Size(260, 34);
@@ -445,7 +446,7 @@ namespace WinFormsApp1
             // checkBox_Option_012
             // 
             this.checkBox_Option_012.AutoSize = true;
-            this.checkBox_Option_012.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_012.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_012.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_012.Name = "checkBox_Option_012";
             this.checkBox_Option_012.Size = new System.Drawing.Size(509, 34);
@@ -511,6 +512,7 @@ namespace WinFormsApp1
             // checkBox_Option_011
             // 
             this.checkBox_Option_011.AutoSize = true;
+            this.checkBox_Option_011.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_011.Location = new System.Drawing.Point(14, 22);
             this.checkBox_Option_011.Name = "checkBox_Option_011";
             this.checkBox_Option_011.Size = new System.Drawing.Size(144, 29);
@@ -651,7 +653,7 @@ namespace WinFormsApp1
             // checkBox_Option_010
             // 
             this.checkBox_Option_010.AutoSize = true;
-            this.checkBox_Option_010.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_010.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_010.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_010.Name = "checkBox_Option_010";
             this.checkBox_Option_010.Size = new System.Drawing.Size(449, 34);
@@ -791,7 +793,7 @@ namespace WinFormsApp1
             // checkBox_Option_009
             // 
             this.checkBox_Option_009.AutoSize = true;
-            this.checkBox_Option_009.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_009.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_009.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_009.Name = "checkBox_Option_009";
             this.checkBox_Option_009.Size = new System.Drawing.Size(523, 34);
@@ -865,7 +867,7 @@ namespace WinFormsApp1
             // checkBox_Option_008
             // 
             this.checkBox_Option_008.AutoSize = true;
-            this.checkBox_Option_008.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_008.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_008.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_008.Name = "checkBox_Option_008";
             this.checkBox_Option_008.Size = new System.Drawing.Size(494, 34);
@@ -939,7 +941,7 @@ namespace WinFormsApp1
             // checkBox_Option_007
             // 
             this.checkBox_Option_007.AutoSize = true;
-            this.checkBox_Option_007.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_007.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_007.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_007.Name = "checkBox_Option_007";
             this.checkBox_Option_007.Size = new System.Drawing.Size(429, 34);
@@ -1082,7 +1084,7 @@ namespace WinFormsApp1
             // checkBox_Option_006
             // 
             this.checkBox_Option_006.AutoSize = true;
-            this.checkBox_Option_006.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_006.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_006.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_006.Name = "checkBox_Option_006";
             this.checkBox_Option_006.Size = new System.Drawing.Size(328, 34);
@@ -1182,7 +1184,7 @@ namespace WinFormsApp1
             // checkBox_Option_005
             // 
             this.checkBox_Option_005.AutoSize = true;
-            this.checkBox_Option_005.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_005.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_005.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_005.Name = "checkBox_Option_005";
             this.checkBox_Option_005.Size = new System.Drawing.Size(272, 34);
@@ -1278,7 +1280,7 @@ namespace WinFormsApp1
             // checkBox_Option_004
             // 
             this.checkBox_Option_004.AutoSize = true;
-            this.checkBox_Option_004.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_004.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_004.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_004.Name = "checkBox_Option_004";
             this.checkBox_Option_004.Size = new System.Drawing.Size(438, 34);
@@ -1397,7 +1399,7 @@ namespace WinFormsApp1
             // checkBox_Option_003
             // 
             this.checkBox_Option_003.AutoSize = true;
-            this.checkBox_Option_003.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_003.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_003.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_003.Name = "checkBox_Option_003";
             this.checkBox_Option_003.Size = new System.Drawing.Size(558, 34);
@@ -1477,7 +1479,7 @@ namespace WinFormsApp1
             // checkBox_Option_002
             // 
             this.checkBox_Option_002.AutoSize = true;
-            this.checkBox_Option_002.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_002.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_002.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_002.Name = "checkBox_Option_002";
             this.checkBox_Option_002.Size = new System.Drawing.Size(477, 34);
@@ -1555,7 +1557,7 @@ namespace WinFormsApp1
             // checkBox_Option_001
             // 
             this.checkBox_Option_001.AutoSize = true;
-            this.checkBox_Option_001.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_001.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
             this.checkBox_Option_001.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_001.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_Option_001.Name = "checkBox_Option_001";
@@ -1629,11 +1631,19 @@ namespace WinFormsApp1
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
             // 
+            // panel9
+            // 
+            this.panel9.Location = new System.Drawing.Point(138, 883);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(300, 150);
+            this.panel9.TabIndex = 42;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2076, 1225);
+            this.Controls.Add(this.panel9);
             this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.tabControl1);
@@ -1835,6 +1845,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
+        private myP panel9;
     }
 }
 
