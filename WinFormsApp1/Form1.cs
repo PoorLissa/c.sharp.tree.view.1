@@ -17,8 +17,6 @@ namespace WinFormsApp1
 
         private myControls.mySplitButton sb_Undo = null;
 
-        private myP p = null;
-
         // --------------------------------------------------------------------------------
 
         public Form1(string path, bool expandEmpty)
@@ -216,15 +214,6 @@ namespace WinFormsApp1
         }
 
         // --------------------------------------------------------------------------------
-    };
-
-    public class myP : Panel
-    {
-        public myP()
-        {
-            ;
-        }
-
     };
 
 };

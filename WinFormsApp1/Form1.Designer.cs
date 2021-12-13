@@ -41,7 +41,7 @@ namespace WinFormsApp1
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel_base = new System.Windows.Forms.Panel();
-            this.panel8 = new System.Windows.Forms.Panel();
+            this.panel8 = new myControls.myPanel();
             this.label19 = new System.Windows.Forms.Label();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
@@ -50,15 +50,15 @@ namespace WinFormsApp1
             this.radioButton20 = new System.Windows.Forms.RadioButton();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.checkBox_Option_013 = new System.Windows.Forms.CheckBox();
-            this.panel6 = new System.Windows.Forms.Panel();
+            this.panel6 = new myControls.myPanel();
             this.checkBox_Option_012 = new System.Windows.Forms.CheckBox();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel4 = new myControls.myPanel();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.radioButton15 = new System.Windows.Forms.RadioButton();
             this.radioButton16 = new System.Windows.Forms.RadioButton();
             this.radioButton17 = new System.Windows.Forms.RadioButton();
             this.checkBox_Option_011 = new System.Windows.Forms.CheckBox();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel2 = new myControls.myPanel();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.numericUpDown14 = new System.Windows.Forms.NumericUpDown();
@@ -70,7 +70,7 @@ namespace WinFormsApp1
             this.radioButton23 = new System.Windows.Forms.RadioButton();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.checkBox_Option_010 = new System.Windows.Forms.CheckBox();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1 = new myControls.myPanel();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.radioButton14 = new System.Windows.Forms.RadioButton();
@@ -82,19 +82,19 @@ namespace WinFormsApp1
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.checkBox_Option_009 = new System.Windows.Forms.CheckBox();
-            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel7 = new myControls.myPanel();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
             this.checkBox_Option_008 = new System.Windows.Forms.CheckBox();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel5 = new myControls.myPanel();
             this.label13 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.checkBox_Option_007 = new System.Windows.Forms.CheckBox();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel3 = new myControls.myPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
@@ -107,7 +107,7 @@ namespace WinFormsApp1
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.checkBox_Option_006 = new System.Windows.Forms.CheckBox();
-            this.panel_content_05 = new System.Windows.Forms.Panel();
+            this.panel_content_05 = new myControls.myPanel();
             this.label18 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.opt_005_predefined_templates = new System.Windows.Forms.ComboBox();
@@ -116,7 +116,7 @@ namespace WinFormsApp1
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.checkBox_Option_005 = new System.Windows.Forms.CheckBox();
-            this.panel_content_04 = new System.Windows.Forms.Panel();
+            this.panel_content_04 = new myControls.myPanel();
             this.label17 = new System.Windows.Forms.Label();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -125,7 +125,7 @@ namespace WinFormsApp1
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.checkBox_Option_004 = new System.Windows.Forms.CheckBox();
-            this.panel_content_03 = new System.Windows.Forms.Panel();
+            this.panel_content_03 = new myControls.myPanel();
             this.label15 = new System.Windows.Forms.Label();
             this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
             this.checkBox11 = new System.Windows.Forms.CheckBox();
@@ -137,14 +137,14 @@ namespace WinFormsApp1
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.checkBox_Option_003 = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.panel_content_02 = new System.Windows.Forms.Panel();
+            this.panel_content_02 = new myControls.myPanel();
             this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox_Option_002 = new System.Windows.Forms.CheckBox();
-            this.panel_content_01 = new System.Windows.Forms.Panel();
+            this.panel_content_01 = new myControls.myPanel();
             this.radioButton18 = new System.Windows.Forms.RadioButton();
             this.radioButton21 = new System.Windows.Forms.RadioButton();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -157,7 +157,6 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
-            this.panel9 = new WinFormsApp1.myP();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1631,19 +1630,11 @@ namespace WinFormsApp1
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
             // 
-            // panel9
-            // 
-            this.panel9.Location = new System.Drawing.Point(138, 883);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(300, 150);
-            this.panel9.TabIndex = 42;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2076, 1225);
-            this.Controls.Add(this.panel9);
             this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.tabControl1);
@@ -1845,7 +1836,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private myP panel9;
     }
 }
 

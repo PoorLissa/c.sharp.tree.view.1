@@ -480,17 +480,17 @@ public class myRenamerApp
                     return 0;
                 });
 
-                void addDelimiterPanel()
+                void addDelimiterPanel(bool useColor)
                 {
                     var delim = new Panel();
                     delim.Height = 2;
                     delim.Dock = DockStyle.Top;
-                    delim.BackColor = Color.LightGray;
+                    delim.BackColor = useColor ? Color.LightGray : panel_base.BackColor;
                     panel_base.Controls.Add(delim);
                     delim.BringToFront();
                 }
 
-                addDelimiterPanel();
+                addDelimiterPanel(false);
 
                 int cnt = 0;
 
@@ -501,14 +501,14 @@ public class myRenamerApp
                     {
                         if (list[i]._name == _controls.optionList[j].Name)
                         {
-                            var panel = _controls.optionList[j].Parent as Panel;
+                            var panel = _controls.optionList[j].Parent as myPanel;
 
-                            panel.BorderStyle = BorderStyle.FixedSingle;
+                            panel.UseCustomBorder = true;
 
                             if (_useAlternatingColor)
                             {
                                 panel.BackColor = (cnt++ % 2 == 0)
-                                    ? Color.FromArgb(50, Color.SeaShell)
+                                    ? Color.FromArgb( 1, Color.LightGray)
                                     : Color.FromArgb(25, Color.Azure);
                             }
 
@@ -516,7 +516,7 @@ public class myRenamerApp
                             panel.BringToFront();
 
                             // Also add delimiter panel
-                            addDelimiterPanel();
+                            addDelimiterPanel(true);
 
                             break;
                         }
