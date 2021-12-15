@@ -215,7 +215,6 @@ public class myRenamerApp
             {
                 var parent = cb.Parent as myPanel;
                 parent.isSelected = cb.Checked;
-                parent.Invalidate();
                 break;
             }
 
@@ -452,8 +451,13 @@ public class myRenamerApp
 
                         if (subControl.Name.StartsWith("checkBox_Option_"))
                         {
-                            _controls.optionList.Add(subControl as CheckBox);
-                            (subControl as CheckBox).CheckedChanged += checkboxChanged_CommonEvent;
+                            var checkbox = subControl as CheckBox;
+
+                            if (checkbox != null)
+                            {
+                                _controls.optionList.Add(checkbox);
+                                checkbox.CheckedChanged += checkboxChanged_CommonEvent;
+                            }
                             break;
                         }
                     }

@@ -10,8 +10,8 @@ namespace myControls
 {
     public class myPanel : Panel
     {
-        private bool _isHovered  = false;
-        private bool _isSelected = false;
+        private bool _isHovered  = false;           // If the mouse pointer is hovering over the panel
+        private bool _isSelected = false;           // If the main checkbox of the panel is checked or unchecked
 
         public bool UseCustomBorder { get; set; } = false;
 
@@ -29,13 +29,15 @@ namespace myControls
 
                     if (subControl.Name.StartsWith("checkBox_Option_"))
                     {
-
+                        subControl.ForeColor = _isSelected ? Color.DarkRed : Color.Black;
                     }
                     else
                     {
                         subControl.Enabled = _isSelected;
                     }
                 }
+
+                Invalidate();
             }
         }
 
@@ -115,11 +117,6 @@ namespace myControls
                 {
                     e.Graphics.DrawRectangle(Pens.LightSlateGray, 1, 1, ClientSize.Width - 2, ClientSize.Height - 4);
                 }
-            }
-
-            if (isSelected)
-            {
-                e.Graphics.DrawRectangle(Pens.DarkRed, 3, 3, ClientSize.Width - 6, 3);
             }
         }
     };
