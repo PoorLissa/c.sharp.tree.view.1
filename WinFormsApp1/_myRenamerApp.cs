@@ -497,16 +497,6 @@ public class myRenamerApp
                     return 0;
                 });
 
-                void addDelimiterPanel(bool useColor)
-                {
-                    var delim = new Panel();
-                    delim.Height = 2;
-                    delim.Dock = DockStyle.Top;
-                    delim.BackColor = useColor ? Color.LightGray : panel_base.BackColor;
-                    panel_base.Controls.Add(delim);
-                    delim.BringToFront();
-                }
-
                 int cnt = 0;
 
                 // Find option panels and sort them within [panel_base]

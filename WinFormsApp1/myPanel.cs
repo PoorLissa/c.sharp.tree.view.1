@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,9 +13,13 @@ namespace myControls
     {
         private bool _isHovered  = false;           // If the mouse pointer is hovering over the panel
         private bool _isSelected = false;           // If the main checkbox of the panel is checked or unchecked
+        private int  _height     = -1;              // Stores original height of the panel to be able to wrap/unwrap it
 
         public bool UseCustomBorder { get; set; } = false;
 
+        // Attribute needed, as without it VS added this property to Form1.Designer.cs file.
+        // This way, this property was set up during initialization, which resulted in wrong _height value
+        [DefaultValue(false)]
         public bool isSelected
         {
             get { return _isSelected; }
@@ -22,6 +27,9 @@ namespace myControls
             set
             {
                 _isSelected = value;
+
+                _height = (_height < 0) ? this.Height : _height;
+                this.Height = _isSelected ? _height : 60;
 
                 for (int i = 0; i < Controls.Count; i++)
                 {
@@ -41,7 +49,7 @@ namespace myControls
             }
         }
 
-        public myPanel()
+        public myPanel() : base()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }

@@ -344,7 +344,7 @@ namespace WinFormsApp1
             this.panel8.Controls.Add(this.textBox5);
             this.panel8.Controls.Add(this.checkBox_Option_013);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel8.Location = new System.Drawing.Point(0, 2726);
+            this.panel8.Location = new System.Drawing.Point(0, 2773);
             this.panel8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(651, 250);
@@ -425,6 +425,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_013.AutoSize = true;
             this.checkBox_Option_013.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_013.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_013.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_013.Name = "checkBox_Option_013";
             this.checkBox_Option_013.Size = new System.Drawing.Size(260, 34);
@@ -437,7 +438,7 @@ namespace WinFormsApp1
             this.panel6.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel6.Controls.Add(this.checkBox_Option_012);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(0, 2642);
+            this.panel6.Location = new System.Drawing.Point(0, 2689);
             this.panel6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(651, 84);
@@ -448,6 +449,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_012.AutoSize = true;
             this.checkBox_Option_012.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_012.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_012.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_012.Name = "checkBox_Option_012";
             this.checkBox_Option_012.Size = new System.Drawing.Size(509, 34);
@@ -464,16 +466,16 @@ namespace WinFormsApp1
             this.panel4.Controls.Add(this.radioButton17);
             this.panel4.Controls.Add(this.checkBox_Option_011);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 2510);
+            this.panel4.Location = new System.Drawing.Point(0, 2514);
             this.panel4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(651, 132);
+            this.panel4.Size = new System.Drawing.Size(651, 175);
             this.panel4.TabIndex = 40;
             this.panel4.UseCustomBorder = false;
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(309, 48);
+            this.textBox10.Location = new System.Drawing.Point(212, 89);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(302, 31);
             this.textBox10.TabIndex = 48;
@@ -481,7 +483,7 @@ namespace WinFormsApp1
             // radioButton15
             // 
             this.radioButton15.AutoSize = true;
-            this.radioButton15.Location = new System.Drawing.Point(170, 78);
+            this.radioButton15.Location = new System.Drawing.Point(73, 119);
             this.radioButton15.Name = "radioButton15";
             this.radioButton15.Size = new System.Drawing.Size(126, 29);
             this.radioButton15.TabIndex = 47;
@@ -492,7 +494,7 @@ namespace WinFormsApp1
             // radioButton16
             // 
             this.radioButton16.AutoSize = true;
-            this.radioButton16.Location = new System.Drawing.Point(170, 52);
+            this.radioButton16.Location = new System.Drawing.Point(73, 93);
             this.radioButton16.Name = "radioButton16";
             this.radioButton16.Size = new System.Drawing.Size(103, 29);
             this.radioButton16.TabIndex = 45;
@@ -503,7 +505,7 @@ namespace WinFormsApp1
             // radioButton17
             // 
             this.radioButton17.AutoSize = true;
-            this.radioButton17.Location = new System.Drawing.Point(170, 23);
+            this.radioButton17.Location = new System.Drawing.Point(73, 64);
             this.radioButton17.Name = "radioButton17";
             this.radioButton17.Size = new System.Drawing.Size(115, 29);
             this.radioButton17.TabIndex = 46;
@@ -514,10 +516,11 @@ namespace WinFormsApp1
             // checkBox_Option_011
             // 
             this.checkBox_Option_011.AutoSize = true;
-            this.checkBox_Option_011.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-            this.checkBox_Option_011.Location = new System.Drawing.Point(14, 22);
+            this.checkBox_Option_011.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_011.ForeColor = System.Drawing.Color.Black;
+            this.checkBox_Option_011.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_011.Name = "checkBox_Option_011";
-            this.checkBox_Option_011.Size = new System.Drawing.Size(144, 29);
+            this.checkBox_Option_011.Size = new System.Drawing.Size(168, 34);
             this.checkBox_Option_011.TabIndex = 2;
             this.checkBox_Option_011.Text = "Insert date of";
             this.checkBox_Option_011.UseVisualStyleBackColor = true;
@@ -537,7 +540,7 @@ namespace WinFormsApp1
             this.panel2.Controls.Add(this.textBox9);
             this.panel2.Controls.Add(this.checkBox_Option_010);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 2301);
+            this.panel2.Location = new System.Drawing.Point(0, 2305);
             this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(651, 209);
@@ -657,6 +660,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_010.AutoSize = true;
             this.checkBox_Option_010.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_010.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_010.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_010.Name = "checkBox_Option_010";
             this.checkBox_Option_010.Size = new System.Drawing.Size(449, 34);
@@ -679,7 +683,7 @@ namespace WinFormsApp1
             this.panel1.Controls.Add(this.checkBox8);
             this.panel1.Controls.Add(this.checkBox_Option_009);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 1926);
+            this.panel1.Location = new System.Drawing.Point(0, 1930);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(651, 375);
@@ -798,6 +802,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_009.AutoSize = true;
             this.checkBox_Option_009.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_009.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_009.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_009.Name = "checkBox_Option_009";
             this.checkBox_Option_009.Size = new System.Drawing.Size(523, 34);
@@ -814,7 +819,7 @@ namespace WinFormsApp1
             this.panel7.Controls.Add(this.numericUpDown8);
             this.panel7.Controls.Add(this.checkBox_Option_008);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(0, 1771);
+            this.panel7.Location = new System.Drawing.Point(0, 1775);
             this.panel7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(651, 155);
@@ -873,6 +878,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_008.AutoSize = true;
             this.checkBox_Option_008.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_008.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_008.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_008.Name = "checkBox_Option_008";
             this.checkBox_Option_008.Size = new System.Drawing.Size(494, 34);
@@ -889,7 +895,7 @@ namespace WinFormsApp1
             this.panel5.Controls.Add(this.numericUpDown6);
             this.panel5.Controls.Add(this.checkBox_Option_007);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 1608);
+            this.panel5.Location = new System.Drawing.Point(0, 1612);
             this.panel5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(651, 163);
@@ -948,6 +954,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_007.AutoSize = true;
             this.checkBox_Option_007.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_007.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_007.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_007.Name = "checkBox_Option_007";
             this.checkBox_Option_007.Size = new System.Drawing.Size(429, 34);
@@ -962,7 +969,7 @@ namespace WinFormsApp1
             this.panel3.Controls.Add(this.groupBox1);
             this.panel3.Controls.Add(this.checkBox_Option_006);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 1230);
+            this.panel3.Location = new System.Drawing.Point(0, 1234);
             this.panel3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(651, 378);
@@ -1092,6 +1099,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_006.AutoSize = true;
             this.checkBox_Option_006.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_006.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_006.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_006.Name = "checkBox_Option_006";
             this.checkBox_Option_006.Size = new System.Drawing.Size(328, 34);
@@ -1111,7 +1119,7 @@ namespace WinFormsApp1
             this.panel_content_05.Controls.Add(this.numericUpDown4);
             this.panel_content_05.Controls.Add(this.checkBox_Option_005);
             this.panel_content_05.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_05.Location = new System.Drawing.Point(0, 984);
+            this.panel_content_05.Location = new System.Drawing.Point(0, 988);
             this.panel_content_05.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_05.Name = "panel_content_05";
             this.panel_content_05.Size = new System.Drawing.Size(651, 246);
@@ -1193,6 +1201,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_005.AutoSize = true;
             this.checkBox_Option_005.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_005.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_005.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_005.Name = "checkBox_Option_005";
             this.checkBox_Option_005.Size = new System.Drawing.Size(272, 34);
@@ -1212,7 +1221,7 @@ namespace WinFormsApp1
             this.panel_content_04.Controls.Add(this.textBox6);
             this.panel_content_04.Controls.Add(this.checkBox_Option_004);
             this.panel_content_04.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_04.Location = new System.Drawing.Point(0, 751);
+            this.panel_content_04.Location = new System.Drawing.Point(0, 755);
             this.panel_content_04.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_04.Name = "panel_content_04";
             this.panel_content_04.Size = new System.Drawing.Size(651, 233);
@@ -1290,6 +1299,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_004.AutoSize = true;
             this.checkBox_Option_004.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_004.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_004.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_004.Name = "checkBox_Option_004";
             this.checkBox_Option_004.Size = new System.Drawing.Size(438, 34);
@@ -1312,7 +1322,7 @@ namespace WinFormsApp1
             this.panel_content_03.Controls.Add(this.checkBox_Option_003);
             this.panel_content_03.Controls.Add(this.label16);
             this.panel_content_03.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_03.Location = new System.Drawing.Point(0, 447);
+            this.panel_content_03.Location = new System.Drawing.Point(0, 451);
             this.panel_content_03.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_03.Name = "panel_content_03";
             this.panel_content_03.Size = new System.Drawing.Size(651, 304);
@@ -1410,6 +1420,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_003.AutoSize = true;
             this.checkBox_Option_003.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_003.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_003.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_003.Name = "checkBox_Option_003";
             this.checkBox_Option_003.Size = new System.Drawing.Size(558, 34);
@@ -1436,7 +1447,7 @@ namespace WinFormsApp1
             this.panel_content_02.Controls.Add(this.checkBox4);
             this.panel_content_02.Controls.Add(this.checkBox_Option_002);
             this.panel_content_02.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_02.Location = new System.Drawing.Point(0, 247);
+            this.panel_content_02.Location = new System.Drawing.Point(0, 251);
             this.panel_content_02.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_02.Name = "panel_content_02";
             this.panel_content_02.Size = new System.Drawing.Size(651, 200);
@@ -1491,6 +1502,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_002.AutoSize = true;
             this.checkBox_Option_002.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_002.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_002.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_002.Name = "checkBox_Option_002";
             this.checkBox_Option_002.Size = new System.Drawing.Size(477, 34);
@@ -1511,14 +1523,14 @@ namespace WinFormsApp1
             this.panel_content_01.Location = new System.Drawing.Point(0, 0);
             this.panel_content_01.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_01.Name = "panel_content_01";
-            this.panel_content_01.Size = new System.Drawing.Size(651, 247);
+            this.panel_content_01.Size = new System.Drawing.Size(651, 251);
             this.panel_content_01.TabIndex = 21;
             this.panel_content_01.UseCustomBorder = false;
             // 
             // radioButton18
             // 
             this.radioButton18.AutoSize = true;
-            this.radioButton18.Location = new System.Drawing.Point(371, 199);
+            this.radioButton18.Location = new System.Drawing.Point(371, 204);
             this.radioButton18.Name = "radioButton18";
             this.radioButton18.Size = new System.Drawing.Size(93, 29);
             this.radioButton18.TabIndex = 38;
@@ -1529,7 +1541,7 @@ namespace WinFormsApp1
             // radioButton21
             // 
             this.radioButton21.AutoSize = true;
-            this.radioButton21.Location = new System.Drawing.Point(371, 173);
+            this.radioButton21.Location = new System.Drawing.Point(371, 178);
             this.radioButton21.Name = "radioButton21";
             this.radioButton21.Size = new System.Drawing.Size(71, 29);
             this.radioButton21.TabIndex = 37;
@@ -1540,7 +1552,7 @@ namespace WinFormsApp1
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(43, 57);
+            this.comboBox2.Location = new System.Drawing.Point(43, 62);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(534, 33);
             this.comboBox2.TabIndex = 18;
@@ -1548,7 +1560,7 @@ namespace WinFormsApp1
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(371, 108);
+            this.checkBox3.Location = new System.Drawing.Point(371, 113);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(206, 29);
             this.checkBox3.TabIndex = 17;
@@ -1558,7 +1570,7 @@ namespace WinFormsApp1
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(371, 136);
+            this.checkBox2.Location = new System.Drawing.Point(371, 141);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(153, 29);
@@ -1570,6 +1582,7 @@ namespace WinFormsApp1
             // 
             this.checkBox_Option_001.AutoSize = true;
             this.checkBox_Option_001.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_Option_001.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_001.Location = new System.Drawing.Point(15, 15);
             this.checkBox_Option_001.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_Option_001.Name = "checkBox_Option_001";
