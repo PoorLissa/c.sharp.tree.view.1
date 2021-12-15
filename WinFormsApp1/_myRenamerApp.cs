@@ -211,6 +211,13 @@ public class myRenamerApp
 
         do
         {
+            if (cb.Name.StartsWith("checkBox_Option_"))
+            {
+                var parent = cb.Parent as myPanel;
+                parent.isSelected = cb.Checked;
+                parent.Invalidate();
+                break;
+            }
 
         } while (false);
 
@@ -426,14 +433,19 @@ public class myRenamerApp
         // Collect each option's main checkboxes into a list
         if (_controls.optionList == null)
         {
+            // Common checkbox changed event
+            var checkboxChanged_CommonEvent = new EventHandler(checkboxChanged_Common);
+
             _controls.optionList = new List<CheckBox>();
 
             for (int i = 0; i < panel_base.Controls.Count; i++)
             {
                 var control = panel_base.Controls[i];
 
-                if (control is Panel)
+                if (control is myPanel)
                 {
+                    (control as myPanel).isSelected = false;
+
                     for (int j = 0; j < control.Controls.Count; j++)
                     {
                         var subControl = control.Controls[j];
@@ -441,6 +453,7 @@ public class myRenamerApp
                         if (subControl.Name.StartsWith("checkBox_Option_"))
                         {
                             _controls.optionList.Add(subControl as CheckBox);
+                            (subControl as CheckBox).CheckedChanged += checkboxChanged_CommonEvent;
                             break;
                         }
                     }
@@ -490,8 +503,6 @@ public class myRenamerApp
                     delim.BringToFront();
                 }
 
-                addDelimiterPanel(false);
-
                 int cnt = 0;
 
                 // Find option panels and sort them within [panel_base]
@@ -514,9 +525,6 @@ public class myRenamerApp
 
                             // Make the panel last from the top
                             panel.BringToFront();
-
-                            // Also add delimiter panel
-                            addDelimiterPanel(true);
 
                             break;
                         }

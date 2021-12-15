@@ -349,6 +349,7 @@ namespace WinFormsApp1
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(651, 250);
             this.panel8.TabIndex = 42;
+            this.panel8.UseCustomBorder = false;
             // 
             // label19
             // 
@@ -441,6 +442,7 @@ namespace WinFormsApp1
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(651, 84);
             this.panel6.TabIndex = 41;
+            this.panel6.UseCustomBorder = false;
             // 
             // checkBox_Option_012
             // 
@@ -467,6 +469,7 @@ namespace WinFormsApp1
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(651, 132);
             this.panel4.TabIndex = 40;
+            this.panel4.UseCustomBorder = false;
             // 
             // textBox10
             // 
@@ -539,6 +542,7 @@ namespace WinFormsApp1
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(651, 209);
             this.panel2.TabIndex = 39;
+            this.panel2.UseCustomBorder = false;
             // 
             // label11
             // 
@@ -680,6 +684,7 @@ namespace WinFormsApp1
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(651, 375);
             this.panel1.TabIndex = 38;
+            this.panel1.UseCustomBorder = false;
             // 
             // comboBox5
             // 
@@ -814,6 +819,7 @@ namespace WinFormsApp1
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(651, 155);
             this.panel7.TabIndex = 37;
+            this.panel7.UseCustomBorder = false;
             // 
             // label9
             // 
@@ -888,6 +894,7 @@ namespace WinFormsApp1
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(651, 163);
             this.panel5.TabIndex = 35;
+            this.panel5.UseCustomBorder = false;
             // 
             // label13
             // 
@@ -960,6 +967,7 @@ namespace WinFormsApp1
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(651, 378);
             this.panel3.TabIndex = 33;
+            this.panel3.UseCustomBorder = false;
             // 
             // groupBox2
             // 
@@ -1021,20 +1029,20 @@ namespace WinFormsApp1
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(373, 148);
+            this.comboBox3.Location = new System.Drawing.Point(339, 148);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(231, 33);
+            this.comboBox3.Size = new System.Drawing.Size(265, 33);
             this.comboBox3.TabIndex = 46;
             // 
             // checkBox6
             // 
             this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(80, 152);
+            this.checkBox6.Location = new System.Drawing.Point(69, 150);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(260, 29);
+            this.checkBox6.Size = new System.Drawing.Size(265, 29);
             this.checkBox6.TabIndex = 45;
-            this.checkBox6.Text = "But skip words from the list:";
+            this.checkBox6.Text = "But Skip Words from the List";
             this.checkBox6.UseVisualStyleBackColor = true;
             // 
             // radioButton7
@@ -1108,6 +1116,7 @@ namespace WinFormsApp1
             this.panel_content_05.Name = "panel_content_05";
             this.panel_content_05.Size = new System.Drawing.Size(651, 246);
             this.panel_content_05.TabIndex = 31;
+            this.panel_content_05.UseCustomBorder = false;
             // 
             // label18
             // 
@@ -1121,9 +1130,9 @@ namespace WinFormsApp1
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(244, 142);
+            this.button2.Location = new System.Drawing.Point(243, 142);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(333, 36);
+            this.button2.Size = new System.Drawing.Size(335, 36);
             this.button2.TabIndex = 50;
             this.button2.Text = "Insert";
             this.button2.UseVisualStyleBackColor = true;
@@ -1208,6 +1217,7 @@ namespace WinFormsApp1
             this.panel_content_04.Name = "panel_content_04";
             this.panel_content_04.Size = new System.Drawing.Size(651, 233);
             this.panel_content_04.TabIndex = 29;
+            this.panel_content_04.UseCustomBorder = false;
             // 
             // label17
             // 
@@ -1307,6 +1317,7 @@ namespace WinFormsApp1
             this.panel_content_03.Name = "panel_content_03";
             this.panel_content_03.Size = new System.Drawing.Size(651, 304);
             this.panel_content_03.TabIndex = 26;
+            this.panel_content_03.UseCustomBorder = false;
             // 
             // label15
             // 
@@ -1430,6 +1441,7 @@ namespace WinFormsApp1
             this.panel_content_02.Name = "panel_content_02";
             this.panel_content_02.Size = new System.Drawing.Size(651, 200);
             this.panel_content_02.TabIndex = 24;
+            this.panel_content_02.UseCustomBorder = false;
             // 
             // label12
             // 
@@ -1501,6 +1513,7 @@ namespace WinFormsApp1
             this.panel_content_01.Name = "panel_content_01";
             this.panel_content_01.Size = new System.Drawing.Size(651, 247);
             this.panel_content_01.TabIndex = 21;
+            this.panel_content_01.UseCustomBorder = false;
             // 
             // radioButton18
             // 
@@ -1726,19 +1739,15 @@ namespace WinFormsApp1
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Panel panel_base;
-        private System.Windows.Forms.Panel panel_content_03;
-        private System.Windows.Forms.Panel panel_content_02;
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox_Option_002;
-        private System.Windows.Forms.Panel panel_content_01;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox_Option_001;
-        private System.Windows.Forms.Panel panel_content_04;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.TextBox textBox4;
@@ -1746,10 +1755,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.CheckBox checkBox_Option_003;
         private System.Windows.Forms.CheckBox checkBox_Option_004;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel_content_05;
         private System.Windows.Forms.CheckBox checkBox_Option_005;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
@@ -1777,14 +1782,10 @@ namespace WinFormsApp1
         private System.Windows.Forms.NumericUpDown numericUpDown7;
         private System.Windows.Forms.CheckBox checkBox7;
         private System.Windows.Forms.NumericUpDown numericUpDown8;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox checkBox_Option_009;
         private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.CheckBox checkBox_Option_010;
-        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.CheckBox checkBox_Option_011;
-        private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.CheckBox checkBox_Option_012;
         private System.Windows.Forms.NumericUpDown numericUpDown11;
         private System.Windows.Forms.TextBox textBox9;
@@ -1793,7 +1794,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.RadioButton radioButton17;
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.CheckBox checkBox_Option_013;
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.TextBox textBox11;
@@ -1836,6 +1836,19 @@ namespace WinFormsApp1
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
+        private myControls.myPanel panel_content_03;
+        private myControls.myPanel panel_content_02;
+        private myControls.myPanel panel_content_01;
+        private myControls.myPanel panel_content_04;
+        private myControls.myPanel panel7;
+        private myControls.myPanel panel5;
+        private myControls.myPanel panel3;
+        private myControls.myPanel panel_content_05;
+        private myControls.myPanel panel1;
+        private myControls.myPanel panel2;
+        private myControls.myPanel panel4;
+        private myControls.myPanel panel6;
+        private myControls.myPanel panel8;
     }
 }
 
