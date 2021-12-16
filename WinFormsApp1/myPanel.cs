@@ -28,8 +28,8 @@ namespace myControls
             {
                 _isSelected = value;
 
-                _height = (_height < 0) ? this.Height : _height;
-                this.Height = _isSelected ? _height : 63;
+                _height = (_height < 0) ? Height : _height;
+                Height = _isSelected ? _height : 63;
 
                 for (int i = 0; i < Controls.Count; i++)
                 {
@@ -66,6 +66,24 @@ namespace myControls
             {
                 _isHovered = false;
                 Invalidate();
+            }
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            // If the panel is wrapped up, check its main checkbox
+            if (Height == 63)
+            {
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    var subControl = Controls[i];
+
+                    if (subControl.Name.StartsWith("checkBox_Option_"))
+                    {
+                        (subControl as CheckBox).Checked = true;
+                        break;
+                    }
+                }
             }
         }
 
