@@ -29,7 +29,7 @@ namespace myControls
                 _isSelected = value;
 
                 _height = (_height < 0) ? this.Height : _height;
-                this.Height = _isSelected ? _height : 60;
+                this.Height = _isSelected ? _height : 63;
 
                 for (int i = 0; i < Controls.Count; i++)
                 {
