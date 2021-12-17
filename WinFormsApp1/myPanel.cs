@@ -14,6 +14,7 @@ namespace myControls
         private bool _isHovered  = false;           // If the mouse pointer is hovering over the panel
         private bool _isSelected = false;           // If the main checkbox of the panel is checked or unchecked
         private int  _height     = -1;              // Stores original height of the panel to be able to wrap/unwrap it
+        private int  _wrapHeight = -1;
 
         public bool UseCustomBorder { get; set; } = false;
 
@@ -29,7 +30,7 @@ namespace myControls
                 _isSelected = value;
 
                 _height = (_height < 0) ? Height : _height;
-                Height = _isSelected ? _height : 63;
+                Height = _isSelected ? _height : _wrapHeight;
 
                 for (int i = 0; i < Controls.Count; i++)
                 {
@@ -51,6 +52,8 @@ namespace myControls
 
         public myPanel() : base()
         {
+            _wrapHeight = this.DeviceDpi > 96 ? 63 : 43;
+
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
 
@@ -72,7 +75,7 @@ namespace myControls
         protected override void OnMouseClick(MouseEventArgs e)
         {
             // If the panel is wrapped up, check its main checkbox
-            if (Height == 63)
+            if (Height == _wrapHeight)
             {
                 for (int i = 0; i < Controls.Count; i++)
                 {
