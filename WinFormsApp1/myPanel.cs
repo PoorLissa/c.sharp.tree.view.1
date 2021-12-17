@@ -76,11 +76,9 @@ namespace myControls
             {
                 for (int i = 0; i < Controls.Count; i++)
                 {
-                    var subControl = Controls[i];
-
-                    if (subControl.Name.StartsWith("checkBox_Option_"))
+                    if (Controls[i].Name.StartsWith("checkBox_Option_"))
                     {
-                        (subControl as CheckBox).Checked = true;
+                        (Controls[i] as CheckBox).Checked = true;
                         break;
                     }
                 }
