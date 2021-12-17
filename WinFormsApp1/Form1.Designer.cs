@@ -157,6 +157,7 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1110,6 +1111,7 @@ namespace WinFormsApp1
             // panel_content_05
             // 
             this.panel_content_05.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel_content_05.Controls.Add(this.button3);
             this.panel_content_05.Controls.Add(this.label18);
             this.panel_content_05.Controls.Add(this.button2);
             this.panel_content_05.Controls.Add(this.opt_005_predefined_templates);
@@ -1656,6 +1658,15 @@ namespace WinFormsApp1
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(525, 15);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(112, 34);
+            this.button3.TabIndex = 52;
+            this.button3.Text = "Use Latest";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -1862,6 +1873,7 @@ namespace WinFormsApp1
         private myControls.myPanel panel4;
         private myControls.myPanel panel6;
         private myControls.myPanel panel8;
+        private System.Windows.Forms.Button button3;
     }
 }
 

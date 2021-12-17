@@ -109,7 +109,8 @@ public class myRenamerApp
     private myRenamerApp_Controls   _controls     = null;
     private myTree_DataGrid_Manager _myTDGManager = null;
     private ini_file_base           _ini          = null;
-    private bool _useAlternatingColor = true;
+    private bool             _useAlternatingColor = true;
+    private Form                    _form         = null;
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -125,6 +126,7 @@ public class myRenamerApp
     {
         _controls = controls;
         _myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
+        _form = mtdgmi.form;
 
         init();
 
@@ -156,6 +158,24 @@ public class myRenamerApp
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message, "myRenamerApp: Failed to undo", MessageBoxButtons.OK);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void _form_onFormClosing(object sender, FormClosingEventArgs e)
+    {
+        // Save panel settings
+        foreach (var item in _controls.optionList)
+        {
+            myPanel p = item.Parent as myPanel;
+
+            if (p != null && p.isSelected)
+            {
+                string param = $"myPanelSettings.{p.Name}";
+
+                _ini[param] = p.getSettings();
+            }
         }
     }
 
@@ -215,6 +235,7 @@ public class myRenamerApp
             {
                 var parent = cb.Parent as myPanel;
                 parent.isSelected = cb.Checked;
+                parent.UseLatest(_ini);
                 break;
             }
 
@@ -339,6 +360,8 @@ public class myRenamerApp
         t.SetToolTip(control, str);
     }
 
+    // --------------------------------------------------------------------------------------------------------
+
     private void init()
     {
         // Initialize the instance, so it becomes available later on
@@ -346,6 +369,8 @@ public class myRenamerApp
 
         _ini = new ini_file_base();
         _ini.read();
+
+        _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
 
         // Subscribe to ApplicationExit event to finalize stuff
         Application.ApplicationExit += new EventHandler(Application_onExit);

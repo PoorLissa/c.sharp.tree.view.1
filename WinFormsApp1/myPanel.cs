@@ -52,9 +52,95 @@ namespace myControls
 
         public myPanel() : base()
         {
-            _wrapHeight = this.DeviceDpi > 96 ? 63 : 43;
+            _wrapHeight = this.DeviceDpi > 96 ? 63 : 43;        // Experimental values
 
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
+
+        public string getSettings()
+        {
+            string res = "";
+
+            for (int i = 0; i < Controls.Count; i++)
+            {
+                Control ctrl = Controls[i];
+
+                if (ctrl is CheckBox && !ctrl.Name.StartsWith("checkBox_Option_"))
+                {
+                    res += ctrl.Name;
+                    res += ":";
+                    res += (ctrl as CheckBox).Checked ? "+" : "-";
+                    res += ";";
+                }
+
+                if (ctrl is ComboBox)
+                {
+                    res += ctrl.Name;
+                    res += ":";
+                    res += (ctrl as ComboBox).Text;
+                    res += ";";
+                }
+
+                if (ctrl is NumericUpDown)
+                {
+                    res += ctrl.Name;
+                    res += ":";
+                    res += (ctrl as NumericUpDown).Value;
+                    res += ";";
+                }
+            }
+
+            return res;
+        }
+
+        // todo: add this to every option
+        public void UseLatest(ini_file_base ini)
+        {
+            for (int i = 0; i < Controls.Count; i++)
+            {
+                if (Controls[i] is Button && Controls[i].Text == "Use Latest")
+                {
+                    Button b = Controls[i] as Button;
+
+                    b.Click += new EventHandler( (object sender, EventArgs e) => 
+                    {
+                        string param = ini[$"myPanelSettings.{Name}"];
+
+                        var Params = param.Split(';');
+
+                        // opt_005_predefined_templates:Numeric sequence;comboBox4:;numericUpDown4:1;
+                        foreach (var item in Params)
+                        {
+                            int pos = item.IndexOf(':');
+
+                            string name  = item.Substring(0, pos);
+                            string value = item.Substring(pos+1);
+
+                            for (int j = 0; j < Controls.Count; j++)
+                            {
+                                Control ctrl = Controls[j];
+
+                                if (ctrl.Name == name)
+                                {
+                                    if (ctrl is NumericUpDown)
+                                    {
+                                        (ctrl as NumericUpDown).Value = Int32.Parse(value);
+                                    }
+
+                                    if (ctrl is ComboBox)
+                                    {
+                                        (ctrl as ComboBox).Text = value;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    });
+
+                    break;
+                }
+            }
         }
 
         protected override void OnMouseEnter(EventArgs e)

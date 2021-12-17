@@ -168,6 +168,8 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            return;
+
             var dg = dataGridView1;
 
             var visibleRowsCount = dg.DisplayedRowCount(true);
