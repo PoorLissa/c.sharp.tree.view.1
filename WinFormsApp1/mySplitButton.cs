@@ -44,8 +44,10 @@ namespace myControls
 
                 _button.TextAlign = ContentAlignment.MiddleLeft;
 
+                int leftPadding = _button.DeviceDpi > 96 ? 3 : 18;
+
                 _button.Padding = new Padding(
-                    _button.Padding.Left + _dividerPos - 3,
+                    _button.Padding.Left + _dividerPos - leftPadding,
                     _button.Padding.Top,
                     _button.Padding.Right,
                     _button.Padding.Bottom);
