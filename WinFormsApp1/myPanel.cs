@@ -52,7 +52,7 @@ namespace myControls
 
         public myPanel() : base()
         {
-            _wrapHeight = this.DeviceDpi > 96 ? 63 : 43;        // Experimental values
+            _wrapHeight = this.DeviceDpi > 96 ? 63 : 43;        // Empirical values
 
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
