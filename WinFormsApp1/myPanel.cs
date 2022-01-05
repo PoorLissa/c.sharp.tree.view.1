@@ -177,7 +177,7 @@ namespace myControls
                             {
                                 if (ctrl is NumericUpDown)
                                 {
-                                    (ctrl as NumericUpDown).Value = Int32.Parse(value);
+                                    (ctrl as NumericUpDown).Value = int.Parse(value);
                                     break;
                                 }
 
