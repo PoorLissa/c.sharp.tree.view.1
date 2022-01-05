@@ -119,16 +119,21 @@ namespace myControls
         {
             if (_isSelected)
             {
-                var b = new Button();
-                b.AccessibleName = ini[$"myPanelSettings.{Name}"];      // Just store a string in a parameter we don't otherwise need
-                b.Text   = "Use Latest";
-                b.Width  = 100;
-                b.Height = 35;
-                b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
-                b.Left = this.Width - b.Width - 10;
-                b.Top = 10;
-                b.Click += new EventHandler(useLatest_onClick);
-                Controls.Add(b);
+                string Params = ini[$"myPanelSettings.{Name}"];
+
+                if (Params != null && Params.Length > 0)
+                {
+                    var b = new Button();
+                    b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise need
+                    b.Text = "Use Latest";
+                    b.Width = 100;
+                    b.Height = 35;
+                    b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
+                    b.Left = this.Width - b.Width - 10;
+                    b.Top = 10;
+                    b.Click += new EventHandler(useLatest_onClick);
+                    Controls.Add(b);
+                }
             }
             else
             {

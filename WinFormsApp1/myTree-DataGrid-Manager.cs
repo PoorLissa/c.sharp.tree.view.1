@@ -121,14 +121,16 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _dataGrid = new myDataGrid(mtdgmi.dg, _globalFileListExt);
 
         // Set up events for the components:
-        _tree.Obj().AfterSelect  += new TreeViewEventHandler        (tree_onAfterSelect);
-        _tree.Obj().BeforeExpand += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
-        _tree.Obj().AfterExpand  += new TreeViewEventHandler        (tree_onAfterExpand);
-
+        _tree.Obj().AfterSelect    += new TreeViewEventHandler        (tree_onAfterSelect);
+        _tree.Obj().BeforeExpand   += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
+        _tree.Obj().AfterExpand    += new TreeViewEventHandler        (tree_onAfterExpand);
+        _tree.Obj().PreviewKeyDown += new PreviewKeyDownEventHandler  (tree_onPreviewKeyDown);
+            
         _dataGrid.Obj().CellMouseEnter   += new DataGridViewCellEventHandler      (dataGrid_CellMouseEnter);
         _dataGrid.Obj().RowsAdded        += new DataGridViewRowsAddedEventHandler (dataGrid_RowsAdded);
         _dataGrid.Obj().Scroll           += new ScrollEventHandler                (dataGrid_Scroll);
         _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler      (dataGrid_CellValueChanged);
+        _dataGrid.Obj().PreviewKeyDown   += new PreviewKeyDownEventHandler        (tree_onPreviewKeyDown);
 
         _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
         _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
@@ -142,6 +144,9 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         // To be able to react to F5 refresh command
         _form.KeyDown += new KeyEventHandler(on_KeyDown);
         _form.KeyPreview = true;
+
+        _tree.Obj().TabIndex = 0;
+        _dataGrid.Obj().TabIndex = 1;
     }
 
     // --------------------------------------------------------------------------------
@@ -365,11 +370,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                 _dataGrid.Enable(true);
             }
         }
-        else
-        {
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
-        }
 
         return;
     }
@@ -475,6 +475,27 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _dataGrid.setRecursiveMode(_useRecursion);
 
         tree_onAfterSelect(sender, null);
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    private void tree_onPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+    {
+        if (e.KeyCode == Keys.Tab)
+        {
+            if (sender is TreeView)
+            {
+                if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
+                    _dataGrid.Obj().Rows[0].Selected = true;
+            }
+
+            if (sender is DataGridView)
+            {
+                _tree.Obj().Focus();
+            }
+        }
 
         return;
     }

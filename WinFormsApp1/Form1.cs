@@ -11,10 +11,6 @@ namespace WinFormsApp1
         // --------------------------------------------------------------------------------
 
         private myRenamerApp app = null;
-
-        private myControls.myComboBox myCb = null;
-        private myControls.myTextBox myTb = null;
-
         private myControls.mySplitButton sb_Undo = null;
 
         // --------------------------------------------------------------------------------
@@ -33,6 +29,7 @@ namespace WinFormsApp1
                 path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\test\aaa";
+                path = @"C:\_maxx\repos\maxx_nextgen_feasibility2\Services\DeadmanLibrary\obj\Debug";
             }
 
             init(path, expandEmpty);

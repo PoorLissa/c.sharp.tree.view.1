@@ -31,8 +31,9 @@ public class myTree
     private Image _imgDir2_Opaque = null;
     private Image _imgHDD         = null;
 
-    private bool _doUseDummies   = false;
-    private bool _allowRedrawing = false;
+    private bool _doUseDummies    = false;
+    private bool _allowRedrawing  = false;
+    private bool _allowWaitCursor = false;
 
     private Font [] _nodeFonts = null;
 
@@ -68,6 +69,8 @@ public class myTree
         setPath(path, useDummies: true, expandEmpty: expandEmpty);
 
         _winVer = Environment.OSVersion.Version.Major * 10 + Environment.OSVersion.Version.Minor;
+
+        _allowWaitCursor = false;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -534,7 +537,10 @@ public class myTree
     {
         if (n.Nodes.Count == 1 && n.Nodes[0].Text == "[?]")
         {
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
+            if (_allowWaitCursor)
+            {
+                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
+            }
 
             n.Nodes.Clear();
             _logic.getDirectories(getFullPath(n), _dirsListTmpExt, doClear: true);
@@ -566,11 +572,14 @@ public class myTree
             else
             {
                 // AfterExpand event won't be called, as the node is actually empty
-                // So we're allowing the redrawing manually from here
+                // So we're allowing the redrawing manually from here on
                 AllowRedrawing(true);
             }
 
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
+            if (_allowWaitCursor)
+            {
+                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Arrow;
+            }
         }
 
         return;
@@ -618,6 +627,7 @@ public class myTree
                 {
                     string nodeName = _logic.getLeftmostPartFromPath(ref path).ToLower();
 
+                    // todo: get rid of tolower and use fast compare instead
                     foreach (TreeNode node in thisLevelNodes)
                     {
                         string text = node.Text.ToLower();
@@ -771,8 +781,6 @@ public class myTree
                 // Collect all the nodes that are not expanded
                 _tree.Invoke(new MethodInvoker(delegate
                 {
-                    _tree.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-
                     do
                     {
                         foreach (TreeNode n in node.Nodes)
@@ -800,7 +808,6 @@ public class myTree
                         n.Nodes.Clear();
 
                     _tree.EndUpdate();
-                    _tree.Cursor = System.Windows.Forms.Cursors.Arrow;
                 }));
 
             }
