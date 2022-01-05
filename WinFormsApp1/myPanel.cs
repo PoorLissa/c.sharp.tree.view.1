@@ -73,6 +73,7 @@ namespace myControls
                     res += ":";
                     res += (ctrl as CheckBox).Checked ? "+" : "-";
                     res += "?";
+                    continue;
                 }
 
                 if (ctrl is ComboBox)
@@ -81,6 +82,7 @@ namespace myControls
                     res += ":";
                     res += (ctrl as ComboBox).Text;
                     res += "?";
+                    continue;
                 }
 
                 if (ctrl is NumericUpDown)
@@ -89,12 +91,14 @@ namespace myControls
                     res += ":";
                     res += (ctrl as NumericUpDown).Value;
                     res += "?";
+                    continue;
                 }
 
                 if (ctrl is RadioButton && (ctrl as RadioButton).Checked)
                 {
                     res += ctrl.Name;
                     res += ":+?";
+                    continue;
                 }
 
                 if (ctrl is TextBox)
@@ -103,6 +107,7 @@ namespace myControls
                     res += ":";
                     res += ctrl.Text;
                     res += "?";
+                    continue;
                 }
             }
 
@@ -173,26 +178,31 @@ namespace myControls
                                 if (ctrl is NumericUpDown)
                                 {
                                     (ctrl as NumericUpDown).Value = Int32.Parse(value);
+                                    break;
                                 }
 
                                 if (ctrl is ComboBox)
                                 {
                                     (ctrl as ComboBox).Text = value;
+                                    break;
                                 }
 
                                 if (ctrl is CheckBox)
                                 {
                                     (ctrl as CheckBox).Checked = (value == "+");
+                                    break;
                                 }
 
                                 if (ctrl is RadioButton && value == "+")
                                 {
                                     (ctrl as RadioButton).Checked = true;
+                                    break;
                                 }
 
                                 if (ctrl is TextBox)
                                 {
                                     (ctrl as TextBox).Text = value;
+                                    break;
                                 }
 
                                 break;
