@@ -126,8 +126,8 @@ namespace myControls
                     var b = new Button();
                     b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise need
                     b.Text = "Use Latest";
-                    b.Width = 100;
-                    b.Height = 35;
+                    b.Width  = this.DeviceDpi > 96 ? 100 : 70;
+                    b.Height = this.DeviceDpi > 96 ?  35 : 23;
                     b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
                     b.Left = this.Width - b.Width - 10;
                     b.Top = 10;
