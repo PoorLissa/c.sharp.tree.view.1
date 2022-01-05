@@ -57,6 +57,8 @@ namespace myControls
             SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
 
+        // Collects current settings for the panel's sub-controls and returns them as a string
+        // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control type
         public string getSettings()
         {
             string res = "";
@@ -70,7 +72,7 @@ namespace myControls
                     res += ctrl.Name;
                     res += ":";
                     res += (ctrl as CheckBox).Checked ? "+" : "-";
-                    res += ";";
+                    res += "?";
                 }
 
                 if (ctrl is ComboBox)
@@ -78,7 +80,7 @@ namespace myControls
                     res += ctrl.Name;
                     res += ":";
                     res += (ctrl as ComboBox).Text;
-                    res += ";";
+                    res += "?";
                 }
 
                 if (ctrl is NumericUpDown)
@@ -86,61 +88,125 @@ namespace myControls
                     res += ctrl.Name;
                     res += ":";
                     res += (ctrl as NumericUpDown).Value;
-                    res += ";";
+                    res += "?";
+                }
+
+                if (ctrl is RadioButton && (ctrl as RadioButton).Checked)
+                {
+                    res += ctrl.Name;
+                    res += ":+?";
+                }
+
+                if (ctrl is TextBox)
+                {
+                    res += ctrl.Name;
+                    res += ":";
+                    res += ctrl.Text;
+                    res += "?";
                 }
             }
 
             return res;
         }
 
-        // todo: add this to every option
+        // Set up "Use Latest" button for this panel
         public void UseLatest(ini_file_base ini)
         {
-            for (int i = 0; i < Controls.Count; i++)
+            if (_isSelected)
             {
-                if (Controls[i] is Button && Controls[i].Text == "Use Latest")
+                var b = new Button();
+                b.AccessibleName = ini[$"myPanelSettings.{Name}"];      // Just store a string in a parameter we don't otherwise need
+                b.Text   = "Use Latest";
+                b.Width  = 100;
+                b.Height = 35;
+                b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
+                b.Left = this.Width - b.Width - 10;
+                b.Top = 10;
+                b.Click += new EventHandler(useLatest_onClick);
+                Controls.Add(b);
+            }
+            else
+            {
+                for (int i = 0; i < Controls.Count; i++)
                 {
-                    Button b = Controls[i] as Button;
-
-                    b.Click += new EventHandler( (object sender, EventArgs e) => 
+                    if (Controls[i] is Button && Controls[i].Text == "Use Latest")
                     {
-                        string param = ini[$"myPanelSettings.{Name}"];
-
-                        var Params = param.Split(';');
-
-                        // opt_005_predefined_templates:Numeric sequence;comboBox4:;numericUpDown4:1;
-                        foreach (var item in Params)
-                        {
-                            int pos = item.IndexOf(':');
-
-                            string name  = item.Substring(0, pos);
-                            string value = item.Substring(pos+1);
-
-                            for (int j = 0; j < Controls.Count; j++)
-                            {
-                                Control ctrl = Controls[j];
-
-                                if (ctrl.Name == name)
-                                {
-                                    if (ctrl is NumericUpDown)
-                                    {
-                                        (ctrl as NumericUpDown).Value = Int32.Parse(value);
-                                    }
-
-                                    if (ctrl is ComboBox)
-                                    {
-                                        (ctrl as ComboBox).Text = value;
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    });
-
-                    break;
+                        Controls[i].Click -= new EventHandler(useLatest_onClick);
+                        Controls.Remove(Controls[i]);
+                        break;
+                    }
                 }
             }
+
+            return;
+        }
+
+        // OnClick event for the "Use Latest" button
+        // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control type
+        private void useLatest_onClick(object sender, EventArgs e)
+        {
+            string param = (sender as Button).AccessibleName;
+
+            if (param != null && param.Length > 0)
+            {
+                try
+                {
+                    var Params = param.Split('?');
+
+                    // opt_005_predefined_templates:Numeric sequence;comboBox4:;numericUpDown4:1;
+                    foreach (var item in Params)
+                    {
+                        if (item == null || item.Length == 0)
+                            continue;
+
+                        int pos = item.IndexOf(':');
+
+                        string name  = item.Substring(0, pos);
+                        string value = item.Substring(pos + 1);
+
+                        for (int j = 0; j < Controls.Count; j++)
+                        {
+                            Control ctrl = Controls[j];
+
+                            if (ctrl.Name == name)
+                            {
+                                if (ctrl is NumericUpDown)
+                                {
+                                    (ctrl as NumericUpDown).Value = Int32.Parse(value);
+                                }
+
+                                if (ctrl is ComboBox)
+                                {
+                                    (ctrl as ComboBox).Text = value;
+                                }
+
+                                if (ctrl is CheckBox)
+                                {
+                                    (ctrl as CheckBox).Checked = (value == "+");
+                                }
+
+                                if (ctrl is RadioButton && value == "+")
+                                {
+                                    (ctrl as RadioButton).Checked = true;
+                                }
+
+                                if (ctrl is TextBox)
+                                {
+                                    (ctrl as TextBox).Text = value;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + ",\n Where Param = " + param, "Parameter restore error", MessageBoxButtons.OK);
+                }
+            }
+
+            return;
         }
 
         protected override void OnMouseEnter(EventArgs e)

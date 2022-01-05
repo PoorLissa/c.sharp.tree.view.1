@@ -108,7 +108,6 @@ namespace WinFormsApp1
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.checkBox_Option_006 = new System.Windows.Forms.CheckBox();
             this.panel_content_05 = new myControls.myPanel();
-            this.button3 = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.opt_005_predefined_templates = new System.Windows.Forms.ComboBox();
@@ -1111,7 +1110,6 @@ namespace WinFormsApp1
             // panel_content_05
             // 
             this.panel_content_05.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel_content_05.Controls.Add(this.button3);
             this.panel_content_05.Controls.Add(this.label18);
             this.panel_content_05.Controls.Add(this.button2);
             this.panel_content_05.Controls.Add(this.opt_005_predefined_templates);
@@ -1127,15 +1125,6 @@ namespace WinFormsApp1
             this.panel_content_05.Size = new System.Drawing.Size(651, 278);
             this.panel_content_05.TabIndex = 31;
             this.panel_content_05.UseCustomBorder = false;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(526, 15);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(111, 37);
-            this.button3.TabIndex = 52;
-            this.button3.Text = "Use Latest";
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // label18
             // 
@@ -1873,7 +1862,6 @@ namespace WinFormsApp1
         private myControls.myPanel panel_content_11;
         private myControls.myPanel panel_content_12;
         private myControls.myPanel panel_content_13;
-        private System.Windows.Forms.Button button3;
     }
 }
 
