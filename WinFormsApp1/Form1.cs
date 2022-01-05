@@ -23,13 +23,10 @@ namespace WinFormsApp1
             {
                 expandEmpty = true;
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
-                path =
-                    @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options\__far.user.menu.1.png";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\test\aaa";
-                path = @"C:\_maxx\repos\maxx_nextgen_feasibility2\Services\DeadmanLibrary\obj\Debug";
             }
 
             init(path, expandEmpty);
