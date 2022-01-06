@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Windows.Forms;
 
 
+// todo:
+// - add '?' with info panel on mouse hover near the controls/options
 
 public class myRenamerApp_Controls
 {

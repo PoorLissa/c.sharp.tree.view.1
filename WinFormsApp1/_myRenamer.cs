@@ -275,6 +275,51 @@ public class myRenamer
                 }
             }
 
+            // When Greedy option is selected, we're probably not done yet.
+            // It is still possible that when we've found the farthest position of a delimiter,
+            // it is immediately followed by another delimiter from our list:
+            // str = abc_123123123+, delims = 1:2:3
+            // => what we've got now is '123123+', but it has to be just '+'
+            // Time to address that!
+            if (!isLazy && doRemoveDelim && index != -1)
+            {
+                bool doRepeat = false;
+
+                do
+                {
+                    doRepeat = false;
+
+                    for (int i = 0; i < delimiters.Length; i++)
+                    {
+                        string delim = delimiters[i];
+
+                        if (startFromEnd)
+                        {
+                            int p = num - delimiters[index].Length;
+
+                            if (p >= 0 && name.LastIndexOf(delim, p) == p && p < num)
+                            {
+                                doRepeat = true;
+                                num = p;
+                                index = i;
+                            }
+                        }
+                        else
+                        {
+                            int p = num + delimiters[index].Length;
+
+                            if (name.IndexOf(delim, p) == p && p > num)
+                            {
+                                doRepeat = true;
+                                num = p;
+                                index = i;
+                            }
+                        }
+                    }
+                }
+                while (doRepeat);
+            }
+
             if (index != -1)
             {
                 if (startFromEnd)
