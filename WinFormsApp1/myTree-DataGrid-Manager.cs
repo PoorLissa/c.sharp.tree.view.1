@@ -379,6 +379,12 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Expanding tree node -- Before
     private void tree_onBeforeExpand(object sender, TreeViewCancelEventArgs e)
     {
+        if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "[?]")
+        {
+            // To remove/reduce flickering when the node is opened for the first time
+            _tree.Obj().BeginUpdate();
+        }
+
         _tree.AllowRedrawing(false);
         _tree.nodeExpanded_Before(e.Node);
     }
@@ -388,6 +394,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Expanding tree node -- After
     private void tree_onAfterExpand(object sender, TreeViewEventArgs e)
     {
+        _tree.Obj().EndUpdate();
         _tree.AllowRedrawing(true);
     }
 

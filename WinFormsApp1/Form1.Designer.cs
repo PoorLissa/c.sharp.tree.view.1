@@ -1423,9 +1423,9 @@ namespace WinFormsApp1
             this.checkBox_Option_003.ForeColor = System.Drawing.Color.Black;
             this.checkBox_Option_003.Location = new System.Drawing.Point(14, 15);
             this.checkBox_Option_003.Name = "checkBox_Option_003";
-            this.checkBox_Option_003.Size = new System.Drawing.Size(558, 34);
+            this.checkBox_Option_003.Size = new System.Drawing.Size(521, 34);
             this.checkBox_Option_003.TabIndex = 30;
-            this.checkBox_Option_003.Text = "Remove [n] symbols at the Position of [mth] Substring";
+            this.checkBox_Option_003.Text = "Remove [n] symbols at Position of [mth] Substring";
             this.checkBox_Option_003.UseVisualStyleBackColor = true;
             // 
             // label16

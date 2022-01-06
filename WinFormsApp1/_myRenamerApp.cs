@@ -214,7 +214,7 @@ public class myRenamerApp
             // -- if the option item has not beed added to ini-file yet
             if (nValNew > 0 || sValOld == null)
             {
-                int nValOld = (sValOld != null) ? Int32.Parse(sValOld) : 0;
+                int nValOld = (sValOld != null) ? int.Parse(sValOld) : 0;
 
                 nValNew += nValOld;
                 _ini[param] = nValNew.ToString();

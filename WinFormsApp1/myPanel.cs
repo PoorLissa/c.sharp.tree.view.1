@@ -124,16 +124,31 @@ namespace myControls
                 if (Params != null && Params.Length > 0)
                 {
                     var b = new Button();
-                    b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise need
+                    b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise use
                     b.Text = "Use Latest";
-                    b.Width  = this.DeviceDpi > 96 ? 100 : 70;
-                    b.Height = this.DeviceDpi > 96 ?  35 : 23;
+                    b.Width  = this.DeviceDpi > 96 ? 80 : 70;
+                    b.Height = this.DeviceDpi > 96 ? 60 : 23;
+                    b.Anchor = AnchorStyles.Top | AnchorStyles.Right;
                     b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
                     b.Left = this.Width - b.Width - 10;
                     b.Top = 10;
                     b.Click += new EventHandler(useLatest_onClick);
                     Controls.Add(b);
                 }
+
+/*
+                if (false)
+                {
+                    var p = new Panel();
+                    p.Width  = 33;
+                    p.Height = 33;
+                    p.Left   = 10;
+                    p.Top    = 50;
+                    p.BorderStyle = BorderStyle.FixedSingle;
+                    p.BringToFront();
+                    Controls.Add(p);
+                }
+*/
             }
             else
             {

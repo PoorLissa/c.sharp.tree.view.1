@@ -13,6 +13,8 @@ namespace WinFormsApp1
         private myRenamerApp app = null;
         private myControls.mySplitButton sb_Undo = null;
 
+//      private Panel p = new Panel();
+
         // --------------------------------------------------------------------------------
 
         public Form1(string path, bool expandEmpty)
@@ -30,6 +32,24 @@ namespace WinFormsApp1
             }
 
             init(path, expandEmpty);
+
+/*
+            p.Width = 666;
+            p.Height = 333;
+
+            p.Left = 300;
+            p.Top = 300;
+
+            p.Visible = false;
+
+            Controls.Add(p);
+            p.BringToFront();
+
+            this.btn_Rename.MouseHover += new EventHandler((object sender, EventArgs e) => 
+            {
+                p.Visible = true;
+            });
+*/
         }
 
         // --------------------------------------------------------------------------------

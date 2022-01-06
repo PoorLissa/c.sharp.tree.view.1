@@ -21,6 +21,7 @@ public class myTreeLogic
     // Checks if the directory contains at least one subdirectory
     public bool folderHasSubfolders(string dir)
     {
+        // todo: check why is that: "C:\_maxx\002 - music\Поп" reported to have subdirs, while actually it does not have them
         return dirHasSubdirs(dir + "\\*.*");
     }
 

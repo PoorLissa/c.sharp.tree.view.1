@@ -543,6 +543,7 @@ public class myTree
             }
 
             n.Nodes.Clear();
+
             _logic.getDirectories(getFullPath(n), _dirsListTmpExt, doClear: true);
 
             if (_dirsListTmpExt.Count > 0)
@@ -551,7 +552,7 @@ public class myTree
 
                 TreeNode[] childNodes = new TreeNode[_dirsListTmpExt.Count];
 
-                for(int i = 0; i < _dirsListTmpExt.Count; i++)
+                for (int i = 0; i < _dirsListTmpExt.Count; i++)
                 {
                     var dir = _dirsListTmpExt[i];
 
@@ -573,6 +574,7 @@ public class myTree
             {
                 // AfterExpand event won't be called, as the node is actually empty
                 // So we're allowing the redrawing manually from here on
+                _tree.EndUpdate();
                 AllowRedrawing(true);
             }
 
