@@ -540,10 +540,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         TextBox tb = (TextBox)(sender);
         var reason = myDataGrid.PopulateReason.filterChanged;
 
-        if (tb.Name == _tb_Filter.Name)
+        if (tb == _tb_Filter)
             _filterStr = tb.Text;
 
-        if (tb.Name == _tb_FilterOut.Name)
+        if (tb == _tb_FilterOut)
             _filterOutStr = tb.Text;
 
         if (_dataGrid.Obj().RowCount < 10000)

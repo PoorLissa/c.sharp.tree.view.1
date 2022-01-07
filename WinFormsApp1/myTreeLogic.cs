@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;   // For dll import
 
+
 /*
     Helper class for myTree class.
     Provides file/directory operations logic, tree traversal logic, etc.
 */
+
+
 public class myTreeLogic
 {
-    // Checks if the directory contains at least one subdirectory
-    //  Prerequisites:
-    //      - Path parameter must be ending with "*.*"
-    [DllImport("cpp.helper.dll", CallingConvention = CallingConvention.Cdecl)]
-    internal static extern bool dirHasSubdirs(string dir);
+    // Checks if this directory contains at least one subdirectory
+    // CharSet and MarshalAs are needed to be able to properly work with wide char strings in c++
+    [DllImport("cpp.helper.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern bool dirContainsSubdirectoryW([MarshalAs(UnmanagedType.LPWStr)] string s);
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Wrapper for c++ function dirHasSubdirs, imported from cpp.helper.dll
+    // Wrapper for c++ function 'dirContainsSubdirectory' imported from cpp.helper.dll
     // Checks if the directory contains at least one subdirectory
-    public bool folderHasSubfolders(string dir)
+    public bool dirContainsSubdirectory(string dir)
     {
-        // todo: check why is that: "C:\_maxx\002 - music\Поп" reported to have subdirs, while actually it does not have them
-        return dirHasSubdirs(dir + "\\*.*");
+        return dirContainsSubdirectoryW(dir);
     }
 
     // --------------------------------------------------------------------------------------------------------

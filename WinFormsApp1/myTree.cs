@@ -594,7 +594,7 @@ public class myTree
     {
         // If [_doUseDummies] parameter is set to true, it does not check if the folder actually has any subfoldes
         // Otherwise, it checks for it and only adds the dummy if the folder does have at least one subfolder
-        if (_doUseDummies == true || _logic.folderHasSubfolders(fullPath))
+        if (_doUseDummies == true || _logic.dirContainsSubdirectory(fullPath))
         {
             node.Nodes.Add("[?]", "[?]");
         }
@@ -696,7 +696,7 @@ public class myTree
                 {
                     if (!n.IsExpanded)
                     {
-                        if (!_logic.folderHasSubfolders(getFullPath(n)))
+                        if (!_logic.dirContainsSubdirectory(getFullPath(n)))
                         {
                             n.Expand();
                         }
@@ -743,7 +743,7 @@ public class myTree
 
                         if (!isNodeExpanded)
                         {
-                            if (!_logic.folderHasSubfolders(getFullPath(n)))
+                            if (!_logic.dirContainsSubdirectory(getFullPath(n)))
                             {
                                 if (_tree.InvokeRequired)
                                 {
@@ -797,7 +797,7 @@ public class myTree
 
                 // Select all the nodes that don't have any subfolders in them
                 foreach (var node in list1)
-                    if (!_logic.folderHasSubfolders(getFullPath(node)))
+                    if (!_logic.dirContainsSubdirectory(getFullPath(node)))
                         list2.Add(node);
 
                 // Clear subnodes of all selected nodes

@@ -398,7 +398,7 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Populate GridView with unknown amount of rows
+    // Populate GridView with unknown amount of rows (depending on filters value)
     // Multiple pass
     private void Populate_Slow(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr, string filterOutStr)
     {
@@ -415,7 +415,7 @@ public class myDataGrid
             // Select only indexes of the items we need
             var selectedItems = new List<int>(Count);
 
-            for(int i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].Id < 0)
                     list[i].Id = i;
