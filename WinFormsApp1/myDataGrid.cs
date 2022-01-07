@@ -415,6 +415,13 @@ public class myDataGrid
             // Select only indexes of the items we need
             var selectedItems = new List<int>(Count);
 
+            bool doSkip       = true;
+            bool useFilter    =    filterStr.Length > 0;
+            bool useFilterOut = filterOutStr.Length > 0;
+
+            var filters    =    filterStr.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            var filtersOut = filterOutStr.Split(':', StringSplitOptions.RemoveEmptyEntries);
+
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].Id < 0)
@@ -433,12 +440,40 @@ public class myDataGrid
                 int filePos = list[i].Name.LastIndexOf('\\') + 1;
 
                 // Skip everything that does not match the search string [filterStr]
-                if (filterStr.Length > 0 && !myUtils.fastStrContains(filterStr, list[i].Name, filePos, -1, caseSensitive: false))
-                    continue;
+                if (useFilter)
+                {
+                    doSkip = true;
+
+                    foreach (var filter in filters)
+                    {
+                        if (myUtils.fastStrContains(filter, list[i].Name, filePos, -1, caseSensitive: false))
+                        {
+                            doSkip = false;
+                            break;
+                        }
+                    }
+
+                    if (doSkip)
+                        continue;
+                }
 
                 // Skip everything that DOES match the search string [filterOutStr]
-                if (filterOutStr.Length > 0 && myUtils.fastStrContains(filterOutStr, list[i].Name, filePos, -1, caseSensitive: false))
-                    continue;
+                if (useFilterOut)
+                {
+                    doSkip = false;
+
+                    foreach (var filterOut in filtersOut)
+                    {
+                        if (myUtils.fastStrContains(filterOut, list[i].Name, filePos, -1, caseSensitive: false))
+                        {
+                            doSkip = true;
+                            break;
+                        }
+                    }
+
+                    if (doSkip)
+                        continue;
+                }
 
                 selectedItems.Add(i);
             }
