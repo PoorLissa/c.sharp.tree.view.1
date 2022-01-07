@@ -439,6 +439,9 @@ public class myDataGrid
 
                 int filePos = list[i].Name.LastIndexOf('\\') + 1;
 
+                // todo: add option to change where we're filering: file name only, or the whole path
+                //filePos = 1;
+
                 // Skip everything that does not match the search string [filterStr]
                 if (useFilter)
                 {
