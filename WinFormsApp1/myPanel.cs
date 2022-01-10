@@ -117,6 +117,21 @@ namespace myControls
         // Set up "Use Latest" button for this panel
         public void UseLatest(ini_file_base ini)
         {
+            // todo:
+            // fix this:
+            /*
+panel_content_01 = radioButton21:+?comboBox2:?checkBox3:+?checkBox2:-?;
+panel_content_05 = opt_005_predefined_templates:Numeric sequence?comboBox4:###?numericUpDown4:1?;
+panel_content_13 = checkBox9:-?textBox11:?numericUpDown9:0?textBox5:?;
+panel_content_08 = numericUpDown11:1?numericUpDown8:1?;
+panel_content_04 = checkBox7:-?numericUpDown5:1?textBox7:?textBox6:?;
+panel_content_02 = numericUpDown2:0?numericUpDown1:1?checkBox4:-?;
+panel_content_09 = comboBox5:Start from the Left?textBox8:aaa?radioButton14:+?checkBox8:-?;
+panel_content_12 = panel_content_10 = numericUpDown14:0?numericUpDown13:1?numericUpDown12:0?checkBox10:-?numericUpDown10:1?textBox9:?;  <----- ???
+panel_content_07 = numericUpDown7:1?numericUpDown6:1?;
+panel_content_06 = panel_content_03 = numericUpDown15:1?checkBox11:-?textBox4:?numericUpDown3:1?;   <----- ???
+            */
+
             if (_isSelected)
             {
                 string Params = ini[$"myPanelSettings.{Name}"];
@@ -127,7 +142,7 @@ namespace myControls
                     b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise use
                     b.Text = "Use Latest";
                     b.Width  = this.DeviceDpi > 96 ? 80 : 70;
-                    b.Height = this.DeviceDpi > 96 ? 60 : 23;
+                    b.Height = this.DeviceDpi > 96 ? 60 : 33;
                     b.Anchor = AnchorStyles.Top | AnchorStyles.Right;
                     b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
                     b.Left = this.Width - b.Width - 10;
