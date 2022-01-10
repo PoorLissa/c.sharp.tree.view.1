@@ -60,6 +60,8 @@ public class myTreeLogic
                     bool isHidden = (fi.Attributes & System.IO.FileAttributes.Hidden) == System.IO.FileAttributes.Hidden;
                     bool isSystem = (fi.Attributes & System.IO.FileAttributes.System) == System.IO.FileAttributes.System;
 
+//                  double fileSizeMb = (float)(fi.Length) / 1024.0 / 1024.0;
+
                     var File = new myTreeListDataItem(file);
                     File.isDir = false;
                     File.isHidden = isHidden || isSystem;

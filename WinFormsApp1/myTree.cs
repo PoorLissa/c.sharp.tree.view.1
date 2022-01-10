@@ -348,7 +348,15 @@ public class myTree
                 x = e.Node.Bounds.X + xAdjustmentText + xLeftMargin;
                 y = e.Node.Bounds.Y + (e.Node.TreeView.ItemHeight - nodeFont.Height) / 2 + yAdjustment;
 
-                e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.LightSlateGray : fontBrush, x, y);
+                // Color.Tomato means, this directory is an NTFS Hard Link, Junction or Symbolic Link
+                if (e.Node.BackColor == Color.Tomato)
+                {
+                    e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.Tomato: Brushes.Tomato, x, y);
+                }
+                else
+                {
+                    e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.LightSlateGray : fontBrush, x, y);
+                }
             }
 
             // If the node is clicked or hovered upon, draw a focus rectangle
@@ -558,12 +566,20 @@ public class myTree
 
                     string key = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Get only name from full path
 
+
                     var newNode = new TreeNode(key);
                     newNode.Name = key;
                     newNode.Text = key;
                     newNode.NodeFont = getNodeFont(n.Level);
                     newNode.ForeColor = dir.isHidden ? Color.Gray : Color.Black;
                     addDummySubNode(ref newNode, dir.Name);
+
+                    System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(dir.Name);
+
+                    if (di.Attributes.HasFlag(System.IO.FileAttributes.ReparsePoint))
+                    {
+                        newNode.BackColor = Color.Tomato;
+                    }
 
                     childNodes[i] = newNode;
                 }
