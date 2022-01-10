@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -58,14 +59,26 @@ namespace myControls
         }
 
         // Collects current settings for the panel's sub-controls and returns them as a string
-        // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control type
+        // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control types
         public string getSettings()
+        {
+            return getSettings(this);
+        }
+
+        // todo: rewrite with stringbuilder and make it work with a list of controls, like 'useLatest_onClick' does
+        private string getSettings(Control Ctrl)
         {
             string res = "";
 
-            for (int i = 0; i < Controls.Count; i++)
+            for (int i = 0; i < Ctrl.Controls.Count; i++)
             {
-                Control ctrl = Controls[i];
+                Control ctrl = Ctrl.Controls[i];
+
+                if (ctrl is GroupBox)
+                {
+                    res += getSettings(ctrl);
+                    continue;
+                }
 
                 if (ctrl is CheckBox && !ctrl.Name.StartsWith("checkBox_Option_"))
                 {
@@ -178,6 +191,9 @@ namespace myControls
                 {
                     var Params = param.Split('?');
 
+                    List<Control> list = new List<Control>();
+                    getControls(this, ref list);
+
                     // opt_005_predefined_templates:Numeric sequence;comboBox4:;numericUpDown4:1;
                     foreach (var item in Params)
                     {
@@ -189,9 +205,9 @@ namespace myControls
                         string name  = item.Substring(0, pos);
                         string value = item.Substring(pos + 1);
 
-                        for (int j = 0; j < Controls.Count; j++)
+                        for (int j = 0; j < list.Count; j++)
                         {
-                            Control ctrl = Controls[j];
+                            Control ctrl = list[j];
 
                             if (ctrl.Name == name)
                             {
@@ -233,6 +249,25 @@ namespace myControls
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message + ",\n Where Param = " + param, "Parameter restore error", MessageBoxButtons.OK);
+                }
+            }
+
+            return;
+        }
+
+        private void getControls(Control Ctrl, ref List<Control> list)
+        {
+            for (int i = 0; i < Ctrl.Controls.Count; i++)
+            {
+                Control ctrl = Ctrl.Controls[i];
+
+                if (ctrl is GroupBox)
+                {
+                    getControls(ctrl, ref list);
+                }
+                else
+                {
+                    list.Add(ctrl);
                 }
             }
 
