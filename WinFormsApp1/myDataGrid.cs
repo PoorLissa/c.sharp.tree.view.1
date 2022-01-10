@@ -19,6 +19,7 @@ public class myDataGrid
 
     private bool _doUseRecursion     = false;
     private bool _doShowRecursionMsg = false;
+    private bool _filterMode         = false;
 
     private Image _imgDir         = null;
     private Image _imgFile        = null;
@@ -400,7 +401,8 @@ public class myDataGrid
 
     // Populate GridView with unknown amount of rows (depending on filters value)
     // Multiple pass
-    private void Populate_Slow(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, string filterStr, string filterOutStr)
+    private void Populate_Slow(List<myTreeListDataItem> list, TreeNode selectedNode, int dirsCount, int filesCount,
+                                        bool doShowDirs, bool doShowFiles, string filterStr, string filterOutStr)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.Populate_Slow", "");
@@ -422,6 +424,14 @@ public class myDataGrid
             var filters    =    filterStr.Split(':', StringSplitOptions.RemoveEmptyEntries);
             var filtersOut = filterOutStr.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
+            int filePos = 0;
+
+            if (_filterMode == true)
+            {
+                // Filter through the path starting with currently selected directory
+                filePos = selectedNode.FullPath.Length - selectedNode.FullPath.IndexOf('\\') + 3;
+            }
+
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].Id < 0)
@@ -437,10 +447,11 @@ public class myDataGrid
                 if (!isDir && !doShowFiles)
                     continue;
 
-                int filePos = list[i].Name.LastIndexOf('\\') + 1;
-
-                // todo: add option to change where we're filering: file name only, or the whole path
-                //filePos = 1;
+                if (_filterMode == false)
+                {
+                    // Filter through only file name (without any path)
+                    filePos = list[i].Name.LastIndexOf('\\') + 1;
+                }
 
                 // Skip everything that does not match the search string [filterStr]
                 if (useFilter)
@@ -589,7 +600,7 @@ public class myDataGrid
     // --------------------------------------------------------------------------------------------------------
 
     // Add files/derectories to the DataGridView from the List
-    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, string filterStr = "", string filterOutStr = "")
+    public void Populate(int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles, PopulateReason reason, TreeNode selectedNode, string filterStr = "", string filterOutStr = "")
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.Populate", "");
@@ -615,7 +626,7 @@ public class myDataGrid
         else
         {
             // Populate GridView with unknown amount of rows -- Multiple pass
-            Populate_Slow(_globalFileListExtRef, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr, filterOutStr);
+            Populate_Slow(_globalFileListExtRef, selectedNode, dirsCount, filesCount, doShowDirs, doShowFiles, filterStr, filterOutStr);
         }
 
         // Try to restore the selection from before:
@@ -1505,6 +1516,13 @@ public class myDataGrid
 #endif
 
         _simulatedFileName = name;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public void setFilterMode(bool mode)
+    {
+        _filterMode = mode;
     }
 
     // --------------------------------------------------------------------------------------------------------

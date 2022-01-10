@@ -157,6 +157,7 @@ namespace WinFormsApp1
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
+            this.cb_FilterPath = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1656,11 +1657,22 @@ namespace WinFormsApp1
             this.btn_Undo.Text = "Undo";
             this.btn_Undo.UseVisualStyleBackColor = true;
             // 
+            // cb_FilterPath
+            // 
+            this.cb_FilterPath.AutoSize = true;
+            this.cb_FilterPath.Location = new System.Drawing.Point(1584, 176);
+            this.cb_FilterPath.Name = "cb_FilterPath";
+            this.cb_FilterPath.Size = new System.Drawing.Size(187, 29);
+            this.cb_FilterPath.TabIndex = 15;
+            this.cb_FilterPath.Text = "Filter Through Path";
+            this.cb_FilterPath.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2076, 1225);
+            this.Controls.Add(this.cb_FilterPath);
             this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.tabControl1);
@@ -1862,6 +1874,7 @@ namespace WinFormsApp1
         private myControls.myPanel panel_content_11;
         private myControls.myPanel panel_content_12;
         private myControls.myPanel panel_content_13;
+        private System.Windows.Forms.CheckBox cb_FilterPath;
     }
 }
 

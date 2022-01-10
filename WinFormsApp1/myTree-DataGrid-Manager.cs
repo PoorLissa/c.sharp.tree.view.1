@@ -40,6 +40,7 @@ public struct myTree_DataGrid_Manager_Initializer
     public CheckBox         cb_ShowFiles;
     public CheckBox         cb_ShowDirs;
     public CheckBox         cb_Recursive;
+    public CheckBox         cb_FilterPath;
     public TextBox          tb_Filter;
     public TextBox          tb_FilterOut;
     public RichTextBox      richTextBox;
@@ -61,15 +62,16 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 {
     // --------------------------------------------------------------------------------
 
-    private Form        _form         = null;
-    private myTree      _tree         = null;
-    private myDataGrid  _dataGrid     = null;
-    private CheckBox    _cb_ShowFiles = null;
-    private CheckBox    _cb_ShowDirs  = null;
-    private CheckBox    _cb_Recursive = null;
-    private TextBox     _tb_Filter    = null;
-    private TextBox     _tb_FilterOut = null;
-    private RichTextBox _richTextBox  = null;
+    private Form        _form          = null;
+    private myTree      _tree          = null;
+    private myDataGrid  _dataGrid      = null;
+    private CheckBox    _cb_ShowFiles  = null;
+    private CheckBox    _cb_ShowDirs   = null;
+    private CheckBox    _cb_Recursive  = null;
+    private CheckBox    _cb_FilterPath = null;
+    private TextBox     _tb_Filter     = null;
+    private TextBox     _tb_FilterOut  = null;
+    private RichTextBox _richTextBox   = null;
 
     private List<myTreeListDataItem> _visibleList = null;
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
@@ -102,13 +104,14 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
         _globalFileListExt = new List<myTreeListDataItem>();
 
-        _form         = mtdgmi.form;
-        _cb_ShowFiles = mtdgmi.cb_ShowFiles;
-        _cb_ShowDirs  = mtdgmi.cb_ShowDirs;
-        _cb_Recursive = mtdgmi.cb_Recursive;
-        _tb_Filter    = mtdgmi.tb_Filter;
-        _tb_FilterOut = mtdgmi.tb_FilterOut;
-        _richTextBox  = mtdgmi.richTextBox;
+        _form          = mtdgmi.form;
+        _cb_ShowFiles  = mtdgmi.cb_ShowFiles;
+        _cb_ShowDirs   = mtdgmi.cb_ShowDirs;
+        _cb_Recursive  = mtdgmi.cb_Recursive;
+        _cb_FilterPath = mtdgmi.cb_FilterPath;
+        _tb_Filter     = mtdgmi.tb_Filter;
+        _tb_FilterOut  = mtdgmi.tb_FilterOut;
+        _richTextBox   = mtdgmi.richTextBox;
 
         _cb_ShowFiles.Checked = true;
         _cb_ShowDirs.Checked  = true;
@@ -132,9 +135,12 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler      (dataGrid_CellValueChanged);
         _dataGrid.Obj().PreviewKeyDown   += new PreviewKeyDownEventHandler        (tree_onPreviewKeyDown);
 
-        _cb_ShowDirs .CheckedChanged += new EventHandler(cb_ShowDirs_onCheckedChanged);
-        _cb_ShowFiles.CheckedChanged += new EventHandler(cb_ShowFiles_onCheckedChanged);
-        _cb_Recursive.CheckedChanged += new EventHandler(cb_Recursive_onCheckedChanged);
+        var cb_CommonHandler = new EventHandler(cb_onCheckedChanged_Commmon_Handler);
+
+        _cb_ShowDirs.CheckedChanged   += cb_CommonHandler;
+        _cb_ShowFiles.CheckedChanged  += cb_CommonHandler;
+        _cb_Recursive.CheckedChanged  += cb_CommonHandler;
+        _cb_FilterPath.CheckedChanged += cb_CommonHandler;
 
         _tb_Filter.TextChanged    += new EventHandler(tb_Filter_onTextChanged);
         _tb_FilterOut.TextChanged += new EventHandler(tb_Filter_onTextChanged);
@@ -250,7 +256,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                 //                         -- Or F5 key has been pressed
 
                 // Hope this local variables will be treated properly by the task...
-                TreeNode selectedNode = (sender == _cb_Recursive || sender == this)
+                TreeNode selectedNode = (sender == _cb_Recursive || sender == _cb_FilterPath || sender == this)
                     ? _tree.Obj().SelectedNode
                     : e.Node;
 
@@ -340,7 +346,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
                     _dataGrid.Obj().Invoke(new MethodInvoker(delegate
                     {
-                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
+                        _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _tree.Obj().SelectedNode, _filterStr, _filterOutStr);
                         _dataGrid.Enable(true);
 
                         // -2 means, the caller is myTree.setPath()
@@ -366,7 +372,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             else
             {
                 // No task needed, as the list is already populated
-                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
+                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _tree.Obj().SelectedNode, _filterStr, _filterOutStr);
                 _dataGrid.Enable(true);
             }
         }
@@ -456,6 +462,47 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    // Common handler for every checkbox
+    private void cb_onCheckedChanged_Commmon_Handler(object sender, EventArgs e)
+    {
+        CheckBox cb = sender as CheckBox;
+
+        if (cb != null)
+        {
+            // Show or hide directories
+            if (cb == _cb_ShowDirs)
+            {
+                _doShowDirs = _cb_ShowDirs.Checked;
+                tree_onAfterSelect(null, null);
+            }
+
+            // Show or hide files
+            if (cb == _cb_ShowFiles)
+            {
+                _doShowFiles = _cb_ShowFiles.Checked;
+                tree_onAfterSelect(null, null);
+            }
+
+            // Recursive search enabled/disabled
+            if (cb == _cb_Recursive)
+            {
+                _useRecursion = _cb_Recursive.Checked;
+                _dataGrid.setRecursiveMode(_useRecursion);
+                tree_onAfterSelect(sender, null);
+            }
+
+            if (cb == _cb_FilterPath)
+            {
+                _dataGrid.setFilterMode(cb.Checked);
+                tree_onAfterSelect(_useRecursion ? sender : null, null);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
     // Show or hide directories
     private void cb_ShowDirs_onCheckedChanged(object sender, EventArgs e)
     {
@@ -537,8 +584,9 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // Filter string changed
     private void tb_Filter_onTextChanged(object sender, EventArgs e)
     {
-        TextBox tb = (TextBox)(sender);
-        var reason = myDataGrid.PopulateReason.filterChanged;
+        TextBox tb  = (TextBox)(sender);
+        var reason  = myDataGrid.PopulateReason.filterChanged;
+        var selNode = _tree.Obj().SelectedNode;
 
         if (tb == _tb_Filter)
             _filterStr = tb.Text;
@@ -549,7 +597,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         if (_dataGrid.Obj().RowCount < 10000)
         {
             // Populate dataGrid immediately, as this won't take much time anyway
-            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
+            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, selNode, _filterStr, _filterOutStr);
         }
         else
         {
@@ -578,7 +626,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                         _form.Invoke(new MethodInvoker(
                             delegate
                             {
-                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _filterStr, _filterOutStr);
+                                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, selNode, _filterStr, _filterOutStr);
                                 tb.BackColor = Color.White;
                             })
                         );

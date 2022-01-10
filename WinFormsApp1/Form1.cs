@@ -58,15 +58,16 @@ namespace WinFormsApp1
         {
             // myTree_DataGrid's controls:
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
-            mtdgmi.form = this;
-            mtdgmi.tv = treeView1;
-            mtdgmi.dg = dataGridView1;
-            mtdgmi.cb_Recursive = cb_Recursive;
-            mtdgmi.cb_ShowDirs = cb_ShowDirs;
-            mtdgmi.cb_ShowFiles = cb_ShowFiles;
-            mtdgmi.tb_Filter = textBox1;
-            mtdgmi.tb_FilterOut = textBox2;
-            mtdgmi.richTextBox = richTextBox1;
+            mtdgmi.form          = this;
+            mtdgmi.tv            = treeView1;
+            mtdgmi.dg            = dataGridView1;
+            mtdgmi.cb_Recursive  = cb_Recursive;
+            mtdgmi.cb_ShowDirs   = cb_ShowDirs;
+            mtdgmi.cb_ShowFiles  = cb_ShowFiles;
+            mtdgmi.cb_FilterPath = cb_FilterPath;
+            mtdgmi.tb_Filter     = textBox1;
+            mtdgmi.tb_FilterOut  = textBox2;
+            mtdgmi.richTextBox   = richTextBox1;
 
             // Every control that myRenamerApp must be aware of:
             var mraControls = new myRenamerApp_Controls();
