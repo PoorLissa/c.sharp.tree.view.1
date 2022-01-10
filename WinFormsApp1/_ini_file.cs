@@ -231,8 +231,8 @@ public class ini_file_base
 				// This is also a point where current record might end
 				if (line.IndexOf('=') >= 0)
 				{
-					// Save current record
-					if (paramDataSB.Length != 0)
+                    // Save current record (effectively clearing out paramNameSB and paramDataSB)
+                    if (paramDataSB.Length != 0)
 					{
                         mapData(sectionNameSB, paramNameSB, paramDataSB, commentarySB);
                     }
@@ -240,11 +240,15 @@ public class ini_file_base
 					// Start the new one
 					int Pos = line.IndexOf('=') + 1;
 
-                    paramNameSB.Append(line, 0, Pos - 1);
-                    trimSB(ref paramNameSB);
-					paramNameSB.Insert(0, sectionNameSB);
+                    // In case '=' is the last char in the line, this line's data seems to be empty: Skip it
+                    if (Pos < line.Length)
+                    {
+                        paramNameSB.Append(line, 0, Pos - 1);
+                        trimSB(ref paramNameSB);
+                        paramNameSB.Insert(0, sectionNameSB);
+                        paramDataSB.Append(line, Pos, line.Length - Pos);
+                    }
 
-					paramDataSB.Append(line, Pos, line.Length-Pos);
                     continue;
 				}
 
@@ -433,8 +437,11 @@ public class ini_file_base
                         sectionSB.Append(Environment.NewLine);
                     }
 
+                    bool isParamName = false;
+
                     if (item.Value.paramName != null && item.Value.paramName.Length > 0)
                     {
+                        isParamName = true;
                         int pos = item.Value.paramName.IndexOf('.') + 1;
                         sectionSB.Append(item.Value.paramName, pos, item.Value.paramName.Length - pos);
                         sectionSB.Append(" = ");
@@ -445,6 +452,15 @@ public class ini_file_base
                         sectionSB.Append(item.Value.paramData);
                         sectionSB.Append(';');
                         sectionSB.Append(Environment.NewLine);
+                    }
+                    else
+                    {
+                        // paramName exists, but the data is actually empty: just add a placeholder
+                        if (isParamName)
+                        {
+                            sectionSB.Append(';');
+                            sectionSB.Append(Environment.NewLine);
+                        }
                     }
 
                     tmpDic[sectionName] = sectionSB;
