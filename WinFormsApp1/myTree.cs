@@ -734,7 +734,7 @@ public class myTree
     // This might take a while, so it is executed in async manner, so it should not block the application.
     private void expandEmptyFolders(TreeNode node, bool useDummies)
     {
-        void expandEmptyFolders_Thread()
+        void expandEmptyFolders_ThreadBody()
         {
             try
             {
@@ -823,11 +823,11 @@ public class myTree
             }
         }
 
-        System.Threading.Thread th = new System.Threading.Thread(expandEmptyFolders_Thread)
+        System.Threading.Thread th = new System.Threading.Thread(expandEmptyFolders_ThreadBody)
         {
             IsBackground = true,
             Priority = System.Threading.ThreadPriority.AboveNormal,
-            Name = nameof(expandEmptyFolders_Thread)
+            Name = nameof(expandEmptyFolders_ThreadBody)
         };
 
         th.Start();
