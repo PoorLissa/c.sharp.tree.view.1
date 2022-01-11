@@ -736,6 +736,9 @@ public class myTree
     {
         void expandEmptyFolders_ThreadBody()
         {
+            string sss = "";
+            var tBefore = System.DateTime.Now.Ticks;
+
             try
             {
                 var list1 = new List<TreeNode>();
@@ -763,15 +766,21 @@ public class myTree
                             list2.Add(n);
 
                     AllowRedrawing(false);
-
+                    {
                         // Clear subnodes of all selected nodes
                         _tree.Invoke(new MethodInvoker(delegate
                         {
                             foreach (TreeNode n in list2)
                                 n.Nodes.Clear();
                         }));
-
+                    }
                     AllowRedrawing(true);
+
+                    var tDiff = (System.DateTime.Now.Ticks - tBefore);
+                    tBefore = System.DateTime.Now.Ticks;
+                    System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
+                    sss += elapsedSpan.TotalMilliseconds.ToString();
+                    sss += "\n";
                 }
 
                 list1.Clear();
@@ -802,7 +811,7 @@ public class myTree
                     // Clear subnodes of all selected nodes
                     // Don't really need to expand them. Clearing is enough
                     AllowRedrawing(false);
-
+                    {
                         _tree.Invoke(new MethodInvoker(delegate
                         {
                             _tree.BeginUpdate();
@@ -812,10 +821,20 @@ public class myTree
 
                             _tree.EndUpdate();
                         }));
-
+                    }
                     AllowRedrawing(true);
-                }
 
+                    var tDiff = (System.DateTime.Now.Ticks - tBefore);
+                    System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
+                    sss += elapsedSpan.TotalMilliseconds.ToString();
+                    sss += "\n";
+
+                    _tree.Invoke(new MethodInvoker(delegate
+                    {
+                        if(_winVer > 90)
+                            MessageBox.Show(sss, "try at home and remove later", MessageBoxButtons.OK);
+                    }));
+                }
             }
             catch (Exception ex)
             {

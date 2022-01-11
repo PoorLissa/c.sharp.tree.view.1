@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using myControls;
 
@@ -26,8 +25,8 @@ namespace WinFormsApp1
                 expandEmpty = true;
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"d:\Games\-= Games =-\Uninstall";
-                path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\002 - music";
                 path = @"c:\_maxx\test\aaa";
             }
 
