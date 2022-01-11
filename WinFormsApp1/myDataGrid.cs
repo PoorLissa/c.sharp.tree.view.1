@@ -1274,8 +1274,30 @@ public class myDataGrid
             case Keys.PageDown:
             case Keys.F4:
             case Keys.F5:
-            case Keys.A:
                 return;
+
+            // Ctrl+A: on the first click, uses default widget's reaction
+            // If then pressed repeatedly, will flip checked state of every item in the grid
+            case Keys.A: {
+
+                    if (e.Modifiers == Keys.Control && _dataGrid.SelectedRows.Count == _dataGrid.Rows.Count)
+                    {
+                        // Change checked state of each selected row
+                        for (int i = 0; i < _dataGrid.RowCount; i++)
+                        {
+                            if (_dataGrid.Rows[i].Selected)
+                            {
+                                var cb = _dataGrid.Rows[i].Cells[(int)Columns.colChBox];
+                                cb.Value = !(bool)(cb.Value);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                break;
 
             // Up and Down arrow keys work mostly as expected
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
