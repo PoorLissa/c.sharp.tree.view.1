@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -15,8 +14,6 @@ public class myTree
 {
     private TreeView    _tree        = null;
     private myTreeLogic _logic       = null;
-    private float       _fontSize    = 0.0f;
-    private Color       _foreColor;
 
     private Brush _treeBackBrush      = null;
     private Brush _treeGradientBrush1 = null;
@@ -55,9 +52,6 @@ public class myTree
         _tree  = tv;
         _logic = new myTreeLogic();
         _richTextBox = rb;
-
-        _foreColor = tv.ForeColor;
-        _fontSize  = tv.Font.Size;
 
         _doUseDummies   = false;
         _allowRedrawing = true;
@@ -694,41 +688,6 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Move up the directory tree and expand all the directories that are empty
-    // This is done to remove 'plus' icons from the nodes that are actually empty
-    // This might take a while, so it should be executed in async manner, so it would not block the application
-    // Note: this is the first atempt to make it work, and it turns out, we can't update controls
-    // from a thread that has not created the control in the first place.
-    // So this method should not be used. Use expandEmptyFolders(TreeNode node, bool useDummies) instead.
-    private void expandEmptyFolders(TreeNode node)
-    {
-        if (node != null && node.Level != 0)
-        {
-            node = node.Parent;
-
-            do
-            {
-                foreach (TreeNode n in node.Nodes)
-                {
-                    if (!n.IsExpanded)
-                    {
-                        if (!_logic.dirContainsSubdirectory(getFullPath(n)))
-                        {
-                            n.Expand();
-                        }
-                    }
-                }
-
-                node = node.Level > 0 ? node.Parent : null;
-
-            } while (node != null);
-        }
-
-        return;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
     // Move up the directory tree and expand all the directories that are empty.
     // This is done to remove 'plus' icons from the nodes that are actually empty.
     // This might take a while, so it is executed in async manner, so it should not block the application.
@@ -832,7 +791,7 @@ public class myTree
                     _tree.Invoke(new MethodInvoker(delegate
                     {
                         if(_winVer > 90)
-                            MessageBox.Show(sss, "try at home and remove later", MessageBoxButtons.OK);
+                            MessageBox.Show(sss, "Try this at home and remove later", MessageBoxButtons.OK);
                     }));
                 }
             }
