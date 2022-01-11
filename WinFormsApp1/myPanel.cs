@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 /*
@@ -62,69 +63,60 @@ namespace myControls
         // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control types
         public string getSettings()
         {
-            return getSettings(this);
-        }
+            List<Control> list = new List<Control>();
+            getSubControls(this, ref list);
 
-        // todo: rewrite with stringbuilder and make it work with a list of controls, like 'useLatest_onClick' does
-        private string getSettings(Control Ctrl)
-        {
-            string res = "";
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < Ctrl.Controls.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                Control ctrl = Ctrl.Controls[i];
-
-                if (ctrl is GroupBox)
-                {
-                    res += getSettings(ctrl);
-                    continue;
-                }
+                Control ctrl = list[i];
 
                 if (ctrl is CheckBox && !ctrl.Name.StartsWith("checkBox_Option_"))
                 {
-                    res += ctrl.Name;
-                    res += ":";
-                    res += (ctrl as CheckBox).Checked ? "+" : "-";
-                    res += "?";
+                    sb.Append(ctrl.Name);
+                    sb.Append(":");
+                    sb.Append((ctrl as CheckBox).Checked ? "+" : "-");
+                    sb.Append("?");
                     continue;
                 }
 
                 if (ctrl is ComboBox)
                 {
-                    res += ctrl.Name;
-                    res += ":";
-                    res += (ctrl as ComboBox).Text;
-                    res += "?";
+                    sb.Append(ctrl.Name);
+                    sb.Append(":");
+                    sb.Append((ctrl as ComboBox).Text);
+                    sb.Append("?");
                     continue;
                 }
 
                 if (ctrl is NumericUpDown)
                 {
-                    res += ctrl.Name;
-                    res += ":";
-                    res += (ctrl as NumericUpDown).Value;
-                    res += "?";
+                    sb.Append(ctrl.Name);
+                    sb.Append(":");
+                    sb.Append((ctrl as NumericUpDown).Value);
+                    sb.Append("?");
                     continue;
                 }
 
                 if (ctrl is RadioButton && (ctrl as RadioButton).Checked)
                 {
-                    res += ctrl.Name;
-                    res += ":+?";
+                    sb.Append(ctrl.Name);
+                    sb.Append(":+?");
                     continue;
                 }
 
                 if (ctrl is TextBox)
                 {
-                    res += ctrl.Name;
-                    res += ":";
-                    res += ctrl.Text;
-                    res += "?";
+                    sb.Append(ctrl.Name);
+                    sb.Append(":");
+                    sb.Append(ctrl.Text);
+                    sb.Append("?");
                     continue;
                 }
             }
 
-            return res;
+            return sb.ToString();
         }
 
         // Set up "Use Latest" button for this panel
@@ -192,7 +184,7 @@ namespace myControls
                     var Params = param.Split('?');
 
                     List<Control> list = new List<Control>();
-                    getControls(this, ref list);
+                    getSubControls(this, ref list);
 
                     // opt_005_predefined_templates:Numeric sequence;comboBox4:;numericUpDown4:1;
                     foreach (var item in Params)
@@ -255,15 +247,16 @@ namespace myControls
             return;
         }
 
-        private void getControls(Control Ctrl, ref List<Control> list)
+        // Recursive: Collect all subcontrols of a Control
+        private void getSubControls(Control Ctrl, ref List<Control> list)
         {
             for (int i = 0; i < Ctrl.Controls.Count; i++)
             {
                 Control ctrl = Ctrl.Controls[i];
 
-                if (ctrl is GroupBox)
+                if (ctrl is GroupBox || ctrl is Panel)
                 {
-                    getControls(ctrl, ref list);
+                    getSubControls(ctrl, ref list);
                 }
                 else
                 {
