@@ -20,8 +20,8 @@ namespace myControls
 
         public bool UseCustomBorder { get; set; } = false;
 
-        // Attribute needed, as without it VS added this property to Form1.Designer.cs file.
-        // This way, this property was set up during initialization, which resulted in wrong _height value
+        // Attribute needed, as without it VS adds this property to Form1.Designer.cs file.
+        // This way, this property is set up during initialization, which results in wrong _height value
         [DefaultValue(false)]
         public bool isSelected
         {

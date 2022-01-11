@@ -351,7 +351,7 @@ public class myTree
                 // Color.Tomato means, this directory is an NTFS Hard Link, Junction or Symbolic Link
                 if (e.Node.BackColor == Color.Tomato)
                 {
-                    e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.Tomato: Brushes.Tomato, x, y);
+                    e.Graphics.DrawString(e.Node.Text, nodeFont, isHidden ? Brushes.LightSalmon : Brushes.Salmon, x, y);
                 }
                 else
                 {

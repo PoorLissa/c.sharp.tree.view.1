@@ -229,7 +229,7 @@ namespace WinFormsApp1
             // cb_ShowDirs
             // 
             this.cb_ShowDirs.AutoSize = true;
-            this.cb_ShowDirs.Location = new System.Drawing.Point(1377, 22);
+            this.cb_ShowDirs.Location = new System.Drawing.Point(1377, 10);
             this.cb_ShowDirs.Name = "cb_ShowDirs";
             this.cb_ShowDirs.Size = new System.Drawing.Size(171, 29);
             this.cb_ShowDirs.TabIndex = 3;
@@ -239,7 +239,7 @@ namespace WinFormsApp1
             // cb_ShowFiles
             // 
             this.cb_ShowFiles.AutoSize = true;
-            this.cb_ShowFiles.Location = new System.Drawing.Point(1377, 57);
+            this.cb_ShowFiles.Location = new System.Drawing.Point(1377, 40);
             this.cb_ShowFiles.Name = "cb_ShowFiles";
             this.cb_ShowFiles.Size = new System.Drawing.Size(121, 29);
             this.cb_ShowFiles.TabIndex = 5;
@@ -260,7 +260,7 @@ namespace WinFormsApp1
             // cb_Recursive
             // 
             this.cb_Recursive.AutoSize = true;
-            this.cb_Recursive.Location = new System.Drawing.Point(1377, 92);
+            this.cb_Recursive.Location = new System.Drawing.Point(1377, 70);
             this.cb_Recursive.Name = "cb_Recursive";
             this.cb_Recursive.Size = new System.Drawing.Size(111, 29);
             this.cb_Recursive.TabIndex = 7;
@@ -269,10 +269,10 @@ namespace WinFormsApp1
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1377, 130);
+            this.textBox1.Location = new System.Drawing.Point(1377, 140);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "filter";
-            this.textBox1.Size = new System.Drawing.Size(201, 31);
+            this.textBox1.Size = new System.Drawing.Size(235, 31);
             this.textBox1.TabIndex = 8;
             // 
             // btn_Rename
@@ -1641,10 +1641,10 @@ namespace WinFormsApp1
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(1377, 175);
+            this.textBox2.Location = new System.Drawing.Point(1377, 176);
             this.textBox2.Name = "textBox2";
             this.textBox2.PlaceholderText = "filter";
-            this.textBox2.Size = new System.Drawing.Size(201, 31);
+            this.textBox2.Size = new System.Drawing.Size(235, 31);
             this.textBox2.TabIndex = 13;
             // 
             // btn_Undo
@@ -1660,7 +1660,7 @@ namespace WinFormsApp1
             // cb_FilterPath
             // 
             this.cb_FilterPath.AutoSize = true;
-            this.cb_FilterPath.Location = new System.Drawing.Point(1584, 176);
+            this.cb_FilterPath.Location = new System.Drawing.Point(1377, 100);
             this.cb_FilterPath.Name = "cb_FilterPath";
             this.cb_FilterPath.Size = new System.Drawing.Size(187, 29);
             this.cb_FilterPath.TabIndex = 15;
