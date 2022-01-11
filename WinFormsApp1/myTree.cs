@@ -695,9 +695,6 @@ public class myTree
     {
         void expandEmptyFolders_ThreadBody()
         {
-            string sss = "";
-            var tBefore = System.DateTime.Now.Ticks;
-
             try
             {
                 var list1 = new List<TreeNode>();
@@ -734,12 +731,6 @@ public class myTree
                         }));
                     }
                     AllowRedrawing(true);
-
-                    var tDiff = (System.DateTime.Now.Ticks - tBefore);
-                    tBefore = System.DateTime.Now.Ticks;
-                    System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
-                    sss += elapsedSpan.TotalMilliseconds.ToString();
-                    sss += "\n";
                 }
 
                 list1.Clear();
@@ -764,8 +755,10 @@ public class myTree
 
                     // Select all the nodes that don't have any subfolders in them
                     foreach (var node in list1)
+                    {
                         if (node.Level != 0 && !_logic.dirContainsSubdirectory(getFullPath(node)))
                             list2.Add(node);
+                    }
 
                     // Clear subnodes of all selected nodes
                     // Don't really need to expand them. Clearing is enough
@@ -782,22 +775,13 @@ public class myTree
                         }));
                     }
                     AllowRedrawing(true);
-
-                    var tDiff = (System.DateTime.Now.Ticks - tBefore);
-                    System.TimeSpan elapsedSpan = new System.TimeSpan(tDiff);
-                    sss += elapsedSpan.TotalMilliseconds.ToString();
-                    sss += "\n";
-
-                    _tree.Invoke(new MethodInvoker(delegate
-                    {
-                        if(_winVer > 90)
-                            MessageBox.Show(sss, "Try this at home and remove later", MessageBoxButtons.OK);
-                    }));
                 }
             }
             catch (Exception ex)
             {
                 string s = ex.Message;
+
+                MessageBox.Show(s, "err", MessageBoxButtons.OK);
             }
         }
 
