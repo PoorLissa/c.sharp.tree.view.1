@@ -14,6 +14,7 @@ using System.Windows.Forms;
 
     todo:
         - give an option to rename through copy: insted of renaming, leave original file as it is, and copy it with the new name (to some other dir)
+        - think about creating hard links and do the renaming on those. this way, initial names are not lost
 */
 
 

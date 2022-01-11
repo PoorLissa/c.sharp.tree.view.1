@@ -734,111 +734,103 @@ public class myTree
     // This might take a while, so it is executed in async manner, so it should not block the application.
     private void expandEmptyFolders(TreeNode node, bool useDummies)
     {
-        var t = new System.Threading.Tasks.Task(() =>
+        void expandEmptyFolders_Thread()
         {
             try
             {
+                var list1 = new List<TreeNode>();
+                var list2 = new List<TreeNode>();
+
                 // Wait until the Form has been created and the tree Handle was obtained
                 while (_tree.InvokeRequired == false)
                 {
                     System.Threading.Tasks.Task.Delay(10).Wait();
                 }
 
-                _tree.Invoke(new MethodInvoker(delegate{ _tree.Enabled = false; }));
-
-                do
+                // Process visible nodes first
                 {
-                    foreach (TreeNode n in node.Nodes)
+                    _tree.Invoke(new MethodInvoker(delegate
                     {
-                        bool isNodeExpanded = false;
-
-                        if (_tree.InvokeRequired)
-                        {
-                            _tree.Invoke(new MethodInvoker(delegate { isNodeExpanded = n.IsExpanded; }));
-                        }
-
-                        if (!isNodeExpanded)
-                        {
-                            if (!_logic.dirContainsSubdirectory(getFullPath(n)))
-                            {
-                                if (_tree.InvokeRequired)
-                                {
-                                    // Don't really need to expand the node. Clearing it is enough
-                                    _tree.Invoke(new MethodInvoker(delegate { n.Nodes.Clear(); }));
-                                }
-                            }
-                        }
-                    }
-
-                    node = node.Level > 0 ? node.Parent : null;
-
-                } while (node != null);
-
-                _tree.Invoke(new MethodInvoker(delegate { _tree.Enabled = true; }));
-
-            }
-            catch (Exception ex)
-            {
-                string s = ex.Message;
-            }
-        });
-
-        var t2 = new System.Threading.Tasks.Task(() =>
-        {
-            try
-            {
-                // Wait until the Form has been created and the tree Handle was obtained
-                while (_tree.InvokeRequired == false)
-                {
-                    System.Threading.Tasks.Task.Delay(10).Wait();
-                }
-
-                var list1 = new System.Collections.Generic.List<TreeNode>();
-                var list2 = new System.Collections.Generic.List<TreeNode>();
-
-                // Collect all the nodes that are not expanded
-                _tree.Invoke(new MethodInvoker(delegate
-                {
-                    do
-                    {
-                        foreach (TreeNode n in node.Nodes)
+                        // Collect all currently visible nodes
+                        for (TreeNode n = _tree.TopNode; n != null && n.IsVisible; n = n.NextVisibleNode)
                             if (!n.IsExpanded)
                                 list1.Add(n);
+                    }));
 
-                        node = node.Level > 0 ? node.Parent : null;
-                    }
-                    while (node != null);
+                    // Select all the nodes that don't have any subfolders in them
+                    foreach (var n in list1)
+                        if (!_logic.dirContainsSubdirectory(getFullPath(n)))
+                            list2.Add(n);
 
-                }));
+                    AllowRedrawing(false);
 
-                // Select all the nodes that don't have any subfolders in them
-                foreach (var node in list1)
-                    if (!_logic.dirContainsSubdirectory(getFullPath(node)))
-                        list2.Add(node);
+                        // Clear subnodes of all selected nodes
+                        _tree.Invoke(new MethodInvoker(delegate
+                        {
+                            foreach (TreeNode n in list2)
+                                n.Nodes.Clear();
+                        }));
 
-                // Clear subnodes of all selected nodes
-                // Don't really need to expand them. Clearing is enough
-                _tree.Invoke(new MethodInvoker(delegate
+                    AllowRedrawing(true);
+                }
+
+                list1.Clear();
+                list2.Clear();
+
+                // Process the rest of the nodes now:
                 {
-                    _tree.BeginUpdate();
+                    // Collect all the nodes that are not expanded
+                    _tree.Invoke(new MethodInvoker(delegate
+                    {
+                        do
+                        {
+                            foreach (TreeNode n in node.Nodes)
+                                if (!n.IsExpanded)
+                                    list1.Add(n);
 
-                    foreach (TreeNode n in list2)
-                        n.Nodes.Clear();
+                            node = node.Level > 0 ? node.Parent : null;
+                        }
+                        while (node != null);
 
-                    _tree.EndUpdate();
-                }));
+                    }));
+
+                    // Select all the nodes that don't have any subfolders in them
+                    foreach (var node in list1)
+                        if (node.Level != 0 && !_logic.dirContainsSubdirectory(getFullPath(node)))
+                            list2.Add(node);
+
+                    // Clear subnodes of all selected nodes
+                    // Don't really need to expand them. Clearing is enough
+                    AllowRedrawing(false);
+
+                        _tree.Invoke(new MethodInvoker(delegate
+                        {
+                            _tree.BeginUpdate();
+
+                            foreach (TreeNode n in list2)
+                                n.Nodes.Clear();
+
+                            _tree.EndUpdate();
+                        }));
+
+                    AllowRedrawing(true);
+                }
 
             }
             catch (Exception ex)
             {
                 string s = ex.Message;
             }
-        });
-
-        if (useDummies && node != null && node.Level != 0)
-        {
-            t2.Start();
         }
+
+        System.Threading.Thread th = new System.Threading.Thread(expandEmptyFolders_Thread)
+        {
+            IsBackground = true,
+            Priority = System.Threading.ThreadPriority.AboveNormal,
+            Name = nameof(expandEmptyFolders_Thread)
+        };
+
+        th.Start();
 
         return;
     }
@@ -884,9 +876,9 @@ public class myTree
     // Set double buffering to reduce flickering
     private void setDoubleBuffering()
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myTree.setDoubleBuffering", "");
-        #endif
+#endif
 
         // Set double buffering to reduce flickering:
         // https://stackoverflow.com/questions/41893708/how-to-prevent-datagridview-from-flickering-when-scrolling-horizontally
@@ -899,9 +891,9 @@ public class myTree
     // Update Tree's state
     public void update(myBackup backUp, List<myTreeListDataItem> updatedList)
     {
-        #if DEBUG_TRACE
+#if DEBUG_TRACE
             myUtils.logMsg("myTree.update", "");
-        #endif
+#endif
 
         TreeNode n = _tree.SelectedNode;
 
