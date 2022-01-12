@@ -15,7 +15,7 @@ namespace myControls
 
         public string PlaceholderText
         {
-            get { return "";  }
+            get { return _tb.PlaceholderText;  }
             set { _tb.PlaceholderText = value; } 
         }
 
@@ -78,6 +78,7 @@ namespace myControls
 
         private void on_lbMouseEnter(object sender, EventArgs e)
         {
+            _lb.ImageIndex = 0;
             _lb.ForeColor = Color.DarkRed;
         }
 
@@ -85,7 +86,19 @@ namespace myControls
 
         private void on_lbMouseLeave(object sender, EventArgs e)
         {
+            _lb.ImageIndex = 3;
             _lb.ForeColor = Color.LightSlateGray;
+
+            // Gradually reduce color
+            new System.Threading.Tasks.Task(() =>
+            {
+                while(_lb.ImageIndex > 0)
+                {
+                    System.Threading.Tasks.Task.Delay(50).Wait();
+                    _lb.Invoke(new MethodInvoker(delegate { _lb.ImageIndex--; }));
+                }
+
+            }).Start();
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -129,27 +142,34 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
+        // Draw 'x' button with some effects
         private void on_lbPaint(object sender, PaintEventArgs e)
         {
-            var bgrBrush = Brushes.LightSteelBlue;
+            var bgrBrush = Brushes.White;
             bool isHovered = _lb.ForeColor == Color.DarkRed;
-
-            if (isHovered)
-            {
-                e.Graphics.FillRectangle(bgrBrush, 0, 0, 99, 99);
-            }
 
             int h = _tb.Height / 2;
             int w = 5;
             int a = 7;
 
+            if (isHovered || _lb.ImageIndex != 0)
+            {
+                bgrBrush = Brushes.LightSteelBlue;
+
+                e.Graphics.FillRectangle(bgrBrush, 0, 0, 99, 99);
+                e.Graphics.DrawLine(Pens.Gray, 0, 0, 0, h+h);
+
+                if (_lb.ImageIndex > 0)
+                {
+                    using (Brush b = new SolidBrush(Color.FromArgb(255 - 66 * _lb.ImageIndex, _tb.BackColor)))
+                    {
+                        e.Graphics.FillRectangle(b, 0, 0, 99, 99);
+                    }
+                }
+            }
+
             using (Pen p = new Pen(_lb.ForeColor, 2))
             {
-                if (isHovered)
-                {
-                    e.Graphics.DrawLine(Pens.Gray, 0, 0, 0, h+h);
-                }
-
                 e.Graphics.DrawLine(p, a, h-w, a+w+w, h+w);
                 e.Graphics.DrawLine(p, a, h+w, a+w+w, h-w);
                 e.Graphics.FillRectangle(bgrBrush, a, h+w, 1, 1);
