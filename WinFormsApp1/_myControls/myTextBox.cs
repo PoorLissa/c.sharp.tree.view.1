@@ -13,6 +13,12 @@ namespace myControls
         private TextBox _tb = null;
         private Label _lb = null;
 
+        public string PlaceholderText
+        {
+            get { return "";  }
+            set { _tb.PlaceholderText = value; } 
+        }
+
         // --------------------------------------------------------------------------------------------------------
 
         public myTextBox(TextBox tb, string placeholder = "...")
@@ -55,6 +61,13 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
+        public ref TextBox Obj()
+        {
+            return ref _tb;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
         private void on_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)(sender);
@@ -65,14 +78,14 @@ namespace myControls
 
         private void on_lbMouseEnter(object sender, EventArgs e)
         {
-            _lb.ForeColor = Color.Red;
+            _lb.ForeColor = Color.DarkRed;
         }
 
         // --------------------------------------------------------------------------------------------------------
 
         private void on_lbMouseLeave(object sender, EventArgs e)
         {
-            _lb.ForeColor = System.Drawing.Color.LightSlateGray;
+            _lb.ForeColor = Color.LightSlateGray;
         }
 
         // --------------------------------------------------------------------------------------------------------
@@ -81,16 +94,15 @@ namespace myControls
         {
             // 'x' button
             _lb.Visible = false;
-            _lb.Width  = _tb.Height - 10;
-            _lb.Height = _tb.Height - 10;
-            _lb.Left   = _tb.Right - _lb.Width - 2;
+            _lb.Width  = _tb.Height - 6;
+            _lb.Height = _tb.Height - 2;
+            _lb.Left   = _tb.Right - _lb.Width - 1;
             _lb.Top    = _tb.Top + 1;
             _lb.BackColor = _tb.BackColor;
-            _lb.ForeColor = System.Drawing.Color.LightSlateGray;
-            _lb.Text = "x";
+            _lb.ForeColor = Color.LightSlateGray;
+            _lb.Text = "";
 
             _lb.TextAlign = ContentAlignment.TopCenter;
-
 
             _tb.Parent.Controls.Add(_lb);
             _lb.BringToFront();
@@ -119,14 +131,30 @@ namespace myControls
 
         private void on_lbPaint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(Brushes.White, e.ClipRectangle);
-            e.Graphics.DrawRectangle(Pens.DarkRed, e.ClipRectangle.X + 1, e.ClipRectangle.Y + 1, e.ClipRectangle.Width-2, e.ClipRectangle.Height-2);
+            var bgrBrush = Brushes.LightSteelBlue;
+            bool isHovered = _lb.ForeColor == Color.DarkRed;
 
-            StringFormat format = new StringFormat(StringFormatFlags.NoWrap);
-                format.LineAlignment = StringAlignment.Center;
-                format.Alignment     = StringAlignment.Center;
+            if (isHovered)
+            {
+                e.Graphics.FillRectangle(bgrBrush, 0, 0, 99, 99);
+            }
 
-            e.Graphics.DrawString("x", _lb.Font, Brushes.Red, e.ClipRectangle, format);
+            int h = _tb.Height / 2;
+            int w = 5;
+            int a = 7;
+
+            using (Pen p = new Pen(_lb.ForeColor, 2))
+            {
+                if (isHovered)
+                {
+                    e.Graphics.DrawLine(Pens.Gray, 0, 0, 0, h+h);
+                }
+
+                e.Graphics.DrawLine(p, a, h-w, a+w+w, h+w);
+                e.Graphics.DrawLine(p, a, h+w, a+w+w, h-w);
+                e.Graphics.FillRectangle(bgrBrush, a, h+w, 1, 1);
+                e.Graphics.FillRectangle(bgrBrush, a+w+w, h + w, 1, 1);
+            }
         }
     };
 };

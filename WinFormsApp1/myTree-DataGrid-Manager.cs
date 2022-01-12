@@ -34,16 +34,16 @@ using System.Windows.Forms;
 
 public struct myTree_DataGrid_Manager_Initializer
 {
-    public Form             form;
-    public TreeView         tv;
-    public DataGridView     dg;
-    public CheckBox         cb_ShowFiles;
-    public CheckBox         cb_ShowDirs;
-    public CheckBox         cb_Recursive;
-    public CheckBox         cb_FilterPath;
-    public TextBox          tb_Filter;
-    public TextBox          tb_FilterOut;
-    public RichTextBox      richTextBox;
+    public Form                 form;
+    public TreeView             tv;
+    public DataGridView         dg;
+    public CheckBox             cb_ShowFiles;
+    public CheckBox             cb_ShowDirs;
+    public CheckBox             cb_Recursive;
+    public CheckBox             cb_FilterPath;
+    public myControls.myTextBox tb_Filter;
+    public myControls.myTextBox tb_FilterOut;
+    public RichTextBox          richTextBox;
 }
 
 
@@ -62,16 +62,16 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 {
     // --------------------------------------------------------------------------------
 
-    private Form        _form          = null;
-    private myTree      _tree          = null;
-    private myDataGrid  _dataGrid      = null;
-    private CheckBox    _cb_ShowFiles  = null;
-    private CheckBox    _cb_ShowDirs   = null;
-    private CheckBox    _cb_Recursive  = null;
-    private CheckBox    _cb_FilterPath = null;
-    private TextBox     _tb_Filter     = null;
-    private TextBox     _tb_FilterOut  = null;
-    private RichTextBox _richTextBox   = null;
+    private Form                    _form          = null;
+    private myTree                  _tree          = null;
+    private myDataGrid              _dataGrid      = null;
+    private CheckBox                _cb_ShowFiles  = null;
+    private CheckBox                _cb_ShowDirs   = null;
+    private CheckBox                _cb_Recursive  = null;
+    private CheckBox                _cb_FilterPath = null;
+    private myControls.myTextBox    _tb_Filter     = null;
+    private myControls.myTextBox    _tb_FilterOut  = null;
+    private RichTextBox             _richTextBox   = null;
 
     private List<myTreeListDataItem> _visibleList = null;
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
@@ -142,8 +142,8 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _cb_Recursive.CheckedChanged  += cb_CommonHandler;
         _cb_FilterPath.CheckedChanged += cb_CommonHandler;
 
-        _tb_Filter.TextChanged    += new EventHandler(tb_Filter_onTextChanged);
-        _tb_FilterOut.TextChanged += new EventHandler(tb_Filter_onTextChanged);
+        _tb_Filter.Obj().TextChanged    += new EventHandler(tb_Filter_onTextChanged);
+        _tb_FilterOut.Obj().TextChanged += new EventHandler(tb_Filter_onTextChanged);
 
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
 
@@ -588,10 +588,10 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         var reason  = myDataGrid.PopulateReason.filterChanged;
         var selNode = _tree.Obj().SelectedNode;
 
-        if (tb == _tb_Filter)
+        if (tb == _tb_Filter.Obj())
             _filterStr = tb.Text;
 
-        if (tb == _tb_FilterOut)
+        if (tb == _tb_FilterOut.Obj())
             _filterOutStr = tb.Text;
 
         if (_dataGrid.Obj().RowCount < 10000)

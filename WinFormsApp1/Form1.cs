@@ -12,7 +12,9 @@ namespace WinFormsApp1
         private myRenamerApp app = null;
         private myControls.mySplitButton sb_Undo = null;
 
-//      private Panel p = new Panel();
+        //private myControls.myComboBox myCb = null;
+        //private myControls.myTextBox myTb = null;
+        //private Panel p = new Panel();
 
         // --------------------------------------------------------------------------------
 
@@ -49,6 +51,9 @@ namespace WinFormsApp1
                 p.Visible = true;
             });
 */
+
+            //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
+            //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
         }
 
         // --------------------------------------------------------------------------------
@@ -64,8 +69,8 @@ namespace WinFormsApp1
             mtdgmi.cb_ShowDirs   = cb_ShowDirs;
             mtdgmi.cb_ShowFiles  = cb_ShowFiles;
             mtdgmi.cb_FilterPath = cb_FilterPath;
-            mtdgmi.tb_Filter     = textBox1;
-            mtdgmi.tb_FilterOut  = textBox2;
+            mtdgmi.tb_Filter     = new myControls.myTextBox(textBox1);
+            mtdgmi.tb_FilterOut  = new myControls.myTextBox(textBox2);
             mtdgmi.richTextBox   = richTextBox1;
 
             // Every control that myRenamerApp must be aware of:
