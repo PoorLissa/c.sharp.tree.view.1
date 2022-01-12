@@ -148,9 +148,9 @@ namespace myControls
             var bgrBrush = Brushes.White;
             bool isHovered = _lb.ForeColor == Color.DarkRed;
 
-            int h = _tb.Height / 2;
-            int w = 5;
-            int a = 7;
+            int h = _lb.DeviceDpi > 96 ? _tb.Height / 2 : _tb.Height / 2 - 1;
+            int w = _lb.DeviceDpi > 96 ? 5 : 4;
+            int a = _lb.DeviceDpi > 96 ? 7 : 4;
 
             if (isHovered || _lb.ImageIndex != 0)
             {
