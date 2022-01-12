@@ -54,6 +54,68 @@ namespace WinFormsApp1
 
             //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
             //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
+
+            this.btn_Rename.MouseEnter += new EventHandler(aaa1);
+            this.btn_Rename.MouseLeave += new EventHandler(aaa2);
+        }
+
+        private void aaa1(object sender, EventArgs e)
+        {
+            btn_Rename.ImageIndex = 1;
+
+            new System.Threading.Tasks.Task(() =>
+            {
+                System.Threading.Tasks.Task.Delay(3000).Wait();
+
+                int t = 333;
+                bool dir = false;
+                var sb = new System.Text.StringBuilder();
+
+                while (btn_Rename.ImageIndex == 1)
+                {
+                    btn_Rename.Invoke(new MethodInvoker(delegate 
+                    {
+                        string s = btn_Rename.Text;
+
+                        for (int i = 0; i < s.Length; i++)
+                        {
+                            if (myUtils.charIsCapitalLetter(s[i]))
+                            {
+                                if (i == 0 || i == s.Length - 1)
+                                {
+                                    dir = !dir;
+                                    System.Threading.Tasks.Task.Delay(i == 0 ? t: 333).Wait();
+                                    t += 333;
+                                }
+
+                                int j = dir ? i + 1 : i - 1;
+
+                                char ch = s[j];
+                                myUtils.charToUpperCase(ref ch);
+
+                                sb.Clear();
+                                sb.Append(s.ToLower());
+                                sb[j] = ch;
+                                btn_Rename.Text = sb.ToString();
+                                break;
+                            }
+                        }
+
+
+                    }));
+
+                    System.Threading.Tasks.Task.Delay(100).Wait();
+                }
+
+            }).Start();
+
+            return;
+        }
+
+        private void aaa2(object sender, EventArgs e)
+        {
+            btn_Rename.ImageIndex = -1;
+            btn_Rename.Text = "Rename";
         }
 
         // --------------------------------------------------------------------------------
