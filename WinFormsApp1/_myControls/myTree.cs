@@ -639,7 +639,6 @@ public class myTree
                 {
                     string nodeName = _logic.getLeftmostPartFromPath(ref path).ToLower();
 
-                    // todo: get rid of tolower and use fast compare instead
                     foreach (TreeNode node in thisLevelNodes)
                     {
                         string text = node.Text.ToLower();

@@ -495,6 +495,7 @@ public class myRenamerApp
         // -------------------------------------------------------------
 
         var dic = _ini.getDic();
+        int cnt = 0;
 
         if (dic != null)
         {
@@ -523,8 +524,6 @@ public class myRenamerApp
                         return (a._data > b._data) ? -1 : 1;
                     return 0;
                 });
-
-                int cnt = 0;
 
                 // Find option panels and sort them within [panel_base]
                 for (int i = 0; i < list.Count; i++)
@@ -558,6 +557,26 @@ public class myRenamerApp
             var tDiff = (DateTime.Now.Ticks - tBefore);
             TimeSpan elapsedSpan = new TimeSpan(tDiff);
             _controls.richTextBox.AppendText($"call to _manager.rePositionPanels() took {elapsedSpan.TotalMilliseconds} ms\n");
+        }
+        else
+        {
+            // Only for the first time run, when the ini file does not exist yet
+            for (int j = 0; j < _controls.optionList.Count; j++)
+            {
+                var panel = _controls.optionList[j].Parent as myPanel;
+
+                panel.UseCustomBorder = true;
+
+                if (_useAlternatingColor)
+                {
+                    panel.BackColor = (cnt++ % 2 == 0)
+                            ? Color.FromArgb( 1, Color.LightGray)
+                            : Color.FromArgb(25, Color.Azure);
+                }
+
+                // Make the panel last from the top
+                panel.BringToFront();
+            }
         }
 
         return;
