@@ -124,24 +124,53 @@ namespace myControls
         {
             if (_isSelected)
             {
-                string Params = ini[$"myPanelSettings.{Name}"];
+                int offsetY = 35;
 
-                if (Params != null && Params.Length > 0)
+                // Check if the button has been added already:
+                bool btnExists = false;
+
+                for (int i = 0; i < Controls.Count; i++)
                 {
-                    var b = new Button();
-                    b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise use
-                    b.Text = "Use Latest";
-                    b.Width  = this.DeviceDpi > 96 ? 80 : 70;
-                    b.Height = this.DeviceDpi > 96 ? 60 : 33;
-                    b.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-                    b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
-                    b.Left = this.Width - b.Width - 10;
-                    b.Top = 10;
-                    b.Click += new EventHandler(useLatest_onClick);
-                    Controls.Add(b);
+                    if (Controls[i] is Button && Controls[i].Text == "Use Latest")
+                    {
+                        Controls[i].Visible = true;
+                        btnExists = true;
+                        break;
+                    }
                 }
 
-/*
+                if (btnExists)
+                {
+                    Height += offsetY;
+                }
+                else
+                {
+                    string Params = ini[$"myPanelSettings.{Name}"];
+
+                    if (Params != null && Params.Length > 0)
+                    {
+                        Height += offsetY;
+
+                        for (int i = 0; i < Controls.Count; i++)
+                            if (!Controls[i].Name.StartsWith("checkBox_Option_"))
+                                Controls[i].Top += offsetY;
+
+                        var b = new Button();
+                        b.AccessibleName = Params;      // Just store a string in a parameter we don't otherwise use
+                        b.Text = "Use Latest";
+                        b.Height = this.DeviceDpi > 96 ? 50 : 33;
+                        b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
+
+                        b.Top = 58;
+                        b.Left = 100;
+                        b.Width = this.Width - b.Left - 100;
+
+                        b.Click += new EventHandler(useLatest_onClick);
+                        Controls.Add(b);
+                    }
+                }
+
+#if false
                 if (false)
                 {
                     var p = new Panel();
@@ -153,7 +182,7 @@ namespace myControls
                     p.BringToFront();
                     Controls.Add(p);
                 }
-*/
+#endif
             }
             else
             {
@@ -161,8 +190,7 @@ namespace myControls
                 {
                     if (Controls[i] is Button && Controls[i].Text == "Use Latest")
                     {
-                        Controls[i].Click -= new EventHandler(useLatest_onClick);
-                        Controls.Remove(Controls[i]);
+                        Controls[i].Visible = false;
                         break;
                     }
                 }

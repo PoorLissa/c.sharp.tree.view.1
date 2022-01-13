@@ -273,15 +273,15 @@ public class ini_file_base
 	// -------------------------------------------------------------------------------------------------------------------
 
 	// Get full path to this program's .exe file
-	string get_exe_path()
+	private string get_exe_path()
 	{
 		return get_file_path('e');
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------------------
 
-	// Get full path to this program's .ini file
-	string get_ini_path()
+    // Get full path to this program's .ini file
+    private string get_ini_path()
 	{
 		return get_file_path('i');
 	}

@@ -93,8 +93,11 @@ public class myBackup
 
         if (hist.Length > 0)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
+            var sbLine = new StringBuilder();
+            sbLine.Append('-', 50);
 
+            string delimiter = sbLine.ToString();
+            string path = AppDomain.CurrentDomain.BaseDirectory;
             path += (file != null) ? file : "\\__History.txt";
 
             if (!System.IO.File.Exists(path))
@@ -105,7 +108,7 @@ public class myBackup
             using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
             {
                 sw.Write(hist);
-                sw.WriteLine("---------------------------------------------------");
+                sw.WriteLine(delimiter);
             }
 
             System.IO.File.SetAttributes(path, System.IO.FileAttributes.Hidden);
