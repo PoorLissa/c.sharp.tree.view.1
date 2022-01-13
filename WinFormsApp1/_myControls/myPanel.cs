@@ -120,9 +120,9 @@ namespace myControls
         }
 
         // Set up "Use Latest" button for this panel
-        public void UseLatest(ini_file_base ini)
+        public void setUpLatest(ini_file_base ini, bool isSelected)
         {
-            if (_isSelected)
+            if (isSelected)
             {
                 int offsetY = 35;
 
@@ -139,17 +139,13 @@ namespace myControls
                     }
                 }
 
-                if (btnExists)
-                {
-                    Height += offsetY;
-                }
-                else
+                if (!btnExists)
                 {
                     string Params = ini[$"myPanelSettings.{Name}"];
 
                     if (Params != null && Params.Length > 0)
                     {
-                        Height += offsetY;
+                        _height += offsetY;
 
                         for (int i = 0; i < Controls.Count; i++)
                             if (!Controls[i].Name.StartsWith("checkBox_Option_"))

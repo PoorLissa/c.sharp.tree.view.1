@@ -159,6 +159,7 @@ namespace WinFormsApp1
                 mraControls.option_011_rb_01 = this.radioButton17;
                 mraControls.option_011_rb_02 = this.radioButton16;
                 mraControls.option_011_rb_03 = this.radioButton15;
+                mraControls.option_011_rb_04 = this.radioButton24;
                 mraControls.option_011_tb_01 = this.textBox10;
 
                 mraControls.option_012_ch_01 = this.checkBox_Option_012;

@@ -814,7 +814,7 @@ public class myRenamer
 
         // --------------------------------------------------------------------------------
 
-        // Option 11: Insert date of creation/modification
+        // Option 11: Insert date of creation/modification/current
         // todo: move it into template section
         if (_controls.option_011_ch_01.Checked)
         {
@@ -840,6 +840,12 @@ public class myRenamer
                 if (_controls.option_011_rb_03.Checked)
                 {
                     dt = System.IO.File.GetLastAccessTime(item.Name);
+                }
+
+                // Current Date
+                if (_controls.option_011_rb_04.Checked)
+                {
+                    dt = DateTime.Now;
                 }
 
                 mask = dt.ToString(mask);

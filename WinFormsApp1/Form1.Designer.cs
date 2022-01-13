@@ -53,6 +53,7 @@ namespace WinFormsApp1
             this.panel_content_12 = new myControls.myPanel();
             this.checkBox_Option_012 = new System.Windows.Forms.CheckBox();
             this.panel_content_11 = new myControls.myPanel();
+            this.radioButton24 = new System.Windows.Forms.RadioButton();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.radioButton15 = new System.Windows.Forms.RadioButton();
             this.radioButton16 = new System.Windows.Forms.RadioButton();
@@ -345,7 +346,7 @@ namespace WinFormsApp1
             this.panel_content_13.Controls.Add(this.textBox5);
             this.panel_content_13.Controls.Add(this.checkBox_Option_013);
             this.panel_content_13.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_13.Location = new System.Drawing.Point(0, 3149);
+            this.panel_content_13.Location = new System.Drawing.Point(0, 3169);
             this.panel_content_13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_13.Name = "panel_content_13";
             this.panel_content_13.Size = new System.Drawing.Size(651, 287);
@@ -439,7 +440,7 @@ namespace WinFormsApp1
             this.panel_content_12.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_12.Controls.Add(this.checkBox_Option_012);
             this.panel_content_12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_12.Location = new System.Drawing.Point(0, 3042);
+            this.panel_content_12.Location = new System.Drawing.Point(0, 3062);
             this.panel_content_12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_12.Name = "panel_content_12";
             this.panel_content_12.Size = new System.Drawing.Size(651, 107);
@@ -461,6 +462,7 @@ namespace WinFormsApp1
             // panel_content_11
             // 
             this.panel_content_11.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel_content_11.Controls.Add(this.radioButton24);
             this.panel_content_11.Controls.Add(this.textBox10);
             this.panel_content_11.Controls.Add(this.radioButton15);
             this.panel_content_11.Controls.Add(this.radioButton16);
@@ -470,13 +472,24 @@ namespace WinFormsApp1
             this.panel_content_11.Location = new System.Drawing.Point(0, 2830);
             this.panel_content_11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_11.Name = "panel_content_11";
-            this.panel_content_11.Size = new System.Drawing.Size(651, 212);
+            this.panel_content_11.Size = new System.Drawing.Size(651, 232);
             this.panel_content_11.TabIndex = 40;
             this.panel_content_11.UseCustomBorder = false;
             // 
+            // radioButton24
+            // 
+            this.radioButton24.AutoSize = true;
+            this.radioButton24.Location = new System.Drawing.Point(73, 177);
+            this.radioButton24.Name = "radioButton24";
+            this.radioButton24.Size = new System.Drawing.Size(95, 29);
+            this.radioButton24.TabIndex = 49;
+            this.radioButton24.TabStop = true;
+            this.radioButton24.Text = "Current";
+            this.radioButton24.UseVisualStyleBackColor = true;
+            // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(211, 112);
+            this.textBox10.Location = new System.Drawing.Point(211, 133);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(365, 31);
             this.textBox10.TabIndex = 48;
@@ -484,7 +497,7 @@ namespace WinFormsApp1
             // radioButton15
             // 
             this.radioButton15.AutoSize = true;
-            this.radioButton15.Location = new System.Drawing.Point(73, 143);
+            this.radioButton15.Location = new System.Drawing.Point(73, 147);
             this.radioButton15.Name = "radioButton15";
             this.radioButton15.Size = new System.Drawing.Size(126, 29);
             this.radioButton15.TabIndex = 47;
@@ -1875,6 +1888,7 @@ namespace WinFormsApp1
         private myControls.myPanel panel_content_12;
         private myControls.myPanel panel_content_13;
         private System.Windows.Forms.CheckBox cb_FilterPath;
+        private System.Windows.Forms.RadioButton radioButton24;
     }
 }
 

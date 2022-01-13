@@ -91,6 +91,7 @@ public class myRenamerApp_Controls
     public RadioButton      option_011_rb_01 = null;
     public RadioButton      option_011_rb_02 = null;
     public RadioButton      option_011_rb_03 = null;
+    public RadioButton      option_011_rb_04 = null;
     public TextBox          option_011_tb_01 = null;
 
     public CheckBox         option_012_ch_01 = null;
@@ -229,19 +230,24 @@ public class myRenamerApp
     // Every checkbox that needs additional processing of its Clicked Event should subscribe to this method
     private void checkboxChanged_Common(object sender, EventArgs e)
     {
-        CheckBox cb = (CheckBox)(sender);
+        CheckBox cb = sender as CheckBox;
 
-        do
+        if (cb != null)
         {
-            if (cb.Name.StartsWith("checkBox_Option_"))
+            do
             {
-                var parent = cb.Parent as myPanel;
-                parent.isSelected = cb.Checked;
-                parent.UseLatest(_ini);
-                break;
-            }
 
-        } while (false);
+                if (cb.Name.StartsWith("checkBox_Option_"))
+                {
+                    var parent = cb.Parent as myPanel;
+                    parent.setUpLatest(_ini, cb.Checked);
+                    parent.isSelected = cb.Checked;
+                    break;
+                }
+
+            } while (false);
+
+        }
 
         return;
     }
@@ -251,19 +257,24 @@ public class myRenamerApp
     // Every radio button that needs additional processing of its Checked Event should subscribe to this method
     private void radioButtonChecked_Common(object sender, EventArgs e)
     {
-        RadioButton rb = (RadioButton)(sender);
+        RadioButton rb = sender as RadioButton;
 
-        do
+        if (rb != null)
         {
-            // While we have only 2 buttons, no need to check the second one
-            if (rb == _controls.option_013_rb_01)
+            do
             {
-                _controls.option_013_ch_02.Text = _controls.option_013_rb_01.Checked
-                                                        ? "Count Position from the End"
-                                                        : "Insert at the Back of the Substring";
-            }
 
-        } while (false);
+                // While we have only 2 buttons, no need to check the second one
+                if (rb == _controls.option_013_rb_01)
+                {
+                    _controls.option_013_ch_02.Text = _controls.option_013_rb_01.Checked
+                                                            ? "Count Position from the End"
+                                                            : "Insert at the Back of the Substring";
+                }
+
+            } while (false);
+
+        }
 
         return;
     }
@@ -273,93 +284,36 @@ public class myRenamerApp
     // Every button that needs additional processing of its Clicked Event should subscribe to this method
     private void buttonClicked_Common(object sender, EventArgs e)
     {
-        Button btn = (Button)(sender);
+        Button btn = sender as Button;
 
-        do
+        if (btn != null)
         {
-
-            if (btn == _controls.option_005_btn_1)
+            do
             {
-                switch (_controls.option_005_cb_02.SelectedIndex)
+
+                if (btn == _controls.option_005_btn_1)
                 {
-                    case 0:
-                        _controls.option_005_cb_01.Obj().Text += "###";
-                        break;
+                    switch (_controls.option_005_cb_02.SelectedIndex)
+                    {
+                        case 0:
+                            _controls.option_005_cb_01.Obj().Text += "###";
+                            break;
 
-                    case 1:
-                        _controls.option_005_cb_01.Obj().Text += "*";
-                        break;
+                        case 1:
+                            _controls.option_005_cb_01.Obj().Text += "*";
+                            break;
 
-                    case 2:
-                        _controls.option_005_cb_01.Obj().Text += "%parent%";
-                        break;
+                        case 2:
+                            _controls.option_005_cb_01.Obj().Text += "%parent%";
+                            break;
+                    }
                 }
-            }
 
-        } while (false);
+            } while (false);
 
-        return;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
-    ToolTip t = null;
-
-    private void mouseHover_CommonEvent(object sender, EventArgs e)
-    {
-        var control = sender as Control;
-
-        if (t == null)
-        {
-            t = new ToolTip();
-
-            t.AutoPopDelay = 30000;
-            t.InitialDelay = 500;
-            t.ReshowDelay  = 50;
         }
 
-        string str = sender.ToString();
-
-        do
-        {
-            if (control == _controls.option_001_ch_01)
-            {
-                t.ToolTipTitle = "Remove any symbols until [delimiter] is found";
-
-                str = "Example:\n delimiter = '+': 'someText+File-Name' => 'File-Name'\n\n" +
-
-                      "Delimiter divided by ':' is treated as multiple delimiters\n" +
-                      "Example:\n delimiter = '+:-': 'someText+File-Name' => 'File-Name'\n\n";
-                break;
-            }
-
-            if (control == _controls.option_002_ch_01)
-            {
-                str = "002" + control.Text;
-                break;
-            }
-
-            if (control == _controls.option_003_ch_01)
-            {
-                str = "003" + control.Text;
-                break;
-            }
-
-            if (control == _controls.option_004_ch_01)
-            {
-                str = "004" + control.Text;
-                break;
-            }
-
-            if (control == _controls.option_005_ch_01)
-            {
-                str = "005" + control.Text;
-                break;
-            }
-
-        } while (false);
-
-        t.SetToolTip(control, str);
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -390,25 +344,21 @@ public class myRenamerApp
         _controls.option_001_ch_03.Checked = true;
         _controls.option_001_cb_01.setItems(_ini[$"myControls.{_controls.option_001_cb_01.Obj().Name}"]);
         _controls.option_001_rb_01.Checked = true;
-        _controls.option_001_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 2
         _controls.option_002_num_1.Value = 1;
         _controls.option_002_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_002_num_2.TextAlign = HorizontalAlignment.Center;
-        _controls.option_002_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 3
         _controls.option_003_num_1.Value = 1;
         _controls.option_003_num_2.Minimum = 1;
         _controls.option_003_num_1.TextAlign = HorizontalAlignment.Center;
         _controls.option_003_tb_01.PlaceholderText = "Substring";
-        _controls.option_003_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 4
         _controls.option_004_tb_01.PlaceholderText = "src";
         _controls.option_004_tb_02.PlaceholderText = "dest";
-        _controls.option_004_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 5
         _controls.option_005_cb_01.setItems(_ini[$"myControls.{_controls.option_005_cb_01.Obj().Name}"], doSelectFirstItem: false);
@@ -418,7 +368,6 @@ public class myRenamerApp
         _controls.option_005_cb_02.SelectedIndex = 0;
         _controls.option_005_cb_02.DropDownStyle = ComboBoxStyle.DropDownList;
         _controls.option_005_btn_1.Click += buttonClicked_CommonEvent;
-        _controls.option_005_ch_01.MouseHover += new EventHandler(mouseHover_CommonEvent);
 
         // Option 6
         _controls.option_006_cb_01.setItems(_ini[$"myControls.{_controls.option_006_cb_01.Obj().Name}"]);
