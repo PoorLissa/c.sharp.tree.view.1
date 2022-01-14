@@ -15,7 +15,7 @@ public class myTreeLogic
     // Checks if this directory contains at least one subdirectory
     // CharSet and MarshalAs are needed to be able to properly work with wide char strings in c++
     [DllImport("cpp.helper.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
-    internal static extern bool dirContainsSubdirectoryW([MarshalAs(UnmanagedType.LPWStr)] string s);
+    internal static extern bool dirContainsSubdirectoryW([MarshalAs(UnmanagedType.LPWStr)] string s, int length = 0);
 
     // --------------------------------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ public class myTreeLogic
     // Checks if the directory contains at least one subdirectory
     public bool dirContainsSubdirectory(string dir)
     {
-        return dirContainsSubdirectoryW(dir);
+        return dirContainsSubdirectoryW(dir, dir.Length);
     }
 
     // --------------------------------------------------------------------------------------------------------
