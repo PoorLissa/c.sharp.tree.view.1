@@ -124,7 +124,7 @@ namespace myControls
         {
             if (isSelected)
             {
-                int offsetY = 35;
+                int offsetY = DeviceDpi > 96 ? 35 : 25;
 
                 // Check if the button has been added already:
                 bool btnExists = false;
@@ -157,7 +157,7 @@ namespace myControls
                         b.Height = this.DeviceDpi > 96 ? 50 : 33;
                         b.Font = new Font(b.Font.Name, 8.0f, b.Font.Unit);
 
-                        b.Top = 58;
+                        b.Top = DeviceDpi > 96 ? 58 : 35;
                         b.Left = 100;
                         b.Width = this.Width - b.Left - 100;
 
