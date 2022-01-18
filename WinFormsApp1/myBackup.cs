@@ -47,20 +47,21 @@ public class myBackup
             _fileNameHistory.Add(newName);
         }
 
-        public void getHistory(ref string str)
+        public void getHistory(ref StringBuilder sb)
         {
-            string tab = "\t";
-
             if (_doSave)
             {
                 for (int i = 0; i < _fileNameHistory.Count; i++)
                 {
-                    str += i > 0 ? tab : "";
-                    str += _fileNameHistory[i];
-                    str += '\n';
+                    if (i == 0 || i == _fileNameHistory.Count - 2 || i == _fileNameHistory.Count - 1)
+                    {
+                        sb.Append(i > 0 ? "\t" : "");
+                        sb.Append(_fileNameHistory[i]);
+                        sb.Append('\n');
+                    }
                 }
 
-                str += "\n";
+                sb.Append('\n');
             }
 
             return;
@@ -86,17 +87,17 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
-    // todo: do we need to save all the iterations in the session? Or do we need to save only the first and the last?
     public void saveHistoryToFile(string file = null)
     {
-        string hist = getHistory();
+        StringBuilder sbHistory = new StringBuilder();
 
-        if (hist.Length > 0)
+        getHistory(ref sbHistory);
+
+        if (sbHistory.Length > 0)
         {
-            var sbLine = new StringBuilder();
-            sbLine.Append('-', 50);
+            sbHistory.Append('-', 50);
+            sbHistory.Append('\n');
 
-            string delimiter = sbLine.ToString();
             string path = AppDomain.CurrentDomain.BaseDirectory;
             path += (file != null) ? file : "\\__History.txt";
 
@@ -107,8 +108,7 @@ public class myBackup
 
             using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
             {
-                sw.Write(hist);
-                sw.WriteLine(delimiter);
+                sw.Write(sbHistory);
             }
 
             System.IO.File.SetAttributes(path, System.IO.FileAttributes.Hidden);
@@ -236,16 +236,10 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
-    public string getHistory()
+    public void getHistory(ref StringBuilder sb)
     {
-        string res = "";
-
         for (int i = 0; i < _historyList.Count; i++)
-        {
-            _historyList[i].getHistory(ref res);
-        }
-
-        return res;
+            _historyList[i].getHistory(ref sb);
     }
 
     // --------------------------------------------------------------------------------
