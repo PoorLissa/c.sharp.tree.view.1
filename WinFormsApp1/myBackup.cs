@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
 
 /*
@@ -87,7 +89,7 @@ public class myBackup
 
     // --------------------------------------------------------------------------------
 
-    public void saveHistoryToFile(string file = null)
+    public void saveHistoryToFile(bool doZip = true, string file = null)
     {
         StringBuilder sbHistory = new StringBuilder();
 
@@ -98,20 +100,63 @@ public class myBackup
             sbHistory.Append('-', 50);
             sbHistory.Append('\n');
 
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            path += (file != null) ? file : "\\__History.txt";
-
-            if (!System.IO.File.Exists(path))
+            if (doZip)
             {
-                System.IO.File.CreateText(path).Dispose();
-            }
+                string zip = AppDomain.CurrentDomain.BaseDirectory + ((file != null) ? file : "\\__History.zip");
 
-            using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                using (var ms = new MemoryStream())
+                {
+                    using (var writer = new StreamWriter(ms))
+                    {
+                        writer.Write(sbHistory);
+                        writer.Flush();
+                        ms.Position = 0;
+
+                        if (!System.IO.File.Exists(zip))
+                        {
+                            using (var archive = ZipFile.Open(zip, ZipArchiveMode.Create))
+                            {
+                                var entry = archive.CreateEntry("history.txt", CompressionLevel.Optimal);
+                                entry.LastWriteTime = DateTimeOffset.Now;
+
+                                using (var entryStream = entry.Open())
+                                    ms.CopyTo(entryStream);
+                            }
+                        }
+                        else
+                        {
+                            using (var archive = ZipFile.Open(zip, ZipArchiveMode.Update))
+                            {
+                                var entry = archive.GetEntry("history.txt");
+                                entry.LastWriteTime = DateTimeOffset.Now;
+
+                                using (var entryStream = entry.Open())
+                                {
+                                    entryStream.Position = entryStream.Length;
+                                    ms.CopyTo(entryStream);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
             {
-                sw.Write(sbHistory);
-            }
+                string path = AppDomain.CurrentDomain.BaseDirectory;
+                path += (file != null) ? file : "\\__History.txt";
 
-            System.IO.File.SetAttributes(path, System.IO.FileAttributes.Hidden);
+                if (!System.IO.File.Exists(path))
+                {
+                    System.IO.File.CreateText(path).Dispose();
+                }
+
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText(path))
+                {
+                    sw.Write(sbHistory);
+                }
+
+                System.IO.File.SetAttributes(path, System.IO.FileAttributes.Hidden);
+            }
         }
 
         return;
@@ -330,13 +375,36 @@ public class myBackup
 
         // ------------------------------------------------------------
 
-        string path = AppDomain.CurrentDomain.BaseDirectory;
-        path += "\\__History.txt";
+        string rawFile = null;
+        string path = AppDomain.CurrentDomain.BaseDirectory + "\\__History.zip";
 
         if (System.IO.File.Exists(path))
         {
-            string rawFile = System.IO.File.ReadAllText(path);
+            using (var zip = ZipFile.OpenRead(path))
+            {
+                var entry = zip.GetEntry("history.txt");
 
+                if (entry != null)
+                {
+                    using (var reader = new StreamReader(entry.Open()))
+                    {
+                        rawFile = reader.ReadToEnd();
+                    }
+                }
+            }
+        }
+        else
+        {
+            path = AppDomain.CurrentDomain.BaseDirectory + "\\__History.txt";
+
+            if (System.IO.File.Exists(path))
+            {
+                rawFile = System.IO.File.ReadAllText(path);
+            }
+        }
+
+        if ( rawFile.Length > 0)
+        {
             var lineSB = new StringBuilder();
             int pos = 0;
 
