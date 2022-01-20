@@ -203,6 +203,11 @@ public class myDataGrid
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
+
+        // Manual edit events
+        _dataGrid.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(on_CellControlShowing);
+        _dataGrid.CellBeginEdit += new DataGridViewCellCancelEventHandler(on_CellBeginEdit);
+        _dataGrid.CellEndEdit   += new DataGridViewCellEventHandler(on_CellEndEdit);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -227,14 +232,15 @@ public class myDataGrid
         // Checkbox column Columns.colCheckBox
         var columnCheckBox = new DataGridViewCheckBoxColumn();
 
-        // Custom cell template
-        var cellTemplate = new myDataGridViewCheckBoxCell();
-            cellTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom3;
-            cellTemplate.CustomSize = 26;
-            cellTemplate.CustomActiveAreaMargin = 5;
-            cellTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
-            cellTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
-        columnCheckBox.CellTemplate = cellTemplate;
+            // Custom cell template
+            var cellCBTemplate = new myDataGridViewCheckBoxCell();
+                cellCBTemplate.CustomDrawing = myDataGridViewCheckBoxCell.DrawMode.Custom3;
+                cellCBTemplate.CustomSize = 26;
+                cellCBTemplate.CustomActiveAreaMargin = 5;
+                cellCBTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
+                cellCBTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
+
+        columnCheckBox.CellTemplate = cellCBTemplate;
         columnCheckBox.Width = 50;
         columnCheckBox.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         columnCheckBox.Resizable = DataGridViewTriState.False;
@@ -246,6 +252,7 @@ public class myDataGrid
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var columnName = new DataGridViewTextBoxColumn();
+        columnName.CellTemplate = new myDataGridViewTextBoxCell();
         columnName.Name = "Name";
         columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         columnName.ReadOnly = true;
@@ -935,6 +942,9 @@ public class myDataGrid
             // Paint custom border around each row
             paintCustomBorder(e, hoverStatus, isRowSelected, isCellIdVisible, x, y, w, h);
 
+            // Paint custom editor in case the cell is being edited
+            paintCustomEditControl(e, isRowSelected);
+
             e.Handled = true;
         }
 
@@ -1191,6 +1201,25 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Custom painting of an editing control -- for a cell that is being edited
+    private void paintCustomEditControl(DataGridViewCellPaintingEventArgs e, bool isRowSelected)
+    {
+        if (isRowSelected == true && e.ColumnIndex == (int)Columns.colName)
+        {
+            var cell = _dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+            if (cell.IsInEditMode)
+            {
+                Rectangle rect = _cache.getRect(e.CellBounds.X + 29, e.CellBounds.Y + 9, e.CellBounds.Width - 39, e.CellBounds.Height - 20);
+                e.Graphics.DrawRectangle(Pens.White, rect);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     private void on_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
     {
         #if DEBUG_TRACE
@@ -1251,6 +1280,95 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Manual cell edit -- Control Showing
+    private void on_CellControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+    {
+        void keyDownHandler(object sender, KeyEventArgs e)
+        {
+            char[] chars = { ' ', '.', ',', ';', '\'', '_', '-', '!', '#', '[', ']', '(', ')' };
+
+            var tb = sender as TextBox;
+
+            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control && tb.TextLength > 0)
+            {
+                int pos = tb.Text.IndexOfAny(chars);
+
+                if (pos < 0)
+                {
+                    tb.Text = "";
+                }
+                else
+                {
+                    if (pos > 0)
+                    {
+                        tb.Text = tb.Text[pos..];
+                    }
+                    else
+                    {
+                        tb.Text = tb.Text[1..];
+                    }
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        // ----------------------------------------------------------
+
+        var tb = e.Control as TextBox;
+
+        if (tb != null)
+        {
+            if (tb.Tag == null)
+            {
+                // Needs to be done only once, as the controls is actually reused in each editing session
+                tb.KeyDown += new KeyEventHandler(keyDownHandler);
+                tb.Tag = 1;
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Manual cell edit -- Begin
+    private void on_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+    {
+        if (e.ColumnIndex == (int)Columns.colName)
+        {
+            var cell = _dataGrid.CurrentCell;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Manual cell edit -- End
+    private void on_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+    {
+        if (e.ColumnIndex == (int)Columns.colName)
+        {
+            int id = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
+            var cell = _dataGrid.CurrentCell;
+
+            if (cell.Value != null)
+            {
+                string newName = cell.Value.ToString();
+
+                //MessageBox.Show(_globalFileListExtRef[id].Name, newName, MessageBoxButtons.OK);
+            }
+            else
+            {
+                cell.Value = "...";
+            }
+
+            cell.ReadOnly = true;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // On widget mouse enter
     private void on_MouseEnter(object sender, System.EventArgs e)
     {
         _dataGrid.Focus();
@@ -1298,6 +1416,9 @@ public class myDataGrid
                     }
                 }
                 break;
+
+            // todo: fix this:
+            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
 
             // Up and Down arrow keys work mostly as expected
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
@@ -1409,6 +1530,16 @@ public class myDataGrid
 
                         _dataGrid.CurrentRow.Selected = true;
                     }
+                }
+                break;
+
+            // Experimental: to be able to rename a file in the grid manually
+            case Keys.F2: {
+
+                    var cell = _dataGrid[(int)Columns.colName, currRow];
+                    _dataGrid.CurrentCell = cell;
+                    cell.ReadOnly = false;
+                    _dataGrid.BeginEdit(false);
                 }
                 break;
         }
