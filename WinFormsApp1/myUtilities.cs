@@ -471,4 +471,82 @@ public class myUtils
     }
 
     // --------------------------------------------------------------------------------------------------------
+
+    // Find the first available stop position in a text
+    // Used with 'Ctrl+Del' key sequence when manually renaming files
+    public static int findStopPosition(string text, int start)
+    {
+        int pos = -1;
+        char prev = '?';
+
+        for (int i = start; i < text.Length; i++)
+        {
+            char ch = text[i];
+
+            bool ch_isDigit   = myUtils.charIsDigit(ch);
+            bool ch_isLetter  = myUtils.charIsLetter(ch);
+            bool ch_isSpecial = !(ch_isDigit || ch_isLetter);
+
+            // Stop, if current symbol is a special symbol (non-letter and non-digit):
+            if (ch_isSpecial)
+            {
+                if (prev == '?')
+                {
+                    // Remove series of the same special chars at once
+                    while (i < text.Length-1 && text[i+1] == ch)
+                        i++;
+                    pos = i + 1;
+                }
+                else
+                {
+                    pos = i;
+                }
+
+                // Remove series of whitespaces at once
+                if (pos < text.Length && text[pos] == ' ')
+                {
+                    while (i < text.Length-1 && text[i+1] == ' ')
+                        i++;
+                    pos = i + 1;
+                }
+
+                prev = ch;
+                break;
+            }
+
+            // Check additional rules for stopping:
+            if (myUtils.charIsDigit(prev))
+            {
+                // 'digit/letter'
+                if (ch_isLetter)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            if (myUtils.charIsLetter(prev))
+            {
+                // 'letter/digit'
+                if (ch_isDigit)
+                {
+                    pos = i;
+                    break;
+                }
+
+                // 'lowercase/UPPERCASE'
+                if (!myUtils.charIsCapitalLetter(prev) && myUtils.charIsCapitalLetter(ch))
+                {
+                    pos = i;
+                    break;
+                }
+            }
+
+            prev = ch;
+        }
+
+        return pos;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
 };

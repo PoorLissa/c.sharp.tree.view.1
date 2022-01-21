@@ -106,9 +106,10 @@ public class myDataGrid
             _dataGrid.RowTemplate.Height = dpi > 96 ? 60 : 40;                              // Row height
             _dataGrid.RowTemplate.MinimumHeight = (int)HoverStatus.DEFAULT;                 // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
-            _dataGrid.SelectionMode   = DataGridViewSelectionMode.FullRowSelect;            // Row select mode
-            _dataGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;       // Cell borders
-            _dataGrid.EditMode        = DataGridViewEditMode.EditOnF2;                      // How to edit cell (press F2)
+            _dataGrid.SelectionMode     = DataGridViewSelectionMode.FullRowSelect;          // Row select mode
+            _dataGrid.CellBorderStyle   = DataGridViewCellBorderStyle.SingleHorizontal;     // Cell borders
+            _dataGrid.EditMode          = DataGridViewEditMode.EditOnF2;                    // How to edit cell (press F2)
+            _dataGrid.ClipboardCopyMode = DataGridViewClipboardCopyMode.Disable;            // To be able to manually copy data from edited cell
 
             _dataGrid.AllowUserToAddRows    = false;                                        // User can't add new rows
             _dataGrid.AllowUserToResizeRows = false;                                        // User can't resize rows
@@ -1285,31 +1286,42 @@ public class myDataGrid
     {
         void keyDownHandler(object sender, KeyEventArgs e)
         {
-            char[] chars = { ' ', '.', ',', ';', '\'', '_', '-', '!', '#', '[', ']', '(', ')' };
-
             var tb = sender as TextBox;
+
+            // todo:
+            // See if it is posible to react to ctrl+backspace key sequence (tried that before, could not make it work)
+            if (e.KeyCode == Keys.Back && e.Modifiers == Keys.Control)
+            {
+                tb.Text = "!!!";
+            }
 
             if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control && tb.TextLength > 0)
             {
-                int pos = tb.Text.IndexOfAny(chars);
+                int start = tb.SelectionStart;
 
-                if (pos < 0)
+                if (start < tb.TextLength)
                 {
-                    tb.Text = "";
-                }
-                else
-                {
-                    if (pos > 0)
-                    {
-                        tb.Text = tb.Text[pos..];
-                    }
-                    else
-                    {
-                        tb.Text = tb.Text[1..];
-                    }
-                }
+                    var sb = new StringBuilder();
+                    sb.Append(tb.Text, 0, start);
 
-                e.Handled = true;
+                    // Find the first available stop position
+                    int pos = myUtils.findStopPosition(tb.Text, start);
+
+                    // Decide what to do with the stop position (if found):
+                    if (pos == start)
+                    {
+                        sb.Append(tb.Text, start + 1, tb.TextLength - start - 1);
+                    }
+
+                    if (pos > start)
+                    {
+                        sb.Append(tb.Text, pos, tb.TextLength - pos);
+                    }
+
+                    tb.Text = sb.ToString();
+                    tb.SelectionStart = start;  // Put caret where it belongs
+                    e.Handled = true;
+                }
             }
         }
 
@@ -1321,7 +1333,7 @@ public class myDataGrid
         {
             if (tb.Tag == null)
             {
-                // Needs to be done only once, as the controls is actually reused in each editing session
+                // Needs to be done only once, as the same control is actually reused in each editing session
                 tb.KeyDown += new KeyEventHandler(keyDownHandler);
                 tb.Tag = 1;
             }
@@ -1435,6 +1447,27 @@ public class myDataGrid
                 }
                 break;
 
+            // Ctrl+C / Ctrl+Ins: copy file name from 'Name' cell
+            case Keys.Insert:
+            case Keys.C: {
+
+                    if (e.Modifiers == Keys.Control)
+                    {
+                        var cell = _dataGrid[(int)Columns.colName, currRow];
+
+                        if (cell.Value != null)
+                        {
+                            string text = cell.Value.ToString();
+
+                            if (text.Length > 0)
+                                Clipboard.SetText(text);
+                            else
+                                Clipboard.Clear();
+                        }
+                    }
+                }
+                break;
+
             // todo: fix this:
             // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
 
@@ -1442,7 +1475,6 @@ public class myDataGrid
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
             // The selection is lost, instead of subtracting items from the selection
             // In order to address that, added 2 additional handlers for Up and Down keys:
-
             case Keys.Up: {
 
                     if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
