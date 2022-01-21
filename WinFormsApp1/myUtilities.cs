@@ -473,7 +473,7 @@ public class myUtils
     // --------------------------------------------------------------------------------------------------------
 
     // Find the first available stop position in a text
-    // Used with 'Ctrl+Del' key sequence when manually renaming files
+    // Used with 'Ctrl+Del' key sequence when manually renaming files (i.e., it removes symbols on the right of the caret)
     public static int findStopPosition(string text, int start)
     {
         int pos = -1;
