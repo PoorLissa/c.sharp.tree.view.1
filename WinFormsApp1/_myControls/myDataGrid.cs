@@ -221,14 +221,14 @@ public class myDataGrid
 
         // Row id column Columns.colId
         var columnId = new DataGridViewTextBoxColumn();
-        columnId.Name = "id";
-        columnId.Visible = true;
-        columnId.DividerWidth = 1;
-        columnId.ReadOnly = true;
-        columnId.MinimumWidth = _dataGrid.RowTemplate.Height;
-        columnId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-        columnId.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        columnId.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
+            columnId.Name = "id";
+            columnId.Visible = true;
+            columnId.DividerWidth = 1;
+            columnId.ReadOnly = true;
+            columnId.MinimumWidth = _dataGrid.RowTemplate.Height;
+            columnId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            columnId.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnId.DefaultCellStyle.Font = new Font("Segoe UI", 8, FontStyle.Regular, GraphicsUnit.Point);
 
         // Checkbox column Columns.colCheckBox
         var columnCheckBox = new DataGridViewCheckBoxColumn();
@@ -241,23 +241,23 @@ public class myDataGrid
                 cellCBTemplate.CustomImg("icon-tick-box1-checked-64.png",   myDataGridViewCheckBoxCell.cbMode.Checked);
                 cellCBTemplate.CustomImg("icon-tick-box1-unchecked-64.png", myDataGridViewCheckBoxCell.cbMode.Unchecked);
 
-        columnCheckBox.CellTemplate = cellCBTemplate;
-        columnCheckBox.Width = 50;
-        columnCheckBox.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        columnCheckBox.Resizable = DataGridViewTriState.False;
+            columnCheckBox.CellTemplate = cellCBTemplate;
+            columnCheckBox.Width = 50;
+            columnCheckBox.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnCheckBox.Resizable = DataGridViewTriState.False;
 
         // Icon column Columns.colImage
         var columnImage = new DataGridViewImageColumn();
-        columnImage.Width = 30;
-        columnImage.Resizable = DataGridViewTriState.False;
+            columnImage.Width = 30;
+            columnImage.Resizable = DataGridViewTriState.False;
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var columnName = new DataGridViewTextBoxColumn();
-        columnName.CellTemplate = new myDataGridViewTextBoxCell();
-        columnName.Name = "Name";
-        columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-        columnName.ReadOnly = true;
-        columnName.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
+            columnName.CellTemplate = new myDataGridViewTextBoxCell();
+            columnName.Name = "Name";
+            columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            columnName.ReadOnly = true;
+            columnName.DefaultCellStyle.Padding = new Padding(20, 0, 0, 0);
 
         // Index of columns must match Columns enum
         _dataGrid.Columns.Add(columnId);
