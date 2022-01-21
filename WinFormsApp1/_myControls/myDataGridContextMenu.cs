@@ -39,8 +39,9 @@ public class myDataGrid_ContextMenu
 
         menu.Items.Add("Copy Name",         null, handler).Name = "1";
         menu.Items.Add("Copy Full Path",    null, handler).Name = "2";
-        menu.Items.Add("Select children",   null, handler).Name = "3";
-        menu.Items.Add("Deselect children", null, handler).Name = "4";
+        menu.Items.Add("Edit (F2)",         null, handler).Name = "3";
+        menu.Items.Add("Select children",   null, handler).Name = "4";
+        menu.Items.Add("Deselect children", null, handler).Name = "5";
 
         pt.X = e.X;
         pt.Y = e.Y + ((e.RowIndex - _dataGrid.FirstDisplayedScrollingRowIndex) * _dataGrid.RowTemplate.Height);
@@ -49,8 +50,8 @@ public class myDataGrid_ContextMenu
             pt.X += _dataGrid.Columns[i].Width;
 
         // Select children is available only in the recursive mode
-        menu.Items[2].Enabled = recursion;
         menu.Items[3].Enabled = recursion;
+        menu.Items[4].Enabled = recursion;
 
         menu.Show(_dataGrid, pt);
 
@@ -79,15 +80,22 @@ public class myDataGrid_ContextMenu
                 break;
             }
 
-            // Select all the children of the selected item
+            // Edit cell text manually
             if (menuItem.Name == "3")
+            {
+                edit();
+                break;
+            }
+
+            // Select all the children of the selected item
+            if (menuItem.Name == "4")
             {
                 selectChildren(true);
                 break;
             }
 
             // Deselect all the children of the selected item
-            if (menuItem.Name == "4")
+            if (menuItem.Name == "5")
             {
                 selectChildren(false);
                 break;
@@ -154,6 +162,19 @@ public class myDataGrid_ContextMenu
             Clipboard.SetText(sb.ToString());
         else
             Clipboard.Clear();
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Edit cell text manually
+    private static void edit()
+    {
+        var cell = _dataGrid.CurrentCell;
+
+        cell.ReadOnly = false;
+        _dataGrid.BeginEdit(false);
 
         return;
     }

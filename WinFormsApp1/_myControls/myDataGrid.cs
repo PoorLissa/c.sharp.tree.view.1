@@ -1351,15 +1351,33 @@ public class myDataGrid
             int id = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
             var cell = _dataGrid.CurrentCell;
 
+            string old = _globalFileListExtRef[id].Name;
+            old = old.Substring((old.LastIndexOf('\\') + 1));
+
             if (cell.Value != null)
             {
-                string newName = cell.Value.ToString();
+                // If Ecs key is hit, the name in the cell will be restored to the original value, but we still will reach this point
+                if (cell.Value.ToString() != old)
+                {
+                    try
+                    {
+                        var list = new List<myTreeListDataItem>();
+                        list.Add(_globalFileListExtRef[id].Clone());
 
-                //MessageBox.Show(_globalFileListExtRef[id].Name, newName, MessageBoxButtons.OK);
+                        if (!myRenamer.getInstance().RenameManual(list, cell.Value.ToString()))
+                        {
+                            cell.Value = old;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename a file", MessageBoxButtons.OK);
+                    }
+                }
             }
             else
             {
-                cell.Value = "...";
+                cell.Value = old;
             }
 
             cell.ReadOnly = true;

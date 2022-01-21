@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
@@ -96,6 +97,39 @@ public class myRenamer
     public string getSimulatedName(myTreeListDataItem item)
     {
         return applyOptions(item, getNameOnly: true);
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public bool RenameManual(List<myTreeListDataItem> list, string newName)
+    {
+        bool res = false;
+
+        foreach (var item in list)
+        {
+            int pos = item.Name.LastIndexOf('\\') + 1;
+            newName = item.Name.Substring(0, pos) + newName;
+
+            bool itemExists = System.IO.Directory.Exists(newName) || System.IO.File.Exists(newName);
+
+            if (itemExists)
+            {
+                MessageBox.Show($"'{newName}':\nAlready Exists", "Warning", MessageBoxButtons.OK);
+            }
+            else
+            {
+                string err = "";
+
+                renTo_TmpName(item, ref err);
+                _manager.update(list, true, false);
+
+                // In case there is more than one file in the list, need to update res accordingly
+                res = RenamePhysical(item, newName, ref err);
+                _manager.update(list, true, true);
+            }
+        }
+
+        return res;
     }
 
     // --------------------------------------------------------------------------------------------------------
