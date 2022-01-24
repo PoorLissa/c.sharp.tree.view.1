@@ -1365,7 +1365,7 @@ public class myDataGrid
                                 }
 
                                 tb.Text = sb.ToString();
-                                tb.SelectionStart = start;  // Put caret where it belongs
+                                tb.SelectionStart = start;      // Put caret where it belongs
                                 e.Handled = true;
                             }
                         }
