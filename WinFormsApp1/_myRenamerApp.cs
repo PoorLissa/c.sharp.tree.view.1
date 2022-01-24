@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 
 // todo:
+// - add keyboard shortcuts to enable/disable option panels (alt+1..0 or ctrl+F1-12 maybe)
 // - add '?' with info panel on mouse hover near the controls/options
 
 public class myRenamerApp_Controls

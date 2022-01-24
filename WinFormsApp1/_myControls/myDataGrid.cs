@@ -1288,11 +1288,31 @@ public class myDataGrid
         {
             var tb = sender as TextBox;
 
-            // todo:
-            // See if it is posible to react to ctrl+backspace key sequence (tried that before, could not make it work)
             if (e.KeyCode == Keys.Back && e.Modifiers == Keys.Control)
             {
-                tb.Text = "!!!";
+                int start = tb.SelectionStart;
+
+                if (start <= tb.TextLength)
+                {
+                    var sb = new StringBuilder();
+
+                    // Find the first available stop position
+                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
+
+                    // Decide what to do with the stop position (if found):
+                    if (pos < start && pos != -1)
+                    {
+                        sb.Append(tb.Text, 0, pos);
+                    }
+
+                    sb.Append(tb.Text, start, tb.TextLength - start);
+
+                    tb.Text = sb.ToString();
+                    tb.SelectionStart = pos >= 0 ? pos : 0;     // Put caret where it belongs
+                    e.Handled = true;
+                }
+
+                e.SuppressKeyPress = true;
             }
 
             if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control && tb.TextLength > 0)
@@ -1305,7 +1325,7 @@ public class myDataGrid
                     sb.Append(tb.Text, 0, start);
 
                     // Find the first available stop position
-                    int pos = myUtils.findStopPosition(tb.Text, start);
+                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
 
                     // Decide what to do with the stop position (if found):
                     if (pos == start)
@@ -1320,6 +1340,34 @@ public class myDataGrid
 
                     tb.Text = sb.ToString();
                     tb.SelectionStart = start;  // Put caret where it belongs
+                    e.Handled = true;
+                }
+            }
+
+            if (e.KeyCode == Keys.Right && e.Modifiers == Keys.Control && tb.TextLength > 0)
+            {
+                int start = tb.SelectionStart;
+
+                if (start < tb.TextLength)
+                {
+                    // Find the first available stop position
+                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
+
+                    tb.SelectionStart = pos >= 0 ? pos : tb.TextLength;
+                    e.Handled = true;
+                }
+            }
+
+            if (e.KeyCode == Keys.Left && e.Modifiers == Keys.Control && tb.TextLength > 0)
+            {
+                int start = tb.SelectionStart;
+
+                if (start <= tb.TextLength)
+                {
+                    // Find the first available stop position
+                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
+
+                    tb.SelectionStart = pos >= 0 ? pos : 0;
                     e.Handled = true;
                 }
             }

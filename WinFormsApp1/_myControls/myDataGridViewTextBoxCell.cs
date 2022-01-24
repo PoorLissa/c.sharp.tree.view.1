@@ -9,50 +9,14 @@ using System.Windows.Forms;
 
 class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 {
-#if false
-
-    public override void PositionEditingControl(bool setLocation, bool setSize, Rectangle cellBounds, Rectangle cellClip, DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow)
+    // Return the type of the editing control this Cell uses
+    public override System.Type EditType
     {
-        Rectangle bounds = cellBounds;
-
-        bounds.Y += 11;
-        bounds.Height -= 22;
-        bounds.X += 11;
-        bounds.Width -= 22;
-
-        Rectangle clip = cellClip;
-
-        clip.Y += 11;
-        clip.Height -= 22;
-        clip.X += 11;
-        clip.Width -= 22;
-
-        //base.PositionEditingControl(setLocation, setSize, cellBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
-
-        //base.PositionEditingControl(true, false, cellBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
+        get
+        {
+            return typeof(myControls.myDataGridViewTextBoxEditingControl);
+        }
     }
-#endif
-
-#if false
-    public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
-    {
-        var style = new DataGridViewCellStyle();
-
-        style.SelectionBackColor = Color.Green;
-
-        //dataGridViewCellStyle.BackColor = Color.Yellow;
-        //dataGridViewCellStyle.Padding = new Padding(0, 20, 0, 0);
-
-        //base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-
-        base.InitializeEditingControl(rowIndex, initialFormattedValue, style);
-
-        //dataGridViewCellStyle.Padding = new Padding(111, 222, 333, 444);
-
-        dataGridViewCellStyle.BackColor = Color.Yellow;
-        dataGridViewCellStyle.SelectionBackColor = Color.Red;
-    }
-#endif
 
     // Adjust the editing panel, so that custom painting isn't drawn over when cells go into edit mode
     public override Rectangle PositionEditingPanel(Rectangle cellBounds, Rectangle cellClip, DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow)

@@ -472,77 +472,148 @@ public class myUtils
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Find the first available stop position in a text
-    // Used with 'Ctrl+Del' key sequence when manually renaming files (i.e., it removes symbols on the right of the caret)
-    public static int findStopPosition(string text, int start)
+    // Find the first available stop position in a text string
+    // Used with 'Ctrl+Del' / 'Ctrl+Arrow' key sequences while manually renaming files
+    public static int findStopPosition(string text, int start, bool moveRight)
     {
         int pos = -1;
         char prev = '?';
 
-        for (int i = start; i < text.Length; i++)
+        if (moveRight == true)
         {
-            char ch = text[i];
-
-            bool ch_isDigit   = myUtils.charIsDigit(ch);
-            bool ch_isLetter  = myUtils.charIsLetter(ch);
-            bool ch_isSpecial = !(ch_isDigit || ch_isLetter);
-
-            // Stop, if current symbol is a special symbol (non-letter and non-digit):
-            if (ch_isSpecial)
+            for (int i = start; i < text.Length; i++)
             {
-                if (prev == '?')
+                char ch = text[i];
+
+                bool ch_isDigit   = myUtils.charIsDigit(ch);
+                bool ch_isLetter  = myUtils.charIsLetter(ch);
+                bool ch_isSpecial = !(ch_isDigit || ch_isLetter);
+
+                // Stop, if current symbol is a special symbol (non-letter and non-digit):
+                if (ch_isSpecial)
                 {
-                    // Remove series of the same special chars at once
-                    while (i < text.Length-1 && text[i+1] == ch)
-                        i++;
-                    pos = i + 1;
-                }
-                else
-                {
-                    pos = i;
+                    if (prev == '?')
+                    {
+                        // Skip series of the same special chars at once
+                        while (i < text.Length - 1 && text[i + 1] == ch)
+                            i++;
+                        pos = i + 1;
+                    }
+                    else
+                    {
+                        pos = i;
+                    }
+
+                    // Skip series of whitespaces at once
+                    if (pos < text.Length && text[pos] == ' ')
+                    {
+                        while (i < text.Length - 1 && text[i + 1] == ' ')
+                            i++;
+                        pos = i + 1;
+                    }
+
+                    prev = ch;
+                    break;
                 }
 
-                // Remove series of whitespaces at once
-                if (pos < text.Length && text[pos] == ' ')
+                // Check additional rules for stopping:
+                if (myUtils.charIsDigit(prev))
                 {
-                    while (i < text.Length-1 && text[i+1] == ' ')
-                        i++;
-                    pos = i + 1;
+                    // 'digit/letter'
+                    if (ch_isLetter)
+                    {
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if (myUtils.charIsLetter(prev))
+                {
+                    // 'letter/digit'
+                    if (ch_isDigit)
+                    {
+                        pos = i;
+                        break;
+                    }
+
+                    // 'lowercase/UPPERCASE'
+                    if (!myUtils.charIsCapitalLetter(prev) && myUtils.charIsCapitalLetter(ch))
+                    {
+                        pos = i;
+                        break;
+                    }
                 }
 
                 prev = ch;
-                break;
             }
-
-            // Check additional rules for stopping:
-            if (myUtils.charIsDigit(prev))
+        }
+        else
+        {
+            for (int i = start-1; i >= 0; i--)
             {
-                // 'digit/letter'
-                if (ch_isLetter)
+                char ch = text[i];
+
+                bool ch_isDigit   = myUtils.charIsDigit(ch);
+                bool ch_isLetter  = myUtils.charIsLetter(ch);
+                bool ch_isSpecial = !(ch_isDigit || ch_isLetter);
+
+                // Stop, if current symbol is a special symbol (non-letter and non-digit):
+                if (ch_isSpecial)
                 {
-                    pos = i;
+                    if (prev == '?')
+                    {
+                        // Skip series of the same special chars at once
+                        while (i > 0 && text[i - 1] == ch)
+                            i--;
+                        pos = i;
+                    }
+                    else
+                    {
+                        pos = i+1;
+                    }
+
+                    // Skip series of whitespaces at once
+                    if (pos > 0 && text[pos] == ' ')
+                    {
+                        while (i > 0 && text[i - 1] == ' ')
+                            i--;
+                        pos = i;
+                    }
+
+                    prev = ch;
                     break;
                 }
+
+                // Check additional rules for stopping:
+                if (myUtils.charIsDigit(prev))
+                {
+                    // 'digit/letter'
+                    if (ch_isLetter)
+                    {
+                        pos = i+1;
+                        break;
+                    }
+                }
+
+                if (myUtils.charIsLetter(prev))
+                {
+                    // 'letter/digit'
+                    if (ch_isDigit)
+                    {
+                        pos = i+1;
+                        break;
+                    }
+
+                    // 'lowercase/UPPERCASE'
+                    if (!myUtils.charIsCapitalLetter(prev) && myUtils.charIsCapitalLetter(ch))
+                    {
+                        pos = i;
+                        break;
+                    }
+                }
+
+                prev = ch;
             }
-
-            if (myUtils.charIsLetter(prev))
-            {
-                // 'letter/digit'
-                if (ch_isDigit)
-                {
-                    pos = i;
-                    break;
-                }
-
-                // 'lowercase/UPPERCASE'
-                if (!myUtils.charIsCapitalLetter(prev) && myUtils.charIsCapitalLetter(ch))
-                {
-                    pos = i;
-                    break;
-                }
-            }
-
-            prev = ch;
         }
 
         return pos;
