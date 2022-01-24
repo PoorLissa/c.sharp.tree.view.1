@@ -1284,93 +1284,129 @@ public class myDataGrid
     // Manual cell edit -- Control Showing
     private void on_CellControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
     {
+        // In order to trap some keys, [myDataGridViewTextBoxEditingControl] class has been introduced
         void keyDownHandler(object sender, KeyEventArgs e)
         {
             var tb = sender as TextBox;
 
-            if (e.KeyCode == Keys.Back && e.Modifiers == Keys.Control)
+            switch (e.KeyCode)
             {
-                int start = tb.SelectionStart;
+                // Ctrl + Backspace
+                case Keys.Back: {
 
-                if (start <= tb.TextLength)
-                {
-                    var sb = new StringBuilder();
+                        if (e.Modifiers == Keys.Control)
+                        {
+                            int start = tb.SelectionStart;
 
-                    // Find the first available stop position
-                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
+                            if (start <= tb.TextLength)
+                            {
+                                var sb = new StringBuilder();
 
-                    // Decide what to do with the stop position (if found):
-                    if (pos < start && pos != -1)
-                    {
-                        sb.Append(tb.Text, 0, pos);
+                                // Find the first available stop position
+                                int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
+
+                                // Decide what to do with the stop position (if found):
+                                if (pos < start && pos != -1)
+                                {
+                                    sb.Append(tb.Text, 0, pos);
+                                }
+
+                                sb.Append(tb.Text, start, tb.TextLength - start);
+
+                                tb.Text = sb.ToString();
+                                tb.SelectionStart = pos >= 0 ? pos : 0;     // Put caret where it belongs
+                                e.Handled = true;
+                            }
+
+                            e.SuppressKeyPress = true;
+                        }
                     }
+                    break;
 
-                    sb.Append(tb.Text, start, tb.TextLength - start);
+                // Ctrl + Delete
+                case Keys.Delete: {
 
-                    tb.Text = sb.ToString();
-                    tb.SelectionStart = pos >= 0 ? pos : 0;     // Put caret where it belongs
-                    e.Handled = true;
-                }
+                        if (e.Modifiers == Keys.Control && tb.TextLength > 0)
+                        {
+                            int start = tb.SelectionStart;
 
-                e.SuppressKeyPress = true;
-            }
+                            if (start < tb.TextLength)
+                            {
+                                var sb = new StringBuilder();
+                                sb.Append(tb.Text, 0, start);
 
-            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Control && tb.TextLength > 0)
-            {
-                int start = tb.SelectionStart;
+                                // Find the first available stop position
+                                int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
 
-                if (start < tb.TextLength)
-                {
-                    var sb = new StringBuilder();
-                    sb.Append(tb.Text, 0, start);
+                                // Decide what to do with the stop position (if found):
+                                if (pos == start)
+                                {
+                                    sb.Append(tb.Text, start + 1, tb.TextLength - start - 1);
+                                }
 
-                    // Find the first available stop position
-                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
+                                if (pos > start)
+                                {
+                                    sb.Append(tb.Text, pos, tb.TextLength - pos);
+                                }
 
-                    // Decide what to do with the stop position (if found):
-                    if (pos == start)
-                    {
-                        sb.Append(tb.Text, start + 1, tb.TextLength - start - 1);
+                                tb.Text = sb.ToString();
+                                tb.SelectionStart = start;  // Put caret where it belongs
+                                e.Handled = true;
+                            }
+                        }
                     }
+                    break;
 
-                    if (pos > start)
-                    {
-                        sb.Append(tb.Text, pos, tb.TextLength - pos);
+                // Ctrl + Right Arrow
+                case Keys.Right: {
+
+                        if (e.Modifiers == Keys.Control && tb.TextLength > 0)
+                        {
+                            int start = tb.SelectionStart;
+
+                            if (start < tb.TextLength)
+                            {
+                                // Find the first available stop position
+                                int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
+
+                                tb.SelectionStart = pos >= 0 ? pos : tb.TextLength;
+                                e.Handled = true;
+                            }
+                        }
                     }
+                    break;
 
-                    tb.Text = sb.ToString();
-                    tb.SelectionStart = start;  // Put caret where it belongs
-                    e.Handled = true;
-                }
+                // Left Arrow, Ctrl + Left Arrow
+                case Keys.Left: {
+
+                        int start = tb.SelectionStart;
+
+                        if (start == 0)
+                        {
+                            // As a default behaviour, GridView will stop editing and attempt to select the cell on the left of this cell
+                            // To prevent this:
+                            e.Handled = true;
+                            e.SuppressKeyPress = true;
+                        }
+                        else
+                        {
+                            if (e.Modifiers == Keys.Control && tb.TextLength > 0)
+                            {
+                                if (start <= tb.TextLength)
+                                {
+                                    // Find the first available stop position
+                                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
+
+                                    tb.SelectionStart = pos >= 0 ? pos : 0;
+                                    e.Handled = true;
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
 
-            if (e.KeyCode == Keys.Right && e.Modifiers == Keys.Control && tb.TextLength > 0)
-            {
-                int start = tb.SelectionStart;
-
-                if (start < tb.TextLength)
-                {
-                    // Find the first available stop position
-                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: true);
-
-                    tb.SelectionStart = pos >= 0 ? pos : tb.TextLength;
-                    e.Handled = true;
-                }
-            }
-
-            if (e.KeyCode == Keys.Left && e.Modifiers == Keys.Control && tb.TextLength > 0)
-            {
-                int start = tb.SelectionStart;
-
-                if (start <= tb.TextLength)
-                {
-                    // Find the first available stop position
-                    int pos = myUtils.findStopPosition(tb.Text, start, moveRight: false);
-
-                    tb.SelectionStart = pos >= 0 ? pos : 0;
-                    e.Handled = true;
-                }
-            }
+            return;
         }
 
         // ----------------------------------------------------------

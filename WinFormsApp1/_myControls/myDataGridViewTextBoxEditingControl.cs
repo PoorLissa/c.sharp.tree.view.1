@@ -23,6 +23,7 @@ namespace myControls
 {
     class myDataGridViewTextBoxEditingControl : DataGridViewTextBoxEditingControl
     {
+        // Return [true] if the character was processed by the control; otherwise, [false]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if ((int)keyData == (int)Keys.Control + (int)Keys.Back)
@@ -30,7 +31,35 @@ namespace myControls
                 return false;
             }
 
-            return base.ProcessCmdKey(ref msg, keyData);
+            if ((int)keyData == (int)Keys.Tab)
+            {
+                return true;
+            }
+
+            bool res = base.ProcessCmdKey(ref msg, keyData);
+
+            return res;
+        }
+
+        // Let the Editing Control handle the keys listed
+        // When [true] is returned, the key will be sent to the Editing Control, not DataGrid
+        public override bool EditingControlWantsInputKey(Keys key, bool dataGridViewWantsInputKey)
+        {
+            switch (key & Keys.KeyCode)
+            {
+                case Keys.Left:
+                case Keys.Right:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.PageDown:
+                case Keys.PageUp:
+                    return true;
+
+                default:
+                    return !dataGridViewWantsInputKey;
+            }
         }
     };
 };
