@@ -1284,6 +1284,21 @@ public class myDataGrid
     // Manual cell edit -- Control Showing
     private void on_CellControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
     {
+        var tb = e.Control as TextBox;
+
+        if (tb != null)
+        {
+            if (tb.Tag == null)
+            {
+                // Needs to be done only once, as the same control is actually reused in each editing session
+                tb.KeyDown += new KeyEventHandler(keyDownHandler);
+                tb.Tag = 1;
+            }
+        }
+
+        // ----------------------------------------------------------
+
+        // KeyDown Handler for an Editing Control of the DataGrid.
         // In order to trap some keys, [myDataGridViewTextBoxEditingControl] class has been introduced
         void keyDownHandler(object sender, KeyEventArgs e)
         {
@@ -1407,20 +1422,6 @@ public class myDataGrid
             }
 
             return;
-        }
-
-        // ----------------------------------------------------------
-
-        var tb = e.Control as TextBox;
-
-        if (tb != null)
-        {
-            if (tb.Tag == null)
-            {
-                // Needs to be done only once, as the same control is actually reused in each editing session
-                tb.KeyDown += new KeyEventHandler(keyDownHandler);
-                tb.Tag = 1;
-            }
         }
 
         return;
