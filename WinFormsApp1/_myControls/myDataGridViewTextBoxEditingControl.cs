@@ -16,6 +16,8 @@
 
     Original DataGridViewTextBoxEditingControl is based on a TextBox class, which in its ProcessCmdKey method
     disables some shortcuts, including [(int)Keys.Control + (int)Keys.Back]
+
+    Also, some methods of [IDataGridViewEditingControl] are overriden here
 */
 
 
@@ -61,5 +63,13 @@ namespace myControls
                     return !dataGridViewWantsInputKey;
             }
         }
+
+#if false
+        public override void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
+        {
+            this.Font = dataGridViewCellStyle.Font;
+            this.BackColor = System.Drawing.Color.White;
+        }
+#endif
     };
 };
