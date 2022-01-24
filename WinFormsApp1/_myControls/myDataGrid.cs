@@ -1306,7 +1306,7 @@ public class myDataGrid
 
             switch (e.KeyCode)
             {
-                // Ctrl + Backspace
+                // Ctrl+Backspace
                 case Keys.Back: {
 
                         if (e.Modifiers == Keys.Control)
@@ -1338,7 +1338,7 @@ public class myDataGrid
                     }
                     break;
 
-                // Ctrl + Delete
+                // Ctrl+Delete
                 case Keys.Delete: {
 
                         if (e.Modifiers == Keys.Control && tb.TextLength > 0)
@@ -1372,7 +1372,7 @@ public class myDataGrid
                     }
                     break;
 
-                // Ctrl + Right Arrow
+                // Ctrl+Right
                 case Keys.Right: {
 
                         if (e.Modifiers == Keys.Control && tb.TextLength > 0)
@@ -1391,7 +1391,7 @@ public class myDataGrid
                     }
                     break;
 
-                // Left Arrow, Ctrl + Left Arrow
+                // Left, Ctrl+Left
                 case Keys.Left: {
 
                         int start = tb.SelectionStart;
