@@ -6,8 +6,8 @@ using System.Windows.Forms;
 
 
 // todo:
-// - add keyboard shortcuts to enable/disable option panels (alt+1..0 or ctrl+F1-12 maybe)
 // - add '?' with info panel on mouse hover near the controls/options
+// - the user must be able to see if the grid is active or not. now we can see selected item, but the grid sometimes is not active at this time somehow...
 
 public class myRenamerApp_Controls
 {
@@ -327,6 +327,11 @@ public class myRenamerApp
         _ini = new ini_file_base();
         _ini.read();
 
+        // The form will receive key events before the event is passed to the control that has focus
+        _form.KeyPreview = true;
+
+        // To be able to react to global key commands
+        _form.KeyDown += new KeyEventHandler(on_KeyDown);
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
 
         // Subscribe to ApplicationExit event to finalize stuff
@@ -526,6 +531,111 @@ public class myRenamerApp
 
                 // Make the panel last from the top
                 panel.BringToFront();
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Global key press event
+    private void on_KeyDown(object sender, KeyEventArgs e)
+    {
+        switch (e.KeyCode)
+        {
+            // Numeric keys
+            case Keys.D1:
+            case Keys.D2:
+            case Keys.D3:
+            case Keys.D4:
+            case Keys.D5:
+            case Keys.D6:
+            case Keys.D7:
+            case Keys.D8:
+            case Keys.D9:
+            case Keys.D0:
+                {
+
+                    if (e.Modifiers == Keys.Alt)
+                    {
+                        activatePanel(e.KeyValue - 49, useLatest: true);
+                        e.Handled = true;
+                    }
+                }
+                break;
+
+            case Keys.F5:
+                {
+
+                    _myTDGManager.refresh();
+                    e.Handled = true;
+                }
+                break;
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void activatePanel(int panel, bool useLatest)
+    {
+        CheckBox getCheckBox(int n)
+        {
+            CheckBox cb = null;
+            SortedDictionary<int, CheckBox> dic = new SortedDictionary<int, CheckBox>();
+
+            foreach (var item in _controls.optionList)
+            {
+                myPanel p = item.Parent as myPanel;
+
+                if (p != null)
+                {
+                    dic.Add(p.Top, item);
+                }
+            }
+
+            // Adjust for D0 key, which is less than D1
+            n += n < 0 ? 10 : 0;
+            int i = 0;
+
+            foreach (var item in dic)
+            {
+                if (i++ == n)
+                {
+                    cb = item.Value;
+                    break;
+                }
+            }
+
+            return cb;
+        }
+
+        // -----------------------------------------------
+
+        CheckBox cb = getCheckBox(panel);
+
+        if (cb != null)
+        {
+            cb.Checked = !cb.Checked;
+
+            if (useLatest && cb.Checked)
+            {
+                myPanel p = cb.Parent as myPanel;
+
+                if (p != null)
+                {
+                    for (int i = 0; i < p.Controls.Count; i++)
+                    {
+                        if (p.Controls[i] is Button && p.Controls[i].Text == "Use Latest")
+                        {
+                            var btn = p.Controls[i] as Button;
+                            btn.PerformClick();
+                            break;
+                        }
+                    }
+                }
             }
         }
 

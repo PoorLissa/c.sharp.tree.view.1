@@ -147,10 +147,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
 
-        // To be able to react to F5 refresh command
-        _form.KeyDown += new KeyEventHandler(on_KeyDown);
-        _form.KeyPreview = true;
-
         _tree.Obj().TabIndex = 0;
         _dataGrid.Obj().TabIndex = 1;
     }
@@ -183,6 +179,13 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         }
 
         return list;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public void refresh()
+    {
+        tree_onAfterSelect(this, null);
     }
 
     // --------------------------------------------------------------------------------
@@ -549,24 +552,6 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             {
                 _tree.Obj().Focus();
             }
-        }
-
-        return;
-    }
-
-    // --------------------------------------------------------------------------------
-
-    private void on_KeyDown(object sender, KeyEventArgs e)
-    {
-        switch (e.KeyCode)
-        {
-            case Keys.F5: {
-
-                    tree_onAfterSelect(this, null);
-                    e.Handled = true;
-
-                }
-                break;
         }
 
         return;
