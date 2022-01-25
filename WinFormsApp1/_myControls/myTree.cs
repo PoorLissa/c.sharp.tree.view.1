@@ -10,6 +10,14 @@ using System.Windows.Forms;
     Allows customization and provides public methods to work with the widget.
 */
 
+/*
+    todo:
+        - sometimes tree is active when the app is started with some path
+            this means, that grid must be active.
+            i think this is due to mouse being within the tree's borders when the window activates.
+            need to check this...
+*/
+
 public class myTree
 {
     private TreeView    _tree        = null;

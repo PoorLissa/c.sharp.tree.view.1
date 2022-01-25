@@ -359,6 +359,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                             selectedNode.ImageIndex = -1;
 
                             _dataGrid.Obj().Focus();
+                            _dataGrid.setTabFocus(true);
 
                             if(_dataGrid.Obj().Rows.Count > 0)
                                 _dataGrid.Obj().Rows[0].Selected = true;
@@ -546,11 +547,14 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             {
                 if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
                     _dataGrid.Obj().Rows[0].Selected = true;
+
+                _dataGrid.setTabFocus(true);
             }
 
             if (sender is DataGridView)
             {
                 _tree.Obj().Focus();
+                _dataGrid.setTabFocus(false);
             }
         }
 

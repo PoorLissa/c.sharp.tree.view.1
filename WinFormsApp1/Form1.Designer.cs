@@ -30,7 +30,6 @@ namespace WinFormsApp1
         private void InitializeComponent()
         {
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.button1 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.cb_ShowDirs = new System.Windows.Forms.CheckBox();
             this.cb_ShowFiles = new System.Windows.Forms.CheckBox();
@@ -207,16 +206,6 @@ namespace WinFormsApp1
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(633, 1225);
             this.treeView1.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1776, 168);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 37);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // richTextBox1
             // 
@@ -1695,7 +1684,6 @@ namespace WinFormsApp1
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.cb_ShowFiles);
             this.Controls.Add(this.cb_ShowDirs);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.treeView1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1760,7 +1748,6 @@ namespace WinFormsApp1
         #endregion
 
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.CheckBox cb_ShowDirs;
         private System.Windows.Forms.CheckBox cb_ShowFiles;

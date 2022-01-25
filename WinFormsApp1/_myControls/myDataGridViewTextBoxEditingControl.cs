@@ -58,17 +58,17 @@ namespace myControls
                 case Keys.PageDown:
                 case Keys.PageUp:
                     return true;
-
-                default:
-                    return !dataGridViewWantsInputKey;
             }
+
+            return !dataGridViewWantsInputKey;
         }
 
 #if false
         public override void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
             this.Font = dataGridViewCellStyle.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.Green;
+            this.ForeColor = System.Drawing.Color.Red;
         }
 #endif
     };

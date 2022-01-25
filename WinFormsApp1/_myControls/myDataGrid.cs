@@ -20,15 +20,17 @@ public class myDataGrid
     private bool _doUseRecursion     = false;
     private bool _doShowRecursionMsg = false;
     private bool _filterMode         = false;
+    private bool _tabFocus           = false;
 
     private Image _imgDir         = null;
     private Image _imgFile        = null;
     private Image _imgDir_Opaque  = null;
     private Image _imgFile_Opaque = null;
 
-    private Brush _gridGradientBrush1 = null;
-    private Brush _gridGradientBrush2 = null;
-    private Brush _disabledStateBrush = null;
+    private Brush _gridGradientBrush1  = null;
+    private Brush _gridGradientBrush2  = null;
+    private Brush _disabledStateBrush1 = null;
+    private Brush _disabledStateBrush2 = null;
 
     // Going to hold a reference to the global list of files
     private readonly List<myTreeListDataItem> _globalFileListExtRef = null;
@@ -163,7 +165,8 @@ public class myDataGrid
                                     Color.FromArgb(150, 255, 200, 133),
                                     Color.FromArgb(233, 255, 128,   0));
 
-        _disabledStateBrush = new SolidBrush(Color.FromArgb(150, Color.White));
+        _disabledStateBrush1 = new SolidBrush(Color.FromArgb(150, Color.White));
+        _disabledStateBrush2 = new SolidBrush(Color.FromArgb(200, Color.White));
 
         strFormat_CellId = new StringFormat(StringFormatFlags.NoClip);
         strFormat_CellId.LineAlignment = StringAlignment.Center;
@@ -207,8 +210,8 @@ public class myDataGrid
 
         // Manual edit events
         _dataGrid.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(on_CellControlShowing);
-        _dataGrid.CellBeginEdit += new DataGridViewCellCancelEventHandler(on_CellBeginEdit);
-        _dataGrid.CellEndEdit   += new DataGridViewCellEventHandler(on_CellEndEdit);
+        _dataGrid.CellBeginEdit         += new DataGridViewCellCancelEventHandler(on_CellBeginEdit);
+        _dataGrid.CellEndEdit           += new DataGridViewCellEventHandler(on_CellEndEdit);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -871,7 +874,7 @@ public class myDataGrid
         // Paint transparent box -- Simulate disabled state
         if (_dataGrid.Enabled == false)
         {
-            e.Graphics.FillRectangle(_disabledStateBrush, e.ClipRectangle);
+            e.Graphics.FillRectangle(_disabledStateBrush1, e.ClipRectangle);
 
             if (_doUseRecursion && _doShowRecursionMsg)
             {
@@ -1043,10 +1046,15 @@ public class myDataGrid
 
         if (isRowSelected)
         {
-            // Skip columnId
+            // Don't paint columnId cell
             if (e.ColumnIndex != (int)Columns.colId)
             {
                 e.Graphics.FillRectangle(hoverStatus == HoverStatus.MOUSE_HOVER ? _gridGradientBrush2 : _gridGradientBrush1, x, y, w, h);
+
+                if (_tabFocus == false)
+                {
+                    e.Graphics.FillRectangle(_disabledStateBrush2, x, y, w, h);
+                }
             }
         }
     }
@@ -1213,6 +1221,9 @@ public class myDataGrid
             {
                 Rectangle rect = _cache.getRect(e.CellBounds.X + 29, e.CellBounds.Y + 9, e.CellBounds.Width - 39, e.CellBounds.Height - 20);
                 e.Graphics.DrawRectangle(Pens.White, rect);
+
+                rect = _cache.getRect(e.CellBounds.X + 27, e.CellBounds.Y + 7, e.CellBounds.Width - 35, e.CellBounds.Height - 16);
+                e.Graphics.DrawRectangle(Pens.Brown, rect);
             }
         }
 
@@ -1811,6 +1822,16 @@ public class myDataGrid
     public void setFilterMode(bool mode)
     {
         _filterMode = mode;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public void setTabFocus(bool mode)
+    {
+        _tabFocus = mode;
+
+        // To redraw selected rows when _dataGrid obtains/loses focus
+        _dataGrid.Invalidate();
     }
 
     // --------------------------------------------------------------------------------------------------------

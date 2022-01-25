@@ -31,7 +31,25 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
         cellClip.Width = cellBounds.Width;
         cellClip.Y += 10;
 
-        // First, let base class do its adjustments
+        // Let the base class do its adjustments
         return base.PositionEditingPanel(controlBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
+    }
+
+    public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
+    {
+        dataGridViewCellStyle.BackColor = Color.White;
+
+        base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
+
+//      var tb = DataGridView.EditingControl as TextBox;
+    }
+
+    protected override void Paint(Graphics graphics,
+                                    Rectangle clipBounds, Rectangle cellBounds, int rowIndex,
+                                    DataGridViewElementStates cellState, object value, object formattedValue,
+                                    string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle,
+                                    DataGridViewPaintParts paintParts)
+    {
+        base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
     }
 };

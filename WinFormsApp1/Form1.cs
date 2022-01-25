@@ -192,12 +192,6 @@ namespace WinFormsApp1
 
         // --------------------------------------------------------------------------------
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
-        // --------------------------------------------------------------------------------
-
         private void btn_Rename_Click(object sender, EventArgs e)
         {
             app.Rename();
