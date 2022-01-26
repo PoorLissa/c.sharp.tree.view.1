@@ -1593,6 +1593,8 @@ public class myDataGrid
                 }
                 return;
 
+            // todo: fix this:
+            // shitf+up --> select some files. then shift+down; then shift+up again --> selection breaks
             case Keys.Down: {
 
                     if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
@@ -1629,43 +1631,66 @@ public class myDataGrid
                 }
                 break;
 
-            // todo: fix this:
-            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
             case Keys.Home: {
 
                     if (_dataGrid.Rows.Count > 0)
                     {
-                        _dataGrid.ClearSelection();
+                        List<int> list = null;
+
+                        // Store current selection
+                        if (_dataGrid.SelectedRows.Count > 0)
+                        {
+                            list = new List<int>();
+                            for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+                                list.Add(_dataGrid.SelectedRows[i].Index);
+                        }
+
                         _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
 
-                        if (e.Modifiers == Keys.Shift)                                      // Select everything from current up to home
-                            for (int i = currRow; i >= 0; i--)
-                                _dataGrid.Rows[i].Selected = true;
+                        if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+                        {
+                            for (int i = 0; i <= currRow; i++)
+                                _dataGrid.Rows[i].Selected = true;                          // Select everything from current up to home
 
-                        _dataGrid.CurrentRow.Selected = true;
+                            if (list != null)
+                                for (int i = 0; i < list.Count; i++)
+                                    _dataGrid.Rows[list[i]].Selected = true;                // Restore old selection
+                        }
                     }
                 }
                 break;
 
-            // todo: fix this:
-            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
             case Keys.End: {
 
                     if (_dataGrid.Rows.Count > 0)
                     {
-                        _dataGrid.ClearSelection();
-                        _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count - 1];     // Jump to the botton
+                        List<int> list = null;
+                        int curr = _dataGrid.CurrentRow.Index;
 
-                        if (e.Modifiers == Keys.Shift)                                      // Select everything from current down to the bottom
+                        // Store current selection
+                        if (_dataGrid.SelectedRows.Count > 0)
+                        {
+                            list = new List<int>();
+                            for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+                                list.Add(_dataGrid.SelectedRows[i].Index);
+                        }
+
+                        _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
+
+                        if ((e.Modifiers & Keys.Shift) == Keys.Shift)
+                        {
                             for (int i = currRow; i < _dataGrid.Rows.Count; i++)
-                                _dataGrid.Rows[i].Selected = true;
+                                _dataGrid.Rows[i].Selected = true;                          // Select everything from current down to the bottom
 
-                        _dataGrid.CurrentRow.Selected = true;
+                            if (list != null)
+                                for (int i = 0; i < list.Count; i++)
+                                    _dataGrid.Rows[list[i]].Selected = true;                // Restore old selection
+                        }
                     }
                 }
                 break;
 
-            // Experimental: to be able to rename a file in the grid manually
+            // Rename a file in the grid manually
             case Keys.F2: {
 
                     var cell = _dataGrid[(int)Columns.colName, currRow];
