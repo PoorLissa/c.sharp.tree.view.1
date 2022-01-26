@@ -10,14 +10,6 @@ using System.Windows.Forms;
     Allows customization and provides public methods to work with the widget.
 */
 
-/*
-    todo:
-        - sometimes tree is active when the app is started with some path
-            this means, that grid must be active.
-            i think this is due to mouse being within the tree's borders when the window activates.
-            need to check this...
-*/
-
 public class myTree
 {
     private TreeView    _tree        = null;
@@ -99,9 +91,6 @@ public class myTree
             _tree.ShowLines     = false;        // The ShowLines property must be false for the FullRowSelect property to work
 
             createDrawingPrimitives();
-
-            // Set up events
-            _tree.MouseEnter += new EventHandler(on_MouseEnter);
 
             // Configure the TreeView control for owner-draw and add a handler for the DrawNode event
             _tree.DrawMode  = TreeViewDrawMode.OwnerDrawAll;
@@ -466,13 +455,6 @@ public class myTree
         }
 
         return res;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
-    private void on_MouseEnter(object sender, EventArgs e)
-    {
-        _tree.Focus();
     }
 
     // --------------------------------------------------------------------------------------------------------

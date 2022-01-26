@@ -7,7 +7,6 @@ using System.Windows.Forms;
 
 // todo:
 // - add '?' with info panel on mouse hover near the controls/options
-// - the user must be able to see if the grid is active or not. now we can see selected item, but the grid sometimes is not active at this time somehow...
 
 public class myRenamerApp_Controls
 {

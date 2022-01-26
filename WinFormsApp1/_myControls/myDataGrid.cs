@@ -203,7 +203,6 @@ public class myDataGrid
         _dataGrid.CellMouseUp    += new DataGridViewCellMouseEventHandler(on_CellMouseUp);
         _dataGrid.CellMouseEnter += new DataGridViewCellEventHandler(on_CellMouseEnter);
         _dataGrid.CellMouseLeave += new DataGridViewCellEventHandler(on_CellMouseLeave);
-        _dataGrid.MouseEnter     += new EventHandler(on_MouseEnter);
 
         // Keyboard events
         _dataGrid.KeyDown += new KeyEventHandler(on_KeyDown);
@@ -1494,14 +1493,6 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    // On widget mouse enter
-    private void on_MouseEnter(object sender, System.EventArgs e)
-    {
-        _dataGrid.Focus();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
     // Key Down Event
     private void on_KeyDown(object sender, KeyEventArgs e)
     {
@@ -1521,7 +1512,8 @@ public class myDataGrid
                 return;
 
             // Ctrl+A: on the first click, uses default widget's reaction
-            // If then pressed repeatedly, will flip checked state of every item in the grid
+            // If then pressed repeatedly, will toggle the state of every row in the grid
+            // todo: do we need to toggle or just to check everything?
             case Keys.A: {
 
                     if (e.Modifiers == Keys.Control && _dataGrid.SelectedRows.Count == _dataGrid.Rows.Count)
@@ -1563,9 +1555,6 @@ public class myDataGrid
                     }
                 }
                 break;
-
-            // todo: fix this:
-            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
 
             // Up and Down arrow keys work mostly as expected
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
@@ -1636,17 +1625,12 @@ public class myDataGrid
             case Keys.Space: {
 
                     // Change checked state of each selected row
-                    for (int i = 0; i < _dataGrid.RowCount; i++)
-                    {
-                        if (_dataGrid.Rows[i].Selected)
-                        {
-                            var cb = _dataGrid.Rows[i].Cells[(int)Columns.colChBox];
-                            cb.Value = !(bool)(cb.Value);
-                        }
-                    }
+                    toggleSelectedCheckboxes();
                 }
                 break;
 
+            // todo: fix this:
+            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
             case Keys.Home: {
 
                     if (_dataGrid.Rows.Count > 0)
@@ -1663,6 +1647,8 @@ public class myDataGrid
                 }
                 break;
 
+            // todo: fix this:
+            // select some files. press ctrl+end => the selected files are lost, while the rest is added properly
             case Keys.End: {
 
                     if (_dataGrid.Rows.Count > 0)
@@ -1826,12 +1812,41 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    public bool getTabFocus()
+    {
+        return _tabFocus;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     public void setTabFocus(bool mode)
     {
-        _tabFocus = mode;
+        if (_tabFocus != mode)
+        {
+            _tabFocus = mode;
 
-        // To redraw selected rows when _dataGrid obtains/loses focus
-        _dataGrid.Invalidate();
+            // To redraw selected rows when _dataGrid obtains/loses focus
+            _dataGrid.Invalidate();
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Change checked state of each selected row
+    public void toggleSelectedCheckboxes()
+    {
+        for (int i = 0; i < _dataGrid.RowCount; i++)
+        {
+            if (_dataGrid.Rows[i].Selected)
+            {
+                var cb = _dataGrid.Rows[i].Cells[(int)Columns.colChBox];
+                cb.Value = !(bool)(cb.Value);
+            }
+        }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------

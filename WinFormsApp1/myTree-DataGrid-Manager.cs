@@ -75,6 +75,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     private List<myTreeListDataItem> _visibleList = null;
     private List<myTreeListDataItem> _globalFileListExt = null;     // Stores all the folders/files found in the last [nodeSelected] call
+    private List<int>                _grid_SelectedRows = null;     // Stores selected rows between calls to 'tree_CellMouseDown' and 'tree_grid_onMouseClick'
 
     private myBackup _backup = null;                                // Keeps the history of all changes made to the file names
 
@@ -127,13 +128,16 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tree.Obj().AfterSelect    += new TreeViewEventHandler        (tree_onAfterSelect);
         _tree.Obj().BeforeExpand   += new TreeViewCancelEventHandler  (tree_onBeforeExpand);
         _tree.Obj().AfterExpand    += new TreeViewEventHandler        (tree_onAfterExpand);
-        _tree.Obj().PreviewKeyDown += new PreviewKeyDownEventHandler  (tree_onPreviewKeyDown);
-            
+        _tree.Obj().PreviewKeyDown += new PreviewKeyDownEventHandler  (tree_grid_onPreviewKeyDown);
+        _tree.Obj().MouseClick     += new MouseEventHandler           (tree_grid_onMouseClick);
+
         _dataGrid.Obj().CellMouseEnter   += new DataGridViewCellEventHandler      (dataGrid_CellMouseEnter);
         _dataGrid.Obj().RowsAdded        += new DataGridViewRowsAddedEventHandler (dataGrid_RowsAdded);
         _dataGrid.Obj().Scroll           += new ScrollEventHandler                (dataGrid_Scroll);
         _dataGrid.Obj().CellValueChanged += new DataGridViewCellEventHandler      (dataGrid_CellValueChanged);
-        _dataGrid.Obj().PreviewKeyDown   += new PreviewKeyDownEventHandler        (tree_onPreviewKeyDown);
+        _dataGrid.Obj().PreviewKeyDown   += new PreviewKeyDownEventHandler        (tree_grid_onPreviewKeyDown);
+        _dataGrid.Obj().MouseClick       += new MouseEventHandler                 (tree_grid_onMouseClick);
+        _dataGrid.Obj().CellMouseDown    += new DataGridViewCellMouseEventHandler (tree_CellMouseDown);
 
         var cb_CommonHandler = new EventHandler(cb_onCheckedChanged_Commmon_Handler);
 
@@ -410,7 +414,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Display tooltip: this row's file name with all the selected options applied
+    // Display tooltip on mouse hover: this row's file name with all the selected options applied
     private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
         var row = _dataGrid.Obj().Rows[e.RowIndex];
@@ -539,23 +543,90 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    private void tree_onPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+    private void tree_grid_onPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
     {
-        if (e.KeyCode == Keys.Tab)
+        switch (e.KeyCode)
         {
-            if (sender is TreeView)
-            {
-                if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
-                    _dataGrid.Obj().Rows[0].Selected = true;
+            // Tab between TreeView and DataGrid
+            case Keys.Tab: {
 
-                _dataGrid.setTabFocus(true);
+                    if (sender is TreeView)
+                    {
+                        if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
+                            _dataGrid.Obj().Rows[0].Selected = true;
+
+                        _dataGrid.setTabFocus(true);
+                    }
+
+                    if (sender is DataGridView)
+                    {
+                        _tree.Obj().Focus();
+                        _dataGrid.setTabFocus(false);
+                    }
+
+                } break;
+
+            // Toggle every selected DataGrid row
+            case Keys.Space: {
+
+                    if (sender is TreeView)
+                    {
+                        _dataGrid.toggleSelectedCheckboxes();
+                    }
+
+                } break;
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Store current selection, to be able to restore it later on
+    private void tree_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+    {
+        if (_dataGrid.getTabFocus() == false && _dataGrid.Obj().SelectedRows.Count > 1)
+        {
+            // Store the selection only when currently clicked row is already selected
+            if (_dataGrid.Obj().Rows[e.RowIndex].Selected)
+            {
+                if (_grid_SelectedRows == null)
+                {
+                    _grid_SelectedRows = new List<int>();
+                }
+
+                for (int i = 0; i < _dataGrid.Obj().Rows.Count; i++)
+                    if (_dataGrid.Obj().Rows[i].Selected)
+                        _grid_SelectedRows.Add(i);
+            }
+        }
+
+        return;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    private void tree_grid_onMouseClick(object sender, MouseEventArgs e)
+    {
+        if (sender is TreeView)
+        {
+            _dataGrid.setTabFocus(false);
+        }
+
+        if (sender is DataGridView)
+        {
+            // Restore selection, if needed
+            if (_dataGrid.getTabFocus() == false && _dataGrid.Obj().Rows.Count > 1 && _grid_SelectedRows != null)
+            {
+                for (int i = 0; i < _grid_SelectedRows.Count; i++)
+                {
+                    _dataGrid.Obj().Rows[_grid_SelectedRows[i]].Selected = true;
+                }
+
+                _grid_SelectedRows.Clear();
             }
 
-            if (sender is DataGridView)
-            {
-                _tree.Obj().Focus();
-                _dataGrid.setTabFocus(false);
-            }
+            _dataGrid.setTabFocus(true);
         }
 
         return;
