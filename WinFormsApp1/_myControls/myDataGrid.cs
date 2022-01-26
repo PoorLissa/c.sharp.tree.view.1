@@ -1560,6 +1560,9 @@ public class myDataGrid
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
             // The selection is lost, instead of subtracting items from the selection
             // In order to address that, added 2 additional handlers for Up and Down keys:
+
+            // todo: fix this:
+            // shitf+up --> select some files. then shift+down; then shift+up again --> selection breaks
             case Keys.Up: {
 
                     if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
@@ -1593,33 +1596,33 @@ public class myDataGrid
                 }
                 return;
 
-            // todo: fix this:
-            // shitf+up --> select some files. then shift+down; then shift+up again --> selection breaks
             case Keys.Down: {
 
                     if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
                     {
-                        int cnt = 0, i = currRow;
+                        bool isNextSelected = false;
 
-                        // Make sure the selection is contiguous
-                        for (; i < _dataGrid.RowCount; i++)
+                        // Store current selection
+                        List<int> list = new List<int>();
+                        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+                            list.Add(_dataGrid.SelectedRows[i].Index);
+
+                        if (_dataGrid.Rows.Count > currRow + 1)
                         {
-                            if (!_dataGrid.Rows[i].Selected)
-                                break;
+                            isNextSelected = _dataGrid[0, currRow+1].Selected;
 
-                            cnt++;
+                            _dataGrid.CurrentCell = _dataGrid[0, currRow + 1];
+
+                            // Restore selection
+                            for (int i = 0; i < list.Count; i++)
+                            {
+                                int index = list[i];
+                                _dataGrid.Rows[index].Selected = (index == currRow) ? !isNextSelected : true;
+                            }
+
                         }
 
-                        if (cnt == _dataGrid.SelectedRows.Count)
-                        {
-                            currRow++;
-                            _dataGrid.CurrentCell = _dataGrid[0, currRow];
-
-                            for (cnt = currRow; cnt < i; cnt++)
-                                _dataGrid.Rows[cnt].Selected = true;
-
-                            e.Handled = true;
-                        }
+                        e.Handled = true;
                     }
                 }
                 return;
