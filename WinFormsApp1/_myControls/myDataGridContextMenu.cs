@@ -118,7 +118,7 @@ public class myDataGrid_ContextMenu
 
             if (row.Selected)
             {
-                sb.Append(row.Cells[(int)myDataGrid.Columns.colName].Value.ToString());
+                sb.Append(row.Cells[(int)myDataGrid_Wrapper.Columns.colName].Value.ToString());
                 sb.Append('\n');
             }
         }
@@ -146,7 +146,7 @@ public class myDataGrid_ContextMenu
 
             if (row.Selected)
             {
-                int n = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
+                int n = (int)(row.Cells[(int)myDataGrid_Wrapper.Columns.colId].Value);
                 list.Add(n);
             }
         }
@@ -193,7 +193,7 @@ public class myDataGrid_ContextMenu
 
             if (row.Selected)
             {
-                int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
+                int id = (int)(row.Cells[(int)myDataGrid_Wrapper.Columns.colId].Value);
                 string path = _globalFileListRef[id].Name;
 
                 set.Add(id);
@@ -210,11 +210,11 @@ public class myDataGrid_ContextMenu
         {
             var row = _dataGrid.Rows[i];
 
-            int id = (int)(row.Cells[(int)myDataGrid.Columns.colId].Value);
+            int id = (int)(row.Cells[(int)myDataGrid_Wrapper.Columns.colId].Value);
 
             if (set.Contains(id))
             {
-                var cb = row.Cells[(int)myDataGrid.Columns.colChBox];
+                var cb = row.Cells[(int)myDataGrid_Wrapper.Columns.colChBox];
                 cb.Value = mode;
 
                 // Also, set selection for the row

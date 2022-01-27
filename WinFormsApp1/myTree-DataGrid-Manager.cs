@@ -64,7 +64,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     private Form                    _form          = null;
     private myTree                  _tree          = null;
-    private myDataGrid              _dataGrid      = null;
+    private myDataGrid_Wrapper      _dataGrid      = null;
     private CheckBox                _cb_ShowFiles  = null;
     private CheckBox                _cb_ShowDirs   = null;
     private CheckBox                _cb_Recursive  = null;
@@ -122,7 +122,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tb_FilterOut.PlaceholderText = "Filter Out";
 
         _tree = new myTree(mtdgmi.tv, _globalFileListExt, path, expandEmpty, _richTextBox);
-        _dataGrid = new myDataGrid(mtdgmi.dg, _globalFileListExt);
+        _dataGrid = new myDataGrid_Wrapper(mtdgmi.dg, _globalFileListExt);
 
         // Set up events for the components:
         _tree.Obj().AfterSelect    += new TreeViewEventHandler        (tree_onAfterSelect);
@@ -251,7 +251,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
         // Decide if the current directory in the tree has changed or not
         // (if not, the checked files in the grid will be restored later, when the grid is repopulated)
-        myDataGrid.PopulateReason reason = myDataGrid.PopulateReason.viewDirChanged;
+        myDataGrid_Wrapper.PopulateReason reason = myDataGrid_Wrapper.PopulateReason.viewDirChanged;
 
 
         if (_useTasks)
@@ -268,8 +268,8 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                     : e.Node;
 
                 reason = (sender == _cb_Recursive)
-                    ? myDataGrid.PopulateReason.recursionChanged_After
-                    : myDataGrid.PopulateReason.dirChanged;
+                    ? myDataGrid_Wrapper.PopulateReason.recursionChanged_After
+                    : myDataGrid_Wrapper.PopulateReason.dirChanged;
 
 
                 // Set Form's header text
@@ -418,7 +418,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private void dataGrid_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
     {
         var row = _dataGrid.Obj().Rows[e.RowIndex];
-        bool isChecked = (bool)(row.Cells[(int)myDataGrid.Columns.colChBox].Value);
+        bool isChecked = (bool)(row.Cells[(int)myDataGrid_Wrapper.Columns.colChBox].Value);
 
         if (isChecked)
         {
@@ -645,7 +645,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     private void tb_Filter_onTextChanged(object sender, EventArgs e)
     {
         TextBox tb  = (TextBox)(sender);
-        var reason  = myDataGrid.PopulateReason.filterChanged;
+        var reason  = myDataGrid_Wrapper.PopulateReason.filterChanged;
         var selNode = _tree.Obj().SelectedNode;
 
         if (tb == _tb_Filter.Obj())

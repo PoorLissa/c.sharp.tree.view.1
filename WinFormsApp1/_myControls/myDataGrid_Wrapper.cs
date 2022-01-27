@@ -12,7 +12,7 @@ using System.Windows.Forms;
 */
 
 
-public class myDataGrid
+public class myDataGrid_Wrapper
 {
     private DataGridView    _dataGrid      = null;
     private DataGridViewRow _myTemplateRow = null;
@@ -68,7 +68,7 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myDataGrid(DataGridView dgv, List<myTreeListDataItem> listGlobal)
+    public myDataGrid_Wrapper(DataGridView dgv, List<myTreeListDataItem> listGlobal)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.myDataGrid", "");
