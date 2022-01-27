@@ -255,7 +255,7 @@ public class myDataGrid
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var columnName = new DataGridViewTextBoxColumn();
-            columnName.CellTemplate = new myDataGridViewTextBoxCell();
+            columnName.CellTemplate = new myDataGridViewTextBoxCell(_dataGrid.DeviceDpi);
             columnName.Name = "Name";
             columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             columnName.ReadOnly = true;

@@ -9,6 +9,17 @@ using System.Windows.Forms;
 
 class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 {
+    static private int _dpi = -1;
+
+    public myDataGridViewTextBoxCell() : base()
+    {
+    }
+
+    public myDataGridViewTextBoxCell(int dpi) : base()
+    {
+        _dpi = _dpi < 0 ? dpi : _dpi;
+    }
+
     // Return the type of the editing control this Cell uses
     public override System.Type EditType
     {
@@ -23,10 +34,12 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
     {
         Rectangle controlBounds = cellBounds;
 
-        controlBounds.Y += 11;
-        controlBounds.Height -= 22;
-        controlBounds.X += 11;
-        controlBounds.Width -= 22;
+        int offset = _dpi > 96 ? 11 : 9;
+
+        controlBounds.Y += offset;
+        controlBounds.Height -= 2*offset;
+        controlBounds.X += offset;
+        controlBounds.Width -= 2*offset;
 
         cellClip.Width = cellBounds.Width;
         cellClip.Y += 10;
