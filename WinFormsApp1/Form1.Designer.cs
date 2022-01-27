@@ -33,7 +33,6 @@ namespace WinFormsApp1
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.cb_ShowDirs = new System.Windows.Forms.CheckBox();
             this.cb_ShowFiles = new System.Windows.Forms.CheckBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.cb_Recursive = new System.Windows.Forms.CheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_Rename = new System.Windows.Forms.Button();
@@ -158,7 +157,7 @@ namespace WinFormsApp1
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.btn_Undo = new System.Windows.Forms.Button();
             this.cb_FilterPath = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.myDataGridView1 = new myControls.myDataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel_base.SuspendLayout();
@@ -194,6 +193,7 @@ namespace WinFormsApp1
             this.panel_content_01.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.myDataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // treeView1
@@ -235,17 +235,6 @@ namespace WinFormsApp1
             this.cb_ShowFiles.TabIndex = 5;
             this.cb_ShowFiles.Text = "Show Files";
             this.cb_ShowFiles.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridView1.Location = new System.Drawing.Point(633, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 62;
-            this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(729, 1225);
-            this.dataGridView1.TabIndex = 6;
             // 
             // cb_Recursive
             // 
@@ -1669,11 +1658,23 @@ namespace WinFormsApp1
             this.cb_FilterPath.Text = "Filter Through Path";
             this.cb_FilterPath.UseVisualStyleBackColor = true;
             // 
+            // myDataGridView1
+            // 
+            this.myDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.myDataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.myDataGridView1.Location = new System.Drawing.Point(633, 0);
+            this.myDataGridView1.Name = "myDataGridView1";
+            this.myDataGridView1.RowHeadersWidth = 62;
+            this.myDataGridView1.RowTemplate.Height = 33;
+            this.myDataGridView1.Size = new System.Drawing.Size(729, 1225);
+            this.myDataGridView1.TabIndex = 16;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2076, 1225);
+            this.Controls.Add(this.myDataGridView1);
             this.Controls.Add(this.cb_FilterPath);
             this.Controls.Add(this.btn_Undo);
             this.Controls.Add(this.textBox2);
@@ -1681,14 +1682,12 @@ namespace WinFormsApp1
             this.Controls.Add(this.btn_Rename);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cb_Recursive);
-            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.cb_ShowFiles);
             this.Controls.Add(this.cb_ShowDirs);
             this.Controls.Add(this.treeView1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.panel_base.ResumeLayout(false);
@@ -1740,6 +1739,7 @@ namespace WinFormsApp1
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.myDataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1751,7 +1751,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.CheckBox cb_ShowDirs;
         private System.Windows.Forms.CheckBox cb_ShowFiles;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.CheckBox cb_Recursive;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btn_Rename;
@@ -1876,6 +1875,7 @@ namespace WinFormsApp1
         private myControls.myPanel panel_content_13;
         private System.Windows.Forms.CheckBox cb_FilterPath;
         private System.Windows.Forms.RadioButton radioButton24;
+        private myControls.myDataGridView myDataGridView1;
     }
 }
 

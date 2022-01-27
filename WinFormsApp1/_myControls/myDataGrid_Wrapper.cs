@@ -1,4 +1,5 @@
-﻿using System;
+﻿using myControls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
@@ -14,7 +15,7 @@ using System.Windows.Forms;
 
 public class myDataGrid_Wrapper
 {
-    private DataGridView    _dataGrid      = null;
+    private myDataGridView  _dataGrid      = null;
     private DataGridViewRow _myTemplateRow = null;
 
     private bool _doUseRecursion     = false;
@@ -68,7 +69,7 @@ public class myDataGrid_Wrapper
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myDataGrid_Wrapper(DataGridView dgv, List<myTreeListDataItem> listGlobal)
+    public myDataGrid_Wrapper(myDataGridView dgv, List<myTreeListDataItem> listGlobal)
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.myDataGrid", "");
@@ -82,7 +83,7 @@ public class myDataGrid_Wrapper
 
     // --------------------------------------------------------------------------------------------------------
 
-    public ref DataGridView Obj()
+    public ref myDataGridView Obj()
     {
         return ref _dataGrid;
     }
@@ -1527,6 +1528,8 @@ public class myDataGrid_Wrapper
                                 cb.Value = !(bool)(cb.Value);
                             }
                         }
+
+                        _dataGrid.my_SetSelectedRowCore(2, false);
                     }
                     else
                     {

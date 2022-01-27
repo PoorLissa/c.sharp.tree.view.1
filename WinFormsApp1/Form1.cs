@@ -1,6 +1,7 @@
-﻿using System;
+﻿using myControls;
+using System;
 using System.Windows.Forms;
-using myControls;
+
 
 
 namespace WinFormsApp1
@@ -69,13 +70,13 @@ namespace WinFormsApp1
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
             mtdgmi.form          = this;
             mtdgmi.tv            = treeView1;
-            mtdgmi.dg            = dataGridView1;
+            mtdgmi.dg            = myDataGridView1;
             mtdgmi.cb_Recursive  = cb_Recursive;
             mtdgmi.cb_ShowDirs   = cb_ShowDirs;
             mtdgmi.cb_ShowFiles  = cb_ShowFiles;
             mtdgmi.cb_FilterPath = cb_FilterPath;
-            mtdgmi.tb_Filter     = new myControls.myTextBox(textBox1);
-            mtdgmi.tb_FilterOut  = new myControls.myTextBox(textBox2);
+            mtdgmi.tb_Filter     = new myTextBox(textBox1);
+            mtdgmi.tb_FilterOut  = new myTextBox(textBox2);
             mtdgmi.richTextBox   = richTextBox1;
 
             // Every control that myRenamerApp must be aware of:
@@ -86,7 +87,7 @@ namespace WinFormsApp1
                 mraControls.option_001_ch_01 = this.checkBox_Option_001;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
-                mraControls.option_001_cb_01 = new myControls.myComboBox(this.comboBox2, SortMode.LastOnTop, "Delimiter");
+                mraControls.option_001_cb_01 = new myComboBox(this.comboBox2, SortMode.LastOnTop, "Delimiter");
                 mraControls.option_001_rb_01 = this.radioButton21;
                 mraControls.option_001_rb_02 = this.radioButton18;
 
@@ -110,7 +111,7 @@ namespace WinFormsApp1
                 mraControls.option_004_num_1 = this.numericUpDown5;
 
                 mraControls.option_005_ch_01 = this.checkBox_Option_005;
-                mraControls.option_005_cb_01 = new myControls.myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
+                mraControls.option_005_cb_01 = new myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
                 mraControls.option_005_num_1 = this.numericUpDown4;
                 mraControls.option_005_cb_02 = this.opt_005_predefined_templates;
                 mraControls.option_005_btn_1 = this.button2;
@@ -124,7 +125,7 @@ namespace WinFormsApp1
                 mraControls.option_006_rb_03 = this.radioButton5;
                 mraControls.option_006_rb_04 = this.radioButton6;
                 mraControls.option_006_rb_05 = this.radioButton7;
-                mraControls.option_006_cb_01 = new myControls.myComboBox(this.comboBox3, SortMode.Sorted, "Short Words");
+                mraControls.option_006_cb_01 = new myComboBox(this.comboBox3, SortMode.Sorted, "Short Words");
 
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
                 mraControls.option_007_num_1 = this.numericUpDown6;
