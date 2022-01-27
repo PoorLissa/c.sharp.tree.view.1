@@ -22,8 +22,16 @@ namespace myControls
         // The selection state changes without regard to the current SelectionMode property value, and without changing the CurrentCell property value.
         public void my_SetSelectedRowCore(int rowIndex, bool selected)
         {
+            // todo:
+            // can we use this with shift+up/down to change our selection without delelecting and restoring the selection?
+            // protected bool ProcessUpKey(Keys keyData) in DataGridViewMethods.cs
             this.SetSelectedRowCore(rowIndex, selected);
         }
-    }
+
+        protected override bool ProcessDataGridViewKey(KeyEventArgs e)
+        {
+            return base.ProcessDataGridViewKey(e);
+        }
+    };
 
 };

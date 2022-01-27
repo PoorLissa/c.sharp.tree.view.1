@@ -29,10 +29,10 @@ namespace WinFormsApp1
                 expandEmpty = true;
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"d:\Games\-= Games =-\Uninstall";
-                path = @"c:\_maxx\002 - music";
                 path = @"d:\test\-= Games =-\Uninstall";
                 path = @"c:\_maxx\test\aaa";
                 path = @"C:\Windows\System32\";
+                path = @"c:\_maxx\002 - music";
             }
 
             init(path, expandEmpty);

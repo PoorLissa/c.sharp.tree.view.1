@@ -1528,8 +1528,6 @@ public class myDataGrid_Wrapper
                                 cb.Value = !(bool)(cb.Value);
                             }
                         }
-
-                        _dataGrid.my_SetSelectedRowCore(2, false);
                     }
                     else
                     {
