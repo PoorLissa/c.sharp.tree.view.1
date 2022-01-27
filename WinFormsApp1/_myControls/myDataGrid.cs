@@ -1683,6 +1683,46 @@ public class myDataGrid
                 }
                 break;
 
+            case Keys.Right: {
+
+                    int index = 0;
+
+                    if (e.Modifiers == Keys.Control)
+                    {
+                        index = _dataGrid.FirstDisplayedScrollingRowIndex + (_dataGrid.RowCount - _dataGrid.FirstDisplayedScrollingRowIndex) / 2;
+                    }
+                    else
+                    {
+                        index = _dataGrid.FirstDisplayedScrollingRowIndex + _dataGrid.DisplayedRowCount(false);
+                    }
+
+                    index = index >= _dataGrid.Rows.Count ? _dataGrid.Rows.Count - 1 : index;
+
+                    _dataGrid.FirstDisplayedScrollingRowIndex = index;
+                    _dataGrid.CurrentCell = _dataGrid[0, index];
+                }
+                break;
+
+            case Keys.Left: {
+
+                    int index = 0;
+
+                    if (e.Modifiers == Keys.Control)
+                    {
+                        index = _dataGrid.FirstDisplayedScrollingRowIndex - (_dataGrid.FirstDisplayedScrollingRowIndex) / 2;
+                    }
+                    else
+                    {
+                        index = _dataGrid.FirstDisplayedScrollingRowIndex - _dataGrid.DisplayedRowCount(false);
+                    }
+
+                    index = index < 0 ? 0 : index;
+
+                    _dataGrid.FirstDisplayedScrollingRowIndex = index;
+                    _dataGrid.CurrentCell = _dataGrid[0, index];
+                }
+                break;
+
             // Rename a file in the grid manually
             case Keys.F2: {
 
