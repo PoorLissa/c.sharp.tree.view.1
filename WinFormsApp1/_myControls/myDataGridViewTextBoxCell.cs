@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 {
-    static private int _dpi = -1;
+    private static int _dpi = -1;
 
     public myDataGridViewTextBoxCell() : base()
     {

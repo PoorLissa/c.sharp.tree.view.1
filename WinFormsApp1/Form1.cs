@@ -5,29 +5,12 @@ using myControls;
 
 namespace WinFormsApp1
 {
-    class A 
-    {
-        public A()
-        {
-            int a = 1;
-        }
-    };
-
-    class B : A
-    {
-        public B(int n) : base()
-        {
-            int b = 1;
-        }
-    };
-
-
     public partial class Form1 : Form
     {
         // --------------------------------------------------------------------------------
 
         private myRenamerApp app = null;
-        private myControls.mySplitButton sb_Undo = null;
+        private mySplitButton sb_Undo = null;
         private System.Drawing.Font _btn_rename_font = null;
 
         //private myControls.myComboBox myCb = null;
@@ -38,8 +21,6 @@ namespace WinFormsApp1
 
         public Form1(string path, bool expandEmpty)
         {
-            var bbb = new B(3);
-
             InitializeComponent();
 
             if (path.Length == 0)
@@ -48,8 +29,9 @@ namespace WinFormsApp1
                 path = @"E:\_work\_projects\Visual Studio\2021\c.sharp.tree.view.1\WinFormsApp1\_far.options";
                 path = @"d:\Games\-= Games =-\Uninstall";
                 path = @"c:\_maxx\002 - music";
-                path = @"c:\_maxx\test\aaa";
                 path = @"d:\test\-= Games =-\Uninstall";
+                path = @"c:\_maxx\test\aaa";
+                path = @"C:\Windows\System32\";
             }
 
             init(path, expandEmpty);

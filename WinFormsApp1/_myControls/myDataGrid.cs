@@ -1560,37 +1560,34 @@ public class myDataGrid
             // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
             // The selection is lost, instead of subtracting items from the selection
             // In order to address that, added 2 additional handlers for Up and Down keys:
-
-            // todo: fix this:
-            // shitf+up --> select some files. then shift+down; then shift+up again --> selection breaks
             case Keys.Up: {
 
-                    if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
+                    if (_dataGrid.SelectedRows.Count > 1)
                     {
-                        int cnt = 0, i = currRow;
-
-                        // Make sure the selection is contiguous
-                        for (; i >= 0; i--)
+                        if (e.Modifiers == Keys.Shift)
                         {
-                            if (!_dataGrid.Rows[i].Selected)
+                            // Store current selection in a dictionary
+                            var dic = storeSelection();
+
+                            if (currRow != 0)
                             {
-                                i++;
-                                break;
+                                bool isNextSelected = _dataGrid[0, currRow - 1].Selected;
+                                _dataGrid.CurrentCell = _dataGrid[0, currRow - 1];
+
+                                // Restore the selection
+                                restoreSelection(dic, currRow, isNextSelected);
                             }
 
-                            cnt++;
-                        }
-
-                        if (cnt == _dataGrid.SelectedRows.Count)
-                        {
-                            i = (i < 0) ? 0 : i;
-                            currRow--;
-                            _dataGrid.CurrentCell = _dataGrid[0, currRow];
-
-                            for (; i != currRow; i++)
-                                _dataGrid.Rows[i].Selected = true;
-
                             e.Handled = true;
+                        }
+                        else
+                        {
+                            if (currRow == 0)
+                            {
+                                _dataGrid.ClearSelection();
+                                _dataGrid.CurrentCell.Selected = true;
+                                e.Handled = true;
+                            }
                         }
                     }
                 }
@@ -1598,31 +1595,33 @@ public class myDataGrid
 
             case Keys.Down: {
 
-                    if (e.Modifiers == Keys.Shift && _dataGrid.SelectedRows.Count > 1)
+                    if (_dataGrid.SelectedRows.Count > 1)
                     {
-                        bool isNextSelected = false;
-
-                        // Store current selection
-                        List<int> list = new List<int>();
-                        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
-                            list.Add(_dataGrid.SelectedRows[i].Index);
-
-                        if (_dataGrid.Rows.Count > currRow + 1)
+                        if (e.Modifiers == Keys.Shift)
                         {
-                            isNextSelected = _dataGrid[0, currRow+1].Selected;
+                            // Store current selection in a dictionary
+                            var dic = storeSelection();
 
-                            _dataGrid.CurrentCell = _dataGrid[0, currRow + 1];
-
-                            // Restore selection
-                            for (int i = 0; i < list.Count; i++)
+                            if (currRow + 1 != _dataGrid.Rows.Count)
                             {
-                                int index = list[i];
-                                _dataGrid.Rows[index].Selected = (index == currRow) ? !isNextSelected : true;
+                                bool isNextSelected = _dataGrid[0, currRow + 1].Selected;
+                                _dataGrid.CurrentCell = _dataGrid[0, currRow + 1];
+
+                                // Restore the selection
+                                restoreSelection(dic, currRow, isNextSelected);
                             }
 
+                            e.Handled = true;
                         }
-
-                        e.Handled = true;
+                        else
+                        {
+                            if (currRow == _dataGrid.RowCount - 1)
+                            {
+                                _dataGrid.ClearSelection();
+                                _dataGrid.CurrentCell.Selected = true;
+                                e.Handled = true;
+                            }
+                        }
                     }
                 }
                 return;
@@ -1638,26 +1637,22 @@ public class myDataGrid
 
                     if (_dataGrid.Rows.Count > 0)
                     {
-                        List<int> list = null;
-
-                        // Store current selection
-                        if (_dataGrid.SelectedRows.Count > 0)
-                        {
-                            list = new List<int>();
-                            for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
-                                list.Add(_dataGrid.SelectedRows[i].Index);
-                        }
-
-                        _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
-
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            for (int i = 0; i <= currRow; i++)
-                                _dataGrid.Rows[i].Selected = true;                          // Select everything from current up to home
+                            var dic = storeSelection();                                         // Store current selection
 
-                            if (list != null)
-                                for (int i = 0; i < list.Count; i++)
-                                    _dataGrid.Rows[list[i]].Selected = true;                // Restore old selection
+                            _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
+
+                            for (int i = 0; i <= currRow; i++)                                  // Select everything from current row all the way to the top
+                                _dataGrid.Rows[i].Selected = true;
+
+                            restoreSelection(dic, currRow, false);                              // Restore old selection
+                        }
+                        else
+                        {
+                            _dataGrid.ClearSelection();
+                            _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
+                            _dataGrid.CurrentCell.Selected = true;
                         }
                     }
                 }
@@ -1667,27 +1662,22 @@ public class myDataGrid
 
                     if (_dataGrid.Rows.Count > 0)
                     {
-                        List<int> list = null;
-                        int curr = _dataGrid.CurrentRow.Index;
-
-                        // Store current selection
-                        if (_dataGrid.SelectedRows.Count > 0)
-                        {
-                            list = new List<int>();
-                            for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
-                                list.Add(_dataGrid.SelectedRows[i].Index);
-                        }
-
-                        _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
-
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            for (int i = currRow; i < _dataGrid.Rows.Count; i++)
-                                _dataGrid.Rows[i].Selected = true;                          // Select everything from current down to the bottom
+                            var dic = storeSelection();                                         // Store current selection
 
-                            if (list != null)
-                                for (int i = 0; i < list.Count; i++)
-                                    _dataGrid.Rows[list[i]].Selected = true;                // Restore old selection
+                            _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
+
+                            for (int i = currRow; i < _dataGrid.Rows.Count; i++)
+                                _dataGrid.Rows[i].Selected = true;                              // Select everything from current row all the way to the bottom
+
+                            restoreSelection(dic, currRow, false);                              // Restore old selection
+                        }
+                        else
+                        {
+                            _dataGrid.ClearSelection();
+                            _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
+                            _dataGrid.CurrentCell.Selected = true;
                         }
                     }
                 }
@@ -1875,6 +1865,66 @@ public class myDataGrid
         }
 
         return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Store current rows selection in a dictionary
+    private Dictionary<int, int> storeSelection()
+    {
+        Dictionary<int, int> dic = new Dictionary<int, int>();
+
+        int first = _dataGrid.SelectedRows[0].Index;
+        int last = _dataGrid.SelectedRows[_dataGrid.SelectedRows.Count - 1].Index;
+
+        if (first - last == _dataGrid.SelectedRows.Count - 1)
+        {
+            // The selection is contiguous: fast way
+            dic.Add(last, _dataGrid.SelectedRows.Count);
+        }
+        else
+        {
+            // The selection is not contiguous: slower way
+            int key = -1;
+            int cnt = 0;
+
+            for (int i = 0; i < _dataGrid.Rows.Count; i++)
+            {
+                var row = _dataGrid.Rows[i];
+
+                if (row.Selected)
+                {
+                    cnt++;
+                }
+                else
+                {
+                    if (cnt > 0)
+                    {
+                        dic.Add(key + 1, cnt);
+                        cnt = 0;
+                    }
+
+                    key = i;
+                }
+            }
+
+            if (cnt > 0)
+            {
+                dic.Add(key + 1, cnt);
+            }
+        }
+
+        return dic;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void restoreSelection(Dictionary<int, int> dic, int currRow, bool isNextSelected)
+    {
+        // Restore the selection
+        foreach (var item in dic)
+            for (int i = 0; i < item.Value; i++)
+                _dataGrid.Rows[item.Key + i].Selected = (item.Key + i == currRow) ? !isNextSelected : true;
     }
 
     // --------------------------------------------------------------------------------------------------------
