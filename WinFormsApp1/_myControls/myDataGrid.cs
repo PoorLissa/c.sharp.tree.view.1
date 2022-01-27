@@ -1919,9 +1919,9 @@ public class myDataGrid
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Restore selection from the dictionary
     private void restoreSelection(Dictionary<int, int> dic, int currRow, bool isNextSelected)
     {
-        // Restore the selection
         foreach (var item in dic)
             for (int i = 0; i < item.Value; i++)
                 _dataGrid.Rows[item.Key + i].Selected = (item.Key + i == currRow) ? !isNextSelected : true;
