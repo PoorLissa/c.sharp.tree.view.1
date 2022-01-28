@@ -190,6 +190,12 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     public void refresh()
     {
+        // To restore focus later on
+        if (_dataGrid.Obj().Focused)
+        {
+            _tree.Obj().SelectedNode.ImageIndex = -3;
+        }
+
         tree_onAfterSelect(this, null);
     }
 
@@ -357,9 +363,11 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                         _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _tree.Obj().SelectedNode, _filterStr, _filterOutStr);
                         _dataGrid.Enable(true);
 
-                        // -2 means, the caller is myTree.setPath()
-                        // In this case, we know the user launched the app with a non-empty path param, and we want to make DataGrid selected immediately
-                        if (selectedNode.ImageIndex == -2)
+                        // selectedNode.ImageIndex == -2 means, the caller is myTree.setPath()
+                        //   In this case, we know the user launched the app with a non-empty path param, and we want to make DataGrid selected immediately
+                        // selectedNode.ImageIndex == -3 means, the caller is myTree_DataGrid_Manager.refresh()
+                        //   In this case, we know F5 was hit when DataGrid was focused, and we want to make DataGrid selected again
+                        if (selectedNode.ImageIndex < -1)
                         {
                             selectedNode.ImageIndex = -1;
 

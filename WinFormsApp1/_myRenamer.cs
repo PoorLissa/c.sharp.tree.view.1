@@ -83,6 +83,7 @@ public class myRenamer
         }
         catch (System.Exception ex)
         {
+            err = (err == null) ? new string("") : err;
             err += ex.Message + "\n";
         }
 
@@ -118,16 +119,27 @@ public class myRenamer
             }
             else
             {
-                string err = "";
-
+                string err = null;
                 renTo_TmpName(item, ref err);
-                _manager.update(list, true, false);
 
-                res &= RenamePhysical(item, newFullName, ref err);
+                if (err == null)
+                {
+                    _manager.update(list, true, false);
+                    res &= RenamePhysical(item, newFullName, ref err);
+                }
+
+                if (err != null)
+                {
+                    res = false;
+                    MessageBox.Show($"'{newFullName}':\n\n{err}", "Error", MessageBoxButtons.OK);
+                }
             }
         }
 
-        _manager.update(list, true, true);
+        if (res)
+        {
+            _manager.update(list, true, true);
+        }
 
         return res;
     }
@@ -1093,6 +1105,7 @@ public class myRenamer
             catch (System.Exception ex)
             {
                 ok = false;
+                err = (err == null) ? new string("") : err;
                 err += ex.Message + "\n";
             }
 
