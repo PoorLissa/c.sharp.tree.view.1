@@ -854,6 +854,8 @@ public class myTree
         }
         else
         {
+            string error = null;
+
             AllowRedrawing(false);
 
             // For each updated item: get its history info from the backUp
@@ -880,12 +882,17 @@ public class myTree
                             // Using old and new paths, update corresponding subnode
                             if (!_logic.updateNode(n, prev, curr))
                             {
-                                MessageBox.Show($"Could not update subnode:\n{n.Name}\n{prev}\n{curr}", "Tree Error",
-                                    MessageBoxButtons.OK);
+                                error = (error == null) ? new string("") : error;
+                                error += $"\n{n.Name}\n{prev}\n{curr}";
                             }
                         }
                     }
                 }
+            }
+
+            if (error != null)
+            {
+                MessageBox.Show($"Could not update subnode(s):{error}", "Tree Error", MessageBoxButtons.OK);
             }
 
             AllowRedrawing(true);

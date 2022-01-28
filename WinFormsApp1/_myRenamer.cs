@@ -103,7 +103,7 @@ public class myRenamer
 
     public bool RenameManual(List<myTreeListDataItem> list, string newName)
     {
-        bool res = false;
+        bool res = true;
 
         foreach (var item in list)
         {
@@ -123,11 +123,11 @@ public class myRenamer
                 renTo_TmpName(item, ref err);
                 _manager.update(list, true, false);
 
-                // In case there is more than one file in the list, need to update res accordingly
-                res = RenamePhysical(item, newFullName, ref err);
-                _manager.update(list, true, true);
+                res &= RenamePhysical(item, newFullName, ref err);
             }
         }
+
+        _manager.update(list, true, true);
 
         return res;
     }
