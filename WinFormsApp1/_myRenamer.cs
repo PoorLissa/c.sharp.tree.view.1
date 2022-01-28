@@ -108,13 +108,13 @@ public class myRenamer
         foreach (var item in list)
         {
             int pos = item.Name.LastIndexOf('\\') + 1;
-            newName = item.Name.Substring(0, pos) + newName;
+            string newFullName = item.Name.Substring(0, pos) + newName;
 
-            bool itemExists = System.IO.Directory.Exists(newName) || System.IO.File.Exists(newName);
+            bool itemExists = System.IO.Directory.Exists(newFullName) || System.IO.File.Exists(newFullName);
 
             if (itemExists)
             {
-                MessageBox.Show($"'{newName}':\nAlready Exists", "Warning", MessageBoxButtons.OK);
+                MessageBox.Show($"'{newFullName}':\nAlready Exists", "Warning", MessageBoxButtons.OK);
             }
             else
             {
@@ -124,7 +124,7 @@ public class myRenamer
                 _manager.update(list, true, false);
 
                 // In case there is more than one file in the list, need to update res accordingly
-                res = RenamePhysical(item, newName, ref err);
+                res = RenamePhysical(item, newFullName, ref err);
                 _manager.update(list, true, true);
             }
         }

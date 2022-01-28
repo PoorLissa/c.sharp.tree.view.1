@@ -22,6 +22,7 @@ public class myDataGrid_Wrapper
     private bool _doShowRecursionMsg = false;
     private bool _filterMode         = false;
     private bool _tabFocus           = false;
+    private bool _manualBulkMode     = false;
 
     private Image _imgDir         = null;
     private Image _imgFile        = null;
@@ -1459,37 +1460,67 @@ public class myDataGrid_Wrapper
             int id = (int)_dataGrid.Rows[e.RowIndex].Cells[(int)Columns.colId].Value;
             var cell = _dataGrid.CurrentCell;
 
-            string old = _globalFileListExtRef[id].Name;
-            old = old.Substring((old.LastIndexOf('\\') + 1));
+            string oldName = _globalFileListExtRef[id].Name;
+            oldName = oldName.Substring((oldName.LastIndexOf('\\') + 1));
 
             if (cell.Value != null)
             {
-                // If Ecs key is hit, the name in the cell will be restored to the original value, but we still will reach this point
-                if (cell.Value.ToString() != old)
-                {
-                    try
-                    {
-                        var list = new List<myTreeListDataItem>();
-                        list.Add(_globalFileListExtRef[id].Clone());
+                string newName = cell.Value.ToString();
 
-                        if (!myRenamer.getInstance().RenameManual(list, cell.Value.ToString()))
+                // If Ecs key is hit, the name in the cell will be restored to the original value, but we still will reach this point
+                if (newName != oldName)
+                {
+                    // In bulk manual mode, make sure all the selected files are located in unique directories:
+                    bool bulkOK = !_manualBulkMode || bulkPathsAreUnique();
+
+                    if (_manualBulkMode && !bulkOK)
+                    {
+                        MessageBox.Show("Some files are located in the same directory.\nManual renaming is not allowed.", "Fail", MessageBoxButtons.OK);
+                        cell.Value = oldName;
+                    }
+                    else
+                    {
+                        try
                         {
-                            cell.Value = old;
+                            var list = new List<myTreeListDataItem>();
+                            list.Add(_globalFileListExtRef[id].Clone());
+
+                            // In case several rows are selected, rename them all to the same name
+                            if (_manualBulkMode)
+                            {
+                                for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+                                {
+                                    if (_dataGrid.SelectedRows[i].Index != e.RowIndex)
+                                    {
+                                        id = (int)_dataGrid.Rows[_dataGrid.SelectedRows[i].Index].Cells[(int)Columns.colId].Value;
+                                        list.Add(_globalFileListExtRef[id].Clone());
+                                    }
+                                }
+                            }
+
+                            if (!myRenamer.getInstance().RenameManual(list, cell.Value.ToString()))
+                            {
+                                cell.Value = oldName;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename a file", MessageBoxButtons.OK);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename a file", MessageBoxButtons.OK);
-                    }
+
+                    _manualBulkMode = false;
                 }
             }
             else
             {
-                cell.Value = old;
+                cell.Value = oldName;
             }
 
             cell.ReadOnly = true;
         }
+
+        return;
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -1536,6 +1567,14 @@ public class myDataGrid_Wrapper
                 }
                 break;
 
+            // Space: Toggle checked state of each selected row
+            case Keys.Space: {
+
+                    toggleSelectedCheckboxes();
+
+                }
+                break;
+
             // Ctrl+C / Ctrl+Ins: copy file name from 'Name' cell
             case Keys.Insert:
             case Keys.C: {
@@ -1557,82 +1596,31 @@ public class myDataGrid_Wrapper
                 }
                 break;
 
-            // Up and Down arrow keys work mostly as expected
-            // The only problem arises in the following case: Shift + End --> (not releasing Shift) --> Up Arrow
-            // The selection is lost, instead of subtracting items from the selection
-            // In order to address that, added 2 additional handlers for Up and Down keys:
             case Keys.Up: {
 
-                    if (_dataGrid.SelectedRows.Count > 1)
+                    // At the top row, up arrow clears the selection
+                    if (e.Modifiers == Keys.None && currRow == 0)
                     {
-                        if (e.Modifiers == Keys.Shift)
-                        {
-                            // Store current selection in a dictionary
-                            var dic = storeSelection();
-
-                            if (currRow != 0)
-                            {
-                                bool isNextSelected = _dataGrid[0, currRow - 1].Selected;
-                                _dataGrid.CurrentCell = _dataGrid[0, currRow - 1];
-
-                                // Restore the selection
-                                restoreSelection(dic, currRow, isNextSelected);
-                            }
-
-                            e.Handled = true;
-                        }
-                        else
-                        {
-                            if (currRow == 0)
-                            {
-                                _dataGrid.ClearSelection();
-                                _dataGrid.CurrentCell.Selected = true;
-                                e.Handled = true;
-                            }
-                        }
+                        _dataGrid.ClearSelection();
+                        _dataGrid.my_SetCurrentCellAddressCore(0, 0, true);
+                        _dataGrid.CurrentCell.Selected = true;
+                        e.Handled = true;
                     }
                 }
                 return;
 
             case Keys.Down: {
 
-                    if (_dataGrid.SelectedRows.Count > 1)
+                    // At the bottom row, down arrow clears the selection
+                    if (e.Modifiers == Keys.None && currRow == _dataGrid.RowCount-1)
                     {
-                        if (e.Modifiers == Keys.Shift)
-                        {
-                            // Store current selection in a dictionary
-                            var dic = storeSelection();
-
-                            if (currRow + 1 != _dataGrid.Rows.Count)
-                            {
-                                bool isNextSelected = _dataGrid[0, currRow + 1].Selected;
-                                _dataGrid.CurrentCell = _dataGrid[0, currRow + 1];
-
-                                // Restore the selection
-                                restoreSelection(dic, currRow, isNextSelected);
-                            }
-
-                            e.Handled = true;
-                        }
-                        else
-                        {
-                            if (currRow == _dataGrid.RowCount - 1)
-                            {
-                                _dataGrid.ClearSelection();
-                                _dataGrid.CurrentCell.Selected = true;
-                                e.Handled = true;
-                            }
-                        }
+                        _dataGrid.ClearSelection();
+                        _dataGrid.my_SetCurrentCellAddressCore(0, _dataGrid.RowCount-1, true);
+                        _dataGrid.CurrentCell.Selected = true;
+                        e.Handled = true;
                     }
                 }
                 return;
-
-            case Keys.Space: {
-
-                    // Change checked state of each selected row
-                    toggleSelectedCheckboxes();
-                }
-                break;
 
             case Keys.Home: {
 
@@ -1640,19 +1628,20 @@ public class myDataGrid_Wrapper
                     {
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            var dic = storeSelection();                                         // Store current selection
+                            _dataGrid.FirstDisplayedScrollingRowIndex = 0;
+                            _dataGrid.my_SetCurrentCellAddressCore(0, 0);
 
-                            _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
-
-                            for (int i = 0; i <= currRow; i++)                                  // Select everything from current row all the way to the top
-                                _dataGrid.Rows[i].Selected = true;
-
-                            restoreSelection(dic, currRow, false);                              // Restore old selection
+                            // Select everything from current row all the way to the top
+                            for (int i = 0; i <= currRow; i++)
+                                if (!_dataGrid.Rows[i].Selected)
+                                    _dataGrid.Rows[i].Selected = true;
                         }
                         else
                         {
+                            // Clean selection and jump home
                             _dataGrid.ClearSelection();
-                            _dataGrid.CurrentCell = _dataGrid[0, 0];                            // Jump home
+                            _dataGrid.my_SetCurrentCellAddressCore(0, 0, true);
+                            _dataGrid.CurrentCell = _dataGrid[0, 0];
                             _dataGrid.CurrentCell.Selected = true;
                         }
                     }
@@ -1665,19 +1654,20 @@ public class myDataGrid_Wrapper
                     {
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            var dic = storeSelection();                                         // Store current selection
+                            _dataGrid.FirstDisplayedScrollingRowIndex = _dataGrid.Rows.Count-1;
+                            _dataGrid.my_SetCurrentCellAddressCore(0, _dataGrid.Rows.Count-1);
 
-                            _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
-
+                            // Select everything from current row all the way to the bottom
                             for (int i = currRow; i < _dataGrid.Rows.Count; i++)
-                                _dataGrid.Rows[i].Selected = true;                              // Select everything from current row all the way to the bottom
-
-                            restoreSelection(dic, currRow, false);                              // Restore old selection
+                                if (!_dataGrid.Rows[i].Selected)
+                                    _dataGrid.Rows[i].Selected = true;
                         }
                         else
                         {
+                            // Clean selection and jump to the bottom
                             _dataGrid.ClearSelection();
-                            _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];       // Jump to the bottom
+                            _dataGrid.my_SetCurrentCellAddressCore(0, _dataGrid.RowCount-1, true);
+                            _dataGrid.CurrentCell = _dataGrid[0, _dataGrid.Rows.Count-1];
                             _dataGrid.CurrentCell.Selected = true;
                         }
                     }
@@ -1686,16 +1676,9 @@ public class myDataGrid_Wrapper
 
             case Keys.Right: {
 
-                    int index = 0;
-
-                    if (e.Modifiers == Keys.Control)
-                    {
-                        index = _dataGrid.FirstDisplayedScrollingRowIndex + (_dataGrid.RowCount - _dataGrid.FirstDisplayedScrollingRowIndex) / 2;
-                    }
-                    else
-                    {
-                        index = _dataGrid.FirstDisplayedScrollingRowIndex + _dataGrid.DisplayedRowCount(false);
-                    }
+                    int index = e.Modifiers == Keys.Control
+                                        ? _dataGrid.FirstDisplayedScrollingRowIndex + (_dataGrid.RowCount - _dataGrid.FirstDisplayedScrollingRowIndex)/2
+                                        : _dataGrid.FirstDisplayedScrollingRowIndex + _dataGrid.DisplayedRowCount(false);
 
                     index = index >= _dataGrid.Rows.Count ? _dataGrid.Rows.Count - 1 : index;
 
@@ -1706,16 +1689,9 @@ public class myDataGrid_Wrapper
 
             case Keys.Left: {
 
-                    int index = 0;
-
-                    if (e.Modifiers == Keys.Control)
-                    {
-                        index = _dataGrid.FirstDisplayedScrollingRowIndex - (_dataGrid.FirstDisplayedScrollingRowIndex) / 2;
-                    }
-                    else
-                    {
-                        index = _dataGrid.FirstDisplayedScrollingRowIndex - _dataGrid.DisplayedRowCount(false);
-                    }
+                    int index = e.Modifiers == Keys.Control
+                                        ? _dataGrid.FirstDisplayedScrollingRowIndex - (_dataGrid.FirstDisplayedScrollingRowIndex)/2
+                                        : _dataGrid.FirstDisplayedScrollingRowIndex - _dataGrid.DisplayedRowCount(false);
 
                     index = index < 0 ? 0 : index;
 
@@ -1728,7 +1704,18 @@ public class myDataGrid_Wrapper
             case Keys.F2: {
 
                     var cell = _dataGrid[(int)Columns.colName, currRow];
-                    _dataGrid.CurrentCell = cell;
+
+                    _manualBulkMode = _dataGrid.SelectedRows.Count > 1;
+
+                    // Scroll current row into view, if needed
+                    if (!isRowDisplayed(currRow))
+                    {
+                        _dataGrid.FirstDisplayedCell = _dataGrid.CurrentCell;
+                    }
+
+                    // Make the cell active WITHOUT changing the selection (as opposed to '_dataGrid.CurrentCell = cell')
+                    _dataGrid.my_SetCurrentCellAddressCore(cell.ColumnIndex, cell.RowIndex);
+
                     cell.ReadOnly = false;
                     _dataGrid.BeginEdit(false);
                 }
@@ -1911,6 +1898,7 @@ public class myDataGrid_Wrapper
     // --------------------------------------------------------------------------------------------------------
 
     // Store current rows selection in a dictionary
+    // Not used anymore (was used in on_KeyDown --> Shift+Home/Shift+End)
     private Dictionary<int, int> storeSelection()
     {
         Dictionary<int, int> dic = new Dictionary<int, int>();
@@ -1961,11 +1949,45 @@ public class myDataGrid_Wrapper
     // --------------------------------------------------------------------------------------------------------
 
     // Restore selection from the dictionary
+    // Not used anymore (was used in on_KeyDown --> Shift+Home/Shift+End)
     private void restoreSelection(Dictionary<int, int> dic, int currRow, bool isNextSelected)
     {
         foreach (var item in dic)
             for (int i = 0; i < item.Value; i++)
                 _dataGrid.Rows[item.Key + i].Selected = (item.Key + i == currRow) ? !isNextSelected : true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Checks if the [index]th row is currently in view
+    private bool isRowDisplayed(int index)
+    {
+        int first = _dataGrid.FirstDisplayedCell.RowIndex;
+        int last = first + _dataGrid.DisplayedRowCount(false);
+
+        return index >= first && index < last;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    // Checks if all the paths of the selected items in the grid are unique
+    private bool bulkPathsAreUnique()
+    {
+        var hashSet = new HashSet<string>();
+
+        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+        {
+            var row = _dataGrid.Rows[_dataGrid.SelectedRows[i].Index];
+            int id = (int)row.Cells[(int)Columns.colId].Value;
+            int pos = _globalFileListExtRef[id].Name.LastIndexOf('\\') + 1;
+
+            string path = _globalFileListExtRef[id].Name.Substring(0, pos);
+
+            if (!hashSet.Add(path))
+                return false;
+        }
+
+        return true;
     }
 
     // --------------------------------------------------------------------------------------------------------
