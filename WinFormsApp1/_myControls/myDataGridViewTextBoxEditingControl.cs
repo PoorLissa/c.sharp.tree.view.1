@@ -86,6 +86,24 @@ namespace myControls
             ;
         }
 
+        // Return [true] if the character was processed by the control; otherwise, [false]
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if ((int)keyData == (int)Keys.Control + (int)Keys.Back)
+            {
+                return false;
+            }
+
+            if ((int)keyData == (int)Keys.Tab)
+            {
+                return true;
+            }
+
+            bool res = base.ProcessCmdKey(ref msg, keyData);
+
+            return res;
+        }
+
         public object EditingControlFormattedValue
         {
             get
@@ -115,23 +133,24 @@ namespace myControls
             set { rowIndex = value; }
         }
 
+        // Let the Editing Control handle the keys listed
+        // When [true] is returned, the key will be sent to the Editing Control, not DataGrid
         public bool EditingControlWantsInputKey(Keys key, bool dataGridViewWantsInputKey)
         {
-            // Let the DateTimePicker handle the keys listed.
             switch (key & Keys.KeyCode)
             {
                 case Keys.Left:
+                case Keys.Right:
                 case Keys.Up:
                 case Keys.Down:
-                case Keys.Right:
                 case Keys.Home:
                 case Keys.End:
                 case Keys.PageDown:
                 case Keys.PageUp:
                     return true;
-                default:
-                    return !dataGridViewWantsInputKey;
             }
+
+            return !dataGridViewWantsInputKey;
         }
 
         public void PrepareEditingControlForEdit(bool selectAll)
@@ -175,14 +194,11 @@ namespace myControls
             }
         }
 
-/*
-        protected new void OnValueChanged(System.EventArgs e)
+        protected override void OnTextChanged(System.EventArgs e)
         {
-            // Notify the DataGridView that the contents of the cell have changed
             valueChanged = true;
             this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
-            //base.OnValueChanged(eventargs);
+            base.OnTextChanged(e);
         }
-*/
     };
 };

@@ -10,14 +10,17 @@ using System.Windows.Forms;
 class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 {
     private static int _dpi = -1;
+    private static CustomEditType _type = CustomEditType.textBox;
+    public enum CustomEditType { textBox, richTextBox };
 
     public myDataGridViewTextBoxCell() : base()
     {
     }
 
-    public myDataGridViewTextBoxCell(int dpi) : base()
+    public myDataGridViewTextBoxCell(CustomEditType type, int dpi) : base()
     {
         _dpi = _dpi < 0 ? dpi : _dpi;
+        _type = type;
     }
 
     // Return the type of the editing control this Cell uses
@@ -25,7 +28,12 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
     {
         get
         {
-            //return typeof(myControls.myDataGridViewRichTextBoxEditingControl);
+            switch (_type)
+            {
+                case CustomEditType.richTextBox:
+                    return typeof(myControls.myDataGridViewRichTextBoxEditingControl);
+            }
+
             return typeof(myControls.myDataGridViewTextBoxEditingControl);
         }
     }
@@ -62,8 +70,9 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
             if (rtb != null)
             {
                 rtb.BorderStyle = BorderStyle.None;
-                //rtb.AcceptsReturn = rtb.Multiline = dataGridViewCellStyle.WrapMode == DataGridViewTriState.True;
+                rtb.Multiline = false;
                 rtb.MaxLength = this.MaxInputLength;
+
                 string initialFormattedValueStr = initialFormattedValue as string;
 
                 if (initialFormattedValueStr == null)

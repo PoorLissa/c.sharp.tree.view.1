@@ -257,7 +257,7 @@ public class myDataGrid_Wrapper
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var columnName = new DataGridViewTextBoxColumn();
-            columnName.CellTemplate = new myDataGridViewTextBoxCell(_dataGrid.DeviceDpi);
+            columnName.CellTemplate = new myDataGridViewTextBoxCell(myDataGridViewTextBoxCell.CustomEditType.textBox, _dataGrid.DeviceDpi);
             columnName.Name = "Name";
             columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             columnName.ReadOnly = true;
@@ -1296,10 +1296,10 @@ public class myDataGrid_Wrapper
     // Manual cell edit -- Control Showing
     private void on_CellControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
     {
-        var tb = e.Control as TextBox;
-
-        if (tb != null)
+        if (e.Control is TextBox || e.Control is RichTextBox)
         {
+            var tb = e.Control as TextBoxBase;
+
             if (tb.Tag == null)
             {
                 // Needs to be done only once, as the same control is actually reused in each editing session
@@ -1314,7 +1314,7 @@ public class myDataGrid_Wrapper
         // In order to trap some keys, [myDataGridViewTextBoxEditingControl] class has been introduced
         void keyDownHandler(object sender, KeyEventArgs e)
         {
-            var tb = sender as TextBox;
+            var tb = sender as TextBoxBase;
 
             switch (e.KeyCode)
             {
