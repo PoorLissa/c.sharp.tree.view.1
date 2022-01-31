@@ -25,6 +25,7 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
     {
         get
         {
+            //return typeof(myControls.myDataGridViewRichTextBoxEditingControl);
             return typeof(myControls.myDataGridViewTextBoxEditingControl);
         }
     }
@@ -54,7 +55,27 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 
         base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
 
-//      var tb = DataGridView.EditingControl as TextBox;
+        if (this.EditType == typeof(myControls.myDataGridViewRichTextBoxEditingControl))
+        {
+            var rtb = DataGridView.EditingControl as RichTextBox;
+
+            if (rtb != null)
+            {
+                rtb.BorderStyle = BorderStyle.None;
+                //rtb.AcceptsReturn = rtb.Multiline = dataGridViewCellStyle.WrapMode == DataGridViewTriState.True;
+                rtb.MaxLength = this.MaxInputLength;
+                string initialFormattedValueStr = initialFormattedValue as string;
+
+                if (initialFormattedValueStr == null)
+                {
+                    rtb.Text = string.Empty;
+                }
+                else
+                {
+                    rtb.Text = initialFormattedValueStr;
+                }
+            }
+        }
     }
 
     protected override void Paint(Graphics graphics,

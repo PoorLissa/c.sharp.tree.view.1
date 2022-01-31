@@ -1630,9 +1630,10 @@ public class myDataGrid_Wrapper
 
                     if (_dataGrid.Rows.Count > 0)
                     {
+                        _dataGrid.FirstDisplayedScrollingRowIndex = 0;
+
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            _dataGrid.FirstDisplayedScrollingRowIndex = 0;
                             _dataGrid.my_SetCurrentCellAddressCore(0, 0);
 
                             // Select everything from current row all the way to the top
@@ -1656,9 +1657,10 @@ public class myDataGrid_Wrapper
 
                     if (_dataGrid.Rows.Count > 0)
                     {
+                        _dataGrid.FirstDisplayedScrollingRowIndex = _dataGrid.Rows.Count-1;
+
                         if ((e.Modifiers & Keys.Shift) == Keys.Shift)
                         {
-                            _dataGrid.FirstDisplayedScrollingRowIndex = _dataGrid.Rows.Count-1;
                             _dataGrid.my_SetCurrentCellAddressCore(0, _dataGrid.Rows.Count-1);
 
                             // Select everything from current row all the way to the bottom
