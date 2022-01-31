@@ -1470,15 +1470,19 @@ public class myDataGrid_Wrapper
                 // If Ecs key is hit, the name in the cell will be restored to the original value, but we still will reach this point
                 if (newName != oldName)
                 {
-                    // In bulk manual mode, make sure all the selected files are located in unique directories:
-                    bool bulkOK = !_manualBulkMode || bulkPathsAreUnique();
+                    // Actually, let's just proceed with the renaming without checking for unique paths.
 
-                    if (_manualBulkMode && !bulkOK)
+#if false
+                    // In bulk manual mode, make sure all the selected files are located in unique directories:
+                    //bool bulkOK = !_manualBulkMode || bulkPathsAreUnique();
+
+                    if (false && _manualBulkMode && !bulkOK)
                     {
                         MessageBox.Show("Some files are located in the same directory.\nManual renaming is not allowed.", "Fail", MessageBoxButtons.OK);
                         cell.Value = oldName;
                     }
                     else
+#endif
                     {
                         try
                         {
