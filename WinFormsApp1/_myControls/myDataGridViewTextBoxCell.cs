@@ -57,8 +57,8 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
         var res = base.PositionEditingPanel(controlBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
 
         // Adjust the distance between the rightmost end of the text and the right border of the control.
-        // This makes sense when the text is longer than the control, and we jump to the nd of it.
-        // Without this adjustment, rightmost part of the text is hidden
+        // This makes sense when the text is longer than the control, and we jump to the right end of it.
+        // Without this adjustment, rightmost part of the text will be hidden
         res.Width -= offset + 10;
 
         return res;
