@@ -66,9 +66,11 @@ namespace myControls
 #if false
         public override void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
+/*
             this.Font = dataGridViewCellStyle.Font;
             this.BackColor = System.Drawing.Color.Green;
             this.ForeColor = System.Drawing.Color.Red;
+*/
         }
 #endif
     };

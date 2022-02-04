@@ -54,7 +54,14 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
         cellClip.Y += 10;
 
         // Let the base class do its adjustments
-        return base.PositionEditingPanel(controlBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
+        var res = base.PositionEditingPanel(controlBounds, cellClip, cellStyle, singleVerticalBorderAdded, singleHorizontalBorderAdded, isFirstDisplayedColumn, isFirstDisplayedRow);
+
+        // Adjust the distance between the rightmost end of the text and the right border of the control.
+        // This makes sense when the text is longer than the control, and we jump to the nd of it.
+        // Without this adjustment, rightmost part of the text is hidden
+        res.Width -= offset + 10;
+
+        return res;
     }
 
     public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
@@ -62,6 +69,11 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
         dataGridViewCellStyle.BackColor = Color.White;
 
         base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
+
+        if (this.EditType == typeof(myControls.myDataGridViewTextBoxEditingControl))
+        {
+            var tb = DataGridView.EditingControl as TextBox;
+        }
 
         if (this.EditType == typeof(myControls.myDataGridViewRichTextBoxEditingControl))
         {
