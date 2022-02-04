@@ -36,12 +36,10 @@ namespace myControls
         {
             if (_tb != null)
             {
-                int dpi = _tb.DeviceDpi;
-
                 // Add and subscribe to events
                 setUpEvents();
 
-                createDrawingPrimitives(dpi);
+                createDrawingPrimitives();
             }
 
             return;
@@ -103,7 +101,7 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
-        private void createDrawingPrimitives(int dpi)
+        private void createDrawingPrimitives()
         {
             // 'x' button
             _lb.Visible = false;

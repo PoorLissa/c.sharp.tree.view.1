@@ -100,14 +100,12 @@ public class myDataGrid_Wrapper
         // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-work-with-image-columns-in-the-windows-forms-datagridview-control?view=netframeworkdesktop-4.8
         if (_dataGrid != null)
         {
-            int dpi = _dataGrid.DeviceDpi;
-
             setDoubleBuffering();
 
             // Add and subscribe to events
             setUpEvents();
 
-            _dataGrid.RowTemplate.Height = dpi > 96 ? 60 : 40;                              // Row height
+            _dataGrid.RowTemplate.Height = myRenamerApp.appDpi > 96 ? 60 : 40;              // Row height
             _dataGrid.RowTemplate.MinimumHeight = (int)HoverStatus.DEFAULT;                 // Will be used as a flag for on_MouseEnter / on_MouseLeave events
 
             _dataGrid.SelectionMode     = DataGridViewSelectionMode.FullRowSelect;          // Row select mode
@@ -132,19 +130,19 @@ public class myDataGrid_Wrapper
             // Add Columns
             addColumns();
 
-            createDrawingPrimitives(dpi);
+            createDrawingPrimitives();
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
 
-    private void createDrawingPrimitives(int dpi)
+    private void createDrawingPrimitives()
     {
         #if DEBUG_TRACE
             myUtils.logMsg("myDataGrid.createDrawingPrimitives", "");
         #endif
 
-        _cache = new myDataGrid_Cache(dpi);
+        _cache = new myDataGrid_Cache();
 
         // Load images
         _imgDir  = Image.FromFile(myUtils.getFilePath("_icons", "icon-folder-1-30.png"));
@@ -257,7 +255,7 @@ public class myDataGrid_Wrapper
 
         // Text column Columns.colName (auto adjusted to fill all the available width)
         var columnName = new DataGridViewTextBoxColumn();
-            columnName.CellTemplate = new myDataGridViewTextBoxCell(myDataGridViewTextBoxCell.CustomEditType.textBox, _dataGrid.DeviceDpi);
+            columnName.CellTemplate = new myDataGridViewTextBoxCell(myDataGridViewTextBoxCell.CustomEditType.textBox);
             columnName.Name = "Name";
             columnName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             columnName.ReadOnly = true;

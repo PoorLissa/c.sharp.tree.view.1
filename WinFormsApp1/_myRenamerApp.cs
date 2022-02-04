@@ -109,6 +109,8 @@ public class myRenamerApp_Controls
 
 public class myRenamerApp
 {
+    public static int appDpi = -1;
+
     private myRenamerApp_Controls   _controls     = null;
     private myTree_DataGrid_Manager _myTDGManager = null;
     private ini_file_base           _ini          = null;
@@ -127,6 +129,8 @@ public class myRenamerApp
 
     public myRenamerApp(myRenamerApp_Controls controls, myTree_DataGrid_Manager_Initializer mtdgmi, string path, bool expandEmpty)
     {
+        appDpi = mtdgmi.form.DeviceDpi;
+
         _controls = controls;
         _myTDGManager = new myTree_DataGrid_Manager(ref mtdgmi, path, expandEmpty);
         _form = mtdgmi.form;

@@ -37,7 +37,6 @@ public class myTree
     private StringBuilder pathStrBuilder = null;
 
     private int _winVer  = 0;
-    private int _treeDpi = 0;
 
     // Going to hold a reference to the global list of files
     private readonly List<myTreeListDataItem> _globalFileListExtRef = null;
@@ -82,9 +81,8 @@ public class myTree
         {
             setDoubleBuffering();
 
-            _treeDpi            = _tree.DeviceDpi;
             _tree.Indent        = 30;
-            _tree.ItemHeight    = _treeDpi > 96 ? 40 : 32;
+            _tree.ItemHeight    = myRenamerApp.appDpi > 96 ? 40 : 32;
             _tree.HideSelection = false;
             _tree.HotTracking   = true;
             _tree.FullRowSelect = true;
@@ -280,7 +278,7 @@ public class myTree
 
             // Draw plus/minus icon
             {
-                int iconHeight = _treeDpi > 96 ?  40 : 32;
+                int iconHeight = myRenamerApp.appDpi > 96 ?  40 : 32;
 
                 x = e.Node.Bounds.Location.X - iconHeight;
                 y = e.Node.Bounds.Location.Y + (_tree.ItemHeight - iconHeight) / 2;
@@ -470,7 +468,7 @@ public class myTree
     // Cache node fonts and return them as needed
     private ref Font getNodeFont(int level)
     {
-        int max = _treeDpi > 96 ? 25 : 18;
+        int max = myRenamerApp.appDpi > 96 ? 25 : 18;
         int min = 9;
 
         if (_nodeFonts == null)

@@ -34,10 +34,8 @@ namespace myControls
         {
             if (_button != null)
             {
-                int dpi = _button.DeviceDpi;
-
                 setUpEvents();
-                createDrawingPrimitives(dpi);
+                createDrawingPrimitives();
 
                 //_button.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
                 //_button.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -67,7 +65,7 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
-        private void createDrawingPrimitives(int dpi)
+        private void createDrawingPrimitives()
         {
             _imgArrow = Image.FromFile(myUtils.getFilePath("_icons", "icon-arrow-down-24.png"));
         }

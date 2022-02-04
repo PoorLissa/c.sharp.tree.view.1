@@ -7,11 +7,8 @@ using System.Windows.Forms;
 
 class myDataGrid_Cache
 {
-    private int _dpi = 0;
-
-    public myDataGrid_Cache(int dpi)
+    public myDataGrid_Cache()
     {
-        _dpi = dpi;
         _rect_01 = new Rectangle(0, 0, 0, 0);
     }
 
@@ -35,7 +32,7 @@ class myDataGrid_Cache
     {
         if (_cellTooltipFont == null)
         {
-            if (_dpi > 96)
+            if (myRenamerApp.appDpi > 96)
             {
                 _cellTooltipFont = new Font("Helvetica Condensed", refFont.Size - 3, FontStyle.Regular, refFont.Unit, refFont.GdiCharSet);
             }

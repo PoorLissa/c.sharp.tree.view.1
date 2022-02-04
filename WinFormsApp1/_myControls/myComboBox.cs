@@ -40,8 +40,6 @@ namespace myControls
         {
             if (_cb != null)
             {
-                int dpi = _cb.DeviceDpi;
-
                 _cb.AutoCompleteMode   = AutoCompleteMode.Suggest;
                 _cb.AutoCompleteSource = AutoCompleteSource.ListItems;
 
@@ -50,7 +48,7 @@ namespace myControls
                 // Add and subscribe to events
                 setUpEvents();
 
-                createDrawingPrimitives(dpi);
+                createDrawingPrimitives();
             }
 
             return;
@@ -130,7 +128,7 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
-        private void createDrawingPrimitives(int dpi)
+        private void createDrawingPrimitives()
         {
             // Text placeholder
             _placeholder.Left = _cb.Left + 2;

@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
 {
-    private static int _dpi = -1;
     private static CustomEditType _type = CustomEditType.textBox;
     public enum CustomEditType { textBox, richTextBox };
 
@@ -17,9 +16,8 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
     {
     }
 
-    public myDataGridViewTextBoxCell(CustomEditType type, int dpi) : base()
+    public myDataGridViewTextBoxCell(CustomEditType type) : base()
     {
-        _dpi = _dpi < 0 ? dpi : _dpi;
         _type = type;
     }
 
@@ -43,7 +41,7 @@ class myDataGridViewTextBoxCell : DataGridViewTextBoxCell
     {
         Rectangle controlBounds = cellBounds;
 
-        int offset = _dpi > 96 ? 11 : 9;
+        int offset = myRenamerApp.appDpi > 96 ? 11 : 9;
 
         controlBounds.Y += offset;
         controlBounds.Height -= 2*offset;
