@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-
 // todo:
 // - add '?' with info panel on mouse hover near the controls/options
 
@@ -563,6 +562,7 @@ public class myRenamerApp
                     if (e.Modifiers == Keys.Alt)
                     {
                         activatePanel(e.KeyValue - 49, useLatest: true);
+                        e.SuppressKeyPress = true;      // No system beep on pressing Alt key
                         e.Handled = true;
                     }
                 }
