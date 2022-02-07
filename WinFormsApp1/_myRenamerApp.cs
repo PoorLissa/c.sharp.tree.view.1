@@ -556,8 +556,7 @@ public class myRenamerApp
             case Keys.D7:
             case Keys.D8:
             case Keys.D9:
-            case Keys.D0:
-                {
+            case Keys.D0: {
 
                     if (e.Modifiers == Keys.Alt)
                     {
@@ -568,8 +567,7 @@ public class myRenamerApp
                 }
                 break;
 
-            case Keys.F5:
-                {
+            case Keys.F5: {
 
                     _myTDGManager.refresh();
                     e.Handled = true;
