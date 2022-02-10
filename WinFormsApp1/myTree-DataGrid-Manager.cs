@@ -158,6 +158,20 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
+    public ref myTree getTree()
+    {
+        return ref _tree;
+    }
+
+    // --------------------------------------------------------------------------------
+
+    public ref myDataGrid_Wrapper getGrid()
+    {
+        return ref _dataGrid;
+    }
+
+    // --------------------------------------------------------------------------------
+
     // Public interface method: populate list with currently selected files
     public void getSelectedFiles(List<myTreeListDataItem> filesList)
     {
@@ -197,6 +211,14 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         }
 
         tree_onAfterSelect(this, null);
+    }
+
+    // --------------------------------------------------------------------------------
+
+    // Process keyboad events captured outside of this object
+    public bool processExternalKeyDown(Keys key)
+    {
+        return _dataGrid.processExternalKeyDown(key);
     }
 
     // --------------------------------------------------------------------------------

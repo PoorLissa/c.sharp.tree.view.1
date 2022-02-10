@@ -567,6 +567,16 @@ public class myRenamerApp
                 }
                 break;
 
+            case Keys.F2: {
+
+                    // In case DataGrid has lost its focus, we still want it to be able to enter edit mode
+                    if (!_myTDGManager.getGrid().Obj().Focused)
+                    {
+                        e.Handled = _myTDGManager.processExternalKeyDown(e.KeyCode);
+                    }
+                }
+                break;
+
             case Keys.F5: {
 
                     _myTDGManager.refresh();

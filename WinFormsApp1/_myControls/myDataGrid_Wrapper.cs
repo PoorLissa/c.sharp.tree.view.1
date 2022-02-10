@@ -1527,6 +1527,25 @@ public class myDataGrid_Wrapper
 
     // --------------------------------------------------------------------------------------------------------
 
+    // Process keyboad events captured outside of this object
+    public bool processExternalKeyDown(Keys key)
+    {
+        if (key == Keys.F2)
+        {
+            // Enter edit mode only when multiple files are already selected
+            if (_dataGrid.SelectedRows.Count > 1)
+            {
+                var args = new KeyEventArgs(key);
+                on_KeyDown(null, args);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
     // Key Down Event
     private void on_KeyDown(object sender, KeyEventArgs e)
     {
@@ -1707,9 +1726,24 @@ public class myDataGrid_Wrapper
             // Rename a file in the grid manually
             case Keys.F2: {
 
-                    var cell = _dataGrid[(int)Columns.colName, currRow];
-
                     _manualBulkMode = _dataGrid.SelectedRows.Count > 1;
+
+                    DataGridViewCell cell = _dataGrid[(int)Columns.colName, currRow];
+
+                    // In bulk mode, the row under mouse cursor will be opened for edit
+                    if (_manualBulkMode == true)
+                    {
+                        for (int i = 0; i < _dataGrid.SelectedRows.Count; i++)
+                        {
+                            var row = _dataGrid.SelectedRows[i];
+
+                            if (row.MinimumHeight > (int)HoverStatus.DEFAULT)
+                            {
+                                cell = _dataGrid[(int)Columns.colName, row.Index];
+                                break;
+                            }
+                        }
+                    }
 
                     // Scroll current row into view, if needed
                     if (!isRowDisplayed(currRow))
