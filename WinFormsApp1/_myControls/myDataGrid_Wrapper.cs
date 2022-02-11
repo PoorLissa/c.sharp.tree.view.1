@@ -1151,14 +1151,12 @@ public class myDataGrid_Wrapper
             myUtils.logMsg("myDataGrid.paintCustomBorder2", "");
         #endif
 
-        bool doPaint = false;
         Pen customBorderPen = null;
 
         if (isSelected)
         {
             if (e.ColumnIndex <= (int)Columns.colName)
             {
-                doPaint = true;
                 customBorderPen = (hoverStatus == HoverStatus.MOUSE_HOVER) ? Pens.DarkMagenta : Pens.DarkOrange;
             }
         }
@@ -1166,16 +1164,16 @@ public class myDataGrid_Wrapper
         {
             if (hoverStatus == HoverStatus.MOUSE_HOVER && (e.ColumnIndex <= (int)Columns.colName))
             {
-                doPaint = true;
                 customBorderPen = Pens.DarkOrange;
             }
         }
 
-        if (doPaint)
+        if (customBorderPen != null)
         {
             if (e.ColumnIndex == (int)Columns.colId)
             {
 #if false
+                // Draw separate border for id cell
                 int divider = _dataGrid.Columns[(int)Columns.colId].DividerWidth;
 
                 Rectangle rect = _cache.getRect(2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - divider, e.CellBounds.Height - 4);
@@ -1191,14 +1189,22 @@ public class myDataGrid_Wrapper
                     e.Graphics.DrawLine(customBorderPen, x, y, x + w, y);
                     e.Graphics.DrawLine(customBorderPen, x, y + h, x + w, y + h);
 
+                    // Restore left border when the mouse clicked on checkbox field
                     if (e.ColumnIndex == (int)Columns.colChBox)
                         e.Graphics.DrawLine(customBorderPen, x, y, x, y + h);
                 }
                 else
                 {
-                    int colIdWidth = _dataGrid.Columns[(int)Columns.colId].Width;
+                    int colIdWidth = (_dataGrid.BorderStyle == BorderStyle.None)
+                            ? _dataGrid.Columns[(int)Columns.colId].Width-1
+                            : _dataGrid.Columns[(int)Columns.colId].Width;
 
-                    Rectangle rect = _cache.getRect(colIdWidth + 2, e.CellBounds.Y + 1, e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
+                    Rectangle rect = _cache.getRect(colIdWidth + 2, e.CellBounds.Y + 1,
+                                                        e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
+
+                    // #pmv : width of rectangle here
+                    //rect.Width -= 22;
+
                     e.Graphics.DrawRectangle(customBorderPen, rect);
                 }
             }
