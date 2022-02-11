@@ -10,6 +10,8 @@
     its scroll bars become partially invisible due to exceeding the bounds of the underlying panel.
 
     To be able to draw custom border, customPanel class is derived from Panel class, and its OnPaint method is overridden.
+
+    https://www.codeproject.com/Articles/14801/How-to-skin-scrollbars-for-Panels-in-C
 */
 
 
@@ -21,7 +23,7 @@ namespace myControls
         {
             public customPanel()
             {
-                SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+                //SetStyle(ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             }
 
             protected override void OnPaint(PaintEventArgs e)
@@ -30,32 +32,34 @@ namespace myControls
             }
         };
 
-        myWrappingPanel(Control ctrl, bool increaseWdth)
+        myWrappingPanel(Control ctrl, bool addBorder, bool adjustHorizontal)
         {
             int offset = 20;
 
-            var _panel = new customPanel();
+            var panel = new customPanel();
             var parent = ctrl.Parent;
 
+            panel.Left = ctrl.Left;
+            panel.BringToFront();
+
             parent.Controls.Remove(ctrl);
-            _panel.Controls.Add(ctrl);
+            panel.Controls.Add(ctrl);
+            parent.Controls.Add(panel);
 
-            parent.Controls.Add(_panel);
-            _panel.BringToFront();
-
-            _panel.Dock = ctrl.Dock;
-            _panel.Width = ctrl.Width;
+            panel.Dock = ctrl.Dock;
+            panel.Width = ctrl.Width;
+            panel.BorderStyle = addBorder ? BorderStyle.FixedSingle : BorderStyle.None;
 
             ctrl.Dock = DockStyle.None;
             ctrl.Left = 0;
             ctrl.Top = 0;
             ctrl.Width += offset;
-            ctrl.Height += offset;
+            ctrl.Height += adjustHorizontal ? offset : 0;
         }
 
-        public static void Wrap(Control control, bool increaseWdth = true)
+        public static void Wrap(Control control, bool addBorder, bool adjustHorizontal)
         {
-            new myWrappingPanel(control, increaseWdth);
+            new myWrappingPanel(control, addBorder, adjustHorizontal);
         }
     }
 };

@@ -88,8 +88,6 @@ public class myTree_Wrapper
             _tree.FullRowSelect = true;
             _tree.ShowLines     = false;        // The ShowLines property must be false for the FullRowSelect property to work
 
-            //myControls.myWrappingPanel.Wrap(_tree);
-
             createDrawingPrimitives();
 
             // Configure the TreeView control for owner-draw and add a handler for the DrawNode event
