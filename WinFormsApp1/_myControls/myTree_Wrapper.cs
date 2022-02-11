@@ -10,7 +10,7 @@ using System.Windows.Forms;
     Allows customization and provides public methods to work with the widget.
 */
 
-public class myTree
+public class myTree_Wrapper
 {
     private TreeView    _tree        = null;
     private myTreeLogic _logic       = null;
@@ -46,7 +46,7 @@ public class myTree
 
     // --------------------------------------------------------------------------------------------------------
 
-    public myTree(TreeView tv, List<myTreeListDataItem> listGlobal, string path, bool expandEmpty, RichTextBox rb = null)
+    public myTree_Wrapper(TreeView tv, List<myTreeListDataItem> listGlobal, string path, bool expandEmpty, RichTextBox rb = null)
     {
         _tree  = tv;
         _logic = new myTreeLogic();
@@ -87,6 +87,8 @@ public class myTree
             _tree.HotTracking   = true;
             _tree.FullRowSelect = true;
             _tree.ShowLines     = false;        // The ShowLines property must be false for the FullRowSelect property to work
+
+            //myControls.myWrappingPanel.Wrap(_tree);
 
             createDrawingPrimitives();
 

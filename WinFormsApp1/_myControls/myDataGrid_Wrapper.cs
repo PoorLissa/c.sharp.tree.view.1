@@ -131,6 +131,8 @@ public class myDataGrid_Wrapper
             addColumns();
 
             createDrawingPrimitives();
+
+            //myControls.myWrappingPanel.Wrap(_dataGrid, increaseWdth: false);
         }
     }
 

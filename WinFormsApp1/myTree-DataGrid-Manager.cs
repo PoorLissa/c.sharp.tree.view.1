@@ -64,7 +64,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
     // --------------------------------------------------------------------------------
 
     private Form                _form          = null;
-    private myTree              _tree          = null;
+    private myTree_Wrapper      _tree          = null;
     private myDataGrid_Wrapper  _dataGrid      = null;
     private CheckBox            _cb_ShowFiles  = null;
     private CheckBox            _cb_ShowDirs   = null;
@@ -122,7 +122,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
         _tb_Filter.PlaceholderText = "Filter";
         _tb_FilterOut.PlaceholderText = "Filter Out";
 
-        _tree = new myTree(mtdgmi.tv, _globalFileListExt, path, expandEmpty, _richTextBox);
+        _tree = new myTree_Wrapper(mtdgmi.tv, _globalFileListExt, path, expandEmpty, _richTextBox);
         _dataGrid = new myDataGrid_Wrapper(mtdgmi.dg, _globalFileListExt);
 
         // Set up events for the components:
@@ -158,7 +158,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    public ref myTree getTree()
+    public ref myTree_Wrapper getTree()
     {
         return ref _tree;
     }
