@@ -180,12 +180,10 @@ namespace WinFormsApp1
             // Adjust scroll bars of the widgets:
             if (false)
             {
-                this.myDataGridView1.BorderStyle = BorderStyle.None;
+                myDataGridView1.BorderStyle = BorderStyle.None;
+                treeView1.BorderStyle = BorderStyle.None;
                 myControls.myWrappingPanel.Wrap(this.myDataGridView1, true, false);
                 myControls.myWrappingPanel.Wrap(this.treeView1,       true, true);
-
-                treeView1.TabIndex = 0;
-                myDataGridView1.TabIndex = 1;
             }
 
             // myRenamerApp
