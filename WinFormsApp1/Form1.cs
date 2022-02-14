@@ -181,8 +181,12 @@ namespace WinFormsApp1
             if (false)
             {
                 this.myDataGridView1.BorderStyle = BorderStyle.None;
+                this.treeView1.BorderStyle = BorderStyle.None;
                 myControls.myWrappingPanel.Wrap(this.myDataGridView1, true, false);
                 myControls.myWrappingPanel.Wrap(this.treeView1,       true, true);
+
+                treeView1.TabIndex = 0;
+                myDataGridView1.TabIndex = 1;
             }
 
             // myRenamerApp
