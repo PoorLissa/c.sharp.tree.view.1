@@ -62,5 +62,29 @@ namespace myControls
         {
             new myWrappingPanel(control, addBorder, adjustHorizontal);
         }
+
+        // Adjust DataGrid's width depending on the number of rows in it
+        // Depending on _dataGrid.BorderStyle, numbers here might differ slightly
+        public static void adjustWidth(Control ctrl, int count)
+        {
+            if (ctrl is DataGridView)
+            {
+                if (ctrl.Parent is myWrappingPanel.customPanel)
+                {
+                    var Ctrl = ctrl as DataGridView;
+
+                    if (Ctrl.Height < Ctrl.RowTemplate.Height * count)
+                    {
+                        Ctrl.Width = Ctrl.Parent.Width + 16;
+                    }
+                    else
+                    {
+                        Ctrl.Width = Ctrl.Parent.Width - 2;
+                    }
+                }
+            }
+
+            return;
+        }
     }
 };

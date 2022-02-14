@@ -350,27 +350,6 @@ public class myDataGrid_Wrapper
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Adjust DataGrid's width depending on the number of rows in it
-    // Depending on _dataGrid.BorderStyle, numbers here might differ slightly
-    private void adjustWidth(int count)
-    {
-        if (_dataGrid.Parent is myWrappingPanel.customPanel)
-        {
-            if (_dataGrid.Height < _dataGrid.RowTemplate.Height * count)
-            {
-                _dataGrid.Width = _dataGrid.Parent.Width + 16;
-            }
-            else
-            {
-                _dataGrid.Width = _dataGrid.Parent.Width - 2;
-            }
-        }
-
-        return;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
     // Populate GridView with known amount of rows
     // Single pass
     private void Populate_Fast(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
@@ -389,7 +368,7 @@ public class myDataGrid_Wrapper
             var rows = new DataGridViewRow[Count];
 
             // Adjust width depending on the number of rows
-            adjustWidth(Count);
+            myWrappingPanel.adjustWidth(_dataGrid, Count);
 
             // Reuse Count
             Count = 0;
@@ -527,7 +506,7 @@ public class myDataGrid_Wrapper
             }
 
             // Adjust width depending on the number of rows
-            adjustWidth(Count);
+            myWrappingPanel.adjustWidth(_dataGrid, Count);
 
             // Reuse Count
             Count = 0;
