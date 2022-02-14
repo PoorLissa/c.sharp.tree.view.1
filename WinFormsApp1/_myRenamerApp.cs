@@ -583,6 +583,12 @@ public class myRenamerApp
                     e.Handled = true;
                 }
                 break;
+
+            case Keys.Tab: {
+
+                    //e.Handled = true;
+                }
+                break;
         }
 
         return;
