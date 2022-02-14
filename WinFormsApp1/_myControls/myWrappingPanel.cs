@@ -19,7 +19,7 @@ namespace myControls
 {
     public class myWrappingPanel
     {
-        public class customPanel : Panel
+        private class customPanel : Panel
         {
             public customPanel()
             {
@@ -34,7 +34,7 @@ namespace myControls
 
         myWrappingPanel(Control ctrl, bool addBorder, bool adjustHorizontal)
         {
-            int offset = 16;
+            int offset = 20;
 
             var panel = new customPanel();
             var parent = ctrl.Parent;
@@ -55,7 +55,7 @@ namespace myControls
             ctrl.Left = 0;
             ctrl.Top = 0;
             ctrl.Width += offset;
-            ctrl.Height += adjustHorizontal ? offset + 3 : 0;
+            ctrl.Height += adjustHorizontal ? offset : 0;
         }
 
         public static void Wrap(Control control, bool addBorder, bool adjustHorizontal)

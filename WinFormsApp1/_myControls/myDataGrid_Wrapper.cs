@@ -350,27 +350,6 @@ public class myDataGrid_Wrapper
 
     // --------------------------------------------------------------------------------------------------------
 
-    // Adjust DataGrid's width depending on the number of rows in it
-    // Depending on _dataGrid.BorderStyle, numbers here might differ slightly
-    private void adjustWidth(int count)
-    {
-        if (_dataGrid.Parent is myWrappingPanel.customPanel)
-        {
-            if (_dataGrid.Height < _dataGrid.RowTemplate.Height * count)
-            {
-                _dataGrid.Width = _dataGrid.Parent.Width + 16;
-            }
-            else
-            {
-                _dataGrid.Width = _dataGrid.Parent.Width - 2;
-            }
-        }
-
-        return;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
     // Populate GridView with known amount of rows
     // Single pass
     private void Populate_Fast(List<myTreeListDataItem> list, int dirsCount, int filesCount, bool doShowDirs, bool doShowFiles)
@@ -387,9 +366,6 @@ public class myDataGrid_Wrapper
         {
             // Reserve known amount of rows
             var rows = new DataGridViewRow[Count];
-
-            // Adjust width depending on the number of rows
-            adjustWidth(Count);
 
             // Reuse Count
             Count = 0;
@@ -525,9 +501,6 @@ public class myDataGrid_Wrapper
 
                 selectedItems.Add(i);
             }
-
-            // Adjust width depending on the number of rows
-            adjustWidth(Count);
 
             // Reuse Count
             Count = 0;
@@ -1226,8 +1199,8 @@ public class myDataGrid_Wrapper
                             ? _dataGrid.Columns[(int)Columns.colId].Width-1
                             : _dataGrid.Columns[(int)Columns.colId].Width;
 
-                    Rectangle rect = _cache.getRect(colIdWidth+2, e.CellBounds.Y+1,
-                                                        e.CellBounds.Width-4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height-4);
+                    Rectangle rect = _cache.getRect(colIdWidth + 2, e.CellBounds.Y + 1,
+                                                        e.CellBounds.Width - 4 + e.CellBounds.X - colIdWidth, e.CellBounds.Height - 4);
 
                     // #pmv : width of rectangle here
                     //rect.Width -= 22;

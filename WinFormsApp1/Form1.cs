@@ -178,10 +178,9 @@ namespace WinFormsApp1
             }
 
             // Adjust scroll bars of the widgets:
-            if (true)
+            if (false)
             {
                 this.myDataGridView1.BorderStyle = BorderStyle.None;
-                this.treeView1.BorderStyle = BorderStyle.None;
                 myControls.myWrappingPanel.Wrap(this.myDataGridView1, true, false);
                 myControls.myWrappingPanel.Wrap(this.treeView1,       true, true);
 
