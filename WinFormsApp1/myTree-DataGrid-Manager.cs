@@ -581,17 +581,14 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             // Tab between TreeView and DataGrid
             case Keys.Tab: {
 
-                    // this one does not works somehow
                     if (sender is TreeView)
                     {
                         if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
                             _dataGrid.Obj().Rows[0].Selected = true;
 
-                        _dataGrid.Obj().Focus();
                         _dataGrid.setTabFocus(true);
                     }
 
-                    // this one works fine
                     if (sender is myDataGridView)
                     {
                         _tree.Obj().Focus();
