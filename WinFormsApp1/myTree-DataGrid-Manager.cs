@@ -581,23 +581,23 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             // Tab between TreeView and DataGrid
             case Keys.Tab: {
 
-                    // todo: This one does not work with thin scrollbars
-                    /*
-                        what here happens, is this: when i hit the Tab key, the focus is set to the _dataGrid (by this piece of code),
-                        but then the system processes the Tab key and changes the focus once again :(
-                    */
                     if (sender is TreeView)
                     {
                         if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
                             _dataGrid.Obj().Rows[0].Selected = true;
 
-                        if(_dataGrid.Obj().BorderStyle == BorderStyle.None)
+                        // Solution to the issue with thin scrollbars:
+                        // Set the focus manually and set 'IsInputKey' to true.
+                        // This will raise KeyDown event and eventually we will reach _myRenamerApp.on_KeyDown -- which will suppress the Tab key
+                        if (_dataGrid.Obj().Parent is myWrappingPanel.customPanel)
+                        {
                             _dataGrid.Obj().Focus();
+                            e.IsInputKey = true;
+                        }
 
                         _dataGrid.setTabFocus(true);
                     }
 
-                    // This one does work ok with thin scrollbars
                     if (sender is myDataGridView)
                     {
                         _tree.Obj().Focus();

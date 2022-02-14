@@ -561,7 +561,7 @@ public class myRenamerApp
                     if (e.Modifiers == Keys.Alt)
                     {
                         activatePanel(e.KeyValue - 49, useLatest: true);
-                        e.SuppressKeyPress = true;      // No system beep on pressing Alt key
+                        e.SuppressKeyPress = true;      // No system beep/sound on pressing Alt key
                         e.Handled = true;
                     }
                 }
@@ -586,7 +586,9 @@ public class myRenamerApp
 
             case Keys.Tab: {
 
-                    //e.Handled = true;
+                    // No system beep/sound on pressing Tab key in TreeView (which must move focus to the Grid silently)
+                    // We're suposed to reach this point after calling to 'tree_grid_onPreviewKeyDown(...)'
+                    e.SuppressKeyPress = true;
                 }
                 break;
         }
