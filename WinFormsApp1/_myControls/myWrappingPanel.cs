@@ -19,7 +19,7 @@ namespace myControls
 {
     public class myWrappingPanel
     {
-        public class customPanel : Panel
+        private class customPanel : Panel
         {
             public customPanel()
             {
