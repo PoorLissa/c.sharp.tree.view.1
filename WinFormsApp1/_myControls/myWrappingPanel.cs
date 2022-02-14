@@ -49,6 +49,7 @@ namespace myControls
             panel.Dock = ctrl.Dock;
             panel.Width = ctrl.Width;
             panel.BorderStyle = addBorder ? BorderStyle.FixedSingle : BorderStyle.None;
+            panel.TabStop = false;
 
             ctrl.Dock = DockStyle.None;
             ctrl.Left = 0;
