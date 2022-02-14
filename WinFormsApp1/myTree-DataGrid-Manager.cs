@@ -581,6 +581,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             // Tab between TreeView and DataGrid
             case Keys.Tab: {
 
+                    // todo: This one does not work with thin scrollbars
                     if (sender is TreeView)
                     {
                         if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
@@ -589,6 +590,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
                         _dataGrid.setTabFocus(true);
                     }
 
+                    // This one does work ok with thin scrollbars
                     if (sender is myDataGridView)
                     {
                         _tree.Obj().Focus();
