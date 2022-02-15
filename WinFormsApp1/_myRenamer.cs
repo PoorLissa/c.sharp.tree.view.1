@@ -251,7 +251,7 @@ public class myRenamer
         int pos_file = item.Name.LastIndexOf('\\') + 1;
         int pos_ext  = item.Name.LastIndexOf('.');
         int pos_tmp  = item.Name.LastIndexOf('#');
-            pos_tmp  = (pos_tmp < 0) ? item.Name.Length : pos_tmp;      // When doing the simulation, no tmp name exists yet
+            pos_tmp  = (pos_tmp < pos_file) ? item.Name.Length : pos_tmp;    // When doing the simulation, no tmp name exists yet
 
         string newName = null;
         string name    = null;
