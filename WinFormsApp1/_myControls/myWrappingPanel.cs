@@ -34,7 +34,7 @@ namespace myControls
 
         myWrappingPanel(Control ctrl, bool addBorder, bool adjustHorizontal)
         {
-            int offset = 16;
+            int offset = myRenamerApp.appDpi > 96 ? 16 : 10;
 
             var panel = new customPanel();
             var parent = ctrl.Parent;
@@ -55,7 +55,7 @@ namespace myControls
             ctrl.Left = 0;
             ctrl.Top = 0;
             ctrl.Width += offset;
-            ctrl.Height += adjustHorizontal ? offset + 3 : 0;
+            ctrl.Height += adjustHorizontal ? (offset + myRenamerApp.appDpi > 96 ? 3 : 10) : 0;
         }
 
         public static void Wrap(Control control, bool addBorder, bool adjustHorizontal)
@@ -75,7 +75,7 @@ namespace myControls
 
                     if (Ctrl.Height < Ctrl.RowTemplate.Height * count)
                     {
-                        Ctrl.Width = Ctrl.Parent.Width + 16;
+                        Ctrl.Width = Ctrl.Parent.Width + (myRenamerApp.appDpi > 96 ? 16 : 10);
                     }
                     else
                     {
