@@ -583,19 +583,27 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
                     if (sender is TreeView)
                     {
-                        if (_dataGrid.Obj().Rows.Count > 0 && _dataGrid.Obj().SelectedRows.Count == 0)
-                            _dataGrid.Obj().Rows[0].Selected = true;
-
-                        // Solution to the issue with thin scrollbars:
-                        // Set the focus manually and set 'IsInputKey' to true.
-                        // This will raise KeyDown event and eventually we will reach _myRenamerApp.on_KeyDown -- which will suppress the Tab key
-                        if (_dataGrid.Obj().Parent is myWrappingPanel.customPanel)
+                        // Leave the TreeView focused in case the Grid is empty
+                        if (_dataGrid.Obj().Rows.Count == 0)
                         {
-                            _dataGrid.Obj().Focus();
                             e.IsInputKey = true;
                         }
+                        else
+                        {
+                            if (_dataGrid.Obj().SelectedRows.Count == 0)
+                                _dataGrid.Obj().Rows[0].Selected = true;
 
-                        _dataGrid.setTabFocus(true);
+                            // Solution to the issue with thin scrollbars:
+                            // Set the focus manually and set 'IsInputKey' to true.
+                            // This will raise KeyDown event and eventually we will reach _myRenamerApp.on_KeyDown -- which will suppress the Tab key
+                            if (_dataGrid.Obj().Parent is myWrappingPanel.customPanel)
+                            {
+                                _dataGrid.Obj().Focus();
+                                e.IsInputKey = true;
+                            }
+
+                            _dataGrid.setTabFocus(true);
+                        }
                     }
 
                     if (sender is myDataGridView)

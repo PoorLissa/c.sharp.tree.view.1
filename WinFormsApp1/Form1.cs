@@ -177,6 +177,9 @@ namespace WinFormsApp1
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
             }
 
+            // myRenamerApp
+            app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
+
             // Adjust scroll bars of the widgets:
             if (true)
             {
@@ -185,9 +188,6 @@ namespace WinFormsApp1
                 myControls.myWrappingPanel.Wrap(this.myDataGridView1, true, false);
                 myControls.myWrappingPanel.Wrap(this.treeView1,       true, true);
             }
-
-            // myRenamerApp
-            app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
 
             // Test controls
             //myCb = new myControls.myComboBox(this.comboBox1, "Select option");

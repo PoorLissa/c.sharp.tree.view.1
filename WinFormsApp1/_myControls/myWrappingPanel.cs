@@ -55,7 +55,7 @@ namespace myControls
             ctrl.Left = 0;
             ctrl.Top = 0;
             ctrl.Width += offset;
-            ctrl.Height += adjustHorizontal ? (offset + myRenamerApp.appDpi > 96 ? 3 : 10) : 0;
+            ctrl.Height += adjustHorizontal ? (offset + myRenamerApp.appDpi > 96 ? 19 : 10) : 0;
         }
 
         public static void Wrap(Control control, bool addBorder, bool adjustHorizontal)
@@ -67,9 +67,9 @@ namespace myControls
         // Depending on _dataGrid.BorderStyle, numbers here might differ slightly
         public static void adjustWidth(Control ctrl, int count)
         {
-            if (ctrl is DataGridView)
+            if (ctrl.Parent is myWrappingPanel.customPanel)
             {
-                if (ctrl.Parent is myWrappingPanel.customPanel)
+                if (ctrl is DataGridView)
                 {
                     var Ctrl = ctrl as DataGridView;
 
@@ -81,6 +81,22 @@ namespace myControls
                     {
                         Ctrl.Width = Ctrl.Parent.Width - 2;
                     }
+                }
+
+                if (ctrl is TreeView)
+                {
+                    var Ctrl = ctrl as TreeView;
+
+/*
+                    if (Ctrl.Height < Ctrl.RowTemplate.Height * count)
+                    {
+                        Ctrl.Width = Ctrl.Parent.Width + (myRenamerApp.appDpi > 96 ? 16 : 10);
+                    }
+                    else
+                    {
+                        Ctrl.Width = Ctrl.Parent.Width - 2;
+                    }
+*/
                 }
             }
 

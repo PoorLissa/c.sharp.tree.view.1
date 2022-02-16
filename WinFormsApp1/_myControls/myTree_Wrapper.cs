@@ -199,14 +199,37 @@ public class myTree_Wrapper
             int drawWidth       = _tree.ClientRectangle.Right - e.Node.Bounds.X;
 
             // Don't let the selection rectangle be shorter than the node's text (Doesn't work in Win7)
+
+            if (_tree.Parent is myControls.myWrappingPanel.customPanel)
             {
                 if (_winVer > 90)
                 {
+                    // Win 7 ?..
                     if (e.Node.Bounds.Right >= _tree.ClientRectangle.Right)
                         drawWidth += 10;
                 }
                 else
                 {
+                    // Win 10
+                    // Adjust drawing width for the case where thin scroll lines are enabled, and are NOT displayed
+                    if (_tree.ClientRectangle.Right >= _tree.Parent.Width)
+                        drawWidth -= 18;
+
+                    if (_tree.ClientRectangle.Right - e.Node.Bounds.Right < 37)
+                        drawWidth += 10;
+                }
+            }
+            else
+            {
+                if (_winVer > 90)
+                {
+                    // Win 7 ?..
+                    if (e.Node.Bounds.Right >= _tree.ClientRectangle.Right)
+                        drawWidth += 10;
+                }
+                else
+                {
+                    // Win 10
                     if (_tree.ClientRectangle.Right - e.Node.Bounds.Right < 37)
                         drawWidth += 10;
                 }
