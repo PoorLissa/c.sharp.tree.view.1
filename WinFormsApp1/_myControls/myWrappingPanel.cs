@@ -85,18 +85,8 @@ namespace myControls
 
                 if (ctrl is TreeView)
                 {
+                    // Not implemented here, because it is taken into account in myTree_Wrapper.myTree_DrawNode()
                     var Ctrl = ctrl as TreeView;
-
-/*
-                    if (Ctrl.Height < Ctrl.RowTemplate.Height * count)
-                    {
-                        Ctrl.Width = Ctrl.Parent.Width + (myRenamerApp.appDpi > 96 ? 16 : 10);
-                    }
-                    else
-                    {
-                        Ctrl.Width = Ctrl.Parent.Width - 2;
-                    }
-*/
                 }
             }
 
