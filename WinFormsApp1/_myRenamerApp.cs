@@ -337,6 +337,8 @@ public class myRenamerApp
         _form.KeyDown += new KeyEventHandler(on_KeyDown);
         _form.FormClosing += new FormClosingEventHandler(_form_onFormClosing);
 
+        _form.Resize += new EventHandler(_form_onFormResize);
+
         // Subscribe to ApplicationExit event to finalize stuff
         Application.ApplicationExit += new EventHandler(Application_onExit);
 
@@ -538,6 +540,15 @@ public class myRenamerApp
         }
 
         return;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    private void _form_onFormResize(object sender, EventArgs e)
+    {
+        // Sort of works, but needs more effort to actually work as intended
+        //_myTDGManager.getTree().Obj().Parent.Width = _form.Width / 3;
+        //_myTDGManager.getTree().Obj().Width = _form.Width / 3;
     }
 
     // --------------------------------------------------------------------------------------------------------
