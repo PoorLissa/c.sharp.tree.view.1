@@ -302,7 +302,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
 
                 // Set Form's header text
-                _form.Text = selectedNode.FullPath;
+                _form.Text = "pmvRenamer : " + selectedNode.FullPath;
 
 
                 // This means, we will have to execute _tree.nodeSelected, which may take a LONG time

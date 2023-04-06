@@ -105,6 +105,7 @@ public class myRenamer
     public bool RenameManual(List<myTreeListDataItem> list, string newName)
     {
         bool res = true;
+        string itemsAlreadyExist = "";
 
         foreach (var item in list)
         {
@@ -115,7 +116,7 @@ public class myRenamer
 
             if (itemExists)
             {
-                MessageBox.Show($"'{newFullName}':\nAlready Exists", "Warning", MessageBoxButtons.OK);
+                itemsAlreadyExist += $"{newFullName}\n";
             }
             else
             {
@@ -134,6 +135,12 @@ public class myRenamer
                     MessageBox.Show($"'{newFullName}':\n\n{err}", "Error", MessageBoxButtons.OK);
                 }
             }
+        }
+
+        // Show a single warning message for multiple failed items
+        if (itemsAlreadyExist.Length > 0)
+        {
+            MessageBox.Show($"These items already exist:\n\n{itemsAlreadyExist}", "Warning", MessageBoxButtons.OK);
         }
 
         if (res)
