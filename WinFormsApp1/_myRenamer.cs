@@ -511,44 +511,57 @@ public class myRenamer
                     {
                         // Insert original name
                         case '*':
-                            doAppendChar = false;
-                            res.Append(name);
+                            {
+                                doAppendChar = false;
+                                res.Append(name);
+                            }
                             break;
 
                         // Insert number
                         case '#':
-                            doAppendChar = false;
+                            {
+                                doAppendChar = false;
 
-                            // Get number of '#' symbols
-                            int cnt = 1;
-                            while (i + cnt < strTemplate.Length && strTemplate[i + cnt] == '#')
-                                cnt++;
-                            i += cnt - 1;
+                                // Get number of '#' symbols
+                                int cnt = 1;
+                                while (i + cnt < strTemplate.Length && strTemplate[i + cnt] == '#')
+                                    cnt++;
+                                i += cnt - 1;
 
-                            int n = (int)(_controls.option_005_num_1.Value) + item.Num - 1;
+                                // Added increment/decrement value;
+                                // Now it's possible to assign numeric values like that: [1, 3, 5, 7, ..] or or [10, 9, 8, 7, ..] or [100, 90, 80, 70, ..]
+                                int n = (int)(_controls.option_005_num_1.Value) + (item.Num - 1) * (int)(_controls.option_005_num_2.Value);
 
-                            string strNUM = n.ToString();
+                                if (n < 0)
+                                {
+                                    n = -n;
+                                    res.Append("-");
+                                }
 
-                            for(int j = strNUM.Length; j < cnt; j++)
-                                res.Append('0');
-                            res.Append(strNUM);
+                                string strNUM = n.ToString();
+
+                                for (int j = strNUM.Length; j < cnt; j++)
+                                    res.Append('0');
+                                res.Append(strNUM);
+                            }
                             break;
 
                         // Insert other options:
                         case '%':
-                            doAppendChar = false;
-
-                            pos = strTemplate.IndexOf('%', i+1);
-
-                            if (pos > i)
                             {
-                                if (myUtils.fastStrCompare("parent", strTemplate, i + 1, pos - i - 1, false))
+                                doAppendChar = false;
+
+                                pos = strTemplate.IndexOf('%', i + 1);
+
+                                if (pos > i)
                                 {
-                                    res.Append(myUtils.getParentName(item.Name, pos_file - 2));
-                                    i = pos;
+                                    if (myUtils.fastStrCompare("parent", strTemplate, i + 1, pos - i - 1, false))
+                                    {
+                                        res.Append(myUtils.getParentName(item.Name, pos_file - 2));
+                                        i = pos;
+                                    }
                                 }
                             }
-
                             break;
                     }
 

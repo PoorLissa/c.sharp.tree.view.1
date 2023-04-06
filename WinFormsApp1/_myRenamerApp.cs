@@ -42,6 +42,7 @@ public class myRenamerApp_Controls
     public CheckBox         option_005_ch_01 = null;
     public myComboBox       option_005_cb_01 = null;
     public NumericUpDown    option_005_num_1 = null;
+    public NumericUpDown    option_005_num_2 = null;
     public ComboBox         option_005_cb_02 = null;
     public Button           option_005_btn_1 = null;
 

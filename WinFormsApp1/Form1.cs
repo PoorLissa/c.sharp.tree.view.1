@@ -113,6 +113,7 @@ namespace WinFormsApp1
                 mraControls.option_005_ch_01 = this.checkBox_Option_005;
                 mraControls.option_005_cb_01 = new myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
                 mraControls.option_005_num_1 = this.numericUpDown4;
+                mraControls.option_005_num_2 = this.numericUpDown16;
                 mraControls.option_005_cb_02 = this.opt_005_predefined_templates;
                 mraControls.option_005_btn_1 = this.button2;
 
