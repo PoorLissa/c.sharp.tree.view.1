@@ -1516,7 +1516,7 @@ public class myDataGrid_Wrapper
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename a file", MessageBoxButtons.OK);
+                            MessageBox.Show(ex.Message, "pmvRenamer: Failed to rename a file", MessageBoxButtons.OK);
                         }
                     }
 

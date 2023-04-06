@@ -150,7 +150,7 @@ public class myRenamerApp
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "myRenamerApp: Failed to rename files", MessageBoxButtons.OK);
+            MessageBox.Show(ex.Message, "pmvRenamer: Failed to rename files", MessageBoxButtons.OK);
         }
     }
 
@@ -164,7 +164,7 @@ public class myRenamerApp
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "myRenamerApp: Failed to undo", MessageBoxButtons.OK);
+            MessageBox.Show(ex.Message, "pmvRenamer: Failed to undo", MessageBoxButtons.OK);
         }
     }
 

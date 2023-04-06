@@ -193,7 +193,7 @@ public class myRenamer
 
             if (err.Length > 0)
             {
-                MessageBox.Show(err, "myRenamer.Rename: Error in pt.1", MessageBoxButtons.OK);
+                MessageBox.Show(err, "pmvRenamer.Rename: Error in pt.1", MessageBoxButtons.OK);
                 err = string.Empty;
             }
 
@@ -230,12 +230,12 @@ public class myRenamer
 
             if (cntUnique > 0)
             {
-                MessageBox.Show($"{cntUnique} file(s) have name conflict.\nThese files will be renamed using unique postfixed names", "myRenamer.Rename: Warning", MessageBoxButtons.OK);
+                MessageBox.Show($"{cntUnique} file(s) have name conflict.\nThese files will be renamed using unique postfixed names", "pmvRenamer.Rename: Warning", MessageBoxButtons.OK);
             }
 
             if (err.Length > 0)
             {
-                MessageBox.Show(err, "myRenamer.Rename: Error in pt.2", MessageBoxButtons.OK);
+                MessageBox.Show(err, "pmvRenamer.Rename: Error in pt.2", MessageBoxButtons.OK);
                 err = string.Empty;
             }
 
