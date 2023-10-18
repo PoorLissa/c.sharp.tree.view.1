@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 /*
     Front-facing class that wraps myTree and myDataGrid objects.
-    Provides all the necessary infrastructure fo them to work together.
+    Provides all the necessary infrastructure for them to work together.
     
     To use it, put the components declared in [myTree_DataGrid_Manager_Initializer] structure on a form,
     fill in the structure and pass it as a parameter to the [myTree_DataGrid_Manager] constructor:

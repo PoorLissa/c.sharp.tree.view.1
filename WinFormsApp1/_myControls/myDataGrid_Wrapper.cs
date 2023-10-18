@@ -374,7 +374,7 @@ public class myDataGrid_Wrapper
             Count = 0;
 
             // Display all directories and files
-            for(int i = 0; i < list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
 
