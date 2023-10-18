@@ -63,6 +63,18 @@ namespace myControls
         // Both 'getSettings' and 'useLatest_onClick' must implement functionality for the same control types
         public string getSettings()
         {
+            // Local func to check if the control should not be saved
+            bool doSkip(Control ctrl)
+            {
+                string[] excludeNames = { "textBox12" };
+
+                foreach (string name in excludeNames)
+                    if (ctrl.Name == name)
+                        return true;
+
+                return false;
+            }
+
             List<Control> list = new List<Control>();
             getSubControls(this, ref list);
 
@@ -108,10 +120,13 @@ namespace myControls
 
                 if (ctrl is TextBox)
                 {
-                    sb.Append(ctrl.Name);
-                    sb.Append(":");
-                    sb.Append(ctrl.Text);
-                    sb.Append("?");
+                    if (!doSkip(ctrl))
+                    {
+                        sb.Append(ctrl.Name);
+                        sb.Append(":");
+                        sb.Append(ctrl.Text);
+                        sb.Append("?");
+                    }
                     continue;
                 }
             }

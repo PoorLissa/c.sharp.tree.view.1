@@ -5,6 +5,8 @@ namespace WinFormsApp1
 {
     static class Program
     {
+        public static long ticks = 0;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -23,6 +25,8 @@ namespace WinFormsApp1
                 if (param.StartsWith("/expandEmpty"))
                     expandEmpty = true;
             }
+
+            ticks = DateTime.Now.Ticks;
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();

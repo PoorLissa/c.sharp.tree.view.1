@@ -112,6 +112,7 @@ namespace WinFormsApp1
 
                 mraControls.option_005_ch_01 = this.checkBox_Option_005;
                 mraControls.option_005_cb_01 = new myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
+                mraControls.option_005_tb_01 = this.textBox12;
                 mraControls.option_005_num_1 = this.numericUpDown4;
                 mraControls.option_005_num_2 = this.numericUpDown16;
                 mraControls.option_005_cb_02 = this.opt_005_predefined_templates;
@@ -301,6 +302,17 @@ namespace WinFormsApp1
             btn_Rename.ImageIndex = -1;
             btn_Rename.Font = _btn_rename_font;
             btn_Rename.Text = "Rename";
+        }
+
+        // --------------------------------------------------------------------------------
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            var tickDiff = System.DateTime.Now.Ticks - Program.ticks;
+
+            System.TimeSpan elapsedSpan = new System.TimeSpan(tickDiff);
+
+            this.Text += $";   startupTime = {elapsedSpan.Milliseconds} ms";
         }
 
         // --------------------------------------------------------------------------------

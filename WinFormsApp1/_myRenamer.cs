@@ -16,6 +16,7 @@ using System.Windows.Forms;
     todo:
         - give an option to rename through copy: insted of renaming, leave original file as it is, and copy it with the new name (to some other dir)
         - think about creating hard links and do the renaming on those. this way, initial names are not lost
+        - mode to rename the files using the same names but in a reverse order
 */
 
 
@@ -504,7 +505,11 @@ public class myRenamer
         // Option 5: Rename using template
         if (_controls.option_005_ch_01.Checked)
         {
-            string strTemplate = _controls.option_005_cb_01.Obj().Text;
+            // Use the text from one-time template text field, if not empty;
+            // This field won't add the used text to history
+            string strTemplate = _controls.option_005_tb_01.Text.Length > 0
+                ? _controls.option_005_tb_01.Text
+                : _controls.option_005_cb_01.Obj().Text;
 
             StringBuilder res = new StringBuilder(33);
 
