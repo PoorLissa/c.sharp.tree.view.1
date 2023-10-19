@@ -272,6 +272,7 @@ namespace WinFormsApp1
             this.btn_Rename.TabIndex = 11;
             this.btn_Rename.Text = "Rename";
             this.btn_Rename.UseVisualStyleBackColor = true;
+            this.btn_Rename.Click += new System.EventHandler(this.btn_Rename_Click);
             // 
             // tabControl1
             // 

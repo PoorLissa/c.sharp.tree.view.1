@@ -157,6 +157,33 @@ public class myRenamer
     // Public Rename func
     public void Rename()
     {
+#if false
+        var form = new Form();
+        var rich = new RichTextBox();
+        form.FormBorderStyle = FormBorderStyle.None;
+        form.Width = 800;
+        form.Height = 600;
+        form.StartPosition = FormStartPosition.CenterScreen;
+        form.Controls.Add(rich);
+        rich.Top = 0;
+        rich.Left = 0;
+        rich.Width = 830;
+        rich.Height = 600 - 50;
+        rich.BackColor = System.Drawing.Color.LightGray;
+        form.Show();
+
+        for (int i = 0; i < 100; i++)
+            rich.AppendText($"{i}\n");
+        rich.AppendText($"done!\n");
+
+        System.Threading.Thread.Sleep(2222);
+
+        form.Hide();
+        form.Dispose();
+
+        return;
+#endif
+
         var tBefore = System.DateTime.Now.Ticks;
 
         var list = _manager.getSelectedFiles(asCopy: true);
