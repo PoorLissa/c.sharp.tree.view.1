@@ -569,8 +569,8 @@ public class myTree_Wrapper
                 {
                     var dir = _dirsListTmpExt[i];
 
-                    string key = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];     // Get only name from full path
-
+                    // Get only a name from the full path
+                    string key = dir.Name[(dir.Name.LastIndexOf('\\') + 1)..];
 
                     var newNode = new TreeNode(key);
                     newNode.Name = key;
