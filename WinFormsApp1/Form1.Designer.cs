@@ -822,7 +822,7 @@ namespace WinFormsApp1
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(193, 130);
+            this.label9.Location = new System.Drawing.Point(191, 133);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(184, 25);
@@ -832,12 +832,12 @@ namespace WinFormsApp1
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(61, 88);
+            this.label7.Location = new System.Drawing.Point(51, 90);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(316, 25);
+            this.label7.Size = new System.Drawing.Size(324, 25);
             this.label7.TabIndex = 41;
-            this.label7.Text = "Number of Numeric Sequence to Find:";
+            this.label7.Text = "Index of the Numeric Sequence to Find:";
             // 
             // numericUpDown11
             // 
@@ -898,17 +898,17 @@ namespace WinFormsApp1
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(61, 90);
+            this.label13.Location = new System.Drawing.Point(51, 90);
             this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(316, 25);
+            this.label13.Size = new System.Drawing.Size(324, 25);
             this.label13.TabIndex = 42;
-            this.label13.Text = "Number of Numeric Sequence to Find:";
+            this.label13.Text = "Index of the Numeric Sequence to Find:";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(29, 133);
+            this.label6.Location = new System.Drawing.Point(22, 133);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(353, 25);
