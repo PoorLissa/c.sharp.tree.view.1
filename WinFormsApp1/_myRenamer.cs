@@ -505,8 +505,8 @@ public class myRenamer
         // Option 5: Rename using template
         if (_controls.option_005_ch_01.Checked)
         {
-            // Use the text from one-time template text field, if not empty;
-            // This field won't add the used text to history
+            // The text from one-time template text field has a higher priority (if not empty);
+            // This field won't update the history for the widget
             string strTemplate = _controls.option_005_tb_01.Text.Length > 0
                 ? _controls.option_005_tb_01.Text
                 : _controls.option_005_cb_01.Obj().Text;

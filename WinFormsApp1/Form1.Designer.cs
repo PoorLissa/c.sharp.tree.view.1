@@ -107,6 +107,10 @@ namespace WinFormsApp1
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.checkBox_Option_006 = new System.Windows.Forms.CheckBox();
             this.panel_content_05 = new myControls.myPanel();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
@@ -147,6 +151,9 @@ namespace WinFormsApp1
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox_Option_002 = new System.Windows.Forms.CheckBox();
             this.panel_content_01 = new myControls.myPanel();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.radioButton18 = new System.Windows.Forms.RadioButton();
             this.radioButton21 = new System.Windows.Forms.RadioButton();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -325,7 +332,7 @@ namespace WinFormsApp1
             this.panel_content_13.Controls.Add(this.textBox5);
             this.panel_content_13.Controls.Add(this.checkBox_Option_013);
             this.panel_content_13.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_13.Location = new System.Drawing.Point(0, 3307);
+            this.panel_content_13.Location = new System.Drawing.Point(0, 3479);
             this.panel_content_13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_13.Name = "panel_content_13";
             this.panel_content_13.Size = new System.Drawing.Size(651, 287);
@@ -419,7 +426,7 @@ namespace WinFormsApp1
             this.panel_content_12.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.panel_content_12.Controls.Add(this.checkBox_Option_012);
             this.panel_content_12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_12.Location = new System.Drawing.Point(0, 3200);
+            this.panel_content_12.Location = new System.Drawing.Point(0, 3372);
             this.panel_content_12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_12.Name = "panel_content_12";
             this.panel_content_12.Size = new System.Drawing.Size(651, 107);
@@ -448,7 +455,7 @@ namespace WinFormsApp1
             this.panel_content_11.Controls.Add(this.radioButton17);
             this.panel_content_11.Controls.Add(this.checkBox_Option_011);
             this.panel_content_11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_11.Location = new System.Drawing.Point(0, 2968);
+            this.panel_content_11.Location = new System.Drawing.Point(0, 3140);
             this.panel_content_11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_11.Name = "panel_content_11";
             this.panel_content_11.Size = new System.Drawing.Size(651, 232);
@@ -533,7 +540,7 @@ namespace WinFormsApp1
             this.panel_content_10.Controls.Add(this.textBox9);
             this.panel_content_10.Controls.Add(this.checkBox_Option_010);
             this.panel_content_10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_10.Location = new System.Drawing.Point(0, 2721);
+            this.panel_content_10.Location = new System.Drawing.Point(0, 2893);
             this.panel_content_10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_10.Name = "panel_content_10";
             this.panel_content_10.Size = new System.Drawing.Size(651, 247);
@@ -676,7 +683,7 @@ namespace WinFormsApp1
             this.panel_content_09.Controls.Add(this.checkBox8);
             this.panel_content_09.Controls.Add(this.checkBox_Option_009);
             this.panel_content_09.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_09.Location = new System.Drawing.Point(0, 2323);
+            this.panel_content_09.Location = new System.Drawing.Point(0, 2495);
             this.panel_content_09.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_09.Name = "panel_content_09";
             this.panel_content_09.Size = new System.Drawing.Size(651, 398);
@@ -709,10 +716,10 @@ namespace WinFormsApp1
             this.radioButton14.AutoSize = true;
             this.radioButton14.Location = new System.Drawing.Point(34, 342);
             this.radioButton14.Name = "radioButton14";
-            this.radioButton14.Size = new System.Drawing.Size(211, 29);
+            this.radioButton14.Size = new System.Drawing.Size(206, 29);
             this.radioButton14.TabIndex = 43;
             this.radioButton14.TabStop = true;
-            this.radioButton14.Text = "Any of the Characters:";
+            this.radioButton14.Text = "Any of the Following:";
             this.radioButton14.UseVisualStyleBackColor = true;
             // 
             // radioButton12
@@ -812,7 +819,7 @@ namespace WinFormsApp1
             this.panel_content_08.Controls.Add(this.numericUpDown8);
             this.panel_content_08.Controls.Add(this.checkBox_Option_008);
             this.panel_content_08.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_08.Location = new System.Drawing.Point(0, 2121);
+            this.panel_content_08.Location = new System.Drawing.Point(0, 2293);
             this.panel_content_08.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_08.Name = "panel_content_08";
             this.panel_content_08.Size = new System.Drawing.Size(651, 202);
@@ -888,7 +895,7 @@ namespace WinFormsApp1
             this.panel_content_07.Controls.Add(this.numericUpDown6);
             this.panel_content_07.Controls.Add(this.checkBox_Option_007);
             this.panel_content_07.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_07.Location = new System.Drawing.Point(0, 1914);
+            this.panel_content_07.Location = new System.Drawing.Point(0, 2086);
             this.panel_content_07.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_07.Name = "panel_content_07";
             this.panel_content_07.Size = new System.Drawing.Size(651, 207);
@@ -962,7 +969,7 @@ namespace WinFormsApp1
             this.panel_content_06.Controls.Add(this.groupBox1);
             this.panel_content_06.Controls.Add(this.checkBox_Option_006);
             this.panel_content_06.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_06.Location = new System.Drawing.Point(0, 1507);
+            this.panel_content_06.Location = new System.Drawing.Point(0, 1679);
             this.panel_content_06.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_06.Name = "panel_content_06";
             this.panel_content_06.Size = new System.Drawing.Size(651, 407);
@@ -1103,6 +1110,10 @@ namespace WinFormsApp1
             // panel_content_05
             // 
             this.panel_content_05.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel_content_05.Controls.Add(this.label27);
+            this.panel_content_05.Controls.Add(this.label26);
+            this.panel_content_05.Controls.Add(this.label25);
+            this.panel_content_05.Controls.Add(this.label24);
             this.panel_content_05.Controls.Add(this.textBox12);
             this.panel_content_05.Controls.Add(this.label20);
             this.panel_content_05.Controls.Add(this.numericUpDown16);
@@ -1115,12 +1126,56 @@ namespace WinFormsApp1
             this.panel_content_05.Controls.Add(this.numericUpDown4);
             this.panel_content_05.Controls.Add(this.checkBox_Option_005);
             this.panel_content_05.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_05.Location = new System.Drawing.Point(0, 1127);
+            this.panel_content_05.Location = new System.Drawing.Point(0, 1194);
             this.panel_content_05.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_05.Name = "panel_content_05";
-            this.panel_content_05.Size = new System.Drawing.Size(651, 380);
+            this.panel_content_05.Size = new System.Drawing.Size(651, 485);
             this.panel_content_05.TabIndex = 31;
             this.panel_content_05.UseCustomBorder = false;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label27.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label27.Location = new System.Drawing.Point(51, 436);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(296, 21);
+            this.label27.TabIndex = 58;
+            this.label27.Text = "%parent -- Inserts Parent Directory Name";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label26.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label26.Location = new System.Drawing.Point(51, 413);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(465, 21);
+            this.label26.TabIndex = 57;
+            this.label26.Text = "# -- Inserts Numeric Value (multiple instances are supported: ###)";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label25.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label25.Location = new System.Drawing.Point(51, 390);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(189, 21);
+            this.label25.TabIndex = 56;
+            this.label25.Text = "* -- Inserts Original Name";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label24.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label24.Location = new System.Drawing.Point(43, 359);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(207, 21);
+            this.label24.TabIndex = 55;
+            this.label24.Text = "Supported template options:";
             // 
             // textBox12
             // 
@@ -1264,7 +1319,7 @@ namespace WinFormsApp1
             this.panel_content_04.Controls.Add(this.textBox6);
             this.panel_content_04.Controls.Add(this.checkBox_Option_004);
             this.panel_content_04.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_04.Location = new System.Drawing.Point(0, 837);
+            this.panel_content_04.Location = new System.Drawing.Point(0, 904);
             this.panel_content_04.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_04.Name = "panel_content_04";
             this.panel_content_04.Size = new System.Drawing.Size(651, 290);
@@ -1365,7 +1420,7 @@ namespace WinFormsApp1
             this.panel_content_03.Controls.Add(this.checkBox_Option_003);
             this.panel_content_03.Controls.Add(this.label16);
             this.panel_content_03.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_03.Location = new System.Drawing.Point(0, 505);
+            this.panel_content_03.Location = new System.Drawing.Point(0, 572);
             this.panel_content_03.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_03.Name = "panel_content_03";
             this.panel_content_03.Size = new System.Drawing.Size(651, 332);
@@ -1490,7 +1545,7 @@ namespace WinFormsApp1
             this.panel_content_02.Controls.Add(this.checkBox4);
             this.panel_content_02.Controls.Add(this.checkBox_Option_002);
             this.panel_content_02.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_content_02.Location = new System.Drawing.Point(0, 282);
+            this.panel_content_02.Location = new System.Drawing.Point(0, 349);
             this.panel_content_02.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_02.Name = "panel_content_02";
             this.panel_content_02.Size = new System.Drawing.Size(651, 223);
@@ -1556,6 +1611,9 @@ namespace WinFormsApp1
             // panel_content_01
             // 
             this.panel_content_01.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel_content_01.Controls.Add(this.label23);
+            this.panel_content_01.Controls.Add(this.label22);
+            this.panel_content_01.Controls.Add(this.label21);
             this.panel_content_01.Controls.Add(this.radioButton18);
             this.panel_content_01.Controls.Add(this.radioButton21);
             this.panel_content_01.Controls.Add(this.comboBox2);
@@ -1566,9 +1624,42 @@ namespace WinFormsApp1
             this.panel_content_01.Location = new System.Drawing.Point(0, 0);
             this.panel_content_01.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel_content_01.Name = "panel_content_01";
-            this.panel_content_01.Size = new System.Drawing.Size(651, 282);
+            this.panel_content_01.Size = new System.Drawing.Size(651, 349);
             this.panel_content_01.TabIndex = 21;
             this.panel_content_01.UseCustomBorder = false;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label23.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label23.Location = new System.Drawing.Point(43, 310);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(322, 21);
+            this.label23.TabIndex = 41;
+            this.label23.Text = "- Greedy means, remove as much as possible";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label22.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label22.Location = new System.Drawing.Point(43, 286);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(283, 21);
+            this.label22.TabIndex = 40;
+            this.label22.Text = "- Lazy means, keep as much as possible";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label21.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.label21.Location = new System.Drawing.Point(43, 262);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(488, 21);
+            this.label21.TabIndex = 39;
+            this.label21.Text = "Lazy option only has effect in case of multiple delimiters divided by \':\'";
             // 
             // radioButton18
             // 
@@ -1594,10 +1685,11 @@ namespace WinFormsApp1
             // 
             // comboBox2
             // 
+            this.comboBox2.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(43, 87);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(534, 33);
+            this.comboBox2.Size = new System.Drawing.Size(534, 44);
             this.comboBox2.TabIndex = 18;
             // 
             // checkBox3
@@ -1932,6 +2024,13 @@ namespace WinFormsApp1
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.NumericUpDown numericUpDown16;
         private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label26;
     }
 }
 
