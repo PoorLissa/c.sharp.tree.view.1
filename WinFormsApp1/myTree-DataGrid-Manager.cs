@@ -410,9 +410,30 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
             }
             else
             {
-                // No task needed, as the list is already populated
-                _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _tree.Obj().SelectedNode, _filterStr, _filterOutStr);
-                _dataGrid.Enable(true);
+                // This part was initially just a direct call without a task;
+                // But now it is wrapped in a task because when it is waiting for a previous task to complete, it becomes completely unresponsive;
+                // This way, we're able to change the directory while waiting, and the tasks are cancelled just fine
+
+                new System.Threading.Tasks.Task(() =>
+                {
+                    // In case the previous task is still running, we need to wait for it to finish;
+                    // Without this, the following scenario fails:
+                    // - select a folder with large amount of files
+                    // - check 'recursive' checkbox
+                    // - immediately uncheck 'show directories' checkbox
+                    if (_tree_onAfterSelect_Task != null)
+                        _tree_onAfterSelect_Task.Wait(_tokenSource.Token);
+
+                    if (_tokenSource.Token.IsCancellationRequested == false)
+                    {
+                        // This call is going to work on a already populated list
+                        _dataGrid.Obj().Invoke(new MethodInvoker(delegate {
+                            _dataGrid.Populate(_nDirs, _nFiles, _doShowDirs, _doShowFiles, reason, _tree.Obj().SelectedNode, _filterStr, _filterOutStr);
+                            _dataGrid.Enable(true);
+                        }));
+                    }
+
+                }).Start();
             }
         }
 
@@ -542,7 +563,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Show or hide directories
+    // Show or hide directories -- not used
     private void cb_ShowDirs_onCheckedChanged(object sender, EventArgs e)
     {
         _doShowDirs = _cb_ShowDirs.Checked;
@@ -551,7 +572,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Show or hide files
+    // Show or hide files -- not used
     private void cb_ShowFiles_onCheckedChanged(object sender, EventArgs e)
     {
         _doShowFiles = _cb_ShowFiles.Checked;
@@ -560,7 +581,7 @@ public class myTree_DataGrid_Manager : ImyTree_DataGrid_Manager
 
     // --------------------------------------------------------------------------------
 
-    // Recursive search enabled/disabled
+    // Recursive search enabled/disabled -- not used
     private void cb_Recursive_onCheckedChanged(object sender, EventArgs e)
     {
         _useRecursion = _cb_Recursive.Checked;
