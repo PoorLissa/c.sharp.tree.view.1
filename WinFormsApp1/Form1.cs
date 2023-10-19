@@ -37,23 +37,23 @@ namespace WinFormsApp1
 
             init(path, expandEmpty);
 
-/*
-            p.Width = 666;
-            p.Height = 333;
+            /*
+                        p.Width = 666;
+                        p.Height = 333;
 
-            p.Left = 300;
-            p.Top = 300;
+                        p.Left = 300;
+                        p.Top = 300;
 
-            p.Visible = false;
+                        p.Visible = false;
 
-            Controls.Add(p);
-            p.BringToFront();
+                        Controls.Add(p);
+                        p.BringToFront();
 
-            this.btn_Rename.MouseHover += new EventHandler((object sender, EventArgs e) => 
-            {
-                p.Visible = true;
-            });
-*/
+                        this.btn_Rename.MouseHover += new EventHandler((object sender, EventArgs e) => 
+                        {
+                            p.Visible = true;
+                        });
+            */
 
             //myCb = new myControls.myComboBox(this.comboBox1, "Select option");
             //myTb = new myControls.myTextBox(this.textBox3, "Filter text");
@@ -68,16 +68,16 @@ namespace WinFormsApp1
         {
             // myTree_DataGrid's controls:
             var mtdgmi = new myTree_DataGrid_Manager_Initializer();
-            mtdgmi.form          = this;
-            mtdgmi.tv            = treeView1;
-            mtdgmi.dg            = myDataGridView1;
-            mtdgmi.cb_Recursive  = cb_Recursive;
-            mtdgmi.cb_ShowDirs   = cb_ShowDirs;
-            mtdgmi.cb_ShowFiles  = cb_ShowFiles;
+            mtdgmi.form = this;
+            mtdgmi.tv = treeView1;
+            mtdgmi.dg = myDataGridView1;
+            mtdgmi.cb_Recursive = cb_Recursive;
+            mtdgmi.cb_ShowDirs = cb_ShowDirs;
+            mtdgmi.cb_ShowFiles = cb_ShowFiles;
             mtdgmi.cb_FilterPath = cb_FilterPath;
-            mtdgmi.tb_Filter     = new myTextBox(textBox1);
-            mtdgmi.tb_FilterOut  = new myTextBox(textBox2);
-            mtdgmi.richTextBox   = richTextBox1;
+            mtdgmi.tb_Filter = new myTextBox(textBox1);
+            mtdgmi.tb_FilterOut = new myTextBox(textBox2);
+            mtdgmi.richTextBox = richTextBox1;
 
             // Every control that myRenamerApp must be aware of:
             var mraControls = new myRenamerApp_Controls();
@@ -188,7 +188,7 @@ namespace WinFormsApp1
                 myDataGridView1.BorderStyle = BorderStyle.None;
                 treeView1.BorderStyle = BorderStyle.None;
                 myControls.myWrappingPanel.Wrap(this.myDataGridView1, true, false);
-                myControls.myWrappingPanel.Wrap(this.treeView1,       true, true);
+                myControls.myWrappingPanel.Wrap(this.treeView1, true, true);
             }
 
             // Test controls
