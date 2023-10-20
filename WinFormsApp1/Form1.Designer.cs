@@ -213,7 +213,7 @@ namespace WinFormsApp1
             treeView1.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeView1.ItemHeight = 33;
             treeView1.Location = new System.Drawing.Point(0, 0);
-            treeView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            treeView1.Margin = new System.Windows.Forms.Padding(2);
             treeView1.Name = "treeView1";
             treeView1.Size = new System.Drawing.Size(444, 736);
             treeView1.TabIndex = 0;
@@ -222,7 +222,7 @@ namespace WinFormsApp1
             // 
             richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             richTextBox1.Location = new System.Drawing.Point(3, 3);
-            richTextBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new System.Drawing.Size(471, 568);
             richTextBox1.TabIndex = 2;
@@ -232,7 +232,7 @@ namespace WinFormsApp1
             // 
             cb_ShowDirs.AutoSize = true;
             cb_ShowDirs.Location = new System.Drawing.Point(964, 6);
-            cb_ShowDirs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            cb_ShowDirs.Margin = new System.Windows.Forms.Padding(2);
             cb_ShowDirs.Name = "cb_ShowDirs";
             cb_ShowDirs.Size = new System.Drawing.Size(114, 19);
             cb_ShowDirs.TabIndex = 3;
@@ -243,7 +243,7 @@ namespace WinFormsApp1
             // 
             cb_ShowFiles.AutoSize = true;
             cb_ShowFiles.Location = new System.Drawing.Point(964, 24);
-            cb_ShowFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            cb_ShowFiles.Margin = new System.Windows.Forms.Padding(2);
             cb_ShowFiles.Name = "cb_ShowFiles";
             cb_ShowFiles.Size = new System.Drawing.Size(81, 19);
             cb_ShowFiles.TabIndex = 5;
@@ -254,7 +254,7 @@ namespace WinFormsApp1
             // 
             cb_Recursive.AutoSize = true;
             cb_Recursive.Location = new System.Drawing.Point(964, 42);
-            cb_Recursive.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            cb_Recursive.Margin = new System.Windows.Forms.Padding(2);
             cb_Recursive.Name = "cb_Recursive";
             cb_Recursive.Size = new System.Drawing.Size(76, 19);
             cb_Recursive.TabIndex = 7;
@@ -264,7 +264,7 @@ namespace WinFormsApp1
             // textBox1
             // 
             textBox1.Location = new System.Drawing.Point(964, 84);
-            textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox1.Margin = new System.Windows.Forms.Padding(2);
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "filter";
             textBox1.Size = new System.Drawing.Size(166, 23);
@@ -273,7 +273,7 @@ namespace WinFormsApp1
             // btn_Rename
             // 
             btn_Rename.Location = new System.Drawing.Point(1140, 3);
-            btn_Rename.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            btn_Rename.Margin = new System.Windows.Forms.Padding(2);
             btn_Rename.Name = "btn_Rename";
             btn_Rename.Size = new System.Drawing.Size(298, 98);
             btn_Rename.TabIndex = 11;
@@ -298,7 +298,7 @@ namespace WinFormsApp1
             tabPage1.Controls.Add(panel_base);
             tabPage1.Location = new System.Drawing.Point(4, 24);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPage1.Padding = new System.Windows.Forms.Padding(3);
             tabPage1.Size = new System.Drawing.Size(477, 574);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Rename Options";
@@ -337,7 +337,7 @@ namespace WinFormsApp1
             panel_content_13.Controls.Add(textBox5);
             panel_content_13.Controls.Add(checkBox_Option_013);
             panel_content_13.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_13.Location = new System.Drawing.Point(0, 2086);
+            panel_content_13.Location = new System.Drawing.Point(0, 2119);
             panel_content_13.Name = "panel_content_13";
             panel_content_13.Size = new System.Drawing.Size(454, 172);
             panel_content_13.TabIndex = 42;
@@ -356,7 +356,7 @@ namespace WinFormsApp1
             // 
             checkBox9.AutoSize = true;
             checkBox9.Location = new System.Drawing.Point(237, 134);
-            checkBox9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox9.Margin = new System.Windows.Forms.Padding(2);
             checkBox9.Name = "checkBox9";
             checkBox9.Size = new System.Drawing.Size(106, 19);
             checkBox9.TabIndex = 52;
@@ -366,7 +366,7 @@ namespace WinFormsApp1
             // textBox11
             // 
             textBox11.Location = new System.Drawing.Point(316, 104);
-            textBox11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox11.Margin = new System.Windows.Forms.Padding(2);
             textBox11.Name = "textBox11";
             textBox11.Size = new System.Drawing.Size(89, 23);
             textBox11.TabIndex = 51;
@@ -384,7 +384,7 @@ namespace WinFormsApp1
             // 
             radioButton19.AutoSize = true;
             radioButton19.Location = new System.Drawing.Point(154, 104);
-            radioButton19.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton19.Margin = new System.Windows.Forms.Padding(2);
             radioButton19.Name = "radioButton19";
             radioButton19.Size = new System.Drawing.Size(150, 19);
             radioButton19.TabIndex = 48;
@@ -396,7 +396,7 @@ namespace WinFormsApp1
             // 
             radioButton20.AutoSize = true;
             radioButton20.Location = new System.Drawing.Point(154, 80);
-            radioButton20.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton20.Margin = new System.Windows.Forms.Padding(2);
             radioButton20.Name = "radioButton20";
             radioButton20.Size = new System.Drawing.Size(133, 19);
             radioButton20.TabIndex = 49;
@@ -407,7 +407,7 @@ namespace WinFormsApp1
             // textBox5
             // 
             textBox5.Location = new System.Drawing.Point(171, 52);
-            textBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox5.Margin = new System.Windows.Forms.Padding(2);
             textBox5.Name = "textBox5";
             textBox5.Size = new System.Drawing.Size(234, 23);
             textBox5.TabIndex = 38;
@@ -418,7 +418,7 @@ namespace WinFormsApp1
             checkBox_Option_013.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_013.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_013.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_013.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_013.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_013.Name = "checkBox_Option_013";
             checkBox_Option_013.Size = new System.Drawing.Size(180, 24);
             checkBox_Option_013.TabIndex = 2;
@@ -430,7 +430,7 @@ namespace WinFormsApp1
             panel_content_12.BackColor = System.Drawing.SystemColors.ControlLightLight;
             panel_content_12.Controls.Add(checkBox_Option_012);
             panel_content_12.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_12.Location = new System.Drawing.Point(0, 2022);
+            panel_content_12.Location = new System.Drawing.Point(0, 2055);
             panel_content_12.Name = "panel_content_12";
             panel_content_12.Size = new System.Drawing.Size(454, 64);
             panel_content_12.TabIndex = 41;
@@ -442,7 +442,7 @@ namespace WinFormsApp1
             checkBox_Option_012.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_012.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_012.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_012.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_012.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_012.Name = "checkBox_Option_012";
             checkBox_Option_012.Size = new System.Drawing.Size(349, 24);
             checkBox_Option_012.TabIndex = 2;
@@ -459,7 +459,7 @@ namespace WinFormsApp1
             panel_content_11.Controls.Add(radioButton17);
             panel_content_11.Controls.Add(checkBox_Option_011);
             panel_content_11.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_11.Location = new System.Drawing.Point(0, 1883);
+            panel_content_11.Location = new System.Drawing.Point(0, 1916);
             panel_content_11.Name = "panel_content_11";
             panel_content_11.Size = new System.Drawing.Size(454, 139);
             panel_content_11.TabIndex = 40;
@@ -469,7 +469,7 @@ namespace WinFormsApp1
             // 
             radioButton24.AutoSize = true;
             radioButton24.Location = new System.Drawing.Point(51, 106);
-            radioButton24.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton24.Margin = new System.Windows.Forms.Padding(2);
             radioButton24.Name = "radioButton24";
             radioButton24.Size = new System.Drawing.Size(65, 19);
             radioButton24.TabIndex = 49;
@@ -480,7 +480,7 @@ namespace WinFormsApp1
             // textBox10
             // 
             textBox10.Location = new System.Drawing.Point(148, 80);
-            textBox10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox10.Margin = new System.Windows.Forms.Padding(2);
             textBox10.Name = "textBox10";
             textBox10.Size = new System.Drawing.Size(257, 23);
             textBox10.TabIndex = 48;
@@ -489,7 +489,7 @@ namespace WinFormsApp1
             // 
             radioButton15.AutoSize = true;
             radioButton15.Location = new System.Drawing.Point(51, 88);
-            radioButton15.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton15.Margin = new System.Windows.Forms.Padding(2);
             radioButton15.Name = "radioButton15";
             radioButton15.Size = new System.Drawing.Size(85, 19);
             radioButton15.TabIndex = 47;
@@ -501,7 +501,7 @@ namespace WinFormsApp1
             // 
             radioButton16.AutoSize = true;
             radioButton16.Location = new System.Drawing.Point(51, 70);
-            radioButton16.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton16.Margin = new System.Windows.Forms.Padding(2);
             radioButton16.Name = "radioButton16";
             radioButton16.Size = new System.Drawing.Size(70, 19);
             radioButton16.TabIndex = 45;
@@ -513,7 +513,7 @@ namespace WinFormsApp1
             // 
             radioButton17.AutoSize = true;
             radioButton17.Location = new System.Drawing.Point(51, 52);
-            radioButton17.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton17.Margin = new System.Windows.Forms.Padding(2);
             radioButton17.Name = "radioButton17";
             radioButton17.Size = new System.Drawing.Size(77, 19);
             radioButton17.TabIndex = 46;
@@ -527,7 +527,7 @@ namespace WinFormsApp1
             checkBox_Option_011.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_011.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_011.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_011.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_011.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_011.Name = "checkBox_Option_011";
             checkBox_Option_011.Size = new System.Drawing.Size(100, 24);
             checkBox_Option_011.TabIndex = 2;
@@ -549,7 +549,7 @@ namespace WinFormsApp1
             panel_content_10.Controls.Add(textBox9);
             panel_content_10.Controls.Add(checkBox_Option_010);
             panel_content_10.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_10.Location = new System.Drawing.Point(0, 1735);
+            panel_content_10.Location = new System.Drawing.Point(0, 1768);
             panel_content_10.Name = "panel_content_10";
             panel_content_10.Size = new System.Drawing.Size(454, 148);
             panel_content_10.TabIndex = 39;
@@ -606,7 +606,7 @@ namespace WinFormsApp1
             checkBox10.AutoSize = true;
             checkBox10.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox10.Location = new System.Drawing.Point(62, 107);
-            checkBox10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox10.Margin = new System.Windows.Forms.Padding(2);
             checkBox10.Name = "checkBox10";
             checkBox10.Size = new System.Drawing.Size(256, 17);
             checkBox10.TabIndex = 52;
@@ -626,7 +626,7 @@ namespace WinFormsApp1
             // 
             radioButton22.AutoSize = true;
             radioButton22.Location = new System.Drawing.Point(48, 76);
-            radioButton22.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton22.Margin = new System.Windows.Forms.Padding(2);
             radioButton22.Name = "radioButton22";
             radioButton22.Size = new System.Drawing.Size(111, 19);
             radioButton22.TabIndex = 47;
@@ -638,7 +638,7 @@ namespace WinFormsApp1
             // 
             radioButton23.AutoSize = true;
             radioButton23.Location = new System.Drawing.Point(48, 52);
-            radioButton23.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton23.Margin = new System.Windows.Forms.Padding(2);
             radioButton23.Name = "radioButton23";
             radioButton23.Size = new System.Drawing.Size(116, 19);
             radioButton23.TabIndex = 48;
@@ -649,7 +649,7 @@ namespace WinFormsApp1
             // textBox9
             // 
             textBox9.Location = new System.Drawing.Point(171, 52);
-            textBox9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox9.Margin = new System.Windows.Forms.Padding(2);
             textBox9.Name = "textBox9";
             textBox9.Size = new System.Drawing.Size(117, 23);
             textBox9.TabIndex = 37;
@@ -661,7 +661,7 @@ namespace WinFormsApp1
             checkBox_Option_010.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_010.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_010.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_010.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_010.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_010.Name = "checkBox_Option_010";
             checkBox_Option_010.Size = new System.Drawing.Size(310, 24);
             checkBox_Option_010.TabIndex = 2;
@@ -683,7 +683,7 @@ namespace WinFormsApp1
             panel_content_09.Controls.Add(checkBox8);
             panel_content_09.Controls.Add(checkBox_Option_009);
             panel_content_09.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_09.Location = new System.Drawing.Point(0, 1496);
+            panel_content_09.Location = new System.Drawing.Point(0, 1529);
             panel_content_09.Name = "panel_content_09";
             panel_content_09.Size = new System.Drawing.Size(454, 239);
             panel_content_09.TabIndex = 38;
@@ -695,7 +695,7 @@ namespace WinFormsApp1
             comboBox5.FormattingEnabled = true;
             comboBox5.Items.AddRange(new object[] { "Start from the Left", "Start from the Right", "Start from Both Ends", "Remove Everywhere" });
             comboBox5.Location = new System.Drawing.Point(18, 81);
-            comboBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            comboBox5.Margin = new System.Windows.Forms.Padding(2);
             comboBox5.Name = "comboBox5";
             comboBox5.Size = new System.Drawing.Size(418, 23);
             comboBox5.TabIndex = 45;
@@ -703,7 +703,7 @@ namespace WinFormsApp1
             // textBox8
             // 
             textBox8.Location = new System.Drawing.Point(176, 205);
-            textBox8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox8.Margin = new System.Windows.Forms.Padding(2);
             textBox8.Name = "textBox8";
             textBox8.Size = new System.Drawing.Size(229, 23);
             textBox8.TabIndex = 44;
@@ -712,7 +712,7 @@ namespace WinFormsApp1
             // 
             radioButton14.AutoSize = true;
             radioButton14.Location = new System.Drawing.Point(24, 205);
-            radioButton14.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton14.Margin = new System.Windows.Forms.Padding(2);
             radioButton14.Name = "radioButton14";
             radioButton14.Size = new System.Drawing.Size(138, 19);
             radioButton14.TabIndex = 43;
@@ -724,7 +724,7 @@ namespace WinFormsApp1
             // 
             radioButton12.AutoSize = true;
             radioButton12.Location = new System.Drawing.Point(24, 189);
-            radioButton12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton12.Margin = new System.Windows.Forms.Padding(2);
             radioButton12.Name = "radioButton12";
             radioButton12.Size = new System.Drawing.Size(121, 19);
             radioButton12.TabIndex = 42;
@@ -736,7 +736,7 @@ namespace WinFormsApp1
             // 
             radioButton13.AutoSize = true;
             radioButton13.Location = new System.Drawing.Point(24, 173);
-            radioButton13.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton13.Margin = new System.Windows.Forms.Padding(2);
             radioButton13.Name = "radioButton13";
             radioButton13.Size = new System.Drawing.Size(95, 19);
             radioButton13.TabIndex = 41;
@@ -748,7 +748,7 @@ namespace WinFormsApp1
             // 
             radioButton11.AutoSize = true;
             radioButton11.Location = new System.Drawing.Point(24, 157);
-            radioButton11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton11.Margin = new System.Windows.Forms.Padding(2);
             radioButton11.Name = "radioButton11";
             radioButton11.Size = new System.Drawing.Size(102, 19);
             radioButton11.TabIndex = 40;
@@ -760,7 +760,7 @@ namespace WinFormsApp1
             // 
             radioButton10.AutoSize = true;
             radioButton10.Location = new System.Drawing.Point(24, 141);
-            radioButton10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton10.Margin = new System.Windows.Forms.Padding(2);
             radioButton10.Name = "radioButton10";
             radioButton10.Size = new System.Drawing.Size(74, 19);
             radioButton10.TabIndex = 39;
@@ -772,7 +772,7 @@ namespace WinFormsApp1
             // 
             radioButton9.AutoSize = true;
             radioButton9.Location = new System.Drawing.Point(24, 125);
-            radioButton9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton9.Margin = new System.Windows.Forms.Padding(2);
             radioButton9.Name = "radioButton9";
             radioButton9.Size = new System.Drawing.Size(88, 19);
             radioButton9.TabIndex = 38;
@@ -784,7 +784,7 @@ namespace WinFormsApp1
             // 
             radioButton8.AutoSize = true;
             radioButton8.Location = new System.Drawing.Point(24, 109);
-            radioButton8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton8.Margin = new System.Windows.Forms.Padding(2);
             radioButton8.Name = "radioButton8";
             radioButton8.Size = new System.Drawing.Size(60, 19);
             radioButton8.TabIndex = 37;
@@ -796,7 +796,7 @@ namespace WinFormsApp1
             // 
             checkBox8.AutoSize = true;
             checkBox8.Location = new System.Drawing.Point(42, 52);
-            checkBox8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox8.Margin = new System.Windows.Forms.Padding(2);
             checkBox8.Name = "checkBox8";
             checkBox8.Size = new System.Drawing.Size(347, 19);
             checkBox8.TabIndex = 4;
@@ -809,7 +809,7 @@ namespace WinFormsApp1
             checkBox_Option_009.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_009.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_009.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_009.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_009.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_009.Name = "checkBox_Option_009";
             checkBox_Option_009.Size = new System.Drawing.Size(358, 24);
             checkBox_Option_009.TabIndex = 2;
@@ -825,7 +825,7 @@ namespace WinFormsApp1
             panel_content_08.Controls.Add(numericUpDown8);
             panel_content_08.Controls.Add(checkBox_Option_008);
             panel_content_08.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_08.Location = new System.Drawing.Point(0, 1375);
+            panel_content_08.Location = new System.Drawing.Point(0, 1408);
             panel_content_08.Name = "panel_content_08";
             panel_content_08.Size = new System.Drawing.Size(454, 121);
             panel_content_08.TabIndex = 37;
@@ -873,7 +873,7 @@ namespace WinFormsApp1
             checkBox_Option_008.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_008.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_008.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_008.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_008.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_008.Name = "checkBox_Option_008";
             checkBox_Option_008.Size = new System.Drawing.Size(337, 24);
             checkBox_Option_008.TabIndex = 2;
@@ -889,7 +889,7 @@ namespace WinFormsApp1
             panel_content_07.Controls.Add(numericUpDown6);
             panel_content_07.Controls.Add(checkBox_Option_007);
             panel_content_07.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_07.Location = new System.Drawing.Point(0, 1251);
+            panel_content_07.Location = new System.Drawing.Point(0, 1284);
             panel_content_07.Name = "panel_content_07";
             panel_content_07.Size = new System.Drawing.Size(454, 124);
             panel_content_07.TabIndex = 35;
@@ -937,7 +937,7 @@ namespace WinFormsApp1
             checkBox_Option_007.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_007.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_007.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_007.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_007.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_007.Name = "checkBox_Option_007";
             checkBox_Option_007.Size = new System.Drawing.Size(292, 24);
             checkBox_Option_007.TabIndex = 2;
@@ -951,7 +951,7 @@ namespace WinFormsApp1
             panel_content_06.Controls.Add(groupBox1);
             panel_content_06.Controls.Add(checkBox_Option_006);
             panel_content_06.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_06.Location = new System.Drawing.Point(0, 1007);
+            panel_content_06.Location = new System.Drawing.Point(0, 1040);
             panel_content_06.Name = "panel_content_06";
             panel_content_06.Size = new System.Drawing.Size(454, 244);
             panel_content_06.TabIndex = 33;
@@ -963,9 +963,9 @@ namespace WinFormsApp1
             groupBox2.Controls.Add(checkBox5);
             groupBox2.Controls.Add(radioButton5);
             groupBox2.Location = new System.Drawing.Point(12, 170);
-            groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            groupBox2.Margin = new System.Windows.Forms.Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            groupBox2.Padding = new System.Windows.Forms.Padding(2);
             groupBox2.Size = new System.Drawing.Size(434, 62);
             groupBox2.TabIndex = 48;
             groupBox2.TabStop = false;
@@ -974,7 +974,7 @@ namespace WinFormsApp1
             // 
             radioButton6.AutoSize = true;
             radioButton6.Location = new System.Drawing.Point(111, 34);
-            radioButton6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton6.Margin = new System.Windows.Forms.Padding(2);
             radioButton6.Name = "radioButton6";
             radioButton6.Size = new System.Drawing.Size(82, 19);
             radioButton6.TabIndex = 45;
@@ -986,7 +986,7 @@ namespace WinFormsApp1
             // 
             checkBox5.AutoSize = true;
             checkBox5.Location = new System.Drawing.Point(10, 12);
-            checkBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox5.Margin = new System.Windows.Forms.Padding(2);
             checkBox5.Name = "checkBox5";
             checkBox5.Size = new System.Drawing.Size(91, 19);
             checkBox5.TabIndex = 44;
@@ -997,7 +997,7 @@ namespace WinFormsApp1
             // 
             radioButton5.AutoSize = true;
             radioButton5.Location = new System.Drawing.Point(111, 18);
-            radioButton5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton5.Margin = new System.Windows.Forms.Padding(2);
             radioButton5.Name = "radioButton5";
             radioButton5.Size = new System.Drawing.Size(88, 19);
             radioButton5.TabIndex = 46;
@@ -1014,9 +1014,9 @@ namespace WinFormsApp1
             groupBox1.Controls.Add(radioButton4);
             groupBox1.Controls.Add(radioButton3);
             groupBox1.Location = new System.Drawing.Point(12, 47);
-            groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            groupBox1.Margin = new System.Windows.Forms.Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            groupBox1.Padding = new System.Windows.Forms.Padding(2);
             groupBox1.Size = new System.Drawing.Size(434, 123);
             groupBox1.TabIndex = 47;
             groupBox1.TabStop = false;
@@ -1033,7 +1033,7 @@ namespace WinFormsApp1
             // 
             checkBox6.AutoSize = true;
             checkBox6.Location = new System.Drawing.Point(48, 90);
-            checkBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox6.Margin = new System.Windows.Forms.Padding(2);
             checkBox6.Name = "checkBox6";
             checkBox6.Size = new System.Drawing.Size(176, 19);
             checkBox6.TabIndex = 45;
@@ -1044,7 +1044,7 @@ namespace WinFormsApp1
             // 
             radioButton7.AutoSize = true;
             radioButton7.Location = new System.Drawing.Point(42, 67);
-            radioButton7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton7.Margin = new System.Windows.Forms.Padding(2);
             radioButton7.Name = "radioButton7";
             radioButton7.Size = new System.Drawing.Size(259, 19);
             radioButton7.TabIndex = 44;
@@ -1056,7 +1056,7 @@ namespace WinFormsApp1
             // 
             checkBox1.AutoSize = true;
             checkBox1.Location = new System.Drawing.Point(10, 12);
-            checkBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox1.Margin = new System.Windows.Forms.Padding(2);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new System.Drawing.Size(91, 19);
             checkBox1.TabIndex = 43;
@@ -1067,7 +1067,7 @@ namespace WinFormsApp1
             // 
             radioButton4.AutoSize = true;
             radioButton4.Location = new System.Drawing.Point(42, 51);
-            radioButton4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton4.Margin = new System.Windows.Forms.Padding(2);
             radioButton4.Name = "radioButton4";
             radioButton4.Size = new System.Drawing.Size(82, 19);
             radioButton4.TabIndex = 41;
@@ -1079,7 +1079,7 @@ namespace WinFormsApp1
             // 
             radioButton3.AutoSize = true;
             radioButton3.Location = new System.Drawing.Point(42, 35);
-            radioButton3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton3.Margin = new System.Windows.Forms.Padding(2);
             radioButton3.Name = "radioButton3";
             radioButton3.Size = new System.Drawing.Size(88, 19);
             radioButton3.TabIndex = 42;
@@ -1093,7 +1093,7 @@ namespace WinFormsApp1
             checkBox_Option_006.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_006.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_006.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_006.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_006.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_006.Name = "checkBox_Option_006";
             checkBox_Option_006.Size = new System.Drawing.Size(225, 24);
             checkBox_Option_006.TabIndex = 2;
@@ -1119,7 +1119,7 @@ namespace WinFormsApp1
             panel_content_05.Controls.Add(numericUpDown4);
             panel_content_05.Controls.Add(checkBox_Option_005);
             panel_content_05.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_05.Location = new System.Drawing.Point(0, 716);
+            panel_content_05.Location = new System.Drawing.Point(0, 749);
             panel_content_05.Name = "panel_content_05";
             panel_content_05.Size = new System.Drawing.Size(454, 291);
             panel_content_05.TabIndex = 31;
@@ -1176,7 +1176,7 @@ namespace WinFormsApp1
             // textBox12
             // 
             textBox12.Location = new System.Drawing.Point(171, 77);
-            textBox12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox12.Margin = new System.Windows.Forms.Padding(2);
             textBox12.Name = "textBox12";
             textBox12.PlaceholderText = "One time template";
             textBox12.Size = new System.Drawing.Size(234, 23);
@@ -1214,7 +1214,7 @@ namespace WinFormsApp1
             // button2
             // 
             button2.Location = new System.Drawing.Point(170, 129);
-            button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            button2.Margin = new System.Windows.Forms.Padding(2);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(236, 25);
             button2.TabIndex = 50;
@@ -1226,7 +1226,7 @@ namespace WinFormsApp1
             opt_005_predefined_templates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             opt_005_predefined_templates.FormattingEnabled = true;
             opt_005_predefined_templates.Location = new System.Drawing.Point(171, 103);
-            opt_005_predefined_templates.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            opt_005_predefined_templates.Margin = new System.Windows.Forms.Padding(2);
             opt_005_predefined_templates.Name = "opt_005_predefined_templates";
             opt_005_predefined_templates.Size = new System.Drawing.Size(234, 23);
             opt_005_predefined_templates.TabIndex = 49;
@@ -1273,7 +1273,7 @@ namespace WinFormsApp1
             checkBox_Option_005.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_005.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_005.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_005.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_005.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_005.Name = "checkBox_Option_005";
             checkBox_Option_005.Size = new System.Drawing.Size(189, 24);
             checkBox_Option_005.TabIndex = 1;
@@ -1292,7 +1292,7 @@ namespace WinFormsApp1
             panel_content_04.Controls.Add(textBox6);
             panel_content_04.Controls.Add(checkBox_Option_004);
             panel_content_04.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_04.Location = new System.Drawing.Point(0, 542);
+            panel_content_04.Location = new System.Drawing.Point(0, 575);
             panel_content_04.Name = "panel_content_04";
             panel_content_04.Size = new System.Drawing.Size(454, 174);
             panel_content_04.TabIndex = 29;
@@ -1312,7 +1312,7 @@ namespace WinFormsApp1
             // 
             checkBox7.AutoSize = true;
             checkBox7.Location = new System.Drawing.Point(276, 138);
-            checkBox7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox7.Margin = new System.Windows.Forms.Padding(2);
             checkBox7.Name = "checkBox7";
             checkBox7.Size = new System.Drawing.Size(134, 19);
             checkBox7.TabIndex = 40;
@@ -1349,7 +1349,7 @@ namespace WinFormsApp1
             // textBox7
             // 
             textBox7.Location = new System.Drawing.Point(171, 78);
-            textBox7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox7.Margin = new System.Windows.Forms.Padding(2);
             textBox7.Name = "textBox7";
             textBox7.Size = new System.Drawing.Size(234, 23);
             textBox7.TabIndex = 36;
@@ -1357,7 +1357,7 @@ namespace WinFormsApp1
             // textBox6
             // 
             textBox6.Location = new System.Drawing.Point(171, 52);
-            textBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox6.Margin = new System.Windows.Forms.Padding(2);
             textBox6.Name = "textBox6";
             textBox6.Size = new System.Drawing.Size(234, 23);
             textBox6.TabIndex = 35;
@@ -1368,7 +1368,7 @@ namespace WinFormsApp1
             checkBox_Option_004.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_004.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_004.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_004.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_004.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_004.Name = "checkBox_Option_004";
             checkBox_Option_004.Size = new System.Drawing.Size(302, 24);
             checkBox_Option_004.TabIndex = 0;
@@ -1390,16 +1390,16 @@ namespace WinFormsApp1
             panel_content_03.Controls.Add(checkBox_Option_003);
             panel_content_03.Controls.Add(label16);
             panel_content_03.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_03.Location = new System.Drawing.Point(0, 343);
+            panel_content_03.Location = new System.Drawing.Point(0, 362);
             panel_content_03.Name = "panel_content_03";
-            panel_content_03.Size = new System.Drawing.Size(454, 199);
+            panel_content_03.Size = new System.Drawing.Size(454, 213);
             panel_content_03.TabIndex = 26;
             panel_content_03.UseCustomBorder = false;
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new System.Drawing.Point(73, 78);
+            label15.Location = new System.Drawing.Point(83, 87);
             label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label15.Name = "label15";
             label15.Size = new System.Drawing.Size(180, 15);
@@ -1408,8 +1408,8 @@ namespace WinFormsApp1
             // 
             // numericUpDown15
             // 
-            numericUpDown15.Location = new System.Drawing.Point(267, 76);
-            numericUpDown15.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            numericUpDown15.Location = new System.Drawing.Point(267, 83);
+            numericUpDown15.Margin = new System.Windows.Forms.Padding(2);
             numericUpDown15.Name = "numericUpDown15";
             numericUpDown15.Size = new System.Drawing.Size(88, 23);
             numericUpDown15.TabIndex = 39;
@@ -1419,8 +1419,8 @@ namespace WinFormsApp1
             // checkBox11
             // 
             checkBox11.AutoSize = true;
-            checkBox11.Location = new System.Drawing.Point(231, 167);
-            checkBox11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox11.Location = new System.Drawing.Point(231, 174);
+            checkBox11.Margin = new System.Windows.Forms.Padding(2);
             checkBox11.Name = "checkBox11";
             checkBox11.Size = new System.Drawing.Size(182, 19);
             checkBox11.TabIndex = 38;
@@ -1430,7 +1430,7 @@ namespace WinFormsApp1
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new System.Drawing.Point(62, 101);
+            label14.Location = new System.Drawing.Point(72, 111);
             label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label14.Name = "label14";
             label14.Size = new System.Drawing.Size(191, 15);
@@ -1440,8 +1440,8 @@ namespace WinFormsApp1
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new System.Drawing.Point(215, 144);
-            radioButton2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton2.Location = new System.Drawing.Point(215, 151);
+            radioButton2.Margin = new System.Windows.Forms.Padding(2);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new System.Drawing.Size(49, 19);
             radioButton2.TabIndex = 36;
@@ -1452,8 +1452,8 @@ namespace WinFormsApp1
             // radioButton1
             // 
             radioButton1.AutoSize = true;
-            radioButton1.Location = new System.Drawing.Point(215, 128);
-            radioButton1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton1.Location = new System.Drawing.Point(215, 135);
+            radioButton1.Margin = new System.Windows.Forms.Padding(2);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new System.Drawing.Size(59, 19);
             radioButton1.TabIndex = 35;
@@ -1464,7 +1464,7 @@ namespace WinFormsApp1
             // textBox4
             // 
             textBox4.Location = new System.Drawing.Point(171, 52);
-            textBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox4.Margin = new System.Windows.Forms.Padding(2);
             textBox4.Name = "textBox4";
             textBox4.Size = new System.Drawing.Size(234, 23);
             textBox4.TabIndex = 34;
@@ -1481,8 +1481,8 @@ namespace WinFormsApp1
             // 
             // numericUpDown3
             // 
-            numericUpDown3.Location = new System.Drawing.Point(267, 99);
-            numericUpDown3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            numericUpDown3.Location = new System.Drawing.Point(267, 107);
+            numericUpDown3.Margin = new System.Windows.Forms.Padding(2);
             numericUpDown3.Name = "numericUpDown3";
             numericUpDown3.Size = new System.Drawing.Size(88, 23);
             numericUpDown3.TabIndex = 32;
@@ -1494,7 +1494,7 @@ namespace WinFormsApp1
             checkBox_Option_003.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_003.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_003.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_003.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_003.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_003.Name = "checkBox_Option_003";
             checkBox_Option_003.Size = new System.Drawing.Size(359, 24);
             checkBox_Option_003.TabIndex = 30;
@@ -1504,7 +1504,7 @@ namespace WinFormsApp1
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new System.Drawing.Point(109, 137);
+            label16.Location = new System.Drawing.Point(109, 144);
             label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label16.Name = "label16";
             label16.Size = new System.Drawing.Size(240, 15);
@@ -1521,7 +1521,7 @@ namespace WinFormsApp1
             panel_content_02.Controls.Add(checkBox4);
             panel_content_02.Controls.Add(checkBox_Option_002);
             panel_content_02.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_02.Location = new System.Drawing.Point(0, 209);
+            panel_content_02.Location = new System.Drawing.Point(0, 228);
             panel_content_02.Name = "panel_content_02";
             panel_content_02.Size = new System.Drawing.Size(454, 134);
             panel_content_02.TabIndex = 24;
@@ -1530,7 +1530,7 @@ namespace WinFormsApp1
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new System.Drawing.Point(164, 76);
+            label12.Location = new System.Drawing.Point(168, 80);
             label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label12.Name = "label12";
             label12.Size = new System.Drawing.Size(94, 15);
@@ -1539,8 +1539,8 @@ namespace WinFormsApp1
             // 
             // numericUpDown2
             // 
-            numericUpDown2.Location = new System.Drawing.Point(267, 75);
-            numericUpDown2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            numericUpDown2.Location = new System.Drawing.Point(267, 76);
+            numericUpDown2.Margin = new System.Windows.Forms.Padding(2);
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new System.Drawing.Size(88, 23);
             numericUpDown2.TabIndex = 29;
@@ -1549,7 +1549,7 @@ namespace WinFormsApp1
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(79, 53);
+            label1.Location = new System.Drawing.Point(90, 56);
             label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(173, 15);
@@ -1559,7 +1559,7 @@ namespace WinFormsApp1
             // numericUpDown1
             // 
             numericUpDown1.Location = new System.Drawing.Point(267, 52);
-            numericUpDown1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new System.Drawing.Size(88, 23);
             numericUpDown1.TabIndex = 27;
@@ -1569,7 +1569,7 @@ namespace WinFormsApp1
             // 
             checkBox4.AutoSize = true;
             checkBox4.Location = new System.Drawing.Point(300, 104);
-            checkBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox4.Margin = new System.Windows.Forms.Padding(2);
             checkBox4.Name = "checkBox4";
             checkBox4.Size = new System.Drawing.Size(102, 19);
             checkBox4.TabIndex = 26;
@@ -1582,7 +1582,7 @@ namespace WinFormsApp1
             checkBox_Option_002.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_002.ForeColor = System.Drawing.Color.Black;
             checkBox_Option_002.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_002.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox_Option_002.Margin = new System.Windows.Forms.Padding(2);
             checkBox_Option_002.Name = "checkBox_Option_002";
             checkBox_Option_002.Size = new System.Drawing.Size(331, 24);
             checkBox_Option_002.TabIndex = 25;
@@ -1604,7 +1604,7 @@ namespace WinFormsApp1
             panel_content_01.Dock = System.Windows.Forms.DockStyle.Top;
             panel_content_01.Location = new System.Drawing.Point(0, 0);
             panel_content_01.Name = "panel_content_01";
-            panel_content_01.Size = new System.Drawing.Size(454, 209);
+            panel_content_01.Size = new System.Drawing.Size(454, 228);
             panel_content_01.TabIndex = 21;
             panel_content_01.UseCustomBorder = false;
             // 
@@ -1613,7 +1613,7 @@ namespace WinFormsApp1
             label23.AutoSize = true;
             label23.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label23.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label23.Location = new System.Drawing.Point(30, 186);
+            label23.Location = new System.Drawing.Point(30, 196);
             label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label23.Name = "label23";
             label23.Size = new System.Drawing.Size(234, 13);
@@ -1625,7 +1625,7 @@ namespace WinFormsApp1
             label22.AutoSize = true;
             label22.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label22.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label22.Location = new System.Drawing.Point(30, 172);
+            label22.Location = new System.Drawing.Point(30, 182);
             label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label22.Name = "label22";
             label22.Size = new System.Drawing.Size(207, 13);
@@ -1637,7 +1637,7 @@ namespace WinFormsApp1
             label21.AutoSize = true;
             label21.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label21.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label21.Location = new System.Drawing.Point(30, 157);
+            label21.Location = new System.Drawing.Point(30, 167);
             label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label21.Name = "label21";
             label21.Size = new System.Drawing.Size(362, 13);
@@ -1647,8 +1647,8 @@ namespace WinFormsApp1
             // radioButton18
             // 
             radioButton18.AutoSize = true;
-            radioButton18.Location = new System.Drawing.Point(260, 138);
-            radioButton18.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton18.Location = new System.Drawing.Point(260, 148);
+            radioButton18.Margin = new System.Windows.Forms.Padding(2);
             radioButton18.Name = "radioButton18";
             radioButton18.Size = new System.Drawing.Size(62, 19);
             radioButton18.TabIndex = 38;
@@ -1659,8 +1659,8 @@ namespace WinFormsApp1
             // radioButton21
             // 
             radioButton21.AutoSize = true;
-            radioButton21.Location = new System.Drawing.Point(260, 122);
-            radioButton21.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            radioButton21.Location = new System.Drawing.Point(260, 132);
+            radioButton21.Margin = new System.Windows.Forms.Padding(2);
             radioButton21.Name = "radioButton21";
             radioButton21.Size = new System.Drawing.Size(48, 19);
             radioButton21.TabIndex = 37;
@@ -1670,19 +1670,19 @@ namespace WinFormsApp1
             // 
             // comboBox2
             // 
-            comboBox2.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            comboBox2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             comboBox2.FormattingEnabled = true;
             comboBox2.Location = new System.Drawing.Point(30, 52);
-            comboBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            comboBox2.Margin = new System.Windows.Forms.Padding(2);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new System.Drawing.Size(375, 31);
+            comboBox2.Size = new System.Drawing.Size(375, 29);
             comboBox2.TabIndex = 18;
             // 
             // checkBox3
             // 
             checkBox3.AutoSize = true;
-            checkBox3.Location = new System.Drawing.Point(260, 83);
-            checkBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            checkBox3.Location = new System.Drawing.Point(260, 93);
+            checkBox3.Margin = new System.Windows.Forms.Padding(2);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new System.Drawing.Size(139, 19);
             checkBox3.TabIndex = 17;
@@ -1692,7 +1692,7 @@ namespace WinFormsApp1
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new System.Drawing.Point(260, 100);
+            checkBox2.Location = new System.Drawing.Point(260, 110);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new System.Drawing.Size(102, 19);
             checkBox2.TabIndex = 16;
@@ -1716,7 +1716,7 @@ namespace WinFormsApp1
             tabPage2.Controls.Add(richTextBox1);
             tabPage2.Location = new System.Drawing.Point(4, 24);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPage2.Padding = new System.Windows.Forms.Padding(3);
             tabPage2.Size = new System.Drawing.Size(477, 574);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "RichEdit";
@@ -1729,7 +1729,7 @@ namespace WinFormsApp1
             tabPage3.Controls.Add(textBox3);
             tabPage3.Location = new System.Drawing.Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPage3.Padding = new System.Windows.Forms.Padding(3);
             tabPage3.Size = new System.Drawing.Size(477, 574);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Test";
@@ -1746,7 +1746,7 @@ namespace WinFormsApp1
             // textBox3
             // 
             textBox3.Location = new System.Drawing.Point(17, 42);
-            textBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox3.Margin = new System.Windows.Forms.Padding(2);
             textBox3.Name = "textBox3";
             textBox3.Size = new System.Drawing.Size(150, 23);
             textBox3.TabIndex = 12;
@@ -1754,7 +1754,7 @@ namespace WinFormsApp1
             // textBox2
             // 
             textBox2.Location = new System.Drawing.Point(964, 106);
-            textBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            textBox2.Margin = new System.Windows.Forms.Padding(2);
             textBox2.Name = "textBox2";
             textBox2.PlaceholderText = "filter";
             textBox2.Size = new System.Drawing.Size(166, 23);
@@ -1773,7 +1773,7 @@ namespace WinFormsApp1
             // 
             cb_FilterPath.AutoSize = true;
             cb_FilterPath.Location = new System.Drawing.Point(964, 60);
-            cb_FilterPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            cb_FilterPath.Margin = new System.Windows.Forms.Padding(2);
             cb_FilterPath.Name = "cb_FilterPath";
             cb_FilterPath.Size = new System.Drawing.Size(127, 19);
             cb_FilterPath.TabIndex = 15;
@@ -1785,7 +1785,7 @@ namespace WinFormsApp1
             myDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             myDataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
             myDataGridView1.Location = new System.Drawing.Point(444, 0);
-            myDataGridView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            myDataGridView1.Margin = new System.Windows.Forms.Padding(2);
             myDataGridView1.Name = "myDataGridView1";
             myDataGridView1.RowHeadersWidth = 62;
             myDataGridView1.RowTemplate.Height = 33;
@@ -1809,7 +1809,7 @@ namespace WinFormsApp1
             Controls.Add(cb_ShowDirs);
             Controls.Add(treeView1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            Margin = new System.Windows.Forms.Padding(2);
             Name = "Form1";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Form1";

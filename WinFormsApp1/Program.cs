@@ -13,6 +13,8 @@ namespace WinFormsApp1
         [STAThread]
         static void Main(string[] args)
         {
+            ticks = DateTime.Now.Ticks;
+
             // Parse command line parameters:
             string path = "";
             bool expandEmpty = false;
@@ -25,8 +27,6 @@ namespace WinFormsApp1
                 if (param.StartsWith("/expandEmpty"))
                     expandEmpty = true;
             }
-
-            ticks = DateTime.Now.Ticks;
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
