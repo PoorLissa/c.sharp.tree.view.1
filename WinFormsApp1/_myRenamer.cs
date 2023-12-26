@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text;
 using System.Windows.Forms;
 
@@ -322,6 +323,14 @@ public class myRenamer
             bool startFromEnd  = _controls.option_001_ch_02.Checked;
             bool isLazy        = _controls.option_001_rb_01.Checked;
             var delimiters     = _controls.option_001_cb_01.Obj().Text.Split(':');
+
+            if (_controls.option_001_cb_01.doTreatSpaces())
+            {
+                for (int i = 0; i < delimiters.Length; i++)
+                {
+                    delimiters[i] = delimiters[i].Replace('·', ' ');
+                }
+            }
 
             // index of delimiter to use
             int index = -1;

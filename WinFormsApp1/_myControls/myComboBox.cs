@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 /*
@@ -19,16 +20,17 @@ namespace myControls
         ComboBox _cb = null;
         Label _placeholder = null;
 
-        private bool     _isChanged = false;
+        private bool     _isChanged = false, _doTreatSpaces = false;
         private SortMode _sort;
 
         // --------------------------------------------------------------------------------------------------------
 
-        public myComboBox(ComboBox cb, SortMode sort, string placeholder = "...")
+        public myComboBox(ComboBox cb, SortMode sort, bool treatSpaces, string placeholder = "...")
         {
             _cb = cb;
             _placeholder = new Label();
             _placeholder.Text = placeholder;
+            _doTreatSpaces = treatSpaces;
             _sort = sort;
 
             init();
@@ -82,7 +84,14 @@ namespace myControls
 
         // --------------------------------------------------------------------------------------------------------
 
-        // Adds items to combobox from string
+        public bool doTreatSpaces()
+        {
+            return _doTreatSpaces;
+        }
+
+        // --------------------------------------------------------------------------------------------------------
+
+        // Adds items to combobox from a string
         public void setItems(string data, bool doSelectFirstItem = false)
         {
             if (data != null)
@@ -93,7 +102,15 @@ namespace myControls
                 do
                 {
                     pos2 = data.IndexOf('?', pos1);
-                    _cb.Items.Add(data.Substring(pos1, pos2 - pos1));
+
+                    string item = data.Substring(pos1, pos2 - pos1);
+
+                    if (_doTreatSpaces)
+                    {
+                        item = item.Replace(' ', '·');
+                    }
+
+                    _cb.Items.Add(item);
                     pos1 = pos2 + 1;
 
                 } while (pos2 != data.Length - 1);
@@ -154,6 +171,13 @@ namespace myControls
         private void on_TextChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)(sender);
+
+            // Set ComboBox.SelectionStart to ComboBox.Text.Length to position the cursor after the text in a drop-down ComboBox
+
+            int pos = cb.SelectionStart;
+            cb.Text = cb.Text.Replace(' ', '·');
+            cb.SelectionStart = pos;
+
             _placeholder.Visible = (cb.Text.Length == 0);
         }
 

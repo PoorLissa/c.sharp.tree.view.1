@@ -87,7 +87,7 @@ namespace WinFormsApp1
                 mraControls.option_001_ch_01 = this.checkBox_Option_001;
                 mraControls.option_001_ch_02 = this.checkBox2;
                 mraControls.option_001_ch_03 = this.checkBox3;
-                mraControls.option_001_cb_01 = new myComboBox(this.comboBox2, SortMode.LastOnTop, "Delimiter (use : to add multiple delimiters)");
+                mraControls.option_001_cb_01 = new myComboBox(this.comboBox2, SortMode.LastOnTop, true, "Delimiter (use : to add multiple delimiters)");
                 mraControls.option_001_rb_01 = this.radioButton21;
                 mraControls.option_001_rb_02 = this.radioButton18;
 
@@ -111,7 +111,7 @@ namespace WinFormsApp1
                 mraControls.option_004_num_1 = this.numericUpDown5;
 
                 mraControls.option_005_ch_01 = this.checkBox_Option_005;
-                mraControls.option_005_cb_01 = new myComboBox(this.comboBox4, SortMode.LastOnTop, "Template: ### - *");
+                mraControls.option_005_cb_01 = new myComboBox(this.comboBox4, SortMode.LastOnTop, false, "Template: ### - *");
                 mraControls.option_005_tb_01 = this.textBox12;
                 mraControls.option_005_num_1 = this.numericUpDown4;
                 mraControls.option_005_num_2 = this.numericUpDown16;
@@ -127,7 +127,7 @@ namespace WinFormsApp1
                 mraControls.option_006_rb_03 = this.radioButton5;
                 mraControls.option_006_rb_04 = this.radioButton6;
                 mraControls.option_006_rb_05 = this.radioButton7;
-                mraControls.option_006_cb_01 = new myComboBox(this.comboBox3, SortMode.Sorted, "Short Words");
+                mraControls.option_006_cb_01 = new myComboBox(this.comboBox3, SortMode.Sorted, false, "Short Words");
 
                 mraControls.option_007_ch_01 = this.checkBox_Option_007;
                 mraControls.option_007_num_1 = this.numericUpDown6;
