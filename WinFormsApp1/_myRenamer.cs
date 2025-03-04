@@ -280,14 +280,19 @@ public class myRenamer
     // todo: rewrite it to use string builder (which can be tricky, as SB does not have indexof() and other such methods)
     private string applyOptions(myTreeListDataItem item, bool getNameOnly = false)
     {
-        // todo:
-        // "I:\ccc\aaa #bbb\986lo.jpg"  causes exception here
-
         int pos = 0, num = 0;
         int pos_file = item.Name.LastIndexOf('\\') + 1;
         int pos_ext  = item.Name.LastIndexOf('.');
         int pos_tmp  = item.Name.LastIndexOf('#');
-            pos_tmp  = (pos_tmp < pos_file) ? item.Name.Length : pos_tmp;    // When doing the simulation, no tmp name exists yet
+
+        // When doing the simulation, no tmp name exists yet
+        pos_tmp = (pos_tmp < pos_file)
+                    ? item.Name.Length
+                    : pos_tmp;
+
+        // Quick fix for: "I:\aaa\98#6lo.jpg" causes an exception, because pos_tmp < pos_ext
+        if (pos_tmp < pos_ext)
+            pos_tmp = item.Name.Length;
 
         string newName = null;
         string name    = null;
