@@ -10,8 +10,8 @@ using System.Windows.Forms;
 public class myRenamerApp_Controls
 {
     public List<CheckBox>   optionList       = null;    // List of each option panel's main checkboxes.
-
     public RichTextBox      richTextBox      = null;
+    public Form             mainForm         = null;
 
     public CheckBox         option_001_ch_01 = null;
     public CheckBox         option_001_ch_02 = null;
@@ -147,11 +147,17 @@ public class myRenamerApp
     {
         try
         {
+            _controls.mainForm.Enabled = false;
+
             myRenamer.getInstance().Rename();
         }
         catch (Exception ex)
         {
             MessageBox.Show(ex.Message, "pmvRenamer: Failed to rename files", MessageBoxButtons.OK);
+        }
+        finally
+        {
+            _controls.mainForm.Enabled = true;
         }
     }
 
