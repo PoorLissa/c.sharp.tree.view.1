@@ -178,6 +178,11 @@ namespace WinFormsApp1
                 mraControls.option_013_ch_02 = this.checkBox9;
                 mraControls.option_013_num_1 = this.numericUpDown9;
 
+                mraControls.option_014_ch_01 = this.checkBox_Option_014;
+                mraControls.option_014_tb_01 = this.textBox13;
+                mraControls.option_014_tb_02 = this.textBox14;
+                mraControls.option_014_ch_02 = this.checkBox12;
+
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
             }
 

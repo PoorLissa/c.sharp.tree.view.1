@@ -39,6 +39,11 @@ namespace WinFormsApp1
             tabControl1 = new System.Windows.Forms.TabControl();
             tabPage1 = new System.Windows.Forms.TabPage();
             panel_base = new System.Windows.Forms.Panel();
+            panel_content_14 = new myControls.myPanel();
+            textBox14 = new System.Windows.Forms.TextBox();
+            textBox13 = new System.Windows.Forms.TextBox();
+            checkBox12 = new System.Windows.Forms.CheckBox();
+            checkBox_Option_014 = new System.Windows.Forms.CheckBox();
             panel_content_13 = new myControls.myPanel();
             label19 = new System.Windows.Forms.Label();
             checkBox9 = new System.Windows.Forms.CheckBox();
@@ -171,6 +176,7 @@ namespace WinFormsApp1
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panel_base.SuspendLayout();
+            panel_content_14.SuspendLayout();
             panel_content_13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown9).BeginInit();
             panel_content_12.SuspendLayout();
@@ -213,28 +219,25 @@ namespace WinFormsApp1
             treeView1.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeView1.ItemHeight = 33;
             treeView1.Location = new System.Drawing.Point(0, 0);
-            treeView1.Margin = new System.Windows.Forms.Padding(2);
             treeView1.Name = "treeView1";
-            treeView1.Size = new System.Drawing.Size(444, 736);
+            treeView1.Size = new System.Drawing.Size(633, 1227);
             treeView1.TabIndex = 0;
             // 
             // richTextBox1
             // 
             richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            richTextBox1.Location = new System.Drawing.Point(3, 3);
-            richTextBox1.Margin = new System.Windows.Forms.Padding(2);
+            richTextBox1.Location = new System.Drawing.Point(4, 5);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new System.Drawing.Size(471, 568);
+            richTextBox1.Size = new System.Drawing.Size(677, 955);
             richTextBox1.TabIndex = 2;
             richTextBox1.Text = "";
             // 
             // cb_ShowDirs
             // 
             cb_ShowDirs.AutoSize = true;
-            cb_ShowDirs.Location = new System.Drawing.Point(964, 6);
-            cb_ShowDirs.Margin = new System.Windows.Forms.Padding(2);
+            cb_ShowDirs.Location = new System.Drawing.Point(1377, 10);
             cb_ShowDirs.Name = "cb_ShowDirs";
-            cb_ShowDirs.Size = new System.Drawing.Size(114, 19);
+            cb_ShowDirs.Size = new System.Drawing.Size(171, 29);
             cb_ShowDirs.TabIndex = 3;
             cb_ShowDirs.Text = "Show Directories";
             cb_ShowDirs.UseVisualStyleBackColor = true;
@@ -242,10 +245,9 @@ namespace WinFormsApp1
             // cb_ShowFiles
             // 
             cb_ShowFiles.AutoSize = true;
-            cb_ShowFiles.Location = new System.Drawing.Point(964, 24);
-            cb_ShowFiles.Margin = new System.Windows.Forms.Padding(2);
+            cb_ShowFiles.Location = new System.Drawing.Point(1377, 40);
             cb_ShowFiles.Name = "cb_ShowFiles";
-            cb_ShowFiles.Size = new System.Drawing.Size(81, 19);
+            cb_ShowFiles.Size = new System.Drawing.Size(121, 29);
             cb_ShowFiles.TabIndex = 5;
             cb_ShowFiles.Text = "Show Files";
             cb_ShowFiles.UseVisualStyleBackColor = true;
@@ -253,29 +255,26 @@ namespace WinFormsApp1
             // cb_Recursive
             // 
             cb_Recursive.AutoSize = true;
-            cb_Recursive.Location = new System.Drawing.Point(964, 42);
-            cb_Recursive.Margin = new System.Windows.Forms.Padding(2);
+            cb_Recursive.Location = new System.Drawing.Point(1377, 70);
             cb_Recursive.Name = "cb_Recursive";
-            cb_Recursive.Size = new System.Drawing.Size(76, 19);
+            cb_Recursive.Size = new System.Drawing.Size(111, 29);
             cb_Recursive.TabIndex = 7;
             cb_Recursive.Text = "Recursive";
             cb_Recursive.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
-            textBox1.Location = new System.Drawing.Point(964, 84);
-            textBox1.Margin = new System.Windows.Forms.Padding(2);
+            textBox1.Location = new System.Drawing.Point(1377, 140);
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "filter";
-            textBox1.Size = new System.Drawing.Size(166, 23);
+            textBox1.Size = new System.Drawing.Size(235, 31);
             textBox1.TabIndex = 8;
             // 
             // btn_Rename
             // 
-            btn_Rename.Location = new System.Drawing.Point(1140, 3);
-            btn_Rename.Margin = new System.Windows.Forms.Padding(2);
+            btn_Rename.Location = new System.Drawing.Point(1629, 5);
             btn_Rename.Name = "btn_Rename";
-            btn_Rename.Size = new System.Drawing.Size(298, 98);
+            btn_Rename.Size = new System.Drawing.Size(426, 163);
             btn_Rename.TabIndex = 11;
             btn_Rename.Text = "Rename";
             btn_Rename.UseVisualStyleBackColor = true;
@@ -286,26 +285,29 @@ namespace WinFormsApp1
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
-            tabControl1.Location = new System.Drawing.Point(959, 133);
+            tabControl1.Location = new System.Drawing.Point(1370, 222);
+            tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new System.Drawing.Size(485, 602);
+            tabControl1.Size = new System.Drawing.Size(693, 1003);
             tabControl1.TabIndex = 12;
             // 
             // tabPage1
             // 
             tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
             tabPage1.Controls.Add(panel_base);
-            tabPage1.Location = new System.Drawing.Point(4, 24);
+            tabPage1.Location = new System.Drawing.Point(4, 34);
+            tabPage1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            tabPage1.Size = new System.Drawing.Size(477, 574);
+            tabPage1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tabPage1.Size = new System.Drawing.Size(685, 965);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Rename Options";
             // 
             // panel_base
             // 
             panel_base.AutoScroll = true;
+            panel_base.Controls.Add(panel_content_14);
             panel_base.Controls.Add(panel_content_13);
             panel_base.Controls.Add(panel_content_12);
             panel_base.Controls.Add(panel_content_11);
@@ -320,10 +322,63 @@ namespace WinFormsApp1
             panel_base.Controls.Add(panel_content_02);
             panel_base.Controls.Add(panel_content_01);
             panel_base.Dock = System.Windows.Forms.DockStyle.Fill;
-            panel_base.Location = new System.Drawing.Point(3, 3);
+            panel_base.Location = new System.Drawing.Point(4, 5);
+            panel_base.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_base.Name = "panel_base";
-            panel_base.Size = new System.Drawing.Size(471, 568);
+            panel_base.Size = new System.Drawing.Size(677, 955);
             panel_base.TabIndex = 21;
+            // 
+            // panel_content_14
+            // 
+            panel_content_14.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            panel_content_14.Controls.Add(textBox14);
+            panel_content_14.Controls.Add(textBox13);
+            panel_content_14.Controls.Add(checkBox12);
+            panel_content_14.Controls.Add(checkBox_Option_014);
+            panel_content_14.Dock = System.Windows.Forms.DockStyle.Top;
+            panel_content_14.Location = new System.Drawing.Point(0, 3820);
+            panel_content_14.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            panel_content_14.Name = "panel_content_14";
+            panel_content_14.Size = new System.Drawing.Size(651, 210);
+            panel_content_14.TabIndex = 43;
+            panel_content_14.UseCustomBorder = false;
+            // 
+            // textBox14
+            // 
+            textBox14.Location = new System.Drawing.Point(328, 87);
+            textBox14.Name = "textBox14";
+            textBox14.Size = new System.Drawing.Size(171, 31);
+            textBox14.TabIndex = 50;
+            // 
+            // textBox13
+            // 
+            textBox13.Location = new System.Drawing.Point(134, 87);
+            textBox13.Name = "textBox13";
+            textBox13.Size = new System.Drawing.Size(170, 31);
+            textBox13.TabIndex = 49;
+            // 
+            // checkBox12
+            // 
+            checkBox12.AutoSize = true;
+            checkBox12.Location = new System.Drawing.Point(362, 144);
+            checkBox12.Name = "checkBox12";
+            checkBox12.Size = new System.Drawing.Size(214, 29);
+            checkBox12.TabIndex = 17;
+            checkBox12.Text = "Remove the delimiters";
+            checkBox12.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Option_014
+            // 
+            checkBox_Option_014.AutoSize = true;
+            checkBox_Option_014.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            checkBox_Option_014.ForeColor = System.Drawing.Color.Black;
+            checkBox_Option_014.Location = new System.Drawing.Point(14, 15);
+            checkBox_Option_014.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            checkBox_Option_014.Name = "checkBox_Option_014";
+            checkBox_Option_014.Size = new System.Drawing.Size(496, 34);
+            checkBox_Option_014.TabIndex = 15;
+            checkBox_Option_014.Text = "Remove Any Symbols Between the 2 Delimiters";
+            checkBox_Option_014.UseVisualStyleBackColor = true;
             // 
             // panel_content_13
             // 
@@ -337,45 +392,46 @@ namespace WinFormsApp1
             panel_content_13.Controls.Add(textBox5);
             panel_content_13.Controls.Add(checkBox_Option_013);
             panel_content_13.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_13.Location = new System.Drawing.Point(0, 2119);
+            panel_content_13.Location = new System.Drawing.Point(0, 3533);
+            panel_content_13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_13.Name = "panel_content_13";
-            panel_content_13.Size = new System.Drawing.Size(454, 172);
+            panel_content_13.Size = new System.Drawing.Size(651, 287);
             panel_content_13.TabIndex = 42;
             panel_content_13.UseCustomBorder = false;
             // 
             // label19
             // 
             label19.AutoSize = true;
-            label19.Location = new System.Drawing.Point(88, 53);
+            label19.Location = new System.Drawing.Point(126, 88);
+            label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label19.Name = "label19";
-            label19.Size = new System.Drawing.Size(74, 15);
+            label19.Size = new System.Drawing.Size(113, 25);
             label19.TabIndex = 53;
             label19.Text = "Text to Insert";
             // 
             // checkBox9
             // 
             checkBox9.AutoSize = true;
-            checkBox9.Location = new System.Drawing.Point(237, 134);
-            checkBox9.Margin = new System.Windows.Forms.Padding(2);
+            checkBox9.Location = new System.Drawing.Point(339, 223);
             checkBox9.Name = "checkBox9";
-            checkBox9.Size = new System.Drawing.Size(106, 19);
+            checkBox9.Size = new System.Drawing.Size(159, 29);
             checkBox9.TabIndex = 52;
             checkBox9.Text = "Start at the End";
             checkBox9.UseVisualStyleBackColor = true;
             // 
             // textBox11
             // 
-            textBox11.Location = new System.Drawing.Point(316, 104);
-            textBox11.Margin = new System.Windows.Forms.Padding(2);
+            textBox11.Location = new System.Drawing.Point(451, 173);
             textBox11.Name = "textBox11";
-            textBox11.Size = new System.Drawing.Size(89, 23);
+            textBox11.Size = new System.Drawing.Size(125, 31);
             textBox11.TabIndex = 51;
             // 
             // numericUpDown9
             // 
-            numericUpDown9.Location = new System.Drawing.Point(316, 80);
+            numericUpDown9.Location = new System.Drawing.Point(451, 133);
+            numericUpDown9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown9.Name = "numericUpDown9";
-            numericUpDown9.Size = new System.Drawing.Size(88, 23);
+            numericUpDown9.Size = new System.Drawing.Size(126, 31);
             numericUpDown9.TabIndex = 50;
             numericUpDown9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown9.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -383,10 +439,9 @@ namespace WinFormsApp1
             // radioButton19
             // 
             radioButton19.AutoSize = true;
-            radioButton19.Location = new System.Drawing.Point(154, 104);
-            radioButton19.Margin = new System.Windows.Forms.Padding(2);
+            radioButton19.Location = new System.Drawing.Point(220, 173);
             radioButton19.Name = "radioButton19";
-            radioButton19.Size = new System.Drawing.Size(150, 19);
+            radioButton19.Size = new System.Drawing.Size(226, 29);
             radioButton19.TabIndex = 48;
             radioButton19.TabStop = true;
             radioButton19.Text = "At Position of Substring";
@@ -395,10 +450,9 @@ namespace WinFormsApp1
             // radioButton20
             // 
             radioButton20.AutoSize = true;
-            radioButton20.Location = new System.Drawing.Point(154, 80);
-            radioButton20.Margin = new System.Windows.Forms.Padding(2);
+            radioButton20.Location = new System.Drawing.Point(220, 133);
             radioButton20.Name = "radioButton20";
-            radioButton20.Size = new System.Drawing.Size(133, 19);
+            radioButton20.Size = new System.Drawing.Size(199, 29);
             radioButton20.TabIndex = 49;
             radioButton20.TabStop = true;
             radioButton20.Text = "At Absolute Position";
@@ -406,10 +460,9 @@ namespace WinFormsApp1
             // 
             // textBox5
             // 
-            textBox5.Location = new System.Drawing.Point(171, 52);
-            textBox5.Margin = new System.Windows.Forms.Padding(2);
+            textBox5.Location = new System.Drawing.Point(244, 87);
             textBox5.Name = "textBox5";
-            textBox5.Size = new System.Drawing.Size(234, 23);
+            textBox5.Size = new System.Drawing.Size(333, 31);
             textBox5.TabIndex = 38;
             // 
             // checkBox_Option_013
@@ -417,10 +470,9 @@ namespace WinFormsApp1
             checkBox_Option_013.AutoSize = true;
             checkBox_Option_013.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_013.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_013.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_013.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_013.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_013.Name = "checkBox_Option_013";
-            checkBox_Option_013.Size = new System.Drawing.Size(180, 24);
+            checkBox_Option_013.Size = new System.Drawing.Size(260, 34);
             checkBox_Option_013.TabIndex = 2;
             checkBox_Option_013.Text = "Insert Text at a Position";
             checkBox_Option_013.UseVisualStyleBackColor = true;
@@ -430,9 +482,10 @@ namespace WinFormsApp1
             panel_content_12.BackColor = System.Drawing.SystemColors.ControlLightLight;
             panel_content_12.Controls.Add(checkBox_Option_012);
             panel_content_12.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_12.Location = new System.Drawing.Point(0, 2055);
+            panel_content_12.Location = new System.Drawing.Point(0, 3426);
+            panel_content_12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_12.Name = "panel_content_12";
-            panel_content_12.Size = new System.Drawing.Size(454, 64);
+            panel_content_12.Size = new System.Drawing.Size(651, 107);
             panel_content_12.TabIndex = 41;
             panel_content_12.UseCustomBorder = false;
             // 
@@ -441,10 +494,9 @@ namespace WinFormsApp1
             checkBox_Option_012.AutoSize = true;
             checkBox_Option_012.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_012.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_012.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_012.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_012.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_012.Name = "checkBox_Option_012";
-            checkBox_Option_012.Size = new System.Drawing.Size(349, 24);
+            checkBox_Option_012.Size = new System.Drawing.Size(509, 34);
             checkBox_Option_012.TabIndex = 2;
             checkBox_Option_012.Text = "Prepend Every Capital Letter With a White Space";
             checkBox_Option_012.UseVisualStyleBackColor = true;
@@ -459,19 +511,19 @@ namespace WinFormsApp1
             panel_content_11.Controls.Add(radioButton17);
             panel_content_11.Controls.Add(checkBox_Option_011);
             panel_content_11.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_11.Location = new System.Drawing.Point(0, 1916);
+            panel_content_11.Location = new System.Drawing.Point(0, 3194);
+            panel_content_11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_11.Name = "panel_content_11";
-            panel_content_11.Size = new System.Drawing.Size(454, 139);
+            panel_content_11.Size = new System.Drawing.Size(651, 232);
             panel_content_11.TabIndex = 40;
             panel_content_11.UseCustomBorder = false;
             // 
             // radioButton24
             // 
             radioButton24.AutoSize = true;
-            radioButton24.Location = new System.Drawing.Point(51, 106);
-            radioButton24.Margin = new System.Windows.Forms.Padding(2);
+            radioButton24.Location = new System.Drawing.Point(73, 177);
             radioButton24.Name = "radioButton24";
-            radioButton24.Size = new System.Drawing.Size(65, 19);
+            radioButton24.Size = new System.Drawing.Size(95, 29);
             radioButton24.TabIndex = 49;
             radioButton24.TabStop = true;
             radioButton24.Text = "Current";
@@ -479,19 +531,17 @@ namespace WinFormsApp1
             // 
             // textBox10
             // 
-            textBox10.Location = new System.Drawing.Point(148, 80);
-            textBox10.Margin = new System.Windows.Forms.Padding(2);
+            textBox10.Location = new System.Drawing.Point(211, 133);
             textBox10.Name = "textBox10";
-            textBox10.Size = new System.Drawing.Size(257, 23);
+            textBox10.Size = new System.Drawing.Size(365, 31);
             textBox10.TabIndex = 48;
             // 
             // radioButton15
             // 
             radioButton15.AutoSize = true;
-            radioButton15.Location = new System.Drawing.Point(51, 88);
-            radioButton15.Margin = new System.Windows.Forms.Padding(2);
+            radioButton15.Location = new System.Drawing.Point(73, 147);
             radioButton15.Name = "radioButton15";
-            radioButton15.Size = new System.Drawing.Size(85, 19);
+            radioButton15.Size = new System.Drawing.Size(126, 29);
             radioButton15.TabIndex = 47;
             radioButton15.TabStop = true;
             radioButton15.Text = "Last Access";
@@ -500,10 +550,9 @@ namespace WinFormsApp1
             // radioButton16
             // 
             radioButton16.AutoSize = true;
-            radioButton16.Location = new System.Drawing.Point(51, 70);
-            radioButton16.Margin = new System.Windows.Forms.Padding(2);
+            radioButton16.Location = new System.Drawing.Point(73, 117);
             radioButton16.Name = "radioButton16";
-            radioButton16.Size = new System.Drawing.Size(70, 19);
+            radioButton16.Size = new System.Drawing.Size(103, 29);
             radioButton16.TabIndex = 45;
             radioButton16.TabStop = true;
             radioButton16.Text = "Creation";
@@ -512,10 +561,9 @@ namespace WinFormsApp1
             // radioButton17
             // 
             radioButton17.AutoSize = true;
-            radioButton17.Location = new System.Drawing.Point(51, 52);
-            radioButton17.Margin = new System.Windows.Forms.Padding(2);
+            radioButton17.Location = new System.Drawing.Point(73, 87);
             radioButton17.Name = "radioButton17";
-            radioButton17.Size = new System.Drawing.Size(77, 19);
+            radioButton17.Size = new System.Drawing.Size(115, 29);
             radioButton17.TabIndex = 46;
             radioButton17.TabStop = true;
             radioButton17.Text = "Last Write";
@@ -526,10 +574,9 @@ namespace WinFormsApp1
             checkBox_Option_011.AutoSize = true;
             checkBox_Option_011.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_011.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_011.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_011.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_011.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_011.Name = "checkBox_Option_011";
-            checkBox_Option_011.Size = new System.Drawing.Size(100, 24);
+            checkBox_Option_011.Size = new System.Drawing.Size(144, 34);
             checkBox_Option_011.TabIndex = 2;
             checkBox_Option_011.Text = "Insert Date";
             checkBox_Option_011.UseVisualStyleBackColor = true;
@@ -549,9 +596,10 @@ namespace WinFormsApp1
             panel_content_10.Controls.Add(textBox9);
             panel_content_10.Controls.Add(checkBox_Option_010);
             panel_content_10.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_10.Location = new System.Drawing.Point(0, 1768);
+            panel_content_10.Location = new System.Drawing.Point(0, 2947);
+            panel_content_10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_10.Name = "panel_content_10";
-            panel_content_10.Size = new System.Drawing.Size(454, 148);
+            panel_content_10.Size = new System.Drawing.Size(651, 247);
             panel_content_10.TabIndex = 39;
             panel_content_10.UseCustomBorder = false;
             // 
@@ -559,9 +607,10 @@ namespace WinFormsApp1
             // 
             label11.AutoSize = true;
             label11.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            label11.Location = new System.Drawing.Point(287, 79);
+            label11.Location = new System.Drawing.Point(410, 132);
+            label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label11.Name = "label11";
-            label11.Size = new System.Drawing.Size(90, 13);
+            label11.Size = new System.Drawing.Size(119, 21);
             label11.TabIndex = 58;
             label11.Text = ", length in chars";
             // 
@@ -569,35 +618,38 @@ namespace WinFormsApp1
             // 
             label10.AutoSize = true;
             label10.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            label10.Location = new System.Drawing.Point(288, 55);
+            label10.Location = new System.Drawing.Point(411, 92);
             label10.Margin = new System.Windows.Forms.Padding(0);
             label10.Name = "label10";
-            label10.Size = new System.Drawing.Size(89, 13);
+            label10.Size = new System.Drawing.Size(120, 21);
             label10.TabIndex = 57;
             label10.Text = ", delimiter index";
             // 
             // numericUpDown14
             // 
-            numericUpDown14.Location = new System.Drawing.Point(377, 76);
+            numericUpDown14.Location = new System.Drawing.Point(539, 127);
+            numericUpDown14.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown14.Name = "numericUpDown14";
-            numericUpDown14.Size = new System.Drawing.Size(51, 23);
+            numericUpDown14.Size = new System.Drawing.Size(73, 31);
             numericUpDown14.TabIndex = 56;
             numericUpDown14.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // numericUpDown13
             // 
-            numericUpDown13.Location = new System.Drawing.Point(377, 52);
+            numericUpDown13.Location = new System.Drawing.Point(539, 87);
+            numericUpDown13.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown13.Name = "numericUpDown13";
-            numericUpDown13.Size = new System.Drawing.Size(51, 23);
+            numericUpDown13.Size = new System.Drawing.Size(73, 31);
             numericUpDown13.TabIndex = 55;
             numericUpDown13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown13.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericUpDown12
             // 
-            numericUpDown12.Location = new System.Drawing.Point(174, 105);
+            numericUpDown12.Location = new System.Drawing.Point(249, 175);
+            numericUpDown12.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown12.Name = "numericUpDown12";
-            numericUpDown12.Size = new System.Drawing.Size(67, 23);
+            numericUpDown12.Size = new System.Drawing.Size(96, 31);
             numericUpDown12.TabIndex = 53;
             numericUpDown12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -605,19 +657,19 @@ namespace WinFormsApp1
             // 
             checkBox10.AutoSize = true;
             checkBox10.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            checkBox10.Location = new System.Drawing.Point(62, 107);
-            checkBox10.Margin = new System.Windows.Forms.Padding(2);
+            checkBox10.Location = new System.Drawing.Point(89, 178);
             checkBox10.Name = "checkBox10";
-            checkBox10.Size = new System.Drawing.Size(256, 17);
+            checkBox10.Size = new System.Drawing.Size(345, 25);
             checkBox10.TabIndex = 52;
             checkBox10.Text = "Keep in place first                             characters";
             checkBox10.UseVisualStyleBackColor = true;
             // 
             // numericUpDown10
             // 
-            numericUpDown10.Location = new System.Drawing.Point(171, 76);
+            numericUpDown10.Location = new System.Drawing.Point(244, 127);
+            numericUpDown10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown10.Name = "numericUpDown10";
-            numericUpDown10.Size = new System.Drawing.Size(116, 23);
+            numericUpDown10.Size = new System.Drawing.Size(166, 31);
             numericUpDown10.TabIndex = 51;
             numericUpDown10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown10.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -625,10 +677,9 @@ namespace WinFormsApp1
             // radioButton22
             // 
             radioButton22.AutoSize = true;
-            radioButton22.Location = new System.Drawing.Point(48, 76);
-            radioButton22.Margin = new System.Windows.Forms.Padding(2);
+            radioButton22.Location = new System.Drawing.Point(69, 127);
             radioButton22.Name = "radioButton22";
-            radioButton22.Size = new System.Drawing.Size(111, 19);
+            radioButton22.Size = new System.Drawing.Size(165, 29);
             radioButton22.TabIndex = 47;
             radioButton22.TabStop = true;
             radioButton22.Text = "Around Position";
@@ -637,10 +688,9 @@ namespace WinFormsApp1
             // radioButton23
             // 
             radioButton23.AutoSize = true;
-            radioButton23.Location = new System.Drawing.Point(48, 52);
-            radioButton23.Margin = new System.Windows.Forms.Padding(2);
+            radioButton23.Location = new System.Drawing.Point(69, 87);
             radioButton23.Name = "radioButton23";
-            radioButton23.Size = new System.Drawing.Size(116, 19);
+            radioButton23.Size = new System.Drawing.Size(173, 29);
             radioButton23.TabIndex = 48;
             radioButton23.TabStop = true;
             radioButton23.Text = "Around Delimiter";
@@ -648,10 +698,9 @@ namespace WinFormsApp1
             // 
             // textBox9
             // 
-            textBox9.Location = new System.Drawing.Point(171, 52);
-            textBox9.Margin = new System.Windows.Forms.Padding(2);
+            textBox9.Location = new System.Drawing.Point(244, 87);
             textBox9.Name = "textBox9";
-            textBox9.Size = new System.Drawing.Size(117, 23);
+            textBox9.Size = new System.Drawing.Size(165, 31);
             textBox9.TabIndex = 37;
             textBox9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -660,10 +709,9 @@ namespace WinFormsApp1
             checkBox_Option_010.AutoSize = true;
             checkBox_Option_010.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_010.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_010.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_010.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_010.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_010.Name = "checkBox_Option_010";
-            checkBox_Option_010.Size = new System.Drawing.Size(310, 24);
+            checkBox_Option_010.Size = new System.Drawing.Size(449, 34);
             checkBox_Option_010.TabIndex = 2;
             checkBox_Option_010.Text = "Swap Left and Right Parts of the File Name";
             checkBox_Option_010.UseVisualStyleBackColor = true;
@@ -683,9 +731,10 @@ namespace WinFormsApp1
             panel_content_09.Controls.Add(checkBox8);
             panel_content_09.Controls.Add(checkBox_Option_009);
             panel_content_09.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_09.Location = new System.Drawing.Point(0, 1529);
+            panel_content_09.Location = new System.Drawing.Point(0, 2549);
+            panel_content_09.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_09.Name = "panel_content_09";
-            panel_content_09.Size = new System.Drawing.Size(454, 239);
+            panel_content_09.Size = new System.Drawing.Size(651, 398);
             panel_content_09.TabIndex = 38;
             panel_content_09.UseCustomBorder = false;
             // 
@@ -694,27 +743,24 @@ namespace WinFormsApp1
             comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             comboBox5.FormattingEnabled = true;
             comboBox5.Items.AddRange(new object[] { "Start from the Left", "Start from the Right", "Start from Both Ends", "Remove Everywhere" });
-            comboBox5.Location = new System.Drawing.Point(18, 81);
-            comboBox5.Margin = new System.Windows.Forms.Padding(2);
+            comboBox5.Location = new System.Drawing.Point(26, 135);
             comboBox5.Name = "comboBox5";
-            comboBox5.Size = new System.Drawing.Size(418, 23);
+            comboBox5.Size = new System.Drawing.Size(595, 33);
             comboBox5.TabIndex = 45;
             // 
             // textBox8
             // 
-            textBox8.Location = new System.Drawing.Point(176, 205);
-            textBox8.Margin = new System.Windows.Forms.Padding(2);
+            textBox8.Location = new System.Drawing.Point(251, 342);
             textBox8.Name = "textBox8";
-            textBox8.Size = new System.Drawing.Size(229, 23);
+            textBox8.Size = new System.Drawing.Size(325, 31);
             textBox8.TabIndex = 44;
             // 
             // radioButton14
             // 
             radioButton14.AutoSize = true;
-            radioButton14.Location = new System.Drawing.Point(24, 205);
-            radioButton14.Margin = new System.Windows.Forms.Padding(2);
+            radioButton14.Location = new System.Drawing.Point(34, 342);
             radioButton14.Name = "radioButton14";
-            radioButton14.Size = new System.Drawing.Size(138, 19);
+            radioButton14.Size = new System.Drawing.Size(206, 29);
             radioButton14.TabIndex = 43;
             radioButton14.TabStop = true;
             radioButton14.Text = "Any of the Following:";
@@ -723,10 +769,9 @@ namespace WinFormsApp1
             // radioButton12
             // 
             radioButton12.AutoSize = true;
-            radioButton12.Location = new System.Drawing.Point(24, 189);
-            radioButton12.Margin = new System.Windows.Forms.Padding(2);
+            radioButton12.Location = new System.Drawing.Point(34, 315);
             radioButton12.Name = "radioButton12";
-            radioButton12.Size = new System.Drawing.Size(121, 19);
+            radioButton12.Size = new System.Drawing.Size(179, 29);
             radioButton12.TabIndex = 42;
             radioButton12.TabStop = true;
             radioButton12.Text = "Special Characters";
@@ -735,10 +780,9 @@ namespace WinFormsApp1
             // radioButton13
             // 
             radioButton13.AutoSize = true;
-            radioButton13.Location = new System.Drawing.Point(24, 173);
-            radioButton13.Margin = new System.Windows.Forms.Padding(2);
+            radioButton13.Location = new System.Drawing.Point(34, 288);
             radioButton13.Name = "radioButton13";
-            radioButton13.Size = new System.Drawing.Size(95, 19);
+            radioButton13.Size = new System.Drawing.Size(143, 29);
             radioButton13.TabIndex = 41;
             radioButton13.TabStop = true;
             radioButton13.Text = "White Spaces";
@@ -747,10 +791,9 @@ namespace WinFormsApp1
             // radioButton11
             // 
             radioButton11.AutoSize = true;
-            radioButton11.Location = new System.Drawing.Point(24, 157);
-            radioButton11.Margin = new System.Windows.Forms.Padding(2);
+            radioButton11.Location = new System.Drawing.Point(34, 262);
             radioButton11.Name = "radioButton11";
-            radioButton11.Size = new System.Drawing.Size(102, 19);
+            radioButton11.Size = new System.Drawing.Size(151, 29);
             radioButton11.TabIndex = 40;
             radioButton11.TabStop = true;
             radioButton11.Text = "Non-Numbers";
@@ -759,10 +802,9 @@ namespace WinFormsApp1
             // radioButton10
             // 
             radioButton10.AutoSize = true;
-            radioButton10.Location = new System.Drawing.Point(24, 141);
-            radioButton10.Margin = new System.Windows.Forms.Padding(2);
+            radioButton10.Location = new System.Drawing.Point(34, 235);
             radioButton10.Name = "radioButton10";
-            radioButton10.Size = new System.Drawing.Size(74, 19);
+            radioButton10.Size = new System.Drawing.Size(110, 29);
             radioButton10.TabIndex = 39;
             radioButton10.TabStop = true;
             radioButton10.Text = "Numbers";
@@ -771,10 +813,9 @@ namespace WinFormsApp1
             // radioButton9
             // 
             radioButton9.AutoSize = true;
-            radioButton9.Location = new System.Drawing.Point(24, 125);
-            radioButton9.Margin = new System.Windows.Forms.Padding(2);
+            radioButton9.Location = new System.Drawing.Point(34, 208);
             radioButton9.Name = "radioButton9";
-            radioButton9.Size = new System.Drawing.Size(88, 19);
+            radioButton9.Size = new System.Drawing.Size(130, 29);
             radioButton9.TabIndex = 38;
             radioButton9.TabStop = true;
             radioButton9.Text = "Non-Letters";
@@ -783,10 +824,9 @@ namespace WinFormsApp1
             // radioButton8
             // 
             radioButton8.AutoSize = true;
-            radioButton8.Location = new System.Drawing.Point(24, 109);
-            radioButton8.Margin = new System.Windows.Forms.Padding(2);
+            radioButton8.Location = new System.Drawing.Point(34, 182);
             radioButton8.Name = "radioButton8";
-            radioButton8.Size = new System.Drawing.Size(60, 19);
+            radioButton8.Size = new System.Drawing.Size(89, 29);
             radioButton8.TabIndex = 37;
             radioButton8.TabStop = true;
             radioButton8.Text = "Letters";
@@ -795,10 +835,9 @@ namespace WinFormsApp1
             // checkBox8
             // 
             checkBox8.AutoSize = true;
-            checkBox8.Location = new System.Drawing.Point(42, 52);
-            checkBox8.Margin = new System.Windows.Forms.Padding(2);
+            checkBox8.Location = new System.Drawing.Point(60, 87);
             checkBox8.Name = "checkBox8";
-            checkBox8.Size = new System.Drawing.Size(347, 19);
+            checkBox8.Size = new System.Drawing.Size(521, 29);
             checkBox8.TabIndex = 4;
             checkBox8.Text = "Invert: Remove any symbols other than the selected category";
             checkBox8.UseVisualStyleBackColor = true;
@@ -808,10 +847,9 @@ namespace WinFormsApp1
             checkBox_Option_009.AutoSize = true;
             checkBox_Option_009.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_009.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_009.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_009.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_009.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_009.Name = "checkBox_Option_009";
-            checkBox_Option_009.Size = new System.Drawing.Size(358, 24);
+            checkBox_Option_009.Size = new System.Drawing.Size(523, 34);
             checkBox_Option_009.TabIndex = 2;
             checkBox_Option_009.Text = "Remove Symbols from the File Name by Category";
             checkBox_Option_009.UseVisualStyleBackColor = true;
@@ -825,44 +863,49 @@ namespace WinFormsApp1
             panel_content_08.Controls.Add(numericUpDown8);
             panel_content_08.Controls.Add(checkBox_Option_008);
             panel_content_08.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_08.Location = new System.Drawing.Point(0, 1408);
+            panel_content_08.Location = new System.Drawing.Point(0, 2347);
+            panel_content_08.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_08.Name = "panel_content_08";
-            panel_content_08.Size = new System.Drawing.Size(454, 121);
+            panel_content_08.Size = new System.Drawing.Size(651, 202);
             panel_content_08.TabIndex = 37;
             panel_content_08.UseCustomBorder = false;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new System.Drawing.Point(134, 80);
+            label9.Location = new System.Drawing.Point(191, 133);
+            label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new System.Drawing.Size(122, 15);
+            label9.Size = new System.Drawing.Size(184, 25);
             label9.TabIndex = 42;
             label9.Text = "Value to Change it By:";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new System.Drawing.Point(36, 54);
+            label7.Location = new System.Drawing.Point(51, 90);
+            label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new System.Drawing.Size(216, 15);
+            label7.Size = new System.Drawing.Size(324, 25);
             label7.TabIndex = 41;
             label7.Text = "Index of the Numeric Sequence to Find:";
             // 
             // numericUpDown11
             // 
-            numericUpDown11.Location = new System.Drawing.Point(267, 52);
+            numericUpDown11.Location = new System.Drawing.Point(381, 87);
+            numericUpDown11.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown11.Name = "numericUpDown11";
-            numericUpDown11.Size = new System.Drawing.Size(88, 23);
+            numericUpDown11.Size = new System.Drawing.Size(126, 31);
             numericUpDown11.TabIndex = 40;
             numericUpDown11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown11.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericUpDown8
             // 
-            numericUpDown8.Location = new System.Drawing.Point(267, 78);
+            numericUpDown8.Location = new System.Drawing.Point(381, 130);
+            numericUpDown8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown8.Name = "numericUpDown8";
-            numericUpDown8.Size = new System.Drawing.Size(88, 23);
+            numericUpDown8.Size = new System.Drawing.Size(126, 31);
             numericUpDown8.TabIndex = 39;
             numericUpDown8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown8.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -872,10 +915,9 @@ namespace WinFormsApp1
             checkBox_Option_008.AutoSize = true;
             checkBox_Option_008.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_008.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_008.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_008.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_008.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_008.Name = "checkBox_Option_008";
-            checkBox_Option_008.Size = new System.Drawing.Size(337, 24);
+            checkBox_Option_008.Size = new System.Drawing.Size(494, 34);
             checkBox_Option_008.TabIndex = 2;
             checkBox_Option_008.Text = "Increase/Decrease Numeric Sequence by Value";
             checkBox_Option_008.UseVisualStyleBackColor = true;
@@ -889,44 +931,49 @@ namespace WinFormsApp1
             panel_content_07.Controls.Add(numericUpDown6);
             panel_content_07.Controls.Add(checkBox_Option_007);
             panel_content_07.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_07.Location = new System.Drawing.Point(0, 1284);
+            panel_content_07.Location = new System.Drawing.Point(0, 2140);
+            panel_content_07.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_07.Name = "panel_content_07";
-            panel_content_07.Size = new System.Drawing.Size(454, 124);
+            panel_content_07.Size = new System.Drawing.Size(651, 207);
             panel_content_07.TabIndex = 35;
             panel_content_07.UseCustomBorder = false;
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new System.Drawing.Point(36, 54);
+            label13.Location = new System.Drawing.Point(51, 90);
+            label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new System.Drawing.Size(216, 15);
+            label13.Size = new System.Drawing.Size(324, 25);
             label13.TabIndex = 42;
             label13.Text = "Index of the Numeric Sequence to Find:";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new System.Drawing.Point(15, 80);
+            label6.Location = new System.Drawing.Point(21, 133);
+            label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new System.Drawing.Size(234, 15);
+            label6.Size = new System.Drawing.Size(353, 25);
             label6.TabIndex = 40;
             label6.Text = "Prepend with Zeroes to the Total Length of:";
             // 
             // numericUpDown7
             // 
-            numericUpDown7.Location = new System.Drawing.Point(267, 52);
+            numericUpDown7.Location = new System.Drawing.Point(381, 87);
+            numericUpDown7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown7.Name = "numericUpDown7";
-            numericUpDown7.Size = new System.Drawing.Size(88, 23);
+            numericUpDown7.Size = new System.Drawing.Size(126, 31);
             numericUpDown7.TabIndex = 39;
             numericUpDown7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown7.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // numericUpDown6
             // 
-            numericUpDown6.Location = new System.Drawing.Point(267, 78);
+            numericUpDown6.Location = new System.Drawing.Point(381, 130);
+            numericUpDown6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown6.Name = "numericUpDown6";
-            numericUpDown6.Size = new System.Drawing.Size(88, 23);
+            numericUpDown6.Size = new System.Drawing.Size(126, 31);
             numericUpDown6.TabIndex = 38;
             numericUpDown6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown6.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -936,10 +983,9 @@ namespace WinFormsApp1
             checkBox_Option_007.AutoSize = true;
             checkBox_Option_007.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_007.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_007.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_007.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_007.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_007.Name = "checkBox_Option_007";
-            checkBox_Option_007.Size = new System.Drawing.Size(292, 24);
+            checkBox_Option_007.Size = new System.Drawing.Size(429, 34);
             checkBox_Option_007.TabIndex = 2;
             checkBox_Option_007.Text = "Prepend Numeric Sequence with Zeroes";
             checkBox_Option_007.UseVisualStyleBackColor = true;
@@ -951,9 +997,10 @@ namespace WinFormsApp1
             panel_content_06.Controls.Add(groupBox1);
             panel_content_06.Controls.Add(checkBox_Option_006);
             panel_content_06.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_06.Location = new System.Drawing.Point(0, 1040);
+            panel_content_06.Location = new System.Drawing.Point(0, 1733);
+            panel_content_06.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_06.Name = "panel_content_06";
-            panel_content_06.Size = new System.Drawing.Size(454, 244);
+            panel_content_06.Size = new System.Drawing.Size(651, 407);
             panel_content_06.TabIndex = 33;
             panel_content_06.UseCustomBorder = false;
             // 
@@ -962,21 +1009,18 @@ namespace WinFormsApp1
             groupBox2.Controls.Add(radioButton6);
             groupBox2.Controls.Add(checkBox5);
             groupBox2.Controls.Add(radioButton5);
-            groupBox2.Location = new System.Drawing.Point(12, 170);
-            groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            groupBox2.Location = new System.Drawing.Point(17, 283);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            groupBox2.Size = new System.Drawing.Size(434, 62);
+            groupBox2.Size = new System.Drawing.Size(620, 103);
             groupBox2.TabIndex = 48;
             groupBox2.TabStop = false;
             // 
             // radioButton6
             // 
             radioButton6.AutoSize = true;
-            radioButton6.Location = new System.Drawing.Point(111, 34);
-            radioButton6.Margin = new System.Windows.Forms.Padding(2);
+            radioButton6.Location = new System.Drawing.Point(159, 57);
             radioButton6.Name = "radioButton6";
-            radioButton6.Size = new System.Drawing.Size(82, 19);
+            radioButton6.Size = new System.Drawing.Size(122, 29);
             radioButton6.TabIndex = 45;
             radioButton6.TabStop = true;
             radioButton6.Text = "lower Case";
@@ -985,10 +1029,9 @@ namespace WinFormsApp1
             // checkBox5
             // 
             checkBox5.AutoSize = true;
-            checkBox5.Location = new System.Drawing.Point(10, 12);
-            checkBox5.Margin = new System.Windows.Forms.Padding(2);
+            checkBox5.Location = new System.Drawing.Point(14, 20);
             checkBox5.Name = "checkBox5";
-            checkBox5.Size = new System.Drawing.Size(91, 19);
+            checkBox5.Size = new System.Drawing.Size(135, 29);
             checkBox5.TabIndex = 44;
             checkBox5.Text = "Extension to";
             checkBox5.UseVisualStyleBackColor = true;
@@ -996,10 +1039,9 @@ namespace WinFormsApp1
             // radioButton5
             // 
             radioButton5.AutoSize = true;
-            radioButton5.Location = new System.Drawing.Point(111, 18);
-            radioButton5.Margin = new System.Windows.Forms.Padding(2);
+            radioButton5.Location = new System.Drawing.Point(159, 30);
             radioButton5.Name = "radioButton5";
-            radioButton5.Size = new System.Drawing.Size(88, 19);
+            radioButton5.Size = new System.Drawing.Size(131, 29);
             radioButton5.TabIndex = 46;
             radioButton5.TabStop = true;
             radioButton5.Text = "UPPER Case";
@@ -1013,29 +1055,27 @@ namespace WinFormsApp1
             groupBox1.Controls.Add(checkBox1);
             groupBox1.Controls.Add(radioButton4);
             groupBox1.Controls.Add(radioButton3);
-            groupBox1.Location = new System.Drawing.Point(12, 47);
-            groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            groupBox1.Location = new System.Drawing.Point(17, 78);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            groupBox1.Size = new System.Drawing.Size(434, 123);
+            groupBox1.Size = new System.Drawing.Size(620, 205);
             groupBox1.TabIndex = 47;
             groupBox1.TabStop = false;
             // 
             // comboBox3
             // 
             comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new System.Drawing.Point(237, 89);
+            comboBox3.Location = new System.Drawing.Point(339, 148);
+            comboBox3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             comboBox3.Name = "comboBox3";
-            comboBox3.Size = new System.Drawing.Size(187, 23);
+            comboBox3.Size = new System.Drawing.Size(265, 33);
             comboBox3.TabIndex = 46;
             // 
             // checkBox6
             // 
             checkBox6.AutoSize = true;
-            checkBox6.Location = new System.Drawing.Point(48, 90);
-            checkBox6.Margin = new System.Windows.Forms.Padding(2);
+            checkBox6.Location = new System.Drawing.Point(69, 150);
             checkBox6.Name = "checkBox6";
-            checkBox6.Size = new System.Drawing.Size(176, 19);
+            checkBox6.Size = new System.Drawing.Size(265, 29);
             checkBox6.TabIndex = 45;
             checkBox6.Text = "But Skip Words from the List";
             checkBox6.UseVisualStyleBackColor = true;
@@ -1043,10 +1083,9 @@ namespace WinFormsApp1
             // radioButton7
             // 
             radioButton7.AutoSize = true;
-            radioButton7.Location = new System.Drawing.Point(42, 67);
-            radioButton7.Margin = new System.Windows.Forms.Padding(2);
+            radioButton7.Location = new System.Drawing.Point(60, 112);
             radioButton7.Name = "radioButton7";
-            radioButton7.Size = new System.Drawing.Size(259, 19);
+            radioButton7.Size = new System.Drawing.Size(392, 29);
             radioButton7.TabIndex = 44;
             radioButton7.TabStop = true;
             radioButton7.Text = "The First Letter Of Every Word To Upper Case";
@@ -1055,10 +1094,9 @@ namespace WinFormsApp1
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new System.Drawing.Point(10, 12);
-            checkBox1.Margin = new System.Windows.Forms.Padding(2);
+            checkBox1.Location = new System.Drawing.Point(14, 20);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new System.Drawing.Size(91, 19);
+            checkBox1.Size = new System.Drawing.Size(135, 29);
             checkBox1.TabIndex = 43;
             checkBox1.Text = "File name to";
             checkBox1.UseVisualStyleBackColor = true;
@@ -1066,10 +1104,9 @@ namespace WinFormsApp1
             // radioButton4
             // 
             radioButton4.AutoSize = true;
-            radioButton4.Location = new System.Drawing.Point(42, 51);
-            radioButton4.Margin = new System.Windows.Forms.Padding(2);
+            radioButton4.Location = new System.Drawing.Point(60, 85);
             radioButton4.Name = "radioButton4";
-            radioButton4.Size = new System.Drawing.Size(82, 19);
+            radioButton4.Size = new System.Drawing.Size(122, 29);
             radioButton4.TabIndex = 41;
             radioButton4.TabStop = true;
             radioButton4.Text = "lower Case";
@@ -1078,10 +1115,9 @@ namespace WinFormsApp1
             // radioButton3
             // 
             radioButton3.AutoSize = true;
-            radioButton3.Location = new System.Drawing.Point(42, 35);
-            radioButton3.Margin = new System.Windows.Forms.Padding(2);
+            radioButton3.Location = new System.Drawing.Point(60, 58);
             radioButton3.Name = "radioButton3";
-            radioButton3.Size = new System.Drawing.Size(88, 19);
+            radioButton3.Size = new System.Drawing.Size(131, 29);
             radioButton3.TabIndex = 42;
             radioButton3.TabStop = true;
             radioButton3.Text = "UPPER Case";
@@ -1092,10 +1128,9 @@ namespace WinFormsApp1
             checkBox_Option_006.AutoSize = true;
             checkBox_Option_006.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_006.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_006.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_006.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_006.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_006.Name = "checkBox_Option_006";
-            checkBox_Option_006.Size = new System.Drawing.Size(225, 24);
+            checkBox_Option_006.Size = new System.Drawing.Size(328, 34);
             checkBox_Option_006.TabIndex = 2;
             checkBox_Option_006.Text = "Change File or Extension Case";
             checkBox_Option_006.UseVisualStyleBackColor = true;
@@ -1119,9 +1154,10 @@ namespace WinFormsApp1
             panel_content_05.Controls.Add(numericUpDown4);
             panel_content_05.Controls.Add(checkBox_Option_005);
             panel_content_05.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_05.Location = new System.Drawing.Point(0, 749);
+            panel_content_05.Location = new System.Drawing.Point(0, 1248);
+            panel_content_05.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_05.Name = "panel_content_05";
-            panel_content_05.Size = new System.Drawing.Size(454, 291);
+            panel_content_05.Size = new System.Drawing.Size(651, 485);
             panel_content_05.TabIndex = 31;
             panel_content_05.UseCustomBorder = false;
             // 
@@ -1130,10 +1166,9 @@ namespace WinFormsApp1
             label27.AutoSize = true;
             label27.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label27.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label27.Location = new System.Drawing.Point(36, 262);
-            label27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label27.Location = new System.Drawing.Point(51, 437);
             label27.Name = "label27";
-            label27.Size = new System.Drawing.Size(215, 13);
+            label27.Size = new System.Drawing.Size(296, 21);
             label27.TabIndex = 58;
             label27.Text = "%parent -- Inserts Parent Directory Name";
             // 
@@ -1142,10 +1177,9 @@ namespace WinFormsApp1
             label26.AutoSize = true;
             label26.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label26.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label26.Location = new System.Drawing.Point(36, 248);
-            label26.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label26.Location = new System.Drawing.Point(51, 413);
             label26.Name = "label26";
-            label26.Size = new System.Drawing.Size(343, 13);
+            label26.Size = new System.Drawing.Size(465, 21);
             label26.TabIndex = 57;
             label26.Text = "# -- Inserts Numeric Value (multiple instances are supported: ###)";
             // 
@@ -1154,10 +1188,9 @@ namespace WinFormsApp1
             label25.AutoSize = true;
             label25.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label25.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label25.Location = new System.Drawing.Point(36, 234);
-            label25.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label25.Location = new System.Drawing.Point(51, 390);
             label25.Name = "label25";
-            label25.Size = new System.Drawing.Size(137, 13);
+            label25.Size = new System.Drawing.Size(189, 21);
             label25.TabIndex = 56;
             label25.Text = "* -- Inserts Original Name";
             // 
@@ -1166,38 +1199,38 @@ namespace WinFormsApp1
             label24.AutoSize = true;
             label24.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label24.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label24.Location = new System.Drawing.Point(30, 215);
-            label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label24.Location = new System.Drawing.Point(43, 358);
             label24.Name = "label24";
-            label24.Size = new System.Drawing.Size(156, 13);
+            label24.Size = new System.Drawing.Size(207, 21);
             label24.TabIndex = 55;
             label24.Text = "Supported template options:";
             // 
             // textBox12
             // 
-            textBox12.Location = new System.Drawing.Point(171, 77);
-            textBox12.Margin = new System.Windows.Forms.Padding(2);
+            textBox12.Location = new System.Drawing.Point(244, 128);
             textBox12.Name = "textBox12";
             textBox12.PlaceholderText = "One time template";
-            textBox12.Size = new System.Drawing.Size(234, 23);
+            textBox12.Size = new System.Drawing.Size(333, 31);
             textBox12.TabIndex = 54;
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new System.Drawing.Point(141, 188);
+            label20.Location = new System.Drawing.Point(201, 313);
+            label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label20.Name = "label20";
-            label20.Size = new System.Drawing.Size(164, 15);
+            label20.Size = new System.Drawing.Size(243, 25);
             label20.TabIndex = 53;
             label20.Text = "Numeric Sequence Increment";
             // 
             // numericUpDown16
             // 
-            numericUpDown16.Location = new System.Drawing.Point(316, 188);
+            numericUpDown16.Location = new System.Drawing.Point(451, 313);
+            numericUpDown16.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown16.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             numericUpDown16.Minimum = new decimal(new int[] { 999999, 0, 0, int.MinValue });
             numericUpDown16.Name = "numericUpDown16";
-            numericUpDown16.Size = new System.Drawing.Size(88, 23);
+            numericUpDown16.Size = new System.Drawing.Size(126, 31);
             numericUpDown16.TabIndex = 52;
             numericUpDown16.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown16.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1205,18 +1238,18 @@ namespace WinFormsApp1
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new System.Drawing.Point(109, 53);
+            label18.Location = new System.Drawing.Point(156, 88);
+            label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label18.Name = "label18";
-            label18.Size = new System.Drawing.Size(55, 15);
+            label18.Size = new System.Drawing.Size(83, 25);
             label18.TabIndex = 51;
             label18.Text = "Template";
             // 
             // button2
             // 
-            button2.Location = new System.Drawing.Point(170, 129);
-            button2.Margin = new System.Windows.Forms.Padding(2);
+            button2.Location = new System.Drawing.Point(243, 215);
             button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(236, 25);
+            button2.Size = new System.Drawing.Size(337, 42);
             button2.TabIndex = 50;
             button2.Text = "Insert";
             button2.UseVisualStyleBackColor = true;
@@ -1225,44 +1258,47 @@ namespace WinFormsApp1
             // 
             opt_005_predefined_templates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             opt_005_predefined_templates.FormattingEnabled = true;
-            opt_005_predefined_templates.Location = new System.Drawing.Point(171, 103);
-            opt_005_predefined_templates.Margin = new System.Windows.Forms.Padding(2);
+            opt_005_predefined_templates.Location = new System.Drawing.Point(244, 172);
             opt_005_predefined_templates.Name = "opt_005_predefined_templates";
-            opt_005_predefined_templates.Size = new System.Drawing.Size(234, 23);
+            opt_005_predefined_templates.Size = new System.Drawing.Size(333, 33);
             opt_005_predefined_templates.TabIndex = 49;
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new System.Drawing.Point(53, 108);
+            label8.Location = new System.Drawing.Point(76, 180);
+            label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new System.Drawing.Size(107, 15);
+            label8.Size = new System.Drawing.Size(163, 25);
             label8.TabIndex = 48;
             label8.Text = "Insert Template For";
             // 
             // comboBox4
             // 
             comboBox4.FormattingEnabled = true;
-            comboBox4.Location = new System.Drawing.Point(171, 51);
+            comboBox4.Location = new System.Drawing.Point(244, 85);
+            comboBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             comboBox4.Name = "comboBox4";
-            comboBox4.Size = new System.Drawing.Size(234, 23);
+            comboBox4.Size = new System.Drawing.Size(333, 33);
             comboBox4.TabIndex = 47;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(122, 164);
+            label3.Location = new System.Drawing.Point(174, 273);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(183, 15);
+            label3.Size = new System.Drawing.Size(273, 25);
             label3.TabIndex = 37;
             label3.Text = "Numeric Sequence Starting Index";
             // 
             // numericUpDown4
             // 
-            numericUpDown4.Location = new System.Drawing.Point(316, 163);
+            numericUpDown4.Location = new System.Drawing.Point(451, 272);
+            numericUpDown4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown4.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             numericUpDown4.Name = "numericUpDown4";
-            numericUpDown4.Size = new System.Drawing.Size(88, 23);
+            numericUpDown4.Size = new System.Drawing.Size(126, 31);
             numericUpDown4.TabIndex = 36;
             numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown4.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1272,10 +1308,9 @@ namespace WinFormsApp1
             checkBox_Option_005.AutoSize = true;
             checkBox_Option_005.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_005.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_005.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_005.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_005.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_005.Name = "checkBox_Option_005";
-            checkBox_Option_005.Size = new System.Drawing.Size(189, 24);
+            checkBox_Option_005.Size = new System.Drawing.Size(272, 34);
             checkBox_Option_005.TabIndex = 1;
             checkBox_Option_005.Text = "Rename Using Template";
             checkBox_Option_005.UseVisualStyleBackColor = true;
@@ -1292,29 +1327,28 @@ namespace WinFormsApp1
             panel_content_04.Controls.Add(textBox6);
             panel_content_04.Controls.Add(checkBox_Option_004);
             panel_content_04.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_04.Location = new System.Drawing.Point(0, 575);
+            panel_content_04.Location = new System.Drawing.Point(0, 958);
+            panel_content_04.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_04.Name = "panel_content_04";
-            panel_content_04.Size = new System.Drawing.Size(454, 174);
+            panel_content_04.Size = new System.Drawing.Size(651, 290);
             panel_content_04.TabIndex = 29;
             panel_content_04.UseCustomBorder = false;
             // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new System.Drawing.Point(61, 53);
-            label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label17.Location = new System.Drawing.Point(87, 88);
             label17.Name = "label17";
-            label17.Size = new System.Drawing.Size(100, 15);
+            label17.Size = new System.Drawing.Size(152, 25);
             label17.TabIndex = 41;
             label17.Text = "Text to Search For";
             // 
             // checkBox7
             // 
             checkBox7.AutoSize = true;
-            checkBox7.Location = new System.Drawing.Point(276, 138);
-            checkBox7.Margin = new System.Windows.Forms.Padding(2);
+            checkBox7.Location = new System.Drawing.Point(394, 230);
             checkBox7.Name = "checkBox7";
-            checkBox7.Size = new System.Drawing.Size(134, 19);
+            checkBox7.Size = new System.Drawing.Size(197, 29);
             checkBox7.TabIndex = 40;
             checkBox7.Text = "Replace in Extension";
             checkBox7.UseVisualStyleBackColor = true;
@@ -1322,44 +1356,45 @@ namespace WinFormsApp1
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(147, 110);
+            label5.Location = new System.Drawing.Point(210, 183);
+            label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(157, 15);
+            label5.Size = new System.Drawing.Size(237, 25);
             label5.TabIndex = 39;
             label5.Text = "Number of Times to Replace";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(48, 80);
+            label4.Location = new System.Drawing.Point(69, 133);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(114, 15);
+            label4.Size = new System.Drawing.Size(171, 25);
             label4.TabIndex = 38;
             label4.Text = "Text to Replace With";
             // 
             // numericUpDown5
             // 
-            numericUpDown5.Location = new System.Drawing.Point(316, 109);
+            numericUpDown5.Location = new System.Drawing.Point(451, 182);
+            numericUpDown5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             numericUpDown5.Name = "numericUpDown5";
-            numericUpDown5.Size = new System.Drawing.Size(88, 23);
+            numericUpDown5.Size = new System.Drawing.Size(126, 31);
             numericUpDown5.TabIndex = 37;
             numericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown5.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // textBox7
             // 
-            textBox7.Location = new System.Drawing.Point(171, 78);
-            textBox7.Margin = new System.Windows.Forms.Padding(2);
+            textBox7.Location = new System.Drawing.Point(244, 130);
             textBox7.Name = "textBox7";
-            textBox7.Size = new System.Drawing.Size(234, 23);
+            textBox7.Size = new System.Drawing.Size(333, 31);
             textBox7.TabIndex = 36;
             // 
             // textBox6
             // 
-            textBox6.Location = new System.Drawing.Point(171, 52);
-            textBox6.Margin = new System.Windows.Forms.Padding(2);
+            textBox6.Location = new System.Drawing.Point(244, 87);
             textBox6.Name = "textBox6";
-            textBox6.Size = new System.Drawing.Size(234, 23);
+            textBox6.Size = new System.Drawing.Size(333, 31);
             textBox6.TabIndex = 35;
             // 
             // checkBox_Option_004
@@ -1367,10 +1402,9 @@ namespace WinFormsApp1
             checkBox_Option_004.AutoSize = true;
             checkBox_Option_004.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_004.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_004.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_004.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_004.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_004.Name = "checkBox_Option_004";
-            checkBox_Option_004.Size = new System.Drawing.Size(302, 24);
+            checkBox_Option_004.Size = new System.Drawing.Size(438, 34);
             checkBox_Option_004.TabIndex = 0;
             checkBox_Option_004.Text = "Replace Substring with Another Substring";
             checkBox_Option_004.UseVisualStyleBackColor = true;
@@ -1390,28 +1424,27 @@ namespace WinFormsApp1
             panel_content_03.Controls.Add(checkBox_Option_003);
             panel_content_03.Controls.Add(label16);
             panel_content_03.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_03.Location = new System.Drawing.Point(0, 362);
+            panel_content_03.Location = new System.Drawing.Point(0, 603);
+            panel_content_03.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_03.Name = "panel_content_03";
-            panel_content_03.Size = new System.Drawing.Size(454, 213);
+            panel_content_03.Size = new System.Drawing.Size(651, 355);
             panel_content_03.TabIndex = 26;
             panel_content_03.UseCustomBorder = false;
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new System.Drawing.Point(83, 87);
-            label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label15.Location = new System.Drawing.Point(119, 145);
             label15.Name = "label15";
-            label15.Size = new System.Drawing.Size(180, 15);
+            label15.Size = new System.Drawing.Size(272, 25);
             label15.TabIndex = 40;
             label15.Text = "Number of Substring (m) to Find";
             // 
             // numericUpDown15
             // 
-            numericUpDown15.Location = new System.Drawing.Point(267, 83);
-            numericUpDown15.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown15.Location = new System.Drawing.Point(381, 138);
             numericUpDown15.Name = "numericUpDown15";
-            numericUpDown15.Size = new System.Drawing.Size(88, 23);
+            numericUpDown15.Size = new System.Drawing.Size(126, 31);
             numericUpDown15.TabIndex = 39;
             numericUpDown15.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             numericUpDown15.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -1419,10 +1452,9 @@ namespace WinFormsApp1
             // checkBox11
             // 
             checkBox11.AutoSize = true;
-            checkBox11.Location = new System.Drawing.Point(231, 174);
-            checkBox11.Margin = new System.Windows.Forms.Padding(2);
+            checkBox11.Location = new System.Drawing.Point(330, 290);
             checkBox11.Name = "checkBox11";
-            checkBox11.Size = new System.Drawing.Size(182, 19);
+            checkBox11.Size = new System.Drawing.Size(273, 29);
             checkBox11.TabIndex = 38;
             checkBox11.Text = "Remove the Substring as Well";
             checkBox11.UseVisualStyleBackColor = true;
@@ -1430,20 +1462,18 @@ namespace WinFormsApp1
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new System.Drawing.Point(72, 111);
-            label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label14.Location = new System.Drawing.Point(103, 185);
             label14.Name = "label14";
-            label14.Size = new System.Drawing.Size(191, 15);
+            label14.Size = new System.Drawing.Size(288, 25);
             label14.TabIndex = 37;
             label14.Text = "Number of Symbols (n) to Remove";
             // 
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new System.Drawing.Point(215, 151);
-            radioButton2.Margin = new System.Windows.Forms.Padding(2);
+            radioButton2.Location = new System.Drawing.Point(307, 252);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new System.Drawing.Size(49, 19);
+            radioButton2.Size = new System.Drawing.Size(73, 29);
             radioButton2.TabIndex = 36;
             radioButton2.TabStop = true;
             radioButton2.Text = "after";
@@ -1452,10 +1482,9 @@ namespace WinFormsApp1
             // radioButton1
             // 
             radioButton1.AutoSize = true;
-            radioButton1.Location = new System.Drawing.Point(215, 135);
-            radioButton1.Margin = new System.Windows.Forms.Padding(2);
+            radioButton1.Location = new System.Drawing.Point(307, 225);
             radioButton1.Name = "radioButton1";
-            radioButton1.Size = new System.Drawing.Size(59, 19);
+            radioButton1.Size = new System.Drawing.Size(89, 29);
             radioButton1.TabIndex = 35;
             radioButton1.TabStop = true;
             radioButton1.Text = "before";
@@ -1463,28 +1492,25 @@ namespace WinFormsApp1
             // 
             // textBox4
             // 
-            textBox4.Location = new System.Drawing.Point(171, 52);
-            textBox4.Margin = new System.Windows.Forms.Padding(2);
+            textBox4.Location = new System.Drawing.Point(244, 87);
             textBox4.Name = "textBox4";
-            textBox4.Size = new System.Drawing.Size(234, 23);
+            textBox4.Size = new System.Drawing.Size(333, 31);
             textBox4.TabIndex = 34;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(63, 53);
-            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label2.Location = new System.Drawing.Point(90, 88);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(97, 15);
+            label2.Size = new System.Drawing.Size(149, 25);
             label2.TabIndex = 33;
             label2.Text = "Substring to Find";
             // 
             // numericUpDown3
             // 
-            numericUpDown3.Location = new System.Drawing.Point(267, 107);
-            numericUpDown3.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown3.Location = new System.Drawing.Point(381, 178);
             numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new System.Drawing.Size(88, 23);
+            numericUpDown3.Size = new System.Drawing.Size(126, 31);
             numericUpDown3.TabIndex = 32;
             numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1493,10 +1519,9 @@ namespace WinFormsApp1
             checkBox_Option_003.AutoSize = true;
             checkBox_Option_003.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_003.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_003.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_003.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_003.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_003.Name = "checkBox_Option_003";
-            checkBox_Option_003.Size = new System.Drawing.Size(359, 24);
+            checkBox_Option_003.Size = new System.Drawing.Size(521, 34);
             checkBox_Option_003.TabIndex = 30;
             checkBox_Option_003.Text = "Remove [n] symbols at Position of [mth] Substring";
             checkBox_Option_003.UseVisualStyleBackColor = true;
@@ -1504,10 +1529,9 @@ namespace WinFormsApp1
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new System.Drawing.Point(109, 144);
-            label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label16.Location = new System.Drawing.Point(156, 240);
             label16.Name = "label16";
-            label16.Size = new System.Drawing.Size(240, 15);
+            label16.Size = new System.Drawing.Size(375, 25);
             label16.TabIndex = 41;
             label16.Text = "Remove Symbols                        the Substring";
             // 
@@ -1521,57 +1545,53 @@ namespace WinFormsApp1
             panel_content_02.Controls.Add(checkBox4);
             panel_content_02.Controls.Add(checkBox_Option_002);
             panel_content_02.Dock = System.Windows.Forms.DockStyle.Top;
-            panel_content_02.Location = new System.Drawing.Point(0, 228);
+            panel_content_02.Location = new System.Drawing.Point(0, 380);
+            panel_content_02.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_02.Name = "panel_content_02";
-            panel_content_02.Size = new System.Drawing.Size(454, 134);
+            panel_content_02.Size = new System.Drawing.Size(651, 223);
             panel_content_02.TabIndex = 24;
             panel_content_02.UseCustomBorder = false;
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new System.Drawing.Point(168, 80);
-            label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label12.Location = new System.Drawing.Point(240, 133);
             label12.Name = "label12";
-            label12.Size = new System.Drawing.Size(94, 15);
+            label12.Size = new System.Drawing.Size(141, 25);
             label12.TabIndex = 30;
             label12.Text = "Starting Position";
             // 
             // numericUpDown2
             // 
-            numericUpDown2.Location = new System.Drawing.Point(267, 76);
-            numericUpDown2.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown2.Location = new System.Drawing.Point(381, 127);
             numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new System.Drawing.Size(88, 23);
+            numericUpDown2.Size = new System.Drawing.Size(126, 31);
             numericUpDown2.TabIndex = 29;
             numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(90, 56);
-            label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label1.Location = new System.Drawing.Point(129, 93);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(173, 15);
+            label1.Size = new System.Drawing.Size(263, 25);
             label1.TabIndex = 28;
             label1.Text = "Number of Symbols to Remove";
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Location = new System.Drawing.Point(267, 52);
-            numericUpDown1.Margin = new System.Windows.Forms.Padding(2);
+            numericUpDown1.Location = new System.Drawing.Point(381, 87);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new System.Drawing.Size(88, 23);
+            numericUpDown1.Size = new System.Drawing.Size(126, 31);
             numericUpDown1.TabIndex = 27;
             numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // checkBox4
             // 
             checkBox4.AutoSize = true;
-            checkBox4.Location = new System.Drawing.Point(300, 104);
-            checkBox4.Margin = new System.Windows.Forms.Padding(2);
+            checkBox4.Location = new System.Drawing.Point(429, 173);
             checkBox4.Name = "checkBox4";
-            checkBox4.Size = new System.Drawing.Size(102, 19);
+            checkBox4.Size = new System.Drawing.Size(153, 29);
             checkBox4.TabIndex = 26;
             checkBox4.Text = "Start from end";
             checkBox4.UseVisualStyleBackColor = true;
@@ -1581,10 +1601,9 @@ namespace WinFormsApp1
             checkBox_Option_002.AutoSize = true;
             checkBox_Option_002.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_002.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_002.Location = new System.Drawing.Point(10, 9);
-            checkBox_Option_002.Margin = new System.Windows.Forms.Padding(2);
+            checkBox_Option_002.Location = new System.Drawing.Point(14, 15);
             checkBox_Option_002.Name = "checkBox_Option_002";
-            checkBox_Option_002.Size = new System.Drawing.Size(331, 24);
+            checkBox_Option_002.Size = new System.Drawing.Size(477, 34);
             checkBox_Option_002.TabIndex = 25;
             checkBox_Option_002.Text = "Remove [n] Symbols Starting at Position [pos]";
             checkBox_Option_002.UseVisualStyleBackColor = true;
@@ -1603,8 +1622,9 @@ namespace WinFormsApp1
             panel_content_01.Controls.Add(checkBox_Option_001);
             panel_content_01.Dock = System.Windows.Forms.DockStyle.Top;
             panel_content_01.Location = new System.Drawing.Point(0, 0);
+            panel_content_01.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             panel_content_01.Name = "panel_content_01";
-            panel_content_01.Size = new System.Drawing.Size(454, 228);
+            panel_content_01.Size = new System.Drawing.Size(651, 380);
             panel_content_01.TabIndex = 21;
             panel_content_01.UseCustomBorder = false;
             // 
@@ -1613,10 +1633,9 @@ namespace WinFormsApp1
             label23.AutoSize = true;
             label23.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label23.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label23.Location = new System.Drawing.Point(30, 196);
-            label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label23.Location = new System.Drawing.Point(43, 327);
             label23.Name = "label23";
-            label23.Size = new System.Drawing.Size(234, 13);
+            label23.Size = new System.Drawing.Size(322, 21);
             label23.TabIndex = 41;
             label23.Text = "- Greedy means, remove as much as possible";
             // 
@@ -1625,10 +1644,9 @@ namespace WinFormsApp1
             label22.AutoSize = true;
             label22.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label22.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label22.Location = new System.Drawing.Point(30, 182);
-            label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label22.Location = new System.Drawing.Point(43, 303);
             label22.Name = "label22";
-            label22.Size = new System.Drawing.Size(207, 13);
+            label22.Size = new System.Drawing.Size(283, 21);
             label22.TabIndex = 40;
             label22.Text = "- Lazy means, keep as much as possible";
             // 
@@ -1637,20 +1655,18 @@ namespace WinFormsApp1
             label21.AutoSize = true;
             label21.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label21.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            label21.Location = new System.Drawing.Point(30, 167);
-            label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label21.Location = new System.Drawing.Point(43, 278);
             label21.Name = "label21";
-            label21.Size = new System.Drawing.Size(362, 13);
+            label21.Size = new System.Drawing.Size(488, 21);
             label21.TabIndex = 39;
             label21.Text = "Lazy option only has effect in case of multiple delimiters divided by ':'";
             // 
             // radioButton18
             // 
             radioButton18.AutoSize = true;
-            radioButton18.Location = new System.Drawing.Point(260, 148);
-            radioButton18.Margin = new System.Windows.Forms.Padding(2);
+            radioButton18.Location = new System.Drawing.Point(371, 247);
             radioButton18.Name = "radioButton18";
-            radioButton18.Size = new System.Drawing.Size(62, 19);
+            radioButton18.Size = new System.Drawing.Size(93, 29);
             radioButton18.TabIndex = 38;
             radioButton18.TabStop = true;
             radioButton18.Text = "Greedy";
@@ -1659,10 +1675,9 @@ namespace WinFormsApp1
             // radioButton21
             // 
             radioButton21.AutoSize = true;
-            radioButton21.Location = new System.Drawing.Point(260, 132);
-            radioButton21.Margin = new System.Windows.Forms.Padding(2);
+            radioButton21.Location = new System.Drawing.Point(371, 220);
             radioButton21.Name = "radioButton21";
-            radioButton21.Size = new System.Drawing.Size(48, 19);
+            radioButton21.Size = new System.Drawing.Size(71, 29);
             radioButton21.TabIndex = 37;
             radioButton21.TabStop = true;
             radioButton21.Text = "Lazy";
@@ -1672,19 +1687,17 @@ namespace WinFormsApp1
             // 
             comboBox2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new System.Drawing.Point(30, 52);
-            comboBox2.Margin = new System.Windows.Forms.Padding(2);
+            comboBox2.Location = new System.Drawing.Point(43, 87);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new System.Drawing.Size(375, 29);
+            comboBox2.Size = new System.Drawing.Size(534, 40);
             comboBox2.TabIndex = 18;
             // 
             // checkBox3
             // 
             checkBox3.AutoSize = true;
-            checkBox3.Location = new System.Drawing.Point(260, 93);
-            checkBox3.Margin = new System.Windows.Forms.Padding(2);
+            checkBox3.Location = new System.Drawing.Point(371, 155);
             checkBox3.Name = "checkBox3";
-            checkBox3.Size = new System.Drawing.Size(139, 19);
+            checkBox3.Size = new System.Drawing.Size(206, 29);
             checkBox3.TabIndex = 17;
             checkBox3.Text = "Remove the delimiter";
             checkBox3.UseVisualStyleBackColor = true;
@@ -1692,9 +1705,10 @@ namespace WinFormsApp1
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new System.Drawing.Point(260, 110);
+            checkBox2.Location = new System.Drawing.Point(371, 183);
+            checkBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             checkBox2.Name = "checkBox2";
-            checkBox2.Size = new System.Drawing.Size(102, 19);
+            checkBox2.Size = new System.Drawing.Size(153, 29);
             checkBox2.TabIndex = 16;
             checkBox2.Text = "Start from end";
             checkBox2.UseVisualStyleBackColor = true;
@@ -1704,9 +1718,10 @@ namespace WinFormsApp1
             checkBox_Option_001.AutoSize = true;
             checkBox_Option_001.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             checkBox_Option_001.ForeColor = System.Drawing.Color.Black;
-            checkBox_Option_001.Location = new System.Drawing.Point(10, 9);
+            checkBox_Option_001.Location = new System.Drawing.Point(14, 15);
+            checkBox_Option_001.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             checkBox_Option_001.Name = "checkBox_Option_001";
-            checkBox_Option_001.Size = new System.Drawing.Size(356, 24);
+            checkBox_Option_001.Size = new System.Drawing.Size(516, 34);
             checkBox_Option_001.TabIndex = 15;
             checkBox_Option_001.Text = "Remove Any Symbols Until the Delimiter is Found";
             checkBox_Option_001.UseVisualStyleBackColor = true;
@@ -1714,10 +1729,11 @@ namespace WinFormsApp1
             // tabPage2
             // 
             tabPage2.Controls.Add(richTextBox1);
-            tabPage2.Location = new System.Drawing.Point(4, 24);
+            tabPage2.Location = new System.Drawing.Point(4, 34);
+            tabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            tabPage2.Size = new System.Drawing.Size(477, 574);
+            tabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tabPage2.Size = new System.Drawing.Size(685, 965);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "RichEdit";
             tabPage2.UseVisualStyleBackColor = true;
@@ -1727,10 +1743,11 @@ namespace WinFormsApp1
             tabPage3.BackColor = System.Drawing.Color.WhiteSmoke;
             tabPage3.Controls.Add(comboBox1);
             tabPage3.Controls.Add(textBox3);
-            tabPage3.Location = new System.Drawing.Point(4, 24);
+            tabPage3.Location = new System.Drawing.Point(4, 34);
+            tabPage3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            tabPage3.Size = new System.Drawing.Size(477, 574);
+            tabPage3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            tabPage3.Size = new System.Drawing.Size(685, 965);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Test";
             // 
@@ -1738,33 +1755,33 @@ namespace WinFormsApp1
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "111", "222", "333", "444", "555" });
-            comboBox1.Location = new System.Drawing.Point(17, 17);
+            comboBox1.Location = new System.Drawing.Point(24, 28);
+            comboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new System.Drawing.Size(150, 23);
+            comboBox1.Size = new System.Drawing.Size(213, 33);
             comboBox1.TabIndex = 11;
             // 
             // textBox3
             // 
-            textBox3.Location = new System.Drawing.Point(17, 42);
-            textBox3.Margin = new System.Windows.Forms.Padding(2);
+            textBox3.Location = new System.Drawing.Point(24, 70);
             textBox3.Name = "textBox3";
-            textBox3.Size = new System.Drawing.Size(150, 23);
+            textBox3.Size = new System.Drawing.Size(213, 31);
             textBox3.TabIndex = 12;
             // 
             // textBox2
             // 
-            textBox2.Location = new System.Drawing.Point(964, 106);
-            textBox2.Margin = new System.Windows.Forms.Padding(2);
+            textBox2.Location = new System.Drawing.Point(1377, 177);
             textBox2.Name = "textBox2";
             textBox2.PlaceholderText = "filter";
-            textBox2.Size = new System.Drawing.Size(166, 23);
+            textBox2.Size = new System.Drawing.Size(235, 31);
             textBox2.TabIndex = 13;
             // 
             // btn_Undo
             // 
-            btn_Undo.Location = new System.Drawing.Point(1341, 101);
+            btn_Undo.Location = new System.Drawing.Point(1916, 168);
+            btn_Undo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             btn_Undo.Name = "btn_Undo";
-            btn_Undo.Size = new System.Drawing.Size(96, 22);
+            btn_Undo.Size = new System.Drawing.Size(137, 37);
             btn_Undo.TabIndex = 14;
             btn_Undo.Text = "Undo";
             btn_Undo.UseVisualStyleBackColor = true;
@@ -1772,10 +1789,9 @@ namespace WinFormsApp1
             // cb_FilterPath
             // 
             cb_FilterPath.AutoSize = true;
-            cb_FilterPath.Location = new System.Drawing.Point(964, 60);
-            cb_FilterPath.Margin = new System.Windows.Forms.Padding(2);
+            cb_FilterPath.Location = new System.Drawing.Point(1377, 100);
             cb_FilterPath.Name = "cb_FilterPath";
-            cb_FilterPath.Size = new System.Drawing.Size(127, 19);
+            cb_FilterPath.Size = new System.Drawing.Size(187, 29);
             cb_FilterPath.TabIndex = 15;
             cb_FilterPath.Text = "Filter Through Path";
             cb_FilterPath.UseVisualStyleBackColor = true;
@@ -1784,19 +1800,18 @@ namespace WinFormsApp1
             // 
             myDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             myDataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
-            myDataGridView1.Location = new System.Drawing.Point(444, 0);
-            myDataGridView1.Margin = new System.Windows.Forms.Padding(2);
+            myDataGridView1.Location = new System.Drawing.Point(633, 0);
             myDataGridView1.Name = "myDataGridView1";
             myDataGridView1.RowHeadersWidth = 62;
             myDataGridView1.RowTemplate.Height = 33;
-            myDataGridView1.Size = new System.Drawing.Size(510, 736);
+            myDataGridView1.Size = new System.Drawing.Size(729, 1227);
             myDataGridView1.TabIndex = 16;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1444, 736);
+            ClientSize = new System.Drawing.Size(2063, 1227);
             Controls.Add(myDataGridView1);
             Controls.Add(cb_FilterPath);
             Controls.Add(btn_Undo);
@@ -1809,7 +1824,6 @@ namespace WinFormsApp1
             Controls.Add(cb_ShowDirs);
             Controls.Add(treeView1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            Margin = new System.Windows.Forms.Padding(2);
             Name = "Form1";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Form1";
@@ -1817,6 +1831,8 @@ namespace WinFormsApp1
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             panel_base.ResumeLayout(false);
+            panel_content_14.ResumeLayout(false);
+            panel_content_14.PerformLayout();
             panel_content_13.ResumeLayout(false);
             panel_content_13.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown9).EndInit();
@@ -2012,6 +2028,11 @@ namespace WinFormsApp1
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label26;
+        private myControls.myPanel panel_content_14;
+        private System.Windows.Forms.CheckBox checkBox12;
+        private System.Windows.Forms.CheckBox checkBox_Option_014;
+        private System.Windows.Forms.TextBox textBox14;
+        private System.Windows.Forms.TextBox textBox13;
     }
 }
 

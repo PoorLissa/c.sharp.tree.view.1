@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System.Text;
 using System.Windows.Forms;
 
 /*
     Adding new subpanels to Tab Control:
-	    - in Properties window, find and select from the dropdown list first divider panel (panel_div_0)
+	    - in Properties window, find and select from the dropdown list first divider panel (panel_div_0) -- not present anymore, skip this step
 	    - with pressed Ctrl, click any existing content panel that is located lower than the selected divider panel
 	    - copy the 2 panels from the UI window: Ctrl+C
 	    - select panel 'panel_base' in Properties window from the dropdown list of widgets
 	    - click anywhere on the black background around the UI window
 	    - press Ctrl+V
 	    - the copied panels are inserted at the bottom into 'panel_base'
+        - in myRenamerApp_Controls  -- add new options
+        - in Form1.init()           -- register these options
+        - in myRenamer.applyOptions -- finally use these options
 
     todo:
         - give an option to rename through copy: insted of renaming, leave original file as it is, and copy it with the new name (to some other dir)
@@ -1058,6 +1060,39 @@ public class myRenamer
                 }
 
                 name = sb.ToString();
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 14: Remove any symbols found between the two delimiters:
+        if (_controls.option_014_ch_01.Checked)
+        {
+            string delim1 = _controls.option_014_tb_01.Text;
+            string delim2 = _controls.option_014_tb_02.Text;
+
+            bool doRemoveDelim = _controls.option_014_ch_02.Checked;
+
+            if (delim1 != null && delim1.Length > 0 && delim2 != null && delim2.Length > 0)
+            {
+                int pos1 = name.IndexOf(delim1);
+                int pos2 = name.IndexOf(delim2, pos1 + 1);
+
+                if (pos1 != -1 && pos2 != -1)
+                {
+                    if (pos2 > pos1)
+                    {
+                        pos1 += 1;
+
+                        if (doRemoveDelim)
+                        {
+                            pos1 -= 1;
+                            pos2 += delim2.Length;
+                        }
+
+                        name = name.Substring(0, pos1) + name.Substring(pos2);
+                    }
+                }
             }
         }
 
