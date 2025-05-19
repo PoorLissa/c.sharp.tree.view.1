@@ -183,10 +183,15 @@ namespace WinFormsApp1
                 mraControls.option_014_tb_02 = this.textBox14;
                 mraControls.option_014_ch_02 = this.checkBox12;
 
+                mraControls.option_015_ch_01 = this.checkBox_Option_015;
+                mraControls.option_015_gb_01 = this.groupBox3;
+                mraControls.option_015_gb_02 = this.groupBox4;
+                mraControls.option_015_tb_01 = this.textBox15;
+
                 // Each new option panel we add must have main checkbox called "checkBox_Option_xxx"
             }
 
-            // myRenamerApp
+             // myRenamerApp
             app = new myRenamerApp(mraControls, mtdgmi, path, expandEmpty);
 
             // Adjust scroll bars of the widgets:

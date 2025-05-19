@@ -274,6 +274,21 @@ public class myUtils
         if ((ch >= 65 && ch <= 90) || (ch >= 1040 && ch <= 1071))
             return true;
 
+        // 'Ё'
+        if (ch == 1025)
+            return true;
+
+        return false;
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+
+    public static bool charIsLowercaseLetter(char ch)
+    {
+        if ((ch >= 97 && ch <= 122) || (ch >= 1072 && ch <= 1103))
+            return true;
+
+        // 'ё'
         if (ch == 1105)
             return true;
 

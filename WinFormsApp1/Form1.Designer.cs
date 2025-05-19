@@ -39,6 +39,17 @@ namespace WinFormsApp1
             tabControl1 = new System.Windows.Forms.TabControl();
             tabPage1 = new System.Windows.Forms.TabPage();
             panel_base = new System.Windows.Forms.Panel();
+            panel_content_15 = new myControls.myPanel();
+            groupBox4 = new System.Windows.Forms.GroupBox();
+            radioButton28 = new System.Windows.Forms.RadioButton();
+            radioButton29 = new System.Windows.Forms.RadioButton();
+            radioButton30 = new System.Windows.Forms.RadioButton();
+            groupBox3 = new System.Windows.Forms.GroupBox();
+            radioButton27 = new System.Windows.Forms.RadioButton();
+            radioButton26 = new System.Windows.Forms.RadioButton();
+            radioButton25 = new System.Windows.Forms.RadioButton();
+            textBox15 = new System.Windows.Forms.TextBox();
+            checkBox_Option_015 = new System.Windows.Forms.CheckBox();
             panel_content_14 = new myControls.myPanel();
             textBox14 = new System.Windows.Forms.TextBox();
             textBox13 = new System.Windows.Forms.TextBox();
@@ -176,6 +187,9 @@ namespace WinFormsApp1
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panel_base.SuspendLayout();
+            panel_content_15.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox3.SuspendLayout();
             panel_content_14.SuspendLayout();
             panel_content_13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown9).BeginInit();
@@ -307,6 +321,7 @@ namespace WinFormsApp1
             // panel_base
             // 
             panel_base.AutoScroll = true;
+            panel_base.Controls.Add(panel_content_15);
             panel_base.Controls.Add(panel_content_14);
             panel_base.Controls.Add(panel_content_13);
             panel_base.Controls.Add(panel_content_12);
@@ -327,6 +342,137 @@ namespace WinFormsApp1
             panel_base.Name = "panel_base";
             panel_base.Size = new System.Drawing.Size(677, 955);
             panel_base.TabIndex = 21;
+            // 
+            // panel_content_15
+            // 
+            panel_content_15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            panel_content_15.Controls.Add(groupBox4);
+            panel_content_15.Controls.Add(groupBox3);
+            panel_content_15.Controls.Add(textBox15);
+            panel_content_15.Controls.Add(checkBox_Option_015);
+            panel_content_15.Dock = System.Windows.Forms.DockStyle.Top;
+            panel_content_15.Location = new System.Drawing.Point(0, 4030);
+            panel_content_15.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            panel_content_15.Name = "panel_content_15";
+            panel_content_15.Size = new System.Drawing.Size(651, 442);
+            panel_content_15.TabIndex = 44;
+            panel_content_15.UseCustomBorder = false;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(radioButton28);
+            groupBox4.Controls.Add(radioButton29);
+            groupBox4.Controls.Add(radioButton30);
+            groupBox4.Location = new System.Drawing.Point(362, 84);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new System.Drawing.Size(209, 263);
+            groupBox4.TabIndex = 52;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "2nd Type";
+            // 
+            // radioButton28
+            // 
+            radioButton28.AutoSize = true;
+            radioButton28.Location = new System.Drawing.Point(17, 109);
+            radioButton28.Name = "radioButton28";
+            radioButton28.Size = new System.Drawing.Size(103, 29);
+            radioButton28.TabIndex = 2;
+            radioButton28.TabStop = true;
+            radioButton28.Tag = "3";
+            radioButton28.Text = "Numeric";
+            radioButton28.UseVisualStyleBackColor = true;
+            // 
+            // radioButton29
+            // 
+            radioButton29.AutoSize = true;
+            radioButton29.Location = new System.Drawing.Point(17, 74);
+            radioButton29.Name = "radioButton29";
+            radioButton29.Size = new System.Drawing.Size(175, 29);
+            radioButton29.TabIndex = 1;
+            radioButton29.TabStop = true;
+            radioButton29.Tag = "2";
+            radioButton29.Text = "Lower Case Letter";
+            radioButton29.UseVisualStyleBackColor = true;
+            // 
+            // radioButton30
+            // 
+            radioButton30.AutoSize = true;
+            radioButton30.Location = new System.Drawing.Point(17, 39);
+            radioButton30.Name = "radioButton30";
+            radioButton30.Size = new System.Drawing.Size(182, 29);
+            radioButton30.TabIndex = 0;
+            radioButton30.TabStop = true;
+            radioButton30.Tag = "1";
+            radioButton30.Text = "Capital Case Letter";
+            radioButton30.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(radioButton27);
+            groupBox3.Controls.Add(radioButton26);
+            groupBox3.Controls.Add(radioButton25);
+            groupBox3.Location = new System.Drawing.Point(86, 84);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new System.Drawing.Size(209, 263);
+            groupBox3.TabIndex = 51;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "1st Type";
+            // 
+            // radioButton27
+            // 
+            radioButton27.AutoSize = true;
+            radioButton27.Location = new System.Drawing.Point(17, 109);
+            radioButton27.Name = "radioButton27";
+            radioButton27.Size = new System.Drawing.Size(103, 29);
+            radioButton27.TabIndex = 2;
+            radioButton27.TabStop = true;
+            radioButton27.Tag = "3";
+            radioButton27.Text = "Numeric";
+            radioButton27.UseVisualStyleBackColor = true;
+            // 
+            // radioButton26
+            // 
+            radioButton26.AutoSize = true;
+            radioButton26.Location = new System.Drawing.Point(17, 74);
+            radioButton26.Name = "radioButton26";
+            radioButton26.Size = new System.Drawing.Size(175, 29);
+            radioButton26.TabIndex = 1;
+            radioButton26.TabStop = true;
+            radioButton26.Tag = "2";
+            radioButton26.Text = "Lower Case Letter";
+            radioButton26.UseVisualStyleBackColor = true;
+            // 
+            // radioButton25
+            // 
+            radioButton25.AutoSize = true;
+            radioButton25.Location = new System.Drawing.Point(17, 39);
+            radioButton25.Name = "radioButton25";
+            radioButton25.Size = new System.Drawing.Size(182, 29);
+            radioButton25.TabIndex = 0;
+            radioButton25.TabStop = true;
+            radioButton25.Tag = "1";
+            radioButton25.Text = "Capital Case Letter";
+            radioButton25.UseVisualStyleBackColor = true;
+            // 
+            // textBox15
+            // 
+            textBox15.Location = new System.Drawing.Point(115, 380);
+            textBox15.Name = "textBox15";
+            textBox15.Size = new System.Drawing.Size(422, 31);
+            textBox15.TabIndex = 50;
+            // 
+            // checkBox_Option_015
+            // 
+            checkBox_Option_015.AutoSize = true;
+            checkBox_Option_015.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            checkBox_Option_015.ForeColor = System.Drawing.Color.Black;
+            checkBox_Option_015.Location = new System.Drawing.Point(14, 15);
+            checkBox_Option_015.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            checkBox_Option_015.Name = "checkBox_Option_015";
+            checkBox_Option_015.Size = new System.Drawing.Size(473, 34);
+            checkBox_Option_015.TabIndex = 15;
+            checkBox_Option_015.Text = "Insert text between the two types of symbols";
+            checkBox_Option_015.UseVisualStyleBackColor = true;
             // 
             // panel_content_14
             // 
@@ -1831,6 +1977,12 @@ namespace WinFormsApp1
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             panel_base.ResumeLayout(false);
+            panel_content_15.ResumeLayout(false);
+            panel_content_15.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             panel_content_14.ResumeLayout(false);
             panel_content_14.PerformLayout();
             panel_content_13.ResumeLayout(false);
@@ -2033,6 +2185,17 @@ namespace WinFormsApp1
         private System.Windows.Forms.CheckBox checkBox_Option_014;
         private System.Windows.Forms.TextBox textBox14;
         private System.Windows.Forms.TextBox textBox13;
+        private myControls.myPanel panel_content_15;
+        private System.Windows.Forms.TextBox textBox15;
+        private System.Windows.Forms.CheckBox checkBox_Option_015;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton radioButton27;
+        private System.Windows.Forms.RadioButton radioButton26;
+        private System.Windows.Forms.RadioButton radioButton25;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RadioButton radioButton28;
+        private System.Windows.Forms.RadioButton radioButton29;
+        private System.Windows.Forms.RadioButton radioButton30;
     }
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 /*
     Adding new subpanels to Tab Control:
@@ -1092,6 +1093,120 @@ public class myRenamer
 
                         name = name.Substring(0, pos1) + name.Substring(pos2);
                     }
+                }
+            }
+        }
+
+        // --------------------------------------------------------------------------------
+
+        // Option 15: Remove any symbols found between the two delimiters:
+        if (_controls.option_015_ch_01.Checked)
+        {
+            // 1: Capital Case
+            // 2: Lower Case
+            // 3: Numeric
+            int getSelectedRadioButton(GroupBox gb)
+            {
+                for (int i = 0; i < gb.Controls.Count; i++)
+                    if (gb.Controls[i] is RadioButton)
+                        if ((gb.Controls[i] as RadioButton).Checked)
+                            return Int32.Parse((string)(gb.Controls[i] as RadioButton).Tag);
+                return -1;
+            }
+
+            bool isOptionTrue(int option, int i, string name)
+            {
+                switch (option)
+                {
+                    // AA
+                    case 101:
+                        if (myUtils.charIsCapitalLetter(name[i]))
+                            if (i > 0 && myUtils.charIsCapitalLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // Aa
+                    case 102:
+                        if (myUtils.charIsLowercaseLetter(name[i]))
+                            if (i > 0 && myUtils.charIsCapitalLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // A1
+                    case 103:
+                        if (myUtils.charIsDigit(name[i]))
+                            if (i > 0 && myUtils.charIsCapitalLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // aA
+                    case 201:
+                        if (myUtils.charIsCapitalLetter(name[i]))
+                            if (i > 0 && myUtils.charIsLowercaseLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // aa
+                    case 202:
+                        if (myUtils.charIsLowercaseLetter(name[i]))
+                            if (i > 0 && myUtils.charIsLowercaseLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // a1
+                    case 203:
+                        if (myUtils.charIsDigit(name[i]))
+                            if (i > 0 && myUtils.charIsLowercaseLetter(name[i-1]))
+                                return true;
+                        break;
+
+                    // 1A
+                    case 301:
+                        if (myUtils.charIsCapitalLetter(name[i]))
+                            if (i > 0 && myUtils.charIsDigit(name[i-1]))
+                                return true;
+                        break;
+
+                    // 1a
+                    case 302:
+                        if (myUtils.charIsLowercaseLetter(name[i]))
+                            if (i > 0 && myUtils.charIsDigit(name[i-1]))
+                                return true;
+                        break;
+
+                    // 11
+                    case 303:
+                        if (myUtils.charIsDigit(name[i]))
+                            if (i > 0 && myUtils.charIsDigit(name[i-1]))
+                                return true;
+                        break;
+                }
+
+                return false;
+            }
+
+            string text = _controls.option_015_tb_01.Text;
+
+            if (text.Length > 0)
+            {
+                int option = getSelectedRadioButton(_controls.option_015_gb_01) * 100 +
+                             getSelectedRadioButton(_controls.option_015_gb_02) * 1;
+
+                bool isChanged = false;
+                var sb = new StringBuilder(name);
+
+                for (int i = name.Length - 1; i >= 0; i--)
+                {
+                    if (isOptionTrue(option, i, name))
+                    {
+                        isChanged = true;
+                        sb.Insert(i, text);
+                    }
+                }
+
+                if (isChanged)
+                {
+                    name = sb.ToString();
                 }
             }
         }

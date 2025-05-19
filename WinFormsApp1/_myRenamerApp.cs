@@ -109,6 +109,11 @@ public class myRenamerApp_Controls
     public TextBox          option_014_tb_01 = null;
     public TextBox          option_014_tb_02 = null;
     public CheckBox         option_014_ch_02 = null;
+
+    public CheckBox         option_015_ch_01 = null;
+    public GroupBox         option_015_gb_01 = null;
+    public GroupBox         option_015_gb_02 = null;
+    public TextBox          option_015_tb_01 = null;
 };
 
 
